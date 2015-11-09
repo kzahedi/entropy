@@ -99,6 +99,8 @@ void containerTest::testUniformDiscretisation()
   for(int i = 0; i < 11; i++)
   {
     c << ((float)i)/10.0;
+    c << ((float)((i + 1) % 10))/10.0;
+    c << ((float)((i + 2) % 10))/10.0;
   }
 
   double **domain = new double*[3];
@@ -125,17 +127,17 @@ void containerTest::testUniformDiscretisation()
 
   Container *d = c.discretise();
 
-  CPPUNIT_ASSERT_EQUAL(0, (int)d->get(0,1));
-  CPPUNIT_ASSERT_EQUAL(1, (int)d->get(1,1));
-  CPPUNIT_ASSERT_EQUAL(2, (int)d->get(2,1));
-  CPPUNIT_ASSERT_EQUAL(3, (int)d->get(3,1));
-  CPPUNIT_ASSERT_EQUAL(4, (int)d->get(4,1));
-  CPPUNIT_ASSERT_EQUAL(5, (int)d->get(5,1));
-  CPPUNIT_ASSERT_EQUAL(6, (int)d->get(6,1));
-  CPPUNIT_ASSERT_EQUAL(7, (int)d->get(7,1));
-  CPPUNIT_ASSERT_EQUAL(8, (int)d->get(8,1));
-  CPPUNIT_ASSERT_EQUAL(9, (int)d->get(9,1));
-  CPPUNIT_ASSERT_EQUAL(9, (int)d->get(10,1));
+  CPPUNIT_ASSERT_EQUAL(210, (int)d->get(0,0));
+  CPPUNIT_ASSERT_EQUAL(321, (int)d->get(1,0));
+  CPPUNIT_ASSERT_EQUAL(432, (int)d->get(2,0));
+  CPPUNIT_ASSERT_EQUAL(543, (int)d->get(3,0));
+  CPPUNIT_ASSERT_EQUAL(654, (int)d->get(4,0));
+  CPPUNIT_ASSERT_EQUAL(765, (int)d->get(5,0));
+  CPPUNIT_ASSERT_EQUAL(876, (int)d->get(6,0));
+  CPPUNIT_ASSERT_EQUAL(987, (int)d->get(7,0));
+  CPPUNIT_ASSERT_EQUAL(98,  (int)d->get(8,0));
+  CPPUNIT_ASSERT_EQUAL(109, (int)d->get(9,0));
+  CPPUNIT_ASSERT_EQUAL(219, (int)d->get(10,0));
 
   delete domain[0];
   delete[] domain;

@@ -7,7 +7,7 @@ class containerTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(containerTest);
   CPPUNIT_TEST(testFilling);
-  // CPPUNIT_TEST(testUniformDiscretisation);
+  CPPUNIT_TEST(testUniformDiscretisation);
   CPPUNIT_TEST(testUniformDiscretisationUnary);
   CPPUNIT_TEST_SUITE_END();
 
