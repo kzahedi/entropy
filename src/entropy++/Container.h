@@ -3,9 +3,14 @@
 
 # define CONTAINER_DISCRETISE_UNIFORM 1001
 
+#include <ostream>
+
+using namespace std;
+
 class Container 
 {
   public:
+
     Container(int rows, int columns);
     ~Container();
 
@@ -20,11 +25,28 @@ class Container
     void setDomains(double**);
     void setDiscretisationMode(int);
 
+    bool isDiscretised();
     Container* discretise();
+
+    friend std::ostream& operator<<(std::ostream& str, const Container& container)
+    {
+      str << "Container content:" << endl;
+      for(int r = 0; r < container._rows; r++)
+      {
+        str << "  " << container(r,0); 
+        for(int c = 1; c < container._columns; c++)
+        {
+          str << " " << container(r, c);
+        }
+        str << endl;
+      }
+      return str;
+    };
 
   private:
     Container* __uniformDiscretisation();
     int        __discretiseAndCombineValues(double *values);
+    void       __strip();
 
     double** _data;
     int      _mode;
@@ -36,6 +58,7 @@ class Container
 
     bool     _domainsGiven;
     bool     _binsGiven;
+    bool     _discretised;
 };
 
 #endif // __CONTAINER_H__

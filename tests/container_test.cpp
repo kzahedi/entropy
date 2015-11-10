@@ -1,6 +1,6 @@
 #include "container_test.h"
 
-#include <entropy/Container.h>
+#include <entropy++/Container.h>
 
 #include <iostream>
 #include <string>
@@ -74,21 +74,20 @@ void containerTest::testUniformDiscretisationUnary()
 
   Container *d = c.discretise();
 
-  CPPUNIT_ASSERT_EQUAL(0, (int)d->get(0,0));
-  CPPUNIT_ASSERT_EQUAL(1, (int)d->get(1,0));
-  CPPUNIT_ASSERT_EQUAL(2, (int)d->get(2,0));
-  CPPUNIT_ASSERT_EQUAL(3, (int)d->get(3,0));
-  CPPUNIT_ASSERT_EQUAL(4, (int)d->get(4,0));
-  CPPUNIT_ASSERT_EQUAL(5, (int)d->get(5,0));
-  CPPUNIT_ASSERT_EQUAL(6, (int)d->get(6,0));
-  CPPUNIT_ASSERT_EQUAL(7, (int)d->get(7,0));
-  CPPUNIT_ASSERT_EQUAL(8, (int)d->get(8,0));
-  CPPUNIT_ASSERT_EQUAL(9, (int)d->get(9,0));
-  CPPUNIT_ASSERT_EQUAL(9, (int)d->get(10,0));
+  CPPUNIT_ASSERT_EQUAL(0, (int)d->get(0,  0));
+  CPPUNIT_ASSERT_EQUAL(1, (int)d->get(1,  0));
+  CPPUNIT_ASSERT_EQUAL(2, (int)d->get(2,  0));
+  CPPUNIT_ASSERT_EQUAL(3, (int)d->get(3,  0));
+  CPPUNIT_ASSERT_EQUAL(4, (int)d->get(4,  0));
+  CPPUNIT_ASSERT_EQUAL(5, (int)d->get(5,  0));
+  CPPUNIT_ASSERT_EQUAL(6, (int)d->get(6,  0));
+  CPPUNIT_ASSERT_EQUAL(7, (int)d->get(7,  0));
+  CPPUNIT_ASSERT_EQUAL(8, (int)d->get(8,  0));
+  CPPUNIT_ASSERT_EQUAL(9, (int)d->get(9,  0));
+  CPPUNIT_ASSERT_EQUAL(9, (int)d->get(10, 0));
 
   delete   domain[0];
   delete[] domain;
-
   delete[] bins;
 }
 
@@ -127,18 +126,21 @@ void containerTest::testUniformDiscretisation()
 
   Container *d = c.discretise();
 
-  CPPUNIT_ASSERT_EQUAL(210, (int)d->get(0,0));
-  CPPUNIT_ASSERT_EQUAL(321, (int)d->get(1,0));
-  CPPUNIT_ASSERT_EQUAL(432, (int)d->get(2,0));
-  CPPUNIT_ASSERT_EQUAL(543, (int)d->get(3,0));
-  CPPUNIT_ASSERT_EQUAL(654, (int)d->get(4,0));
-  CPPUNIT_ASSERT_EQUAL(765, (int)d->get(5,0));
-  CPPUNIT_ASSERT_EQUAL(876, (int)d->get(6,0));
-  CPPUNIT_ASSERT_EQUAL(987, (int)d->get(7,0));
-  CPPUNIT_ASSERT_EQUAL(98,  (int)d->get(8,0));
-  CPPUNIT_ASSERT_EQUAL(109, (int)d->get(9,0));
-  CPPUNIT_ASSERT_EQUAL(219, (int)d->get(10,0));
+  CPPUNIT_ASSERT_EQUAL(210, (int)d->get(0,  0));
+  CPPUNIT_ASSERT_EQUAL(321, (int)d->get(1,  0));
+  CPPUNIT_ASSERT_EQUAL(432, (int)d->get(2,  0));
+  CPPUNIT_ASSERT_EQUAL(543, (int)d->get(3,  0));
+  CPPUNIT_ASSERT_EQUAL(654, (int)d->get(4,  0));
+  CPPUNIT_ASSERT_EQUAL(765, (int)d->get(5,  0));
+  CPPUNIT_ASSERT_EQUAL(876, (int)d->get(6,  0));
+  CPPUNIT_ASSERT_EQUAL(987, (int)d->get(7,  0));
+  CPPUNIT_ASSERT_EQUAL(98,  (int)d->get(8,  0));
+  CPPUNIT_ASSERT_EQUAL(109, (int)d->get(9,  0));
+  CPPUNIT_ASSERT_EQUAL(219, (int)d->get(10, 0));
 
-  delete domain[0];
+  delete   domain[0];
+  delete   domain[1];
+  delete   domain[2];
   delete[] domain;
+  delete[] bins;
 }

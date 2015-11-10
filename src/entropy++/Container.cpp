@@ -1,7 +1,8 @@
-#include <entropy/Container.h>
+#include <entropy++/Container.h>
 
 #include <iostream>
 #include <assert.h>
+#include <vector>
 
 # define MIN(a,b) (((a)<(b))?a:b)
 
@@ -16,6 +17,7 @@ Container::Container(int rows, int columns)
 
   _domainsGiven = false;
   _binsGiven    = false;
+  _discretised  = false;
 
   for(int i = 0; i < columns; i++)
   {
@@ -154,5 +156,48 @@ Container* Container::__uniformDiscretisation()
     double v = (double)__discretiseAndCombineValues(_data[r]);
     (*copy) << v;
   }
+  copy->__strip();
+  copy->_discretised = true;
   return copy;
+}
+
+void Container::__strip()
+{
+
+  vector<int> values;
+
+  for(int r = 0; r < _rows; r++)
+  {
+    int  value = (int)_data[r][0];
+    bool found = false;
+    for(int i = 0; i < values.size(); i++)
+    {
+      if(value == values[i])
+      {
+        found = true;
+        break;
+      }
+    }
+    if(found == false)
+    {
+      values.push_back(value);
+    }
+  }
+
+  for(int r = 0; r < _rows; r++)
+  {
+    int value = (int)_data[r][0];
+    for(int i = 0; i < values.size(); i++)
+    {
+      if(value == values[i])
+      {
+        _data[r][0] = (double)i;
+      }
+    }
+  }
+}
+
+bool Container::isDiscretised()
+{
+  return _discretised;
 }
