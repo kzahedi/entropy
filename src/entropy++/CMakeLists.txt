@@ -6,6 +6,8 @@ add_library(Entropy++ SHARED
   MI.cpp
   PI.cpp
   Entropy.cpp
+  Matrix.cpp
+  SparseMatrix.cpp
   )
 # target_link_libraries(Entropy ${Boost_LIBRARIES} xerces-c glog YarsClientCom dl)
 
