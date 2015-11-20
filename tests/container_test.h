@@ -11,8 +11,8 @@ class containerTest : public CppUnit::TestFixture
 
   public:
 
-  void testFilling();
-  void testUniformDiscretisation();
-  void testUniformDiscretisationUnary();
+    void testFilling();
+    void testUniformDiscretisation();
+    void testUniformDiscretisationUnary();
 
 };

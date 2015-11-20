@@ -7,16 +7,14 @@
 
 using namespace std;
 
-SparseMatrix::SparseMatrix(int d)
+SparseMatrix::SparseMatrix()
 {
-  _dimension = d;
   _default   = 0.0;
   _size      = 0;
 }
 
-SparseMatrix::SparseMatrix(double def, int d)
+SparseMatrix::SparseMatrix(double def)
 {
-  _dimension = d;
   _size      = 0;
   _default   = def;
 }
@@ -75,35 +73,73 @@ double SparseMatrix::__get(const int f, const int s, const int t) const
   return value;
 }
 
-double SparseMatrix::operator()(int row, int col) const throw(MatrixException)
+double SparseMatrix::operator()(int first) const throw(MatrixException)
 {
-  assert(_dimension == 2);
-  return __get(row, col, -1);
+  return __get(first, -1, -1);
 }
 
-double& SparseMatrix::operator()(int row, int col) throw(MatrixException)
+double& SparseMatrix::operator()(int first) throw(MatrixException)
 {
-  assert(_dimension == 2);
   for(int i = 0; i < _indices.size(); i++)
   {
     MatrixIndex mi = _indices[i];
-    if(mi.first == row && mi.second == col)
+    if(mi.first == first)
     {
       return _values[i];
     }
   }
-  MatrixIndex mi(row, col);
+  MatrixIndex mi(first, -1, -1);
   _indices.push_back(mi);
   _values.push_back(_default);
-  if(row > _size) _size = row;
-  if(col > _size) _size = col;
+  if(first  > _size) _size = first;
   return _values[_values.size() - 1];
 }
 
-double SparseMatrix::get(int row, int col)
+double SparseMatrix::operator()(int first, int second) const throw(MatrixException)
 {
-  assert(_dimension == 2);
-  return __get(row, col, -1);
+  return __get(first, second, -1);
+}
+
+double& SparseMatrix::operator()(int first, int second) throw(MatrixException)
+{
+  for(int i = 0; i < _indices.size(); i++)
+  {
+    MatrixIndex mi = _indices[i];
+    if(mi.first == first && mi.second == second)
+    {
+      return _values[i];
+    }
+  }
+  MatrixIndex mi(first, second, -1);
+  _indices.push_back(mi);
+  _values.push_back(_default);
+  if(first  > _size) _size = first;
+  if(second > _size) _size = second;
+  return _values[_values.size() - 1];
+}
+
+double SparseMatrix::operator()(int first, int second, int third) const throw(MatrixException)
+{
+  return __get(first, second, third);
+}
+
+double& SparseMatrix::operator()(int first, int second, int third) throw(MatrixException)
+{
+  for(int i = 0; i < _indices.size(); i++)
+  {
+    MatrixIndex mi = _indices[i];
+    if(mi.first == first && mi.second == second)
+    {
+      return _values[i];
+    }
+  }
+  MatrixIndex mi(first, second, third);
+  _indices.push_back(mi);
+  _values.push_back(_default);
+  if(first  > _size) _size = first;
+  if(second > _size) _size = second;
+  if(third  > _size) _size = third;
+  return _values[_values.size() - 1];
 }
 
 void SparseMatrix::__copy(const SparseMatrix &m)
@@ -120,7 +156,6 @@ void SparseMatrix::__copy(const SparseMatrix &m)
     _values.push_back(v);
   }
   _size      = m._size;
-  _dimension = m._dimension;
 }
 
 SparseMatrix& SparseMatrix::operator+=(const SparseMatrix &m) throw(MatrixException)
@@ -130,14 +165,7 @@ SparseMatrix& SparseMatrix::operator+=(const SparseMatrix &m) throw(MatrixExcept
     MatrixIndex mi       = m._indices[i];
     double value         = m._values[i];
     double current_value = __get(mi.first, mi.second, -1);
-    if(_dimension == 2)
-    {
-      __set(mi.first, mi.second, -1, current_value + value);
-    }
-    else if(_dimension == 3)
-    {
-      // __set3(mi.first, mi.second, mi.third, current_value + value);
-    }
+    __set(mi.first, mi.second, mi.third, current_value + value);
   }
   return *this;
 }
@@ -237,4 +265,9 @@ int SparseMatrix::size() const
 MatrixIndex SparseMatrix::getmi(int i) const
 {
   return _indices[i];
+}
+
+double SparseMatrix::get(int index)
+{
+  return _values[index];
 }

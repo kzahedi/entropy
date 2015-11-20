@@ -15,7 +15,7 @@ MI::~MI()
 {
 }
 
-double MI::calulate(Container* X, Container* Y)
+double MI::calculate(Container* X, Container* Y)
 {
   switch(_mode)
   {
@@ -59,6 +59,9 @@ double MI::__empericalMI(Container* X, Container* Y)
       pxy[x][y] = 0.0;
     }
   }
+
+  for(int x = 0; x < maxX; x++) px[x] = 0.0;
+  for(int y = 0; y < maxY; y++) py[y] = 0.0;
 
   for(int i = 0; i < X->rows(); i++)
   {

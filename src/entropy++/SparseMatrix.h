@@ -56,9 +56,10 @@ class MatrixIndex
 class SparseMatrix 
 {
   public:
+
     /** Most simple constructor. Every cell is initialised with 0.*/
-    SparseMatrix(int dimension = 2);
-    SparseMatrix(double, int dimension = 2);
+    SparseMatrix();
+    SparseMatrix(double);
     SparseMatrix(SparseMatrix &m);
     SparseMatrix(const SparseMatrix &m);
 
@@ -66,8 +67,15 @@ class SparseMatrix
     ~SparseMatrix();
 
     /** Allows to access and modification of the values by indexing */
-    double&   operator()(int row, int col) throw(MatrixException);
-    double    operator()(int row, int col) const throw(MatrixException);
+    double&   operator()(int first) throw(MatrixException);
+    double    operator()(int first) const throw(MatrixException);
+
+    double&   operator()(int first, int second) throw(MatrixException);
+    double    operator()(int first, int second) const throw(MatrixException);
+
+    double&   operator()(int first, int second, int third) throw(MatrixException);
+    double    operator()(int first, int second, int third) const throw(MatrixException);
+
     SparseMatrix&   operator+=(const SparseMatrix &m)  throw(MatrixException);
     SparseMatrix&   operator-=(const SparseMatrix &m)  throw(MatrixException);
 
@@ -83,9 +91,8 @@ class SparseMatrix
     const SparseMatrix operator-(const SparseMatrix &m);
     const SparseMatrix operator+(const SparseMatrix &m);
 
-    double get(const int row, const int col);
-
     int size() const;
+    double get(int);
 
     MatrixIndex getmi(int) const;
 
@@ -136,8 +143,7 @@ class SparseMatrix
     vector<MatrixIndex> _indices;
     vector<double>      _values;
 
-    int _size;
-    int _dimension;
+    int    _size;
     double _default;
 
 };

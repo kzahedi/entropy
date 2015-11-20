@@ -12,11 +12,11 @@ class matrixTest : public CppUnit::TestFixture
 
   public:
 
-  void testInitialisation();
-  void testSet();
-  void testAdd();
-  void testMul();
-  void testDiv();
+    void testInitialisation();
+    void testSet();
+    void testAdd();
+    void testMul();
+    void testDiv();
 
 };
 

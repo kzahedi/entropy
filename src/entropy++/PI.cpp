@@ -15,7 +15,7 @@ PI::~PI()
 {
 }
 
-double PI::calulate(Container* X)
+double PI::calculate(Container* X)
 {
   switch(_mode)
   {
@@ -69,7 +69,7 @@ double PI::__empericalPI(Container* X)
   {
     for(int xp = 0; xp < maxX; xp++)
     {
-      pxxp[x][xp] = pxxp[x][xp] / (double)(X->rows());
+      pxxp[x][xp] = pxxp[x][xp] / (double)(X->rows()-1);
     }
   }
 
@@ -102,7 +102,6 @@ double PI::__empericalPI(Container* X)
   for(int xp = 0; xp < maxX; xp++) sum += pxp[xp];
   assert(fabs(sum - 1.0) < 0.000001);
 
-
   double r = 0.0;
   for(int x = 0; x < maxX; x++)
   {
@@ -111,12 +110,9 @@ double PI::__empericalPI(Container* X)
       if(px[x] > 0.0 && pxp[xp] > 0.0 && pxxp[x][xp] > 0.0)
       {
         r += pxxp[x][xp] * (log2(pxxp[x][xp]) - log2(px[x] * pxp[xp]));
-        sum += pxxp[x][xp];
       }
     }
   }
-
-  assert(fabs(sum - 1.0) < 0.0000001);
 
   for(int x = 0; x < maxX; x++)
   {

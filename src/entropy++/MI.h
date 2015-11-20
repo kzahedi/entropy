@@ -13,7 +13,7 @@ class MI
     ~MI();
 
     // MI(X;Y)
-    double calulate(Container* X, Container* Y);
+    double calculate(Container* X, Container* Y);
 
   private:
 

@@ -13,7 +13,7 @@ class PI
     ~PI();
 
     // PI(X;X')
-    double calulate(Container* X);
+    double calculate(Container* X);
 
   private:
 
