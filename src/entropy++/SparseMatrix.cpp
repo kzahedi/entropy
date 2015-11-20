@@ -3,13 +3,22 @@
 #include <iostream>
 #include <sstream>
 #include <math.h>
+#include <assert.h>
 
 using namespace std;
 
-SparseMatrix::SparseMatrix()
+SparseMatrix::SparseMatrix(int d)
 {
-  _rows = 0;
-  _cols = 0;
+  _dimension = d;
+  _default   = 0.0;
+  _size      = 0;
+}
+
+SparseMatrix::SparseMatrix(double def, int d)
+{
+  _dimension = d;
+  _size      = 0;
+  _default   = def;
 }
 
 SparseMatrix::SparseMatrix(SparseMatrix &m)
@@ -32,29 +41,32 @@ void SparseMatrix::reset()
   _values.clear();
 }
 
-void SparseMatrix::__set(const int row, const int col, const double value)
+void SparseMatrix::__set(const int f, const int s, int t, const double value)
 {
   for(int i = 0; i < _indices.size(); i++)
   {
-    matrixindex mi = _indices[i];
-    if(mi.first == row && mi.second == col)
+    MatrixIndex mi = _indices[i];
+    if(mi.first == f && mi.second == s && mi.third == t)
     {
       _values[i] = value;
       return;
     }
   }
-  matrixindex mi = make_pair(row, col);
+  MatrixIndex mi(f, s, t);
   _indices.push_back(mi);
   _values.push_back(value);
+  if(f > _size) _size = f;
+  if(s > _size) _size = s;
+  if(t > _size) _size = t;
 }
 
-double SparseMatrix::__get(const int row, const int col) const
+double SparseMatrix::__get(const int f, const int s, const int t) const
 {
-  double value = 0.0;
+  double value = _default;
   for(int i = 0; i < _indices.size(); i++)
   {
-    matrixindex mi = _indices[i];
-    if(mi.first == row && mi.second == col)
+    MatrixIndex mi = _indices[i];
+    if(mi.first == f && mi.second == s && mi.third == t)
     {
       value = _values[i];
       break;
@@ -65,63 +77,79 @@ double SparseMatrix::__get(const int row, const int col) const
 
 double SparseMatrix::operator()(int row, int col) const throw(MatrixException)
 {
-  return __get(row, col);
+  assert(_dimension == 2);
+  return __get(row, col, -1);
 }
 
 double& SparseMatrix::operator()(int row, int col) throw(MatrixException)
 {
+  assert(_dimension == 2);
   for(int i = 0; i < _indices.size(); i++)
   {
-    matrixindex mi = _indices[i];
+    MatrixIndex mi = _indices[i];
     if(mi.first == row && mi.second == col)
     {
       return _values[i];
     }
   }
-  matrixindex mi = make_pair(row, col);
+  MatrixIndex mi(row, col);
   _indices.push_back(mi);
-  _values.push_back(0.0);
+  _values.push_back(_default);
+  if(row > _size) _size = row;
+  if(col > _size) _size = col;
   return _values[_values.size() - 1];
 }
 
 double SparseMatrix::get(int row, int col)
 {
-  return __get(row, col);
+  assert(_dimension == 2);
+  return __get(row, col, -1);
 }
 
 void SparseMatrix::__copy(const SparseMatrix &m)
 {
-  for(int i = 0; i < m._indices.size(); i++)
+  _indices.clear();
+  _values.clear();
+  for(int i = 0; i < (int)m._indices.size(); i++)
   {
-    matrixindex mi = m._indices[i];
+    MatrixIndex mi = m._indices[i];
     double      v  = m._values[i];
 
-    matrixindex nmi = make_pair(mi.first, mi.second);
+    MatrixIndex nmi(mi.first, mi.second, mi.third);
     _indices.push_back(nmi);
     _values.push_back(v);
   }
+  _size      = m._size;
+  _dimension = m._dimension;
 }
 
 SparseMatrix& SparseMatrix::operator+=(const SparseMatrix &m) throw(MatrixException)
 {
-  for(int i = 0; m._indices.size(); i++)
+  for(int i = 0; i < m._indices.size(); i++)
   {
-    matrixindex mi       = m._indices[i];
+    MatrixIndex mi       = m._indices[i];
     double value         = m._values[i];
-    double current_value = __get(mi.first, mi.second);
-    __set(mi.first, mi.second, current_value + value);
+    double current_value = __get(mi.first, mi.second, -1);
+    if(_dimension == 2)
+    {
+      __set(mi.first, mi.second, -1, current_value + value);
+    }
+    else if(_dimension == 3)
+    {
+      // __set3(mi.first, mi.second, mi.third, current_value + value);
+    }
   }
   return *this;
 }
 
 SparseMatrix& SparseMatrix::operator-=(const SparseMatrix &m) throw(MatrixException)
 {
-  for(int i = 0; m._indices.size(); i++)
+  for(int i = 0; i < m._indices.size(); i++)
   {
-    matrixindex mi       = m._indices[i];
+    MatrixIndex mi       = m._indices[i];
     double value         = m._values[i];
-    double current_value = __get(mi.first, mi.second);
-    __set(mi.first, mi.second, current_value - value);
+    double current_value = __get(mi.first, mi.second, -1);
+    __set(mi.first, mi.second, -1, current_value - value);
   }
   return *this;
 }
@@ -165,34 +193,22 @@ SparseMatrix& SparseMatrix::operator=(const SparseMatrix &m)
 
 SparseMatrix& SparseMatrix::operator-=(const double d)
 {
-  for(int i = 0; _indices.size(); i++)
+  for(int i = 0; i < _indices.size(); i++)
   {
-    matrixindex mi       = _indices[i];
-    double current_value = __get(mi.first, mi.second);
-    __set(mi.first, mi.second, current_value - d);
+    MatrixIndex mi       = _indices[i];
+    double current_value = __get(mi.first, mi.second, -1);
+    __set(mi.first, mi.second, -1, current_value - d);
   }
   return *this;
 }
 
 SparseMatrix& SparseMatrix::operator/=(const double d)
 {
-  for(int i = 0; _indices.size(); i++)
+  for(int i = 0; i < _indices.size(); i++)
   {
-    matrixindex mi       = _indices[i];
-    double current_value = __get(mi.first, mi.second);
-    __set(mi.first, mi.second, current_value / d);
-  }
-  return *this;
-}
-
-SparseMatrix& SparseMatrix::operator*=(const SparseMatrix &m)
-{
-  for(int i = 0; m._indices.size(); i++)
-  {
-    matrixindex mi       = m._indices[i];
-    double value         = m._values[i];
-    double current_value = __get(mi.first, mi.second);
-    __set(mi.first, mi.second, current_value * value);
+    MatrixIndex mi       = _indices[i];
+    double current_value = __get(mi.first, mi.second, -1);
+    __set(mi.first, mi.second, -1, current_value / d);
   }
   return *this;
 }
@@ -203,10 +219,12 @@ SparseMatrix operator*(double factor, const SparseMatrix& m)
 
   for(int i = 0; i < m.size(); i++)
   {
-    matrixindex mi = m.getmi(i);
+    MatrixIndex mi = m.getmi(i);
     int r = mi.first;
     int c = mi.second;
+    cout << "row: " << r << " col: " << c << " value = " << m(r,c) << " -> ";
     R(r, c) = m(r,c) * factor;
+    cout << R(r,c) << endl;
   }
   return R;
 }
@@ -216,9 +234,7 @@ int SparseMatrix::size() const
   return _indices.size();
 }
 
-matrixindex SparseMatrix::getmi(int i) const
+MatrixIndex SparseMatrix::getmi(int i) const
 {
   return _indices[i];
 }
-
-

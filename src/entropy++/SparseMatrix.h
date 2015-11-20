@@ -10,13 +10,55 @@
 
 using namespace std;
 
-typedef pair<int, int> matrixindex;
+class MatrixIndex
+{
+  public:
+    MatrixIndex();
+    // ~MatrixIndex();
+
+    MatrixIndex(int f, int s)
+    {
+      first  = f;
+      second = s;
+      third  = -1;
+    }
+
+    MatrixIndex(int f, int s, int t)
+    {
+      first  = f;
+      second = s;
+      third  = t;
+    }
+
+    MatrixIndex(const MatrixIndex& m)
+    {
+      first  = m.first;
+      second = m.second;
+      third  = m.third;
+    }
+
+    MatrixIndex operator=(const MatrixIndex &m)
+    {
+      this->first  = m.first;
+      this->second = m.second;
+      this->third  = m.third;
+      return *this;
+    }
+
+    int first;
+    int second;
+    int third;
+
+  private:
+};
+
 
 class SparseMatrix 
 {
   public:
     /** Most simple constructor. Every cell is initialised with 0.*/
-    SparseMatrix();
+    SparseMatrix(int dimension = 2);
+    SparseMatrix(double, int dimension = 2);
     SparseMatrix(SparseMatrix &m);
     SparseMatrix(const SparseMatrix &m);
 
@@ -33,8 +75,7 @@ class SparseMatrix
     const SparseMatrix operator* (const double factor);
     SparseMatrix&      operator*=(const double factor);
 
-    SparseMatrix&      operator= (const SparseMatrix &m);
-    SparseMatrix&      operator*=(const SparseMatrix &m);
+    SparseMatrix&      operator=(const SparseMatrix &m);
 
     SparseMatrix&      operator-=(const double d);
     SparseMatrix&      operator/=(const double d);
@@ -46,7 +87,9 @@ class SparseMatrix
 
     int size() const;
 
-    matrixindex getmi(int) const;
+    MatrixIndex getmi(int) const;
+
+    void reset();
 
     // double L2();
 
@@ -60,7 +103,6 @@ class SparseMatrix
 
     // double l2();
 
-    void reset();
     // void   rescaleRows(double value, bool verbose);
 
     // double det() throw(MatrixException);
@@ -85,15 +127,18 @@ class SparseMatrix
     // };
 
   protected:
-    void     __set(const  int row, const int col, const  double value);
-    double   __get(const  int row, const int col) const;
-    void     __copy(const SparseMatrix &m);
-    int      _rows;
-    int      _cols;
-    double   _tmp;
+    void   __set(const int f, const int s, const int t, const double value);
+    double __get(const int f, const int s, const int t) const;
 
-    vector<matrixindex> _indices;
+
+    void   __copy(const SparseMatrix &m);
+
+    vector<MatrixIndex> _indices;
     vector<double>      _values;
+
+    int _size;
+    int _dimension;
+    double _default;
 
 };
 #endif // __SPARSE_MATRIX_H__

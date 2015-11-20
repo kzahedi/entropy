@@ -1,5 +1,3 @@
-#ifndef __CONFIGURATION_TEST_H__
-#define __CONFIGURATION_TEST_H__
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -18,5 +16,3 @@ class containerTest : public CppUnit::TestFixture
   void testUniformDiscretisationUnary();
 
 };
-
-#endif // __RNN_H__
