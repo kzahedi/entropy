@@ -12,7 +12,12 @@ add_library(Entropy++ SHARED
   PIs.cpp
   CMI.cpp
   CMIs.cpp
+  MC_W.cpp
+  MC_Ws.cpp
+  MC_MI.cpp
+  MC_MIs.cpp
+  CsvToContainer.cpp
   )
-# target_link_libraries(Entropy ${Boost_LIBRARIES} xerces-c glog YarsClientCom dl)
+target_link_libraries(Entropy++ ${Boost_LIBRARIES})
 
 install(TARGETS Entropy++ LIBRARY DESTINATION lib)

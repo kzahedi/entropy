@@ -6,18 +6,22 @@ ENABLE_TESTING()
 
 cmake_policy(SET CMP0042 OLD)
 
-set(CMAKE_VERBOSE_MAKEFILE       OFF)
-set(CMAKE_BUILD_TYPE             "Debug")
-set(CMAKE_BASE_NAME              "g++")
-set(CMAKE_CXX_COMPILER           "g++")
-set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O3")
-set(CMAKE_CXX_COMPILER_FULLPATH  "g++")
 set(EXECUTABLE_OUTPUT_PATH       ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH          ${PROJECT_BINARY_DIR}/lib)
+
+set(CMAKE_VERBOSE_MAKEFILE       OFF)
+set(CMAKE_BUILD_TYPE             "Release")
+set(CMAKE_CXX_COMPILER           "g++")
+set(CMAKE_CXX_COMPILER_FULLPATH  "g++")
+
 set(CMAKE_CXX_FLAGS_DEBUG        "-g -arch x86_64")
 set(CMAKE_CXX_FLAGS_RELEASE      "-arch x86_64")
+set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O3")
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
+
+set(Boost_USE_STATIC_LIBS ON)
+find_package(Boost REQUIRED filesystem system)
 
 add_subdirectory(src/entropy++)
 add_subdirectory(tests)
