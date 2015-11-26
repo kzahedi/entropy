@@ -21,6 +21,9 @@ class Container
     int rows();
     int columns();
 
+    void drop(int n);
+    // void take(int n);
+
     void setBinSizes(int*);
     void setDomains(double**);
     void setDiscretisationMode(int);
@@ -47,6 +50,8 @@ class Container
     Container* __uniformDiscretisation();
     int        __discretiseAndCombineValues(double *values);
     void       __strip();
+    void       __dropFirst(int n);
+    void       __dropLast(int n);
 
     double** _data;
     int      _mode;

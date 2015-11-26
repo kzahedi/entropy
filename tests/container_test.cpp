@@ -52,6 +52,47 @@ void containerTest::testFilling()
 
 }
 
+void containerTest::testDropping()
+{
+  Container c(10,3);
+
+  for(int i = 0; i < 30; i++)
+  {
+    c << i;
+  }
+
+  c.drop(3);
+
+  CPPUNIT_ASSERT_EQUAL(7, c.rows());
+  CPPUNIT_ASSERT_EQUAL(3, c.columns());
+
+  int v = 8;
+  for(int i = 0; i < c.rows(); i++)
+  {
+    for(int j = 0; j < c.columns(); j++)
+    {
+      v++;
+      CPPUNIT_ASSERT_EQUAL((int)v, (int)c(i,j));
+    }
+  }
+
+  c.drop(-3);
+
+  CPPUNIT_ASSERT_EQUAL(4, c.rows());
+  CPPUNIT_ASSERT_EQUAL(3, c.columns());
+
+  v = 8;
+  for(int i = 0; i < c.rows(); i++)
+  {
+    for(int j = 0; j < c.columns(); j++)
+    {
+      v++;
+      CPPUNIT_ASSERT_EQUAL((int)v, (int)c(i,j));
+    }
+  }
+
+}
+
 void containerTest::testUniformDiscretisationUnary()
 {
   Container c(11,1);

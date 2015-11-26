@@ -201,3 +201,58 @@ bool Container::isDiscretised()
 {
   return _discretised;
 }
+
+void Container::drop(int n)
+{
+  if(n > 0) __dropFirst(n);
+  if(n < 0) __dropLast(n);
+}
+
+void Container::__dropFirst(int n)
+{
+  double **newdata = new double*[_rows-abs(n)];
+  for(int i = 0; i < _rows - abs(n); i++)
+  {
+    newdata[i] = new double[_columns];
+  }
+
+  for(int i = 0; i < _rows-abs(n); i++)
+  {
+    for(int j = 0; j < _columns; j++)
+    {
+      newdata[i][j] = _data[i+abs(n)][j];
+    }
+  }
+
+  for(int r = 0; r < _rows; r++) delete _data[r];
+  delete _data;
+
+  _rows = _rows - abs(n);
+
+  _data = newdata;
+}
+
+void Container::__dropLast(int n)
+{
+  double **newdata = new double*[_rows-abs(n)];
+  for(int i = 0; i < _rows - abs(n); i++)
+  {
+    newdata[i] = new double[_columns];
+  }
+
+  for(int i = 0; i < _rows - abs(n); i++)
+  {
+    for(int j = 0; j < _columns; j++)
+    {
+      newdata[i][j] = _data[i][j];
+    }
+  }
+
+  for(int r = 0; r < _rows; r++) delete _data[r];
+  delete _data;
+
+  _rows = _rows - abs(n);
+
+  _data = newdata;
+
+}
