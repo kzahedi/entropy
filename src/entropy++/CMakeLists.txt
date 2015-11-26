@@ -3,13 +3,15 @@ link_directories(${PROJECT_BINARY_DIR}/lib)
 
 add_library(Entropy++ SHARED
   Container.cpp
+  Entropy.cpp
+  Matrix.cpp
+  SparseMatrix.cpp
   MI.cpp
   MIs.cpp
   PI.cpp
   PIs.cpp
-  Entropy.cpp
-  Matrix.cpp
-  SparseMatrix.cpp
+  CMI.cpp
+  CMIs.cpp
   )
 # target_link_libraries(Entropy ${Boost_LIBRARIES} xerces-c glog YarsClientCom dl)
 

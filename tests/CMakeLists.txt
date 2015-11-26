@@ -13,6 +13,10 @@ target_link_libraries(pi-tests        Entropy++ cppunit)
 add_executable(mi-tests               main.cpp  mi_test.cpp)
 target_link_libraries(mi-tests        Entropy++ cppunit)
 
+add_executable(cmi-tests              main.cpp  cmi_test.cpp)
+target_link_libraries(cmi-tests       Entropy++ cppunit)
+
 ADD_TEST(container "${PROJECT_BINARY_DIR}/bin/container-tests")
 ADD_TEST(matrix    "${PROJECT_BINARY_DIR}/bin/matrix-tests")
 ADD_TEST(mi        "${PROJECT_BINARY_DIR}/bin/mi-tests")
+ADD_TEST(cmi       "${PROJECT_BINARY_DIR}/bin/cmi-tests")

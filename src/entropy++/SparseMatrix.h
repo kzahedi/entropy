@@ -16,10 +16,17 @@ class MatrixIndex
     MatrixIndex();
     // ~MatrixIndex();
 
+    MatrixIndex(int f)
+    {
+      first  =  f;
+      second = -1;
+      third  = -1;
+    }
+
     MatrixIndex(int f, int s)
     {
-      first  = f;
-      second = s;
+      first  =  f;
+      second =  s;
       third  = -1;
     }
 
@@ -93,6 +100,13 @@ class SparseMatrix
 
     int size() const;
     double get(int);
+    double value(int,int,int);
+    double value(int,int);
+    double value(int);
+    double defaultValue();
+    bool available(int first, int second, int third);
+    bool available(int first, int second);
+    bool available(int first);
 
     MatrixIndex getmi(int) const;
 
@@ -136,7 +150,6 @@ class SparseMatrix
   protected:
     void   __set(const int f, const int s, const int t, const double value);
     double __get(const int f, const int s, const int t) const;
-
 
     void   __copy(const SparseMatrix &m);
 
