@@ -14,22 +14,37 @@ class Container
     Container(int rows, int columns);
     ~Container();
 
+    // Container(const Container);
+    Container& operator=(const Container&);
+
     const Container& operator<<(const double&) const;
-    double operator()(const int row, const int column) const;
-    double get(int, int);
+    double  operator()(const int row, const int column) const;
+    double& operator()(const int row, const int column);
 
-    int rows();
-    int columns();
+    double     get(int, int);
+    void       set(int, int, double);
+    void       normaliseColumn(int, double, double);
 
-    void drop(int n);
+    double     max();
+    double     max(int);
+
+    double     min();
+    double     min(int);
+
+    int        rows();
+    int        columns();
+    Container* columns(int n, ...);
+
+    bool       isDiscretised();
+    Container* drop(int n);
     // void take(int n);
 
     void setBinSizes(int*);
     void setDomains(double**);
     void setDiscretisationMode(int);
 
-    bool isDiscretised();
     Container* discretise();
+    Container* discretiseByColumn();
 
     friend std::ostream& operator<<(std::ostream& str, const Container& container)
     {
@@ -50,8 +65,8 @@ class Container
     Container* __uniformDiscretisation();
     int        __discretiseAndCombineValues(double *values);
     void       __strip();
-    void       __dropFirst(int n);
-    void       __dropLast(int n);
+    Container* __dropFirst(int n);
+    Container* __dropLast(int n);
 
     double** _data;
     int      _mode;

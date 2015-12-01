@@ -13,7 +13,7 @@ class CsvToContainer
   public:
     CsvToContainer();
 
-    Container* read(string filename, vector<int> indices);
+    Container* read(string filename, int n, ...);
 
   private:
 };

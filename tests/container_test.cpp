@@ -61,36 +61,35 @@ void containerTest::testDropping()
     c << i;
   }
 
-  c.drop(3);
+  Container *d = c.drop(3);
 
-  CPPUNIT_ASSERT_EQUAL(7, c.rows());
-  CPPUNIT_ASSERT_EQUAL(3, c.columns());
+  CPPUNIT_ASSERT_EQUAL(7, d->rows());
+  CPPUNIT_ASSERT_EQUAL(3, d->columns());
 
   int v = 8;
-  for(int i = 0; i < c.rows(); i++)
+  for(int i = 0; i < d->rows(); i++)
   {
-    for(int j = 0; j < c.columns(); j++)
+    for(int j = 0; j < d->columns(); j++)
     {
       v++;
-      CPPUNIT_ASSERT_EQUAL((int)v, (int)c(i,j));
+      CPPUNIT_ASSERT_EQUAL((int)v, (int)d->get(i,j));
     }
   }
 
-  c.drop(-3);
+  Container *e = d->drop(-3);
 
-  CPPUNIT_ASSERT_EQUAL(4, c.rows());
-  CPPUNIT_ASSERT_EQUAL(3, c.columns());
+  CPPUNIT_ASSERT_EQUAL(4, e->rows());
+  CPPUNIT_ASSERT_EQUAL(3, e->columns());
 
   v = 8;
-  for(int i = 0; i < c.rows(); i++)
+  for(int i = 0; i < e->rows(); i++)
   {
-    for(int j = 0; j < c.columns(); j++)
+    for(int j = 0; j < e->columns(); j++)
     {
       v++;
-      CPPUNIT_ASSERT_EQUAL((int)v, (int)c(i,j));
+      CPPUNIT_ASSERT_EQUAL((int)v, (int)e->get(i,j));
     }
   }
-
 }
 
 void containerTest::testUniformDiscretisationUnary()
@@ -184,4 +183,116 @@ void containerTest::testUniformDiscretisation()
   delete   domain[2];
   delete[] domain;
   delete[] bins;
+}
+
+void containerTest::testCopy()
+{
+  Container c(10,3);
+  Container d(0,0);
+
+  for(int i = 0; i < 30; i++) c << i;
+
+  d = c;
+
+  CPPUNIT_ASSERT_EQUAL(c.rows(),    d.rows());
+  CPPUNIT_ASSERT_EQUAL(c.columns(), d.columns());
+
+  for(int i = 0; i < 10; i++)
+  {
+    for(int j = 0; j < 3; j++)
+    {
+      CPPUNIT_ASSERT_EQUAL((int)c(i,j), (int)d(i,j));
+    }
+  }
+
+  c(0, 0) =  10;
+
+  CPPUNIT_ASSERT((int)c(0,0) != (int)d(0,0));
+}
+
+void containerTest::testMax()
+{
+  Container c(10,3);
+
+  for(int i = 0; i < 30; i++)
+  {
+    c << i;
+  }
+
+  CPPUNIT_ASSERT_EQUAL(27, (int)c.max(0));
+  CPPUNIT_ASSERT_EQUAL(28, (int)c.max(1));
+  CPPUNIT_ASSERT_EQUAL(29, (int)c.max(2));
+  CPPUNIT_ASSERT_EQUAL(29, (int)c.max());
+
+}
+
+void containerTest::testMin()
+{
+  Container c(10,3);
+
+  for(int i = 0; i < 30; i++)
+  {
+    c << i;
+  }
+
+  CPPUNIT_ASSERT_EQUAL(0, (int)c.min(0));
+  CPPUNIT_ASSERT_EQUAL(1, (int)c.min(1));
+  CPPUNIT_ASSERT_EQUAL(2, (int)c.min(2));
+  CPPUNIT_ASSERT_EQUAL(0, (int)c.min());
+
+}
+
+void containerTest::testExtractColumns()
+{
+  int rows    = 50;
+  int columns = 5;
+  Container c(rows,columns);
+  for(int i = 0; i < rows; i++)
+  {
+    for(int j = 0; j < columns; j++)
+    {
+      int value = (j+1) * 100 + i;
+      c << value;
+    }
+  }
+
+  Container *onethreefive = c.columns(3,0,2,4);
+
+  for(int i = 0; i < rows; i++)
+  {
+    CPPUNIT_ASSERT_EQUAL((int)c(i,0), (int)(*onethreefive)(i,0));
+    CPPUNIT_ASSERT_EQUAL((int)c(i,2), (int)(*onethreefive)(i,1));
+    CPPUNIT_ASSERT_EQUAL((int)c(i,4), (int)(*onethreefive)(i,2));
+  }
+
+}
+
+void containerTest::testNormaliseColumn()
+{
+  int rows    = 50;
+  int columns = 5;
+  Container c(rows,columns);
+  int index = 0;
+  for(int i = 0; i < rows; i++)
+  {
+    for(int j = 0; j < columns; j++)
+    {
+      c << index++;
+    }
+  }
+
+  for(int j = 0; j < columns; j++)
+  {
+    c.normaliseColumn(j, c.min(j), c.max(j));
+  }
+
+  for(int i = 0; i < rows; i++)
+  {
+    for(int j = 0; j < columns; j++)
+    {
+      CPPUNIT_ASSERT(0.0    <= c(i,j));
+      CPPUNIT_ASSERT(c(i,j) <= 1.0);
+    }
+  }
+
 }

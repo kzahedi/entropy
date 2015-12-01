@@ -17,11 +17,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( csvTest );
 void csvTest::readTestFile()
 {
   CsvToContainer *csv = new CsvToContainer();
-  vector<int> indices;
-  indices.push_back(0);
-  indices.push_back(3);
-  indices.push_back(7);
-  Container *c = csv->read(TEST_CSV, indices);
+  Container *c = csv->read(TEST_CSV, 3, 0, 3, 7);
 
   CPPUNIT_ASSERT_EQUAL(21, c->rows());
   CPPUNIT_ASSERT_EQUAL(3,  c->columns());

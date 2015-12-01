@@ -13,8 +13,18 @@ CsvToContainer::CsvToContainer()
 {
 }
 
-Container* CsvToContainer::read(string filename, std::vector<int> indices)
+Container* CsvToContainer::read(string filename, int n, ...)
 {
+
+  vector<int> indices;
+  va_list ap;
+  va_start(ap, n);
+  for(int i = 0; i < n; i++)
+  {
+     indices.push_back(va_arg(ap, int));
+  }
+  va_end(ap);
+
   ifstream ifs(filename.c_str());
   string   line;
   int      nrOfLines = 0;
@@ -29,9 +39,10 @@ Container* CsvToContainer::read(string filename, std::vector<int> indices)
 
   while (std::getline(ifs, line))
   {
-    tokenizer<> tk(line);
+    boost::char_separator<char> sep(",");
+    tokenizer<boost::char_separator<char> > tk(line,sep);
     vector<string> vec;
-    for (tokenizer<>::iterator i(tk.begin()); i!=tk.end();++i) 
+    for(tokenizer<boost::char_separator<char> >::iterator i(tk.begin()); i!=tk.end();++i) 
     {
       vec.push_back(*i);
     }
