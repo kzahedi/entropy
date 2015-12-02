@@ -40,8 +40,10 @@ double MI::__empericalMI(Container* X, Container* Y)
 
   for(int i = 0; i < X->rows(); i++)
   {
-    if(X->get(i,0) > maxX) maxX = X->get(i,0);
-    if(Y->get(i,0) > maxY) maxY = Y->get(i,0);
+    int x = X->get(i,0);
+    int y = Y->get(i,0);
+    if(x > maxX) maxX = x;
+    if(y > maxY) maxY = y;
   }
 
   maxX = maxX + 1;
