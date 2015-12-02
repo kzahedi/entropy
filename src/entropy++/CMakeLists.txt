@@ -7,6 +7,7 @@ add_library(Entropy++ SHARED
   Matrix.cpp
   SparseMatrix.cpp
   MI.cpp
+  MIsd.cpp
   MIs.cpp
   PI.cpp
   PIs.cpp
@@ -15,6 +16,7 @@ add_library(Entropy++ SHARED
   MC_W.cpp
   MC_Ws.cpp
   MC_MI.cpp
+  MC_MIsd.cpp
   MC_MIs.cpp
   CsvToContainer.cpp
   )
