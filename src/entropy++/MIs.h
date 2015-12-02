@@ -2,8 +2,7 @@
 #define __MIs_H__
 
 #include <entropy++/Container.h>
-
-# define MIs_EMPERICAL 2001
+#include <entropy++/defs.h>
 
 class MIs
 {

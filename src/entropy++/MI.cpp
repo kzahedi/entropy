@@ -8,7 +8,7 @@ using namespace std;
 
 MI::MI()
 {
-  _mode = MI_EMPERICAL;
+  _mode = EMPERICAL;
 }
 
 MI::~MI()
@@ -19,7 +19,7 @@ double MI::calculate(Container* X, Container* Y)
 {
   switch(_mode)
   {
-    case MI_EMPERICAL:
+    case EMPERICAL:
       return __empericalMI(X, Y);
       break;
     default:

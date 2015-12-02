@@ -9,7 +9,7 @@ using namespace std;
 
 PIs::PIs()
 {
-  _mode = PIs_EMPERICAL;
+  _mode = EMPERICAL;
 }
 
 PIs::~PIs()
@@ -20,7 +20,7 @@ double PIs::calculate(Container* X)
 {
   switch(_mode)
   {
-    case PIs_EMPERICAL:
+    case EMPERICAL:
       return __empericalPIs(X);
       break;
     default:

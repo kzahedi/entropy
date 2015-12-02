@@ -1,4 +1,4 @@
-#include <entropy++/CMI.h>
+#include <entropy++/CMIsd.h>
 
 #include <iostream>
 #include <assert.h>
@@ -6,33 +6,33 @@
 
 using namespace std;
 
-CMI::CMI()
+CMIsd::CMIsd()
 {
   _mode = EMPERICAL;
 }
 
-CMI::~CMI()
+CMIsd::~CMIsd()
 {
 }
 
 //
 // I(X;Y|Z) = \sum_{x,y,z} p(x,y,z) log( p(x,y|z) / (p(x|z) * p(y|z)))
 //
-double CMI::calculate(Container* X, Container* Y, Container *Z)
+Container* CMIsd::calculate(Container* X, Container* Y, Container *Z)
 {
   switch(_mode)
   {
     case EMPERICAL:
-      return __empericalCMI(X, Y, Z);
+      return __emperical(X, Y, Z);
       break;
     default:
-      cerr << "CMI::calulate unknown mode given: " << _mode << endl;
+      cerr << "CMIsd::calulate unknown mode given: " << _mode << endl;
       break;
   }
-  return 0.0;
+  return NULL;
 }
 
-double CMI::__empericalCMI(Container* X, Container* Y, Container* Z)
+Container* CMIsd::__emperical(Container* X, Container* Y, Container* Z)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -59,6 +59,7 @@ double CMI::__empericalCMI(Container* X, Container* Y, Container* Z)
   double  **px_c_z  = new double*[maxX];
   double  **py_c_z  = new double*[maxY];
   double   *pz      = new double[maxZ];
+  double ***cmi     = new double**[maxX];
 
   for(int z = 0; z < maxZ; z++)
   {
@@ -68,14 +69,17 @@ double CMI::__empericalCMI(Container* X, Container* Y, Container* Z)
   for(int x = 0; x < maxX; x++)
   {
     pxyz[x]    = new double*[maxY];
+    cmi[x]     = new double*[maxY];
     pxy_c_z[x] = new double*[maxY];
     for(int y = 0; y < maxY; y++)
     {
       pxyz[x][y]    = new double[maxZ];
+      cmi[x][y]     = new double[maxZ];
       pxy_c_z[x][y] = new double[maxZ];
       for(int z = 0; z < maxZ; z++)
       {
         pxyz[x][y][z]    = 0.0;
+        cmi[x][y][z]     = 0.0;
         pxy_c_z[x][y][z] = 0.0;
       }
     }
@@ -193,7 +197,6 @@ double CMI::__empericalCMI(Container* X, Container* Y, Container* Z)
   for(int z = 0; z < maxZ; z++) sum += pz[z];
   assert(fabs(sum - 1.0) < 0.000001);
 
-  double r = 0.0;
   for(int x = 0; x < maxX; x++)
   {
     for(int y = 0; y < maxY; y++)
@@ -205,11 +208,19 @@ double CMI::__empericalCMI(Container* X, Container* Y, Container* Z)
            px_c_z[x][z]     > 0.0 &&
            py_c_z[y][z]     > 0.0)
         {
-          r += pxyz[x][y][z]
-            * (log2(pxy_c_z[x][y][z]) - log2(px_c_z[x][z] * py_c_z[y][z]));
+          cmi[x][y][z] = (log2(pxy_c_z[x][y][z]) - log2(px_c_z[x][z] * py_c_z[y][z]));
         }
       }
     }
+  }
+
+  Container* r = new Container(X->rows(), 1);
+  for(int i = 0; i < X->rows(); i++)
+  {
+    int x     = X->get(i, 0);
+    int y     = Y->get(i, 0);
+    int z     = Z->get(i, 0);
+    (*r)(i,0) = cmi[x][y][z];
   }
 
   for(int x = 0; x < maxX; x++)
@@ -217,9 +228,11 @@ double CMI::__empericalCMI(Container* X, Container* Y, Container* Z)
     for(int y = 0; y < maxY; y++)
     {
       delete[] pxyz[x][y];
+      delete[] cmi[x][y];
       delete[] pxy_c_z[x][y];
     }
     delete[] pxyz[x];
+    delete[] cmi[x];
     delete[] pxy_c_z[x];
   }
 
@@ -233,6 +246,8 @@ double CMI::__empericalCMI(Container* X, Container* Y, Container* Z)
     delete[] py_c_z[y];
   }
 
+  delete[] pxyz;
+  delete[] cmi;
   delete[] py_c_z;
   delete[] px_c_z;
   delete[] pz;

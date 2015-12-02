@@ -1,7 +1,7 @@
 #ifndef __CONTAINER_H__
 #define __CONTAINER_H__
 
-# define CONTAINER_DISCRETISE_UNIFORM 1001
+#include <entropy++/defs.h>
 
 #include <ostream>
 #include <vector>
@@ -44,6 +44,8 @@ class Container
     void setBinSizes(int*);
     void setDomains(double**);
     void setDiscretisationMode(int);
+
+    double columnSum(int);
 
     Container* discretise();
     Container* discretiseByColumn();

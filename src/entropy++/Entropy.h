@@ -2,8 +2,7 @@
 #define __ENTROPY_H__
 
 #include <entropy++/Container.h>
-
-# define Entropy_EMPERICAL 2001
+#include <entropy++/defs.h>
 
 class Entropy
 {

@@ -8,7 +8,7 @@ using namespace std;
 
 Entropy::Entropy()
 {
-  _mode = Entropy_EMPERICAL;
+  _mode = EMPERICAL;
 }
 
 Entropy::~Entropy()
@@ -19,7 +19,7 @@ double Entropy::calulate(Container* X)
 {
   switch(_mode)
   {
-    case Entropy_EMPERICAL:
+    case EMPERICAL:
       return __empericalEntropy(X);
       break;
     default:

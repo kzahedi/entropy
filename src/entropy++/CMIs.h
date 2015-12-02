@@ -2,8 +2,7 @@
 #define __CMIs_H__
 
 #include <entropy++/Container.h>
-
-# define CMIs_EMPERICAL 2001
+#include <entropy++/defs.h>
 
 class CMIs
 {

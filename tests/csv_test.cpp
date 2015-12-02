@@ -1,7 +1,7 @@
 #include "csv_test.h"
 
 #include <entropy++/Container.h>
-#include <entropy++/CsvToContainer.h>
+#include <entropy++/Csv.h>
 
 #include <fstream>
 #include <iostream>
@@ -16,7 +16,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( csvTest );
 
 void csvTest::readTestFile()
 {
-  CsvToContainer *csv = new CsvToContainer();
+  Csv *csv = new Csv();
   Container *c = csv->read(TEST_CSV, 3, 0, 3, 7);
 
   CPPUNIT_ASSERT_EQUAL(21, c->rows());

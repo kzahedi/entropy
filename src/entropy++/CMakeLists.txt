@@ -8,17 +8,23 @@ add_library(Entropy++ SHARED
   SparseMatrix.cpp
   MI.cpp
   MIsd.cpp
+  MIssd.cpp
   MIs.cpp
   PI.cpp
   PIs.cpp
   CMI.cpp
+  CMIsd.cpp
   CMIs.cpp
+  CMIssd.cpp
   MC_W.cpp
+  MC_Wsd.cpp
   MC_Ws.cpp
+  MC_Wssd.cpp
   MC_MI.cpp
   MC_MIsd.cpp
+  MC_MIssd.cpp
   MC_MIs.cpp
-  CsvToContainer.cpp
+  Csv.cpp
   )
 target_link_libraries(Entropy++ ${Boost_LIBRARIES})
 

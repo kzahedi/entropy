@@ -10,7 +10,7 @@ using namespace std;
 
 MIssd::MIssd()
 {
-  _mode = MIs_EMPERICAL;
+  _mode = EMPERICAL;
 }
 
 MIssd::~MIssd()
@@ -21,8 +21,8 @@ Container* MIssd::calculate(Container* X, Container* Y)
 {
   switch(_mode)
   {
-    case MIs_EMPERICAL:
-      return __empericalMIs(X, Y);
+    case EMPERICAL:
+      return __empericalMIssd(X, Y);
       break;
     default:
       cerr << "MIssd::calulate unknown mode given: " << _mode << endl;
@@ -31,7 +31,7 @@ Container* MIssd::calculate(Container* X, Container* Y)
   return NULL;
 }
 
-Container* MIssd::__empericalMIs(Container* X, Container* Y)
+Container* MIssd::__empericalMIssd(Container* X, Container* Y)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -81,16 +81,24 @@ Container* MIssd::__empericalMIs(Container* X, Container* Y)
 
   for(int i = 0; i < pxy.size(); i++)
   {
-    MatrixIndex mi = pxy.getmi(i);
-    int x = mi.first;
-    int y = mi.second;
+    MatrixIndex m = pxy.getmi(i);
+    int x = m.first;
+    int y = m.second;
     if(px(x) > 0.0 && py(y) > 0.0 && pxy(x,y) > 0.0)
     {
-      mi(x,y) = pxy(x,y) * (log2(pxy(x,y)) - log2(px(x) * py(y)));
+      mi(x,y) = (log2(pxy(x,y)) - log2(px(x) * py(y)));
     }
   }
 
   Container *r = new Container(X->rows(), 1);
+
+  for(int i = 0; i < X->rows(); i++)
+  {
+    int x    = X->get(i, 0);
+    int y    = Y->get(i, 0);
+    double v = mi(x,y);
+    (*r)(i,0) = v;
+  }
 
   return r;
 }

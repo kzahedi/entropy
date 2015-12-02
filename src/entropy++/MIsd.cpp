@@ -8,7 +8,7 @@ using namespace std;
 
 MIsd::MIsd()
 {
-  _mode = MI_EMPERICAL;
+  _mode = EMPERICAL;
 }
 
 MIsd::~MIsd()
@@ -19,7 +19,7 @@ Container* MIsd::calculate(Container* X, Container* Y)
 {
   switch(_mode)
   {
-    case MI_EMPERICAL:
+    case EMPERICAL:
       return __empericalMI(X, Y);
       break;
     default:

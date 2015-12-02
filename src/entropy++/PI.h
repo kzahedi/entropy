@@ -2,8 +2,7 @@
 #define __PI_H__
 
 #include <entropy++/Container.h>
-
-# define PI_EMPERICAL 2001
+#include <entropy++/defs.h>
 
 class PI
 {

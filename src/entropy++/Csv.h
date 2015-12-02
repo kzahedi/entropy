@@ -1,5 +1,5 @@
-#ifndef __CSV_TO_CONTAINER_H__
-#define __CSV_TO_CONTAINER_H__
+#ifndef __CSV_H__
+#define __CSV_H__
 
 #include <entropy++/Container.h>
 
@@ -8,14 +8,14 @@
 
 using namespace std;
 
-class CsvToContainer
+class Csv
 {
   public:
-    CsvToContainer();
+    Csv();
 
     Container* read(string filename, int n, ...);
 
   private:
 };
 
-#endif // __CSV_TO_CONTAINER_H__
+#endif // __CSV_H__

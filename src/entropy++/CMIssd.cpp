@@ -1,4 +1,4 @@
-#include <entropy++/CMIs.h>
+#include <entropy++/CMIssd.h>
 
 #include <entropy++/SparseMatrix.h>
 
@@ -8,33 +8,33 @@
 
 using namespace std;
 
-CMIs::CMIs()
+CMIssd::CMIssd()
 {
   _mode = EMPERICAL;
 }
 
-CMIs::~CMIs()
+CMIssd::~CMIssd()
 {
 }
 
 //
 // I(X;Y|Z) = \sum_{x,y,z} p(x,y,z) log( p(x,y|z) / (p(x|z) * p(y|z)))
 //
-double CMIs::calculate(Container* X, Container* Y, Container *Z)
+Container* CMIssd::calculate(Container* X, Container* Y, Container *Z)
 {
   switch(_mode)
   {
     case EMPERICAL:
-      return __empericalCMIs(X, Y, Z);
+      return __emperical(X, Y, Z);
       break;
     default:
-      cerr << "CMIs::calulate unknown mode given: " << _mode << endl;
+      cerr << "CMIssd::calulate unknown mode given: " << _mode << endl;
       break;
   }
-  return 0.0;
+  return NULL;
 }
 
-double CMIs::__empericalCMIs(Container* X, Container* Y, Container* Z)
+Container* CMIssd::__emperical(Container* X, Container* Y, Container* Z)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -133,18 +133,27 @@ double CMIs::__empericalCMIs(Container* X, Container* Y, Container* Z)
 
   // CHECK MATRICES
 
-  double r = 0.0;
+  SparseMatrix mi;
   for(int i = 0; i < pxyz.size(); i++)
   {
-    MatrixIndex mi = pxyz.getmi(i);
-    int x = mi.first;
-    int y = mi.second;
-    int z = mi.third;
+    MatrixIndex m = pxyz.getmi(i);
+    int x = m.first;
+    int y = m.second;
+    int z = m.third;
     if(pxyz(x,y,z) > 0.0 && pxy_c_z(x,y,z) > 0.0 &&
        px_c_z(x,z) > 0.0 && py_c_z(y,z)    > 0.0)
     {
-      r += pxyz(x,y,z) * (log2(pxy_c_z(x,y,z)) - log2(px_c_z(x,z) * py_c_z(y,z)));
+      mi(x,y,z) = (log2(pxy_c_z(x,y,z)) - log2(px_c_z(x,z) * py_c_z(y,z)));
     }
+  }
+
+  Container* r = new Container(X->rows(), 1);
+  for(int i = 0; i < X->rows(); i++)
+  {
+    int x = X->get(i, 0);
+    int y = Y->get(i, 0);
+    int z = Z->get(i, 0);
+    (*r)(i,0) = mi(x,y,z);
   }
 
   return r;

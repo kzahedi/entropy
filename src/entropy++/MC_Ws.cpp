@@ -3,8 +3,7 @@
 #include <entropy++/CMIs.h>
 
 MC_Ws::MC_Ws()
-{
-}
+{ }
 
 double MC_Ws::calculate(Container* W2, Container* W1, Container* A1)
 {

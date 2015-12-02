@@ -10,7 +10,7 @@ using namespace std;
 
 MIs::MIs()
 {
-  _mode = MIs_EMPERICAL;
+  _mode = EMPERICAL;
 }
 
 MIs::~MIs()
@@ -21,7 +21,7 @@ double MIs::calculate(Container* X, Container* Y)
 {
   switch(_mode)
   {
-    case MIs_EMPERICAL:
+    case EMPERICAL:
       return __empericalMIs(X, Y);
       break;
     default:

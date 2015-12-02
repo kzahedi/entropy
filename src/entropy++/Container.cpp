@@ -13,7 +13,7 @@ Container::Container(int rows, int columns)
   _data         = new double*[rows];
   _domains      = new double*[columns];
   _bins         = new int[columns];
-  _mode         = CONTAINER_DISCRETISE_UNIFORM;
+  _mode         = UNIFORM;
 
   _domainsGiven = false;
   _binsGiven    = false;
@@ -197,7 +197,7 @@ Container* Container::discretise()
   Container *com = NULL;
   switch(_mode)
   {
-    case CONTAINER_DISCRETISE_UNIFORM:
+    case UNIFORM:
       dis = discretiseByColumn();
       com = dis->combineDiscretisedColumns();
       delete dis;
@@ -415,7 +415,7 @@ Container* Container::discretiseByColumn()
 {
   switch(_mode)
   {
-    case CONTAINER_DISCRETISE_UNIFORM:
+    case UNIFORM:
       return __uniformDiscretisationByColumn();
       break;
     default:
@@ -466,4 +466,11 @@ Container* Container::combineDiscretisedColumns()
   }
   copy->__strip();
   return copy;
+}
+
+double Container::columnSum(int c)
+{
+  double s = 0.0;
+  for(int r = 0; r < _rows; r++) s += _data[r][c];
+  return s;
 }

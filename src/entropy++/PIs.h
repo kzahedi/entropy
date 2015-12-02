@@ -2,8 +2,7 @@
 #define __PIs_H__
 
 #include <entropy++/Container.h>
-
-# define PIs_EMPERICAL 2001
+#include <entropy++/defs.h>
 
 class PIs
 {

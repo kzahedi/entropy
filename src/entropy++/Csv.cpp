@@ -1,4 +1,4 @@
-#include <entropy++/CsvToContainer.h>
+#include <entropy++/Csv.h>
 
 #include <boost/filesystem.hpp>
 #include <boost/tokenizer.hpp>
@@ -9,11 +9,11 @@
 
 using namespace boost;
 
-CsvToContainer::CsvToContainer()
+Csv::Csv()
 {
 }
 
-Container* CsvToContainer::read(string filename, int n, ...)
+Container* Csv::read(string filename, int n, ...)
 {
 
   vector<int> indices;
