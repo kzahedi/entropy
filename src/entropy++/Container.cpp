@@ -193,10 +193,15 @@ void Container::setDomains(double **domains)
 
 Container* Container::discretise()
 {
+  Container *dis = NULL;
+  Container *com = NULL;
   switch(_mode)
   {
     case CONTAINER_DISCRETISE_UNIFORM:
-      return __uniformDiscretisation();
+      dis = discretiseByColumn();
+      com = dis->combineDiscretisedColumns();
+      delete dis;
+      return com;
       break;
     default:
       cerr << "Unknown discretisation mode given: " << _mode << endl;
@@ -210,50 +215,15 @@ void Container::setDiscretisationMode(int mode)
   _mode = mode;
 }
 
-int Container::__discretiseAndCombineValues(double *values)
-{
-  assert(_domainsGiven && _binsGiven);
-
-  int value  = 0;
-  int factor = 1;
-
-  for(int c = 0; c < _columns; c++)
-  {
-    // cout << _domains[c][0] << " <= " << values[c] << " <= " << _domains[c][1] << endl;
-    assert(_domains[c][0] <= values[c] && values[c] <= _domains[c][1]);
-    double mapped = ((values[c]      - _domains[c][0]) /
-                     (_domains[c][1] - _domains[c][0]) * _bins[c]);
-    double cropped = MIN(_bins[c]-1, mapped);
-    if(c > 0) factor *= _bins[c-1];
-    value += (int)(cropped * factor);
-  }
-
-  return value;
-}
-
-Container* Container::__uniformDiscretisation()
-{
-  Container *copy = new Container(_rows, 1);
-  for(int r = 0; r < _rows; r++)
-  {
-    double v = (double)__discretiseAndCombineValues(_data[r]);
-    (*copy) << v;
-  }
-  copy->__strip();
-  copy->_discretised = true;
-  return copy;
-}
-
 void Container::__strip()
 {
-
   vector<int> values;
 
   for(int r = 0; r < _rows; r++)
   {
     int  value = (int)_data[r][0];
     bool found = false;
-    for(int i = 0; i < values.size(); i++)
+    for(int i = 0; i < (int)values.size(); i++)
     {
       if(value == values[i])
       {
@@ -270,7 +240,7 @@ void Container::__strip()
   for(int r = 0; r < _rows; r++)
   {
     int value = (int)_data[r][0];
-    for(int i = 0; i < values.size(); i++)
+    for(int i = 0; i < (int)values.size(); i++)
     {
       if(value == values[i])
       {
@@ -280,21 +250,52 @@ void Container::__strip()
   }
 }
 
+Container* Container::__uniformDiscretisationByColumn()
+{
+  Container *copy = new Container(_rows, _columns);
+  __copyProperties(copy);
+  for(int c = 0; c < _columns; c++)
+  {
+    vector<int> values;
+    for(int r = 0; r < _rows; r++)
+    {
+      assert(_domains[c][0] <= get(r,c) && get(r,c) <= _domains[c][1]);
+      int mapped  = (int)(((get(r,c)       - _domains[c][0])
+                         / (_domains[c][1] - _domains[c][0]))
+                         * _bins[c]);
+      int cropped = (int)MIN(_bins[c]-1, mapped);
+      copy->set(r, c, cropped);
+    }
+  }
+  copy->__strip();
+  copy->_discretised = true;
+  return copy;
+}
+
 bool Container::isDiscretised()
 {
   return _discretised;
+}
+
+double& Container::operator()(const int row, const int column)
+{
+  assert(row    < _rows);
+  assert(column < _columns);
+  return _data[row][column];
 }
 
 Container* Container::drop(int n)
 {
   if(n > 0) return __dropFirst(n);
   if(n < 0) return __dropLast(n);
-  return NULL;
+  return copy();
 }
 
 Container* Container::__dropFirst(int n)
 {
   Container *copy = new Container(_rows-abs(n), _columns);
+  __copyProperties(copy);
+
   for(int i = 0; i < _rows-abs(n); i++)
   {
     for(int j = 0; j < _columns; j++)
@@ -305,17 +306,10 @@ Container* Container::__dropFirst(int n)
   return copy;
 }
 
-double& Container::operator()(const int row, const int column)
-{
-  assert(row    < _rows);
-  assert(column < _columns);
-  return _data[row][column];
-}
-
 Container* Container::__dropLast(int n)
 {
   Container *copy = new Container(_rows-abs(n), _columns);
-  copy->_discretised  = _discretised;
+  __copyProperties(copy);
 
   for(int i = 0; i < _rows - abs(n); i++)
   {
@@ -324,7 +318,6 @@ Container* Container::__dropLast(int n)
       (*copy) << _data[i][j];
     }
   }
-
   return copy;
 }
 
@@ -399,8 +392,78 @@ void Container::normaliseColumn(int c, double min, double max)
 {
   for(int r = 0; r < _rows; r++)
   {
-    // cout << _data[r][c] << " -> ";
     _data[r][c] = (_data[r][c] - min) / (max - min);
-    // cout << _data[r][c] << endl;
   }
+}
+
+Container* Container::copy()
+{
+  Container *copy = new Container(_rows, _columns);
+  __copyProperties(copy);
+
+  for(int r = 0; r < _rows; r++)
+  {
+    for(int c = 0; c < _columns; c++)
+    {
+      (*copy) << _data[r][c];
+    }
+  }
+  return copy;
+}
+
+Container* Container::discretiseByColumn()
+{
+  switch(_mode)
+  {
+    case CONTAINER_DISCRETISE_UNIFORM:
+      return __uniformDiscretisationByColumn();
+      break;
+    default:
+      cerr << "Unknown discretisation mode given: " << _mode << endl;
+      break;
+  }
+  return NULL;
+}
+
+void Container::__copyProperties(Container* dst)
+{
+  dst->_binsGiven    = _binsGiven;
+  dst->_domainsGiven = _domainsGiven;
+  dst->_discretised  = _discretised;
+  if(_binsGiven == true && dst->_columns == _columns)
+  {
+    for(int i = 0; i < _columns; i++)
+    {
+      dst->_bins[i] = _bins[i];
+    }
+  }
+  if(_domainsGiven == true && dst->_columns == _columns)
+  {
+    for(int i = 0; i < _columns; i++)
+    {
+      dst->_domains[i][0] = _domains[i][0];
+      dst->_domains[i][1] = _domains[i][1];
+    }
+  }
+}
+
+Container* Container::combineDiscretisedColumns()
+{
+  assert(_discretised == true);
+  Container *copy = new Container(_rows, 1);
+  __copyProperties(copy);
+
+  for(int r = 0; r < _rows; r++)
+  {
+    int v = 0;
+    int f = 1;
+    for(int c = 0; c < _columns; c++)
+    {
+      if(c > 0) f = f * _bins[c-1];
+      v += f * get(r,c);
+    }
+    *copy << v;
+  }
+  copy->__strip();
+  return copy;
 }

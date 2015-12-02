@@ -294,5 +294,29 @@ void containerTest::testNormaliseColumn()
       CPPUNIT_ASSERT(c(i,j) <= 1.0);
     }
   }
+}
+
+void containerTest::testCopyFunc()
+{
+  int rows    = 50;
+  int columns = 5;
+  Container c(rows,columns);
+  int index = 0;
+  for(int i = 0; i < rows; i++)
+  {
+    for(int j = 0; j < columns; j++)
+    {
+      c << index++;
+    }
+  }
+
+  Container *d = c.copy();
+  for(int i = 0; i < rows; i++)
+  {
+    for(int j = 0; j < columns; j++)
+    {
+      CPPUNIT_ASSERT_EQUAL((int)c(i,j), (int)(*d)(i,j));
+    }
+  }
 
 }

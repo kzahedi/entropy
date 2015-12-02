@@ -11,6 +11,7 @@ class containerTest : public CppUnit::TestFixture
   CPPUNIT_TEST(testCopy);
   CPPUNIT_TEST(testMax);
   CPPUNIT_TEST(testMin);
+  CPPUNIT_TEST(testCopyFunc);
   CPPUNIT_TEST(testExtractColumns);
   CPPUNIT_TEST(testNormaliseColumn);
   CPPUNIT_TEST_SUITE_END();
@@ -26,5 +27,6 @@ class containerTest : public CppUnit::TestFixture
     void testMin();
     void testExtractColumns();
     void testNormaliseColumn();
+    void testCopyFunc();
 
 };

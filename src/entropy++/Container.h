@@ -4,6 +4,7 @@
 # define CONTAINER_DISCRETISE_UNIFORM 1001
 
 #include <ostream>
+#include <vector>
 
 using namespace std;
 
@@ -34,6 +35,7 @@ class Container
     int        rows();
     int        columns();
     Container* columns(int n, ...);
+    Container* copy();
 
     bool       isDiscretised();
     Container* drop(int n);
@@ -45,6 +47,7 @@ class Container
 
     Container* discretise();
     Container* discretiseByColumn();
+    Container* combineDiscretisedColumns();
 
     friend std::ostream& operator<<(std::ostream& str, const Container& container)
     {
@@ -63,22 +66,24 @@ class Container
 
   private:
     Container* __uniformDiscretisation();
+    Container* __uniformDiscretisationByColumn();
     int        __discretiseAndCombineValues(double *values);
     void       __strip();
+    void       __copyProperties(Container* dst);
     Container* __dropFirst(int n);
     Container* __dropLast(int n);
 
-    double** _data;
-    int      _mode;
-    int      _rows;
-    int      _columns;
-    int      _fillIndex;
-    int*     _bins;
-    double** _domains;
+    double**    _data;
+    int         _mode;
+    int         _rows;
+    int         _columns;
+    int         _fillIndex;
+    int*        _bins;
+    double**    _domains;
 
-    bool     _domainsGiven;
-    bool     _binsGiven;
-    bool     _discretised;
+    bool        _domainsGiven;
+    bool        _binsGiven;
+    bool        _discretised;
 };
 
 #endif // __CONTAINER_H__
