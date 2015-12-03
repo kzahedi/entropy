@@ -40,3 +40,9 @@ INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/src/entropy++/
   PATTERN "*.txt" EXCLUDE 
   )
 
+option(COMPILE_HOPPING "Compile MC example with hopping data" OFF)
+
+if(COMPILE_HOPPING)
+  add_subdirectory(examples/hopping)
+endif(COMPILE_HOPPING)
+       
