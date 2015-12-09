@@ -18,6 +18,7 @@ set(CMAKE_CXX_FLAGS_RELEASE      "-g -arch x86_64")
 set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O3")
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(/usr/local/include)
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED filesystem system)

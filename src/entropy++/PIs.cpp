@@ -48,10 +48,6 @@ double PIs::__empericalPIs(Container* X)
   SparseMatrix px;
   SparseMatrix pxp;
 
-  // double **pxxp = new double*[maxX];
-  // double  *px   = new double[maxX];
-  // double  *pxp  = new double[maxX];
-
   for(int i = 0; i < X->rows()-1; i++)
   {
     int x      = X->get(i,     0);

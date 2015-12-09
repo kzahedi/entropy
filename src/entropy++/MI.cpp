@@ -127,6 +127,8 @@ double MI::__empericalMI(Container* X, Container* Y)
     delete[] pxy[x];
   }
   delete[] pxy;
+  delete[] px;
+  delete[] py;
 
   return r;
 }

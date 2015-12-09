@@ -10,6 +10,8 @@ add_library(Entropy++ SHARED
   MIsd.cpp
   MIssd.cpp
   MIs.cpp
+  H.cpp
+  Hs.cpp
   PI.cpp
   PIs.cpp
   CMI.cpp
