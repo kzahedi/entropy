@@ -1,4 +1,4 @@
-#include <entropy++/CMIssd.h>
+#include <entropy++/sparse/state/CMI.h>
 
 #include <entropy++/SparseMatrix.h>
 
@@ -7,7 +7,7 @@
 #include <math.h>
 
 using namespace std;
-
+using namespace entropy::sparse::state;
 
 Container* __empericalCMIssd(Container* X, Container* Y, Container* Z)
 {
@@ -137,7 +137,7 @@ Container* __empericalCMIssd(Container* X, Container* Y, Container* Z)
 //
 // I(X;Y|Z) = \sum_{x,y,z} p(x,y,z) log( p(x,y|z) / (p(x|z) * p(y|z)))
 //
-Container* CMI_sparse_matrix_state_dependent(Container* X, Container* Y, Container *Z, int mode)
+Container* entropy::sparse::state::CMI(Container* X, Container* Y, Container *Z, int mode)
 {
   switch(mode)
   {

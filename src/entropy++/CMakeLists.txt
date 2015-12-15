@@ -14,20 +14,22 @@ add_library(Entropy++ SHARED
   state/MC_W.cpp
   state/MI.cpp
 
+  sparse/state/CMI.cpp
+  sparse/state/MC_W.cpp
+  sparse/state/MI.cpp
+  sparse/state/MC_MI.cpp
+
   SparseMatrix.cpp
   Container.cpp
   Entropy.cpp
   Matrix.cpp
   MI.cpp
-  MIssd.cpp
   H.cpp
   PI.cpp
   CMI.cpp
-  CMIssd.cpp
   MC_W.cpp
-  MC_Wssd.cpp
   MC_MI.cpp
-  MC_MIssd.cpp
+
   Csv.cpp
   )
 target_link_libraries(Entropy++ ${Boost_LIBRARIES})

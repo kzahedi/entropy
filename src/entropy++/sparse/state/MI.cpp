@@ -1,4 +1,4 @@
-#include <entropy++/MIssd.h>
+#include <entropy++/sparse/state/MI.h>
 
 #include <entropy++/SparseMatrix.h>
 
@@ -7,6 +7,7 @@
 #include <math.h>
 
 using namespace std;
+using namespace entropy::sparse::state;
 
 
 Container* __empericalMIssd(Container* X, Container* Y)
@@ -81,7 +82,7 @@ Container* __empericalMIssd(Container* X, Container* Y)
   return r;
 }
 
-Container* MI_state_dependent_sparse_matrix(Container* X, Container* Y, int mode)
+Container* entropy::sparse::state::MI(Container* X, Container* Y, int mode)
 {
   switch(mode)
   {

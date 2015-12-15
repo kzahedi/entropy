@@ -2,6 +2,7 @@
 #define __MC_W_SPARSE_MATRIX_H__
 
 #include <entropy++/Entropy.h>
+
 namespace entropy
 {
   namespace sparse
