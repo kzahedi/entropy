@@ -2,14 +2,7 @@
 
 #include <entropy++/CMI.h>
 
-MC_W::MC_W()
+double MC_W(Container* W2, Container* W1, Container* A1, int mode)
 {
-}
-
-double MC_W::calculate(Container* W2, Container* W1, Container* A1)
-{
-  CMI *cmi = new CMI();
-  double r = cmi->calculate(W2, W1, A1);
-  delete cmi;
-  return r;
+  return CMI(W2, W1, A1, mode);
 }

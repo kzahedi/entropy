@@ -1,4 +1,4 @@
-#include <entropy++/Hs.h>
+#include <entropy++/sparse/H.h>
 
 #include <entropy++/SparseMatrix.h>
 
@@ -7,31 +7,9 @@
 #include <math.h>
 
 using namespace std;
+using namespace entropy::sparse;
 
-Hs::Hs()
-{
-  _mode = EMPERICAL;
-}
-
-Hs::~Hs()
-{
-}
-
-double Hs::calculate(Container* X)
-{
-  switch(_mode)
-  {
-    case EMPERICAL:
-      return __emperical(X);
-      break;
-    default:
-      cerr << "Hs::calulate unknown mode given: " << _mode << endl;
-      break;
-  }
-  return 0.0;
-}
-
-double Hs::__emperical(Container* X)
+double __empericalHs(Container* X)
 {
   assert(X->isDiscretised());
 
@@ -70,3 +48,18 @@ double Hs::__emperical(Container* X)
 
   return -r;
 }
+
+double entropy::sparse::H(Container* X, int mode)
+{
+  switch(mode)
+  {
+    case EMPERICAL:
+      return __empericalHs(X);
+      break;
+    default:
+      cerr << "Hs::calulate unknown mode given: " << mode << endl;
+      break;
+  }
+  return 0.0;
+}
+

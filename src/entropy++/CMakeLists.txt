@@ -2,30 +2,32 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 link_directories(${PROJECT_BINARY_DIR}/lib)
 
 add_library(Entropy++ SHARED
+  sparse/CMI.cpp
+  sparse/H.cpp
+  sparse/MC_MI.cpp
+  sparse/MI.cpp
+  sparse/MC_W.cpp
+  sparse/PI.cpp
+
+  state/CMI.cpp
+  state/MC_MI.cpp
+  state/MC_W.cpp
+  state/MI.cpp
+
+  SparseMatrix.cpp
   Container.cpp
   Entropy.cpp
   Matrix.cpp
-  SparseMatrix.cpp
   MI.cpp
-  MIsd.cpp
   MIssd.cpp
-  MIs.cpp
   H.cpp
-  Hs.cpp
   PI.cpp
-  PIs.cpp
   CMI.cpp
-  CMIsd.cpp
-  CMIs.cpp
   CMIssd.cpp
   MC_W.cpp
-  MC_Wsd.cpp
-  MC_Ws.cpp
   MC_Wssd.cpp
   MC_MI.cpp
-  MC_MIsd.cpp
   MC_MIssd.cpp
-  MC_MIs.cpp
   Csv.cpp
   )
 target_link_libraries(Entropy++ ${Boost_LIBRARIES})

@@ -4,22 +4,6 @@
 #include <entropy++/Container.h>
 #include <entropy++/defs.h>
 
-class PI
-{
-  public:
-
-    PI();
-    ~PI();
-
-    // PI(X;X')
-    double calculate(Container* X);
-
-  private:
-
-    double __empericalPI(Container* X);
-
-    int _mode;
-};
-
+double PI(Container* X, int mode = EMPERICAL);
 
 #endif // __PI_H__

@@ -2,7 +2,7 @@
 
 #include <entropy++/Container.h>
 #include <entropy++/CMI.h>
-#include <entropy++/CMIs.h>
+#include <entropy++/sparse/CMI.h>
 #include <entropy++/SparseMatrix.h>
 
 #include <iostream>
@@ -14,7 +14,6 @@ using namespace std;
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( cmiTest );
-
 
 void cmiTest::testSinus()
 {
@@ -51,8 +50,7 @@ void cmiTest::testSinus()
   Container *dy = Y.discretise();
   Container *dz = Z.discretise();
 
-  CMI cmi;
-  double s = cmi.calculate(dx, dy, dz);
+  double s = CMI(dx, dy, dz);
 
   CPPUNIT_ASSERT_DOUBLES_EQUAL(2.473493, s, 0.00001); // recalcuate somewhere else
 
@@ -95,11 +93,8 @@ void cmiTest::testSparseVsNonSparse()
   Container *dy = Y.discretise();
   Container *dz = Z.discretise();
 
-  CMI  cmi;
-  CMIs cmis;
-
-  double s1 = cmi.calculate(dx, dy, dz);
-  double s2 = cmis.calculate(dx, dy, dz);
+  double s1 = CMI(dx, dy, dz);
+  double s2 = entropy::sparse::CMI(dx, dy, dz);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(s1, s2, 0.00001);
 
   delete dx;

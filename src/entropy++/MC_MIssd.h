@@ -3,14 +3,8 @@
 
 #include <entropy++/Container.h>
 
-class MC_MIssd
-{
-  public:
-    MC_MIssd();
+Container* MC_MI_sparse_matrix_state_dependent(Container* W2, Container* W1, Container* S1, Container* A1, int mode = EMPERICAL);
 
-    Container* calculate(Container* W2, Container* W1, Container* S1, Container* A1);
-
-  private:
-};
+#define MC_MIssd(a,b,c,d) MC_MI_sparse_matrix_state_dependent(a,b,c,d)
 
 #endif

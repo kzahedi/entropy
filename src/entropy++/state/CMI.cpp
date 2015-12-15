@@ -1,38 +1,14 @@
-#include <entropy++/CMIsd.h>
+#include <entropy++/state/CMI.h>
 
 #include <iostream>
 #include <assert.h>
 #include <math.h>
 
 using namespace std;
+using namespace entropy::state;
 
-CMIsd::CMIsd()
-{
-  _mode = EMPERICAL;
-}
 
-CMIsd::~CMIsd()
-{
-}
-
-//
-// I(X;Y|Z) = \sum_{x,y,z} p(x,y,z) log( p(x,y|z) / (p(x|z) * p(y|z)))
-//
-Container* CMIsd::calculate(Container* X, Container* Y, Container *Z)
-{
-  switch(_mode)
-  {
-    case EMPERICAL:
-      return __emperical(X, Y, Z);
-      break;
-    default:
-      cerr << "CMIsd::calulate unknown mode given: " << _mode << endl;
-      break;
-  }
-  return NULL;
-}
-
-Container* CMIsd::__emperical(Container* X, Container* Y, Container* Z)
+Container* __empericalCMIsd(Container* X, Container* Y, Container* Z)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -254,3 +230,18 @@ Container* CMIsd::__emperical(Container* X, Container* Y, Container* Z)
 
   return r;
 }
+
+Container* entropy::state::CMI(Container* X, Container* Y, Container *Z, int mode)
+{
+  switch(mode)
+  {
+    case EMPERICAL:
+      return __empericalCMIsd(X, Y, Z);
+      break;
+    default:
+      cerr << "CMIsd::calulate unknown mode given: " << mode << endl;
+      break;
+  }
+  return NULL;
+}
+

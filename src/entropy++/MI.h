@@ -4,22 +4,6 @@
 #include <entropy++/Container.h>
 #include <entropy++/defs.h>
 
-class MI
-{
-  public:
-
-    MI();
-    ~MI();
-
-    // MI(X;Y)
-    double calculate(Container* X, Container* Y);
-
-  private:
-
-    double __empericalMI(Container* X, Container* Y);
-
-    int _mode;
-};
-
+double MI(Container* X, Container* Y, int mode = EMPERICAL);
 
 #endif // __MI_H__

@@ -6,33 +6,7 @@
 
 using namespace std;
 
-CMI::CMI()
-{
-  _mode = EMPERICAL;
-}
-
-CMI::~CMI()
-{
-}
-
-//
-// I(X;Y|Z) = \sum_{x,y,z} p(x,y,z) log( p(x,y|z) / (p(x|z) * p(y|z)))
-//
-double CMI::calculate(Container* X, Container* Y, Container *Z)
-{
-  switch(_mode)
-  {
-    case EMPERICAL:
-      return __empericalCMI(X, Y, Z);
-      break;
-    default:
-      cerr << "CMI::calulate unknown mode given: " << _mode << endl;
-      break;
-  }
-  return 0.0;
-}
-
-double CMI::__empericalCMI(Container* X, Container* Y, Container* Z)
+double __empericalCMI(Container* X, Container* Y, Container* Z)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -239,3 +213,19 @@ double CMI::__empericalCMI(Container* X, Container* Y, Container* Z)
 
   return r;
 }
+
+double CMI(Container* X, Container* Y, Container *Z, int mode)
+{
+  switch(mode)
+  {
+    case EMPERICAL:
+      return __empericalCMI(X, Y, Z);
+      break;
+    default:
+      cerr << "CMI::calulate unknown mode given: " << mode << endl;
+      break;
+  }
+  return 0.0;
+}
+
+

@@ -1,5 +1,4 @@
-#include <entropy++/CMIs.h>
-
+#include <entropy++/sparse/CMI.h>
 #include <entropy++/SparseMatrix.h>
 
 #include <iostream>
@@ -7,34 +6,10 @@
 #include <math.h>
 
 using namespace std;
+using namespace entropy::sparse;
 
-CMIs::CMIs()
-{
-  _mode = EMPERICAL;
-}
 
-CMIs::~CMIs()
-{
-}
-
-//
-// I(X;Y|Z) = \sum_{x,y,z} p(x,y,z) log( p(x,y|z) / (p(x|z) * p(y|z)))
-//
-double CMIs::calculate(Container* X, Container* Y, Container *Z)
-{
-  switch(_mode)
-  {
-    case EMPERICAL:
-      return __empericalCMIs(X, Y, Z);
-      break;
-    default:
-      cerr << "CMIs::calulate unknown mode given: " << _mode << endl;
-      break;
-  }
-  return 0.0;
-}
-
-double CMIs::__empericalCMIs(Container* X, Container* Y, Container* Z)
+double __empericalCMIs(Container* X, Container* Y, Container* Z)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -88,7 +63,7 @@ double CMIs::__empericalCMIs(Container* X, Container* Y, Container* Z)
   sum = 0.0;
   for(int i = 0; i < pz.size(); i++) sum += pz.get(i);
   assert(fabs(sum - 1.0) < 0.000001);
-  
+
   for(int i = 0; i < pxyz.size(); i++)
   {
     MatrixIndex mi = pxyz.getmi(i);
@@ -148,4 +123,21 @@ double CMIs::__empericalCMIs(Container* X, Container* Y, Container* Z)
   }
 
   return r;
+}
+
+//
+// I(X;Y|Z) = \sum_{x,y,z} p(x,y,z) log( p(x,y|z) / (p(x|z) * p(y|z)))
+//
+double entropy::sparse::CMI(Container* X, Container* Y, Container *Z, int mode)
+{
+  switch(mode)
+  {
+    case EMPERICAL:
+      return __empericalCMIs(X, Y, Z);
+      break;
+    default:
+      cerr << "CMIs::calulate unknown mode given: " << mode << endl;
+      break;
+  }
+  return 0.0;
 }

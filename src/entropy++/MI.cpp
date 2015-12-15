@@ -6,30 +6,8 @@
 
 using namespace std;
 
-MI::MI()
-{
-  _mode = EMPERICAL;
-}
 
-MI::~MI()
-{
-}
-
-double MI::calculate(Container* X, Container* Y)
-{
-  switch(_mode)
-  {
-    case EMPERICAL:
-      return __empericalMI(X, Y);
-      break;
-    default:
-      cerr << "MI::calulate unknown mode given: " << _mode << endl;
-      break;
-  }
-  return 0.0;
-}
-
-double MI::__empericalMI(Container* X, Container* Y)
+double __empericalMI(Container* X, Container* Y)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -132,3 +110,18 @@ double MI::__empericalMI(Container* X, Container* Y)
 
   return r;
 }
+
+double MI(Container* X, Container* Y, int mode)
+{
+  switch(mode)
+  {
+    case EMPERICAL:
+      return __empericalMI(X, Y);
+      break;
+    default:
+      cerr << "MI::calulate unknown mode given: " << mode << endl;
+      break;
+  }
+  return 0.0;
+}
+

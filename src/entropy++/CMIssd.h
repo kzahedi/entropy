@@ -4,22 +4,8 @@
 #include <entropy++/Container.h>
 #include <entropy++/defs.h>
 
-class CMIssd
-{
-  public:
+Container* CMI_sparse_matrix_state_dependent(Container* X, Container* Y, Container* Z, int mode = EMPERICAL);
 
-    CMIssd();
-    ~CMIssd();
-
-    // CMIssd(X;Y|Z)
-    Container* calculate(Container* X, Container* Y, Container* Z);
-
-  private:
-
-    Container* __emperical(Container* X, Container* Y, Container *Z);
-
-    int _mode;
-};
-
+#define CMIssd(x,y,z) CMI_sparse_matrix_state_dependent(x,y,z)
 
 #endif // __CMIssd_H__

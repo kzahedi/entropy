@@ -2,7 +2,7 @@
 
 #include <entropy++/Container.h>
 #include <entropy++/MI.h>
-#include <entropy++/MIs.h>
+#include <entropy++/sparse/MI.h>
 
 #include <iostream>
 #include <string>
@@ -43,8 +43,7 @@ void miTest::testSinus()
   Container *dx = X.discretise();
   Container *dy = Y.discretise();
 
-  MI mi;
-  double s = mi.calculate(dx, dy);
+  double s = MI(dx, dy);
 
   CPPUNIT_ASSERT_DOUBLES_EQUAL(4.17221, s, 0.00001); // recalcuate somewhere else
 
@@ -80,11 +79,8 @@ void miTest::testSparseVsNonSparse()
   Container *dx = X.discretise();
   Container *dy = Y.discretise();
 
-  MI  mi;
-  MIs mis;
-
-  double s1 = mi.calculate(dx, dy);
-  double s2 = mis.calculate(dx, dy);
+  double s1 = MI(dx, dy);
+  double s2 = entropy::sparse::MI(dx, dy);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(s1, s2, 0.00001);
 
   delete dx;

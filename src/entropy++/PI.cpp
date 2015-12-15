@@ -6,30 +6,17 @@
 
 using namespace std;
 
-PI::PI()
-{
-  _mode = EMPERICAL;
-}
+// PI::PI()
+// {
+  // _mode = EMPERICAL;
+// }
 
-PI::~PI()
-{
-}
+// PI::~PI()
+// {
+// }
 
-double PI::calculate(Container* X)
-{
-  switch(_mode)
-  {
-    case EMPERICAL:
-      return __empericalPI(X);
-      break;
-    default:
-      cerr << "PI::calulate unknown mode given: " << _mode << endl;
-      break;
-  }
-  return 0.0;
-}
 
-double PI::__empericalPI(Container* X)
+double __empericalPI(Container* X)
 {
   assert(X->isDiscretised());
 
@@ -122,3 +109,18 @@ double PI::__empericalPI(Container* X)
 
   return r;
 }
+
+double PI(Container* X, int mode)
+{
+  switch(mode)
+  {
+    case EMPERICAL:
+      return __empericalPI(X);
+      break;
+    default:
+      cerr << "PI::calulate unknown mode given: " << mode << endl;
+      break;
+  }
+  return 0.0;
+}
+

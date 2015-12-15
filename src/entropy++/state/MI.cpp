@@ -1,35 +1,13 @@
-#include <entropy++/MIsd.h>
+#include <entropy++/state/MI.h>
 
 #include <iostream>
 #include <assert.h>
 #include <math.h>
 
 using namespace std;
+using namespace entropy::state;
 
-MIsd::MIsd()
-{
-  _mode = EMPERICAL;
-}
-
-MIsd::~MIsd()
-{
-}
-
-Container* MIsd::calculate(Container* X, Container* Y)
-{
-  switch(_mode)
-  {
-    case EMPERICAL:
-      return __empericalMI(X, Y);
-      break;
-    default:
-      cerr << "MIsd::calulate unknown mode given: " << _mode << endl;
-      break;
-  }
-  return NULL;
-}
-
-Container* MIsd::__empericalMI(Container* X, Container* Y)
+Container* __empericalMIsd(Container* X, Container* Y)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -149,3 +127,18 @@ Container* MIsd::__empericalMI(Container* X, Container* Y)
 
   return r_misd;
 }
+
+Container* entropy::state::MI(Container* X, Container* Y, int mode)
+{
+  switch(mode)
+  {
+    case EMPERICAL:
+      return __empericalMIsd(X, Y);
+      break;
+    default:
+      cerr << "MIsd::calulate unknown mode given: " << mode << endl;
+      break;
+  }
+  return NULL;
+}
+

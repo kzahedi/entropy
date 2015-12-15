@@ -3,14 +3,6 @@
 
 #include <entropy++/Container.h>
 
-class MC_MI
-{
-  public:
-    MC_MI();
-
-    double calculate(Container* W2, Container* W1, Container* S1, Container* A1);
-
-  private:
-};
+double MC_MI(Container* W2, Container* W1, Container* S1, Container* A1, int mode = EMPERICAL);
 
 #endif // __MC_MI_H__

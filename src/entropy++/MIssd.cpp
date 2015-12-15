@@ -8,30 +8,8 @@
 
 using namespace std;
 
-MIssd::MIssd()
-{
-  _mode = EMPERICAL;
-}
 
-MIssd::~MIssd()
-{
-}
-
-Container* MIssd::calculate(Container* X, Container* Y)
-{
-  switch(_mode)
-  {
-    case EMPERICAL:
-      return __empericalMIssd(X, Y);
-      break;
-    default:
-      cerr << "MIssd::calulate unknown mode given: " << _mode << endl;
-      break;
-  }
-  return NULL;
-}
-
-Container* MIssd::__empericalMIssd(Container* X, Container* Y)
+Container* __empericalMIssd(Container* X, Container* Y)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -102,3 +80,18 @@ Container* MIssd::__empericalMIssd(Container* X, Container* Y)
 
   return r;
 }
+
+Container* MI_state_dependent_sparse_matrix(Container* X, Container* Y, int mode)
+{
+  switch(mode)
+  {
+    case EMPERICAL:
+      return __empericalMIssd(X, Y);
+      break;
+    default:
+      cerr << "MIssd::calulate unknown mode given: " << mode << endl;
+      break;
+  }
+  return NULL;
+}
+

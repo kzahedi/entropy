@@ -1,4 +1,4 @@
-#include <entropy++/PIs.h>
+#include <entropy++/sparse/PI.h>
 #include <entropy++/SparseMatrix.h>
 
 #include <iostream>
@@ -6,31 +6,9 @@
 #include <math.h>
 
 using namespace std;
+using namespace entropy::sparse;
 
-PIs::PIs()
-{
-  _mode = EMPERICAL;
-}
-
-PIs::~PIs()
-{
-}
-
-double PIs::calculate(Container* X)
-{
-  switch(_mode)
-  {
-    case EMPERICAL:
-      return __empericalPIs(X);
-      break;
-    default:
-      cerr << "PIs::calulate unknown mode given: " << _mode << endl;
-      break;
-  }
-  return 0.0;
-}
-
-double PIs::__empericalPIs(Container* X)
+double __empericalPIs(Container* X)
 {
   assert(X->isDiscretised());
 
@@ -87,3 +65,18 @@ double PIs::__empericalPIs(Container* X)
 
   return r;
 }
+
+double entropy::sparse::PI(Container* X, int mode)
+{
+  switch(mode)
+  {
+    case EMPERICAL:
+      return __empericalPIs(X);
+      break;
+    default:
+      cerr << "PIs::calulate unknown mode given: " << mode << endl;
+      break;
+  }
+  return 0.0;
+}
+

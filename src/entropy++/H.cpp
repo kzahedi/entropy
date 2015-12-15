@@ -6,30 +6,9 @@
 
 using namespace std;
 
-H::H()
-{
-  _mode = EMPERICAL;
-}
 
-H::~H()
-{
-}
 
-double H::calculate(Container* X)
-{
-  switch(_mode)
-  {
-    case EMPERICAL:
-      return __emperical(X);
-      break;
-    default:
-      cerr << "H::calulate unknown mode given: " << _mode << endl;
-      break;
-  }
-  return 0.0;
-}
-
-double H::__emperical(Container* X)
+double __empericalH(Container* X)
 {
   assert(X->isDiscretised());
 
@@ -73,3 +52,18 @@ double H::__emperical(Container* X)
 
   return r;
 }
+
+double H(Container* X, int mode)
+{
+  switch(mode)
+  {
+    case EMPERICAL:
+      return __empericalH(X);
+      break;
+    default:
+      cerr << "H::calulate unknown mode given: " << mode << endl;
+      break;
+  }
+  return 0.0;
+}
+

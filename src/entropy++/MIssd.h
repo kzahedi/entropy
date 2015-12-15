@@ -4,22 +4,8 @@
 #include <entropy++/Container.h>
 #include <entropy++/defs.h>
 
-class MIssd
-{
-  public:
+Container* MI_state_dependent_sparse_matrix(Container* X, Container* Y, int mode = EMPERICAL);
 
-    MIssd();
-    ~MIssd();
-
-    // MIssd(X;Y)
-    Container* calculate(Container* X, Container* Y);
-
-  private:
-
-    Container* __empericalMIssd(Container* X, Container* Y);
-
-    int _mode;
-};
-
+# define MIssd(x,y)   MI_state_dependent_sparse_matrix(x,y)
 
 #endif // __MIssd_H__

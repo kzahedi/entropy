@@ -1,8 +1,7 @@
-#include <entropy++/MC_MIs.h>
 #include <entropy++/Csv.h>
+#include <entropy++/sparse/MC_MI.h>
 #include <entropy++/MC_Ws.h>
 #include <entropy++/MC_Wssd.h>
-#include <entropy++/MC_MIs.h>
 #include <entropy++/MC_MIssd.h>
 
 #include <string>
@@ -13,6 +12,7 @@
 
 using namespace std;
 using namespace boost::filesystem;
+using namespace entropy::sparse;
 
 # define MAX(a,b)    ((a>b)?a:b)
 # define MAX3(a,b,c) MAX(a,MAX(b,c))
@@ -218,16 +218,11 @@ int main(int argc, char **argv)
   Container *mfA1 = DmusfibA->drop(-1);
   Container *mfS1 = DmusfibS->drop(-1);
 
-  MC_Ws*    mc_w     = new MC_Ws();
-  MC_MIs*   mc_mi    = new MC_MIs();
-  MC_MIssd* mc_missd = new MC_MIssd();
-  MC_Wssd*  mc_wssd  = new MC_Wssd();
-
   cout << "Calculating DCMot:" << endl;
-  double     dcmc_w   = mc_w->calculate(dcW2, dcW1, dcA1);
-  double     dcmc_mi  = mc_mi->calculate(dcW2, dcW1, dcS1, dcA1);
-  Container* dcmc_mid = mc_missd->calculate(dcW2, dcW1, dcS1, dcA1);
-  Container* dcmc_wd  = mc_wssd->calculate(dcW2, dcW1, dcA1);
+  double     dcmc_w   = MC_Ws(dcW2, dcW1, dcA1);
+  double     dcmc_mi  = MC_MI(dcW2, dcW1, dcS1, dcA1);
+  Container* dcmc_mid = MC_MIssd(dcW2, dcW1, dcS1, dcA1);
+  Container* dcmc_wd  = MC_Wssd(dcW2, dcW1, dcA1);
   double     s        = dcmc_mid->columnSum(0) / ((double)dcmc_mid->rows());
   double     ss       = dcmc_wd->columnSum(0)  / ((double)dcmc_mid->rows());
   cout << "  DCMot MC_W:  " << dcmc_w  << endl;
@@ -240,10 +235,10 @@ int main(int argc, char **argv)
   csv->write("state-dependent-dc_mc_mi.csv", dcmc_mid);
 
   cout << "Calculating MusLin:" << endl;
-  double     mlmc_w   = mc_w->calculate(mlW2, mlW1, mlA1);
-  double     mlmc_mi  = mc_mi->calculate(mlW2, mlW1, mlS1, mlA1);
-  Container* mlmc_mid = mc_missd->calculate(mlW2, mlW1, mlS1, mlA1);
-  Container* mlmc_wd  = mc_wssd->calculate(mlW2, mlW1, mlA1);
+  double     mlmc_w   = MC_Ws(mlW2, mlW1, mlA1);
+  double     mlmc_mi  = MC_MI(mlW2, mlW1, mlS1, mlA1);
+  Container* mlmc_mid = MC_MIssd(mlW2, mlW1, mlS1, mlA1);
+  Container* mlmc_wd  = MC_Wssd(mlW2, mlW1, mlA1);
   double     t        = mlmc_mid->columnSum(0) / ((double)mlmc_mid->rows());
   double     tt       = mlmc_wd->columnSum(0) / ((double)mlmc_wd->rows());
   cout << "MusLin MC_W:  " << mlmc_w  << endl;
@@ -256,10 +251,10 @@ int main(int argc, char **argv)
   csv->write("state-dependent-ml_mc_mi.csv", mlmc_mid);
 
   cout << "Calculating MusFib:" << endl;
-  double     mfmc_w   = mc_w->calculate(mfW2, mfW1, mfA1);
-  double     mfmc_mi  = mc_mi->calculate(mfW2, mfW1, mfS1, mfA1);
-  Container* mfmc_mid = mc_missd->calculate(mfW2, mfW1, mfS1, mfA1);
-  Container* mfmc_wd  = mc_wssd->calculate(mfW2, mfW1, mfA1);
+  double     mfmc_w   = MC_Ws(mfW2, mfW1, mfA1);
+  double     mfmc_mi  = MC_MI(mfW2, mfW1, mfS1, mfA1);
+  Container* mfmc_mid = MC_MIssd(mfW2, mfW1, mfS1, mfA1);
+  Container* mfmc_wd  = MC_Wssd(mfW2, mfW1, mfA1);
   double     u        = mfmc_mid->columnSum(0) / ((double)mfmc_mid->rows());
   double     uu       = mfmc_wd->columnSum(0)  / ((double)mfmc_mid->rows());
   cout << "MusFib MC_W:  " << mfmc_w  << endl;

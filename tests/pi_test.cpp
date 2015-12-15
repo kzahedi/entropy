@@ -2,7 +2,7 @@
 
 #include <entropy++/Container.h>
 #include <entropy++/PI.h>
-#include <entropy++/PIs.h>
+#include <entropy++/sparse/PI.h>
 
 #include <iostream>
 #include <string>
@@ -42,9 +42,7 @@ void piTest::testSinus()
 
   Container *d  = container.discretise();
 
-  PI pi;
-
-  double s = pi.calculate(d);
+  double s = PI(d);
 
   CPPUNIT_ASSERT_DOUBLES_EQUAL(9.56171, s, 0.00001); // recalcuate somewhere else
 
@@ -78,11 +76,11 @@ void piTest::testSparseVsNonSparse()
 
   Container *d  = container.discretise();
 
-  PI  pi;
-  PIs pis;
+  // PI  pi;
+  // PIs pis;
 
-  double s1 = pi.calculate(d);
-  double s2 = pis.calculate(d);
+  double s1 = PI(d);
+  double s2 = entropy::sparse::PI(d);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(s1, s2, 0.00001);
 
   delete d;

@@ -8,33 +8,8 @@
 
 using namespace std;
 
-CMIssd::CMIssd()
-{
-  _mode = EMPERICAL;
-}
 
-CMIssd::~CMIssd()
-{
-}
-
-//
-// I(X;Y|Z) = \sum_{x,y,z} p(x,y,z) log( p(x,y|z) / (p(x|z) * p(y|z)))
-//
-Container* CMIssd::calculate(Container* X, Container* Y, Container *Z)
-{
-  switch(_mode)
-  {
-    case EMPERICAL:
-      return __emperical(X, Y, Z);
-      break;
-    default:
-      cerr << "CMIssd::calulate unknown mode given: " << _mode << endl;
-      break;
-  }
-  return NULL;
-}
-
-Container* CMIssd::__emperical(Container* X, Container* Y, Container* Z)
+Container* __empericalCMIssd(Container* X, Container* Y, Container* Z)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -158,3 +133,21 @@ Container* CMIssd::__emperical(Container* X, Container* Y, Container* Z)
 
   return r;
 }
+
+//
+// I(X;Y|Z) = \sum_{x,y,z} p(x,y,z) log( p(x,y|z) / (p(x|z) * p(y|z)))
+//
+Container* CMI_sparse_matrix_state_dependent(Container* X, Container* Y, Container *Z, int mode)
+{
+  switch(mode)
+  {
+    case EMPERICAL:
+      return __empericalCMIssd(X, Y, Z);
+      break;
+    default:
+      cerr << "CMIssd::calulate unknown mode given: " << mode << endl;
+      break;
+  }
+  return NULL;
+}
+

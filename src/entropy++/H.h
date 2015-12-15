@@ -4,22 +4,6 @@
 #include <entropy++/Container.h>
 #include <entropy++/defs.h>
 
-class H
-{
-  public:
-
-    H();
-    ~H();
-
-    // H(X;Y)
-    double calculate(Container* X);
-
-  private:
-
-    double __emperical(Container* X);
-
-    int _mode;
-};
-
+double H(Container* X, int mode = EMPERICAL);
 
 #endif // __H_H__

@@ -1,4 +1,4 @@
-#include <entropy++/MIs.h>
+#include <entropy++/sparse/MI.h>
 
 #include <entropy++/SparseMatrix.h>
 
@@ -7,31 +7,9 @@
 #include <math.h>
 
 using namespace std;
+using namespace entropy::sparse;
 
-MIs::MIs()
-{
-  _mode = EMPERICAL;
-}
-
-MIs::~MIs()
-{
-}
-
-double MIs::calculate(Container* X, Container* Y)
-{
-  switch(_mode)
-  {
-    case EMPERICAL:
-      return __empericalMIs(X, Y);
-      break;
-    default:
-      cerr << "MIs::calulate unknown mode given: " << _mode << endl;
-      break;
-  }
-  return 0.0;
-}
-
-double MIs::__empericalMIs(Container* X, Container* Y)
+double __empericalMIs(Container* X, Container* Y)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -92,3 +70,18 @@ double MIs::__empericalMIs(Container* X, Container* Y)
 
   return r;
 }
+
+double entropy::sparse::MI(Container* X, Container* Y, int mode)
+{
+  switch(mode)
+  {
+    case EMPERICAL:
+      return __empericalMIs(X, Y);
+      break;
+    default:
+      cerr << "MIs::calulate unknown mode given: " << mode << endl;
+      break;
+  }
+  return 0.0;
+}
+
