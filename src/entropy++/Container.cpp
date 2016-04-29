@@ -147,6 +147,54 @@ const Container& Container::operator<<(const double &value) const
   return *this;
 }
 
+Container& Container::operator+=(const Container &c)
+{
+  int newrows    = MIN(this->_rows, c._rows);
+  int newcolumns = this->_columns + c._columns;
+
+  double** tmp   = new double*[newrows];
+  int* newBins   = new int[newcolumns];
+
+  for(int i = 0; i < _columns; i++)
+  {
+    newBins[i] = _bins[i];
+  }
+  for(int i = 0; i < c._columns; i++)
+  {
+    newBins[_columns + i] = c._bins[i];
+  }
+
+  for(int i = 0; i < newrows; i++)
+  {
+    tmp[i] = new double[newcolumns];
+    int index = 0;
+    for(int j = 0; j < _columns; j++)
+    {
+      tmp[i][index] = _data[i][j];
+      index++;
+    }
+    for(int j = 0; j < c._columns; j++)
+    {
+      tmp[i][index] = c(i,j);
+      index++;
+    }
+  }
+
+  if(_data != NULL)
+  {
+    for(int r = 0; r < _rows; r++) delete _data[r];
+    delete _data;
+  }
+
+  _data    = tmp;
+  _columns = newcolumns;
+
+  delete _bins;
+  _bins = newBins;
+
+  return *this;
+}
+
 int Container::rows()
 {
   return _rows;
@@ -259,7 +307,7 @@ Container* Container::__uniformDiscretisationByColumn()
     vector<int> values;
     for(int r = 0; r < _rows; r++)
     {
-      assert(_domains[c][0] <= get(r,c) && get(r,c) <= _domains[c][1]);
+      ASSERT(_domains[c][0] <= get(r,c) && get(r,c) <= _domains[c][1], "get(" << r << "," << c << ") = " << get(r,c) << endl << "Domain " << _domains[c][0] << ", " << _domains[c][1] << endl << *this);
       int mapped  = (int)(((get(r,c)       - _domains[c][0])
                          / (_domains[c][1] - _domains[c][0]))
                          * _bins[c]);

@@ -318,5 +318,36 @@ void containerTest::testCopyFunc()
       CPPUNIT_ASSERT_EQUAL((int)c(i,j), (int)(*d)(i,j));
     }
   }
+}
 
+void containerTest::testMerge()
+{
+  Container c(10,3);
+  Container d(10,5);
+
+  for(int i = 0; i < 30; i++) c << i;
+  for(int i = 0; i < 50; i++) d << i;
+
+  c += d;
+
+  CPPUNIT_ASSERT_EQUAL(10, c.rows());
+  CPPUNIT_ASSERT_EQUAL(8,  c.columns());
+
+  int index = 0;
+  for(int i = 0; i < 10; i++)
+  {
+    for(int j = 0; j < 3; j++)
+    {
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(index++, c(i,j), 0.0001);
+    }
+  }
+
+  index = 0;
+  for(int i = 0; i < 10; i++)
+  {
+    for(int j = 0; j < 5; j++)
+    {
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(index++, c(i,3+j), 0.0001);
+    }
+  }
 }

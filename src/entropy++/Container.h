@@ -19,6 +19,8 @@ class Container
     Container& operator=(const Container&);
 
     const Container& operator<<(const double&) const;
+    Container& operator+=(const Container&);
+
     double  operator()(const int row, const int column) const;
     double& operator()(const int row, const int column);
 
