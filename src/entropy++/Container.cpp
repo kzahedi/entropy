@@ -14,6 +14,7 @@ Container::Container(int rows, int columns)
   _domains      = new double*[columns];
   _bins         = new int[columns];
   _mode         = UNIFORM;
+  _fillMode     = FILL_MODE_BY_ROW;
 
   _domainsGiven = false;
   _binsGiven    = false;
@@ -137,9 +138,20 @@ const Container& Container::operator<<(const double &value) const
 {
   assert(_fillIndex < _rows * _columns);
 
-  int c = _fillIndex % _columns;
-  int r = _fillIndex / _columns;
+  int c = -1;
+  int r = -1;
 
+  switch(_fillMode)
+  {
+    case FILL_MODE_BY_ROW:
+      c = _fillIndex % _columns;
+      r = _fillIndex / _columns;
+      break;
+    case FILL_MODE_BY_COLUMN:
+      c = _fillIndex / _rows;
+      r = _fillIndex % _rows;
+      break;
+  }
   _data[r][c] = value;
   Container *co = (Container*)this;
   co->_fillIndex++;
@@ -307,7 +319,7 @@ Container* Container::__uniformDiscretisationByColumn()
     vector<int> values;
     for(int r = 0; r < _rows; r++)
     {
-      ASSERT(_domains[c][0] <= get(r,c) && get(r,c) <= _domains[c][1], "get(" << r << "," << c << ") = " << get(r,c) << endl << "Domain " << _domains[c][0] << ", " << _domains[c][1] << endl << *this);
+      ASSERT(_domains[c][0] <= get(r,c) && get(r,c) <= _domains[c][1], "get(" << r << "," << c << ") = " << get(r,c) << endl << "Domain " << _domains[c][0] << ", " << _domains[c][1] << endl);
       int mapped  = (int)(((get(r,c)       - _domains[c][0])
                          / (_domains[c][1] - _domains[c][0]))
                          * _bins[c]);
@@ -323,6 +335,11 @@ Container* Container::__uniformDiscretisationByColumn()
 bool Container::isDiscretised()
 {
   return _discretised;
+}
+
+void Container::isDiscretised(bool b)
+{
+  _discretised = b;
 }
 
 double& Container::operator()(const int row, const int column)
@@ -521,4 +538,9 @@ double Container::columnSum(int c)
   double s = 0.0;
   for(int r = 0; r < _rows; r++) s += _data[r][c];
   return s;
+}
+
+void Container::setFillMode(int f)
+{
+  _fillMode = f;
 }

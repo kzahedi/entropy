@@ -351,3 +351,62 @@ void containerTest::testMerge()
     }
   }
 }
+
+void containerTest::testFillMode()
+{
+  Container container(2,3);
+  container.setFillMode(FILL_MODE_BY_ROW);
+
+  CPPUNIT_ASSERT_EQUAL(2, container.rows());
+  CPPUNIT_ASSERT_EQUAL(3, container.columns());
+  
+  for(int r = 0; r < container.rows(); r++)
+  {
+    for(int c = 0; c < container.columns(); c++)
+    {
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, container(r,c), 0.0001);
+    }
+  }
+
+  for(int r = 0; r < container.rows(); r++)
+  {
+    for(int c = 0; c < container.columns(); c++)
+    {
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, container.get(r,c), 0.0001);
+    }
+  }
+
+  for(int i = 0; i < 2 * 3; i++)
+  {
+    container << i;
+  }
+
+  int index = 0;
+  for(int r = 0; r < container.rows(); r++)
+  {
+    for(int c = 0; c < container.columns(); c++)
+    {
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(index, container(r,c), 0.0001);
+      index++;
+    }
+  }
+
+  Container container2(2,3);
+  container2.setFillMode(FILL_MODE_BY_COLUMN);
+
+  for(int i = 0; i < 2 * 3; i++)
+  {
+    container2 << i;
+  }
+
+  index = 0;
+  for(int c = 0; c < container2.columns(); c++)
+  {
+    for(int r = 0; r < container2.rows(); r++)
+    {
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(index, container2(r,c), 0.0001);
+      index++;
+    }
+  }
+
+}

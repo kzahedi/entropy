@@ -15,6 +15,7 @@ class containerTest : public CppUnit::TestFixture
   CPPUNIT_TEST(testExtractColumns);
   CPPUNIT_TEST(testNormaliseColumn);
   CPPUNIT_TEST(testMerge);
+  CPPUNIT_TEST(testFillMode);
   CPPUNIT_TEST_SUITE_END();
 
   public:
@@ -30,5 +31,6 @@ class containerTest : public CppUnit::TestFixture
     void testNormaliseColumn();
     void testCopyFunc();
     void testMerge();
+    void testFillMode();
 
 };

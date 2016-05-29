@@ -6,6 +6,9 @@
 #include <ostream>
 #include <vector>
 
+#define FILL_MODE_BY_ROW    1001
+#define FILL_MODE_BY_COLUMN 1002
+
 using namespace std;
 
 class Container 
@@ -19,6 +22,7 @@ class Container
     Container& operator=(const Container&);
 
     const Container& operator<<(const double&) const;
+    // merge
     Container& operator+=(const Container&);
 
     double  operator()(const int row, const int column) const;
@@ -27,6 +31,8 @@ class Container
     double     get(int, int);
     void       set(int, int, double);
     void       normaliseColumn(int, double, double);
+
+    void       setFillMode(int);
 
     double     max();
     double     max(int);
@@ -40,6 +46,7 @@ class Container
     Container* copy();
 
     bool       isDiscretised();
+    void       isDiscretised(bool);
     Container* drop(int n);
     // void take(int n);
 
@@ -52,6 +59,7 @@ class Container
     Container* discretise();
     Container* discretiseByColumn();
     Container* combineDiscretisedColumns();
+    Container* combineColumns();
 
     friend std::ostream& operator<<(std::ostream& str, const Container& container)
     {
@@ -83,6 +91,7 @@ class Container
     int         _columns;
     int         _fillIndex;
     int*        _bins;
+    int         _fillMode;
     double**    _domains;
 
     bool        _domainsGiven;
