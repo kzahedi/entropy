@@ -21,7 +21,8 @@ A detailed description will follow soon.
 
 MC_W and MC_MI are available and more information about these measures can be found in
 
-<b>Evaluating Morphological Computation in Muscle and DC-motor Driven Models of Human Hopping</b>, by <i> Keyan Ghazi-Zahedi, Daniel F.B. Haeufle, Guido Montufar, Syn Schmitt, and Nihat Ay,</i> [Arxiv 1512.00250](http://arxiv.org/abs/1512.00250)
+<b>Evaluating Morphological Computation in Muscle and DC-motor Driven Models of Human Hopping</b>, by <i> Keyan Ghazi-Zahedi, Daniel F.B. Haeufle, Guido Montufar, Syn Schmitt, and Nihat Ay,</i> Front. Robot. AI, 2016, [PDF](http://journal.frontiersin.org/article/10.3389/frobt.2016.00042/full)
+
 
 The file examples/hopping/mc.cpp contains the calculations that lead to the results discussed in the paper above. 
 
