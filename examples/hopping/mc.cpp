@@ -98,8 +98,8 @@ int main(int argc, char **argv)
   double mi_min = MIN(muslinS->min(0), musfibS->min(0));
   double mi_max = MAX(muslinS->max(0), musfibS->max(0));
 
-  double ac_min = dcmotA->min(2);
-  double ac_max = dcmotA->max(2);
+  double ac_min = dcmotA->min(0);
+  double ac_max = dcmotA->max(0);
 
   cout << "Domains:" << endl;
   cout << "  Position:          " << p_min  << " " << p_max  << endl;

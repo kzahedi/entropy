@@ -22,7 +22,7 @@ class Container:
     def setAddByColumn(self):
         self.addByRow = False
         
-    def add(self, valum):
+    def add(self, value):
         c = -1
         r = -1
         if self.addByRow is True:
@@ -32,13 +32,13 @@ class Container:
             c = self.fillIndex / self.rows
             r = self.fillIndex % self.rows
 
-        self.data[r,c] = valum
+        self.data[r,c] = value
         self.fillIndex = self.fillIndex + 1
 
     def shape(self):
         return self.data.shape
 
-    def setBinsSizes(self, lst):
+    def setBins(self, lst):
         self.bins = lst
 
     def setDomains(self, lst_of_tuples):
@@ -57,7 +57,7 @@ class Container:
     def uniformDiscretisationByColumn(self):
         for c in range(0, self.cols):
             for r in range(0, self.rows):
-                assert (self.domains[c][0] <= self.data[r,c] and self.data[r,c] <= self.domains[c][1])
+                assert (self.domains[c][0] <= self.data[r,c] and self.data[r,c] <= self.domains[c][1]), "%f < %f < %f" % (self.domains[c][0], self.data[r,c], self.domains[c][1])
                 mapped  = int(((self.data[r,c] - self.domains[c][0]) / (self.domains[c][1] - self.domains[c][0])) * self.bins[c])
                 cropped = int(min(self.bins[c]-1, mapped))
                 self.data[r,c] = cropped
@@ -74,6 +74,22 @@ class Container:
                     values.append(self.data[r,c])
                 self.data[r,c] = index
 
+
+    def normaliseColumn(self, index, _min, _max):
+        for r in range(0, self.rows):
+            self.data[r][index] = (self.data[r][index] - _min) / (_max - _min)
+
+    def drop(self, n):
+        cc = Container(self.rows-abs(n), self.cols)
+        if n > 0:
+            for r in range(n, self.rows):
+                for c in range(0, self.cols):
+                    cc.add(self.data[r,c])
+        else:
+            for r in range(0, self.rows-abs(n)):
+                for c in range(0, self.cols):
+                    cc.add(self.data[r,c])
+        return cc
 
     def combineDiscretisedColumns(self):
         new_data = numpy.zeros((self.rows,1))

@@ -1,6 +1,4 @@
 """
-    >>> import numpy
-    >>> import math
     >>> from entropy import container
     >>> from entropy import cmi
 
