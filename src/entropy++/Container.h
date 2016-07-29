@@ -59,7 +59,6 @@ class Container
     Container* discretise();
     Container* discretiseByColumn();
     Container* combineDiscretisedColumns();
-    Container* combineColumns();
 
     friend std::ostream& operator<<(std::ostream& str, const Container& container)
     {
