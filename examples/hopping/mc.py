@@ -4,6 +4,7 @@ import sys
 sys.path.append("../../py/")
 
 from entropy import container, mc_w 
+from entropy.state import mc_w as mc_w_d
 
 fd = open("data/dcmot.csv","r")
 data = fd.readlines()
@@ -119,7 +120,6 @@ muslinA.setBins([300])
 muslinA.setDomains([ (0.0, 1.0) ])
 
 
-
 musfibW.setBins([300, 300, 300])
 musfibW.setDomains([ (0.0, 1.0), (0.0, 1.0), (0.0, 1.0)])
 musfibS.setBins([300, 300])
@@ -160,11 +160,32 @@ mc_w_dcmot  = mc_w.MC_W(dcmotW2,  dcmotW1,  dcmotA1)
 mc_w_muslin = mc_w.MC_W(muslinW2, muslinW1, muslinA1)
 mc_w_musfib = mc_w.MC_W(musfibW2, musfibW1, musfibA1)
 
-mc_w_dcmot_sparse  = sparse.mc_w.MC_W(dcmotW2,  dcmotW1,  dcmotA1)
-mc_w_muslin_sparse = sparse.mc_w.MC_W(muslinW2, muslinW1, muslinA1)
-mc_w_musfib_sparse = sparse.mc_w.MC_W(musfibW2, musfibW1, musfibA1)
-
 print "MC_W: "
 print " dcmot:  " + str(mc_w_dcmot)
 print " muslin: " + str(mc_w_muslin)
 print " musfib: " + str(mc_w_musfib)
+
+mc_w_dcmot_state  = mc_w_d.MC_W(dcmotW2,  dcmotW1,  dcmotA1)
+mc_w_muslin_state = mc_w_d.MC_W(muslinW2, muslinW1, muslinA1)
+mc_w_musfib_state = mc_w_d.MC_W(musfibW2, musfibW1, musfibA1)
+
+print "MC_W: "
+print " dcmot:  " + str(mc_w_dcmot_state)
+print " muslin: " + str(mc_w_muslin_state)
+print " musfib: " + str(mc_w_musfib_state)
+
+fd = open("dcmot.csv","w")
+for i in range(0, mc_w_dcmot_state.shape[0]):
+    fd.write(str(mc_w_dcmot_state[i]) + "\n")
+fd.close()
+
+fd = open("muslin.csv","w")
+for i in range(0, mc_w_muslin_state.shape[0]):
+    fd.write(str(mc_w_muslin_state[i]) + "\n")
+fd.close()
+
+fd = open("musfib.csv","w")
+for i in range(0, mc_w_musfib_state.shape[0]):
+    fd.write(str(mc_w_musfib_state[i]) + "\n")
+fd.close()
+
