@@ -70,25 +70,56 @@ int main(int argc, char** argv)
   VLOG(1) << "Files:";
   VLOG(1) << "  W domain: " << w_domain_file;
   VLOG(1) << "  A domain: " << a_domain_file;
-  VLOG(1) << "  W states: " << w_states     ;
-  VLOG(1) << "  A states: " << a_states     ;
+  VLOG(1) << "  W states: " << w_states;
+  VLOG(1) << "  A states: " << a_states;
 
   Csv* csv = new Csv();
 
   // W data
   Container* w_domains = NULL;
   Container* W         = NULL;
+  double w_min[3];
+  double w_max[3];
+  vector<int> w_indices;
   if(FLAGS_wi == "")
   {
     w_domains = csv->read(w_domain_file);
     W         = csv->read(w_states);
+    for(int i = 0; i < 3; i++)
+    {
+      w_min[i]  = (*w_domains)(0,i);
+      w_max[i]  = (*w_domains)(1,i);
+    }
+    for(int i = 0; i < w_domains->columns(); i++)
+    {
+      if((*w_domains)(0,i) < w_min[i%3]) w_min[i%3] = (*w_domains)(0,i);
+      if((*w_domains)(1,i) > w_max[i%3]) w_max[i%3] = (*w_domains)(1,i);
+    }
   }
   else
   {
-    vector<int> w_indices = int_tokenizer(FLAGS_wi);
+    w_indices = int_tokenizer(FLAGS_wi);
     w_domains = csv->read(w_domain_file, w_indices);
     W         = csv->read(w_states, w_indices);
+    for(int i = 0; i < 3; i++)
+    {
+      w_min[i] = -1000000.0;
+      w_max[i] = -1000000.0;
+    }
+    for(int i = 0; i < (int)w_indices.size(); i++)
+    {
+      // map the chosen indices to the x,y,z coordinates
+      int index = w_indices[i] % 3;
+      if(w_min[index] > (*w_domains)(0, i) ||
+         w_min[index] == -1000000.0)
+        w_min[index] = (*w_domains)(0, i);
+      if(w_max[index] < (*w_domains)(1, i) ||
+         w_max[index] == -1000000.0)
+        w_max[index] = (*w_domains)(1, i);
+    }
   }
+
+  for(int i = 0; i < 3; i++) VLOG(1) << w_min[i] << ", " << w_max[i];
 
   VLOG(1) << "W domain file:";
   VLOG(1) << *w_domains;
@@ -97,12 +128,26 @@ int main(int argc, char** argv)
 
   double **wdomain = new double*[W->columns()];
   int *wbins = new int[W->columns()];
-  for(int i = 0; i < W->columns(); i++)
+  for(int i = 0; i < W->columns(); i++) wbins[i] = FLAGS_wbins;
+
+  if(FLAGS_wi == "")
   {
-    wdomain[i]    = new double[2];
-    wdomain[i][0] = (*w_domains)(0,i);
-    wdomain[i][1] = (*w_domains)(1,i);
-    wbins[i]      = FLAGS_wbins;
+    for(int i = 0; i < W->columns(); i++)
+    {
+      wdomain[i]    = new double[2];
+      wdomain[i][0] = w_min[i%3];
+      wdomain[i][1] = w_max[i%3];
+    }
+  }
+  else
+  {
+    for(int i = 0; i < W->columns(); i++)
+    {
+      wdomain[i]    = new double[2];
+      wdomain[i][0] = w_min[w_indices[i]%3];
+      wdomain[i][1] = w_max[w_indices[i]%3];
+      VLOG(1) << "setting " << w_min[w_indices[i]%3] << " " << w_max[w_indices[i]%3];
+    }
   }
 
   W->setDomains(wdomain);
@@ -160,7 +205,11 @@ int main(int argc, char** argv)
   sst << FLAGS_d << "/mc_w-averaged.txt";
   VLOG(10) << "writing \"" << sst.str() << "\"";
   ofstream output;
+#ifdef __APPLE__
   output.open(sst.str());
+#else
+  output.open(sst.str().c_str());
+#endif
   output << mc << endl;
   output.close();
 
