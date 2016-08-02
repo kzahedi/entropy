@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
+#include <cstdarg>
 
 using namespace boost;
 

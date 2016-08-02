@@ -1,8 +1,7 @@
 include_directories(${PROJECT_SOURCE_DIR}/src)
 link_directories(${PROJECT_BINARY_DIR}/lib)
 
-add_library(Entropy++ SHARED
-  sparse/CMI.cpp
+set(SRC sparse/CMI.cpp
   sparse/H.cpp
   sparse/MC_MI.cpp
   sparse/MI.cpp
@@ -31,7 +30,14 @@ add_library(Entropy++ SHARED
   MC_MI.cpp
 
   Csv.cpp
-  )
+)
+
+if(APPLE)
+	add_library(Entropy++ SHARED ${SRC})
+	install(TARGETS Entropy++ LIBRARY DESTINATION lib)
+else(APPLE)
+	add_library(Entropy++ STATIC ${SRC})
+endif(APPLE)
+
 target_link_libraries(Entropy++ ${Boost_LIBRARIES})
 
-install(TARGETS Entropy++ LIBRARY DESTINATION lib)
