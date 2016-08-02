@@ -3,6 +3,9 @@
 #include <iostream>
 #include <assert.h>
 #include <vector>
+#include <cstdlib>
+#include <math.h>
+#include <cstdarg>
 
 # define MIN(a,b) (((a)<(b))?a:b)
 
