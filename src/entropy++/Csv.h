@@ -14,7 +14,9 @@ class Csv
     Csv();
 
     Container* read(string filename, int n, ...);
-    void       write(string filename, Container* c);
+    Container* read(string filename);
+    Container* read(string filename, vector<int>);
+    void write(string filename, Container* c);
 
   private:
 };

@@ -43,8 +43,13 @@ INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/src/entropy++/
   )
 
 option(COMPILE_HOPPING "Compile MC example with hopping data" OFF)
+option(COMPILE_RBO     "Compile MC example for RBOHand data" OFF)
 
 if(COMPILE_HOPPING)
   add_subdirectory(examples/hopping)
 endif(COMPILE_HOPPING)
+
+if(COMPILE_RBO)
+  add_subdirectory(examples/RBOHand)
+endif(COMPILE_RBO)
        

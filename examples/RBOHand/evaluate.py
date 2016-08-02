@@ -31,11 +31,13 @@ for s in subdirectories:
         shutil.rmtree(args.d + "/" + s + "/analysis")
         os.mkdir(args.d + "/" + s + "/analysis")
 
-subdirectories = [args.d + "/"  + v        for v in subdirectories]
-controlstates  = [v + "/raw/" + c_states   for v in subdirectories]
-sofastates     = [v + "/raw/" + s_states   for v in subdirectories]
-sofacsvstates  = [v + "/analysis/" + s_csv for v in subdirectories]
-analysisdirs   = [v + "/analysis/"         for v in subdirectories]
+subdirectories = [args.d + "/"  + v             for v in subdirectories]
+controlstates  = [v + "/raw/" + c_states        for v in subdirectories]
+sofastates     = [v + "/raw/" + s_states        for v in subdirectories]
+sofacsvstates  = [v + "/analysis/" + s_csv      for v in subdirectories]
+analysisdirs   = [v + "/analysis/"              for v in subdirectories]
+wdomains       = [v + "/analysis/W.domains.csv" for v in subdirectories]
+adomains       = [v + "/analysis/A.domains.csv" for v in subdirectories]
 
 # convert sofa state files
 for i in sofastates:
@@ -97,17 +99,20 @@ for c in sofacsvstates:
                     sofa_min_values[i] = values[i]
 
 
-fd = open(args.d+"/A.domain.csv","w")
-fd.write(",".join([str(v) for v in control_min_values]) + "\n")
-fd.write(",".join([str(v) for v in control_max_values]) + "\n")
-fd.close()
+for a in adomains:
+    fd = open(a,"w")
+    fd.write(",".join([str(v) for v in control_min_values]) + "\n")
+    fd.write(",".join([str(v) for v in control_max_values]) + "\n")
+    fd.close()
 
-fd = open(args.d+"/W.domain.csv","w")
-fd.write(",".join([str(v) for v in sofa_min_values]) + "\n")
-fd.write(",".join([str(v) for v in sofa_max_values]) + "\n")
-fd.close()
-
+for w in wdomains:
+    fd = open(w,"w")
+    fd.write(",".join([str(v) for v in sofa_min_values]) + "\n")
+    fd.write(",".join([str(v) for v in sofa_max_values]) + "\n")
+    fd.close()
 
 # copy control states
 for c in controlstates:
     shutil.copyfile(c, c.replace("raw","analysis"))
+
+
