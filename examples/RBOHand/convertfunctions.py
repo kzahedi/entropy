@@ -62,6 +62,17 @@ def get_position(line):
     pos = [[v[0],v[1],v[2]] for v in r]
     return pos
 
+def get_position_local_wrist(line):
+    l = line.replace("  X= ","")
+    v = l.split(" ")
+    v = [float(w) for w in v]
+    local_y = v[1]
+    r = []
+    for i in range(0,len(v)/7):
+        r.append(v[i*7:i*7+7])
+    pos = [[v[0],v[1]-local_y,v[2]] for v in r]
+    return pos
+
 def convert_to_csv(lst):
     s = [str(v[0])+","+str(v[1])+","+str(v[2]) for v in lst]
     r = ""

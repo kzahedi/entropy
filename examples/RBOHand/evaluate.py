@@ -18,6 +18,7 @@ parser.add_argument("-wi", type=str, default=None, help="W indices.")
 parser.add_argument("-ai", type=str, default=None, help="A indices.")
 parser.add_argument("-wb", type=int, default=300, help="W bins.")
 parser.add_argument("-ab", type=int, default=300, help="A bins.")
+parser.add_argument("-wf", type=bool, default=True, help="Convert to wrist frame.")
 args = parser.parse_args()
 
 option_string = "--wbins " + str(args.wb) + " --abins " + str(args.ab)
@@ -32,7 +33,7 @@ s_csv    = "hand.sofastates.csv"
 
 # subdirectories = [x[0] for x in os.walk(args.d)]
 subdirectories = os.listdir(args.d)
-subdirectories = filter(lambda x: os.path.isdir(args.d + "/" + x) == True, subdirectories)
+subdirectories = filter(lambda x: os.path.isdir(args.d + "/" + x) == True and os.path.isdir(args.d + "/" + x + "/raw") == True, subdirectories)
 
 for s in subdirectories:
     try:
@@ -59,7 +60,12 @@ for i in sofastates:
         lines = fd.readlines()
         fd.close()
 
-        data = [get_position(line) for line in lines if "T=" not in line]
+        data = None
+
+        if args.wf:
+            data = [get_position_local_wrist(line) for line in lines if "T=" not in line]
+        else:
+            data = [get_position(line) for line in lines if "T=" not in line]
 
         o = i.replace(".txt",".csv")
         o = o.replace("raw","analysis")
@@ -121,19 +127,16 @@ for c in controlstates:
                     if values[i] < control_min_values[i]:
                         control_min_values[i] = values[i]
 
-
 for a in adomains:
     fd = open(a,"w")
     fd.write(",".join([str(v) for v in control_min_values]) + "\n")
     fd.write(",".join([str(v) for v in control_max_values]) + "\n")
     fd.close()
 
-
 # copy control states
 for c in controlstates:
     shutil.copyfile(c, c.replace("raw","analysis"))
 
-
 for a in analysisdirs:
-    print "rbo_mc " + option_string + " -d " + "/".join(a.split("/")[-3:])
-    os.system("rbo_mc " + option_string + " -d " + a)
+    print "./rbo_mc " + option_string + " -d " + "/".join(a.split("/")[-3:])
+    os.system("./rbo_mc " + option_string + " -d " + a)
