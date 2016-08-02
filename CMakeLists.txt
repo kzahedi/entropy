@@ -1,6 +1,6 @@
 project(entropy)
 
-cmake_minimum_required(VERSION 3.3)
+cmake_minimum_required(VERSION 3.0)
 
 ENABLE_TESTING()
 
@@ -13,9 +13,15 @@ set(CMAKE_VERBOSE_MAKEFILE       OFF)
 set(CMAKE_CXX_COMPILER           "g++")
 set(CMAKE_CXX_COMPILER_FULLPATH  "g++")
 
+if(APPLE)
 set(CMAKE_CXX_FLAGS_DEBUG        "-g -arch x86_64")
 set(CMAKE_CXX_FLAGS_RELEASE      "-g -arch x86_64")
 set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O3")
+else(APPLE)
+set(CMAKE_CXX_FLAGS_DEBUG        "-g -arch x86_64 -fPIC")
+set(CMAKE_CXX_FLAGS_RELEASE      "-g -arch x86_64 -fPIC")
+set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O3")
+endif(APPLE)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(/usr/local/include)
@@ -25,7 +31,6 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED filesystem system)
 
 add_subdirectory(src/entropy++)
-add_subdirectory(tests)
 
 CONFIGURE_FILE(
   "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
@@ -44,6 +49,7 @@ INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/src/entropy++/
 
 option(COMPILE_HOPPING "Compile MC example with hopping data" OFF)
 option(COMPILE_RBO     "Compile MC example for RBOHand data" OFF)
+option(ENTROPY_TESTS   "Compile test cases" OFF)
 
 if(COMPILE_HOPPING)
   add_subdirectory(examples/hopping)
@@ -52,4 +58,8 @@ endif(COMPILE_HOPPING)
 if(COMPILE_RBO)
   add_subdirectory(examples/RBOHand)
 endif(COMPILE_RBO)
-       
+
+if(ENTROPY_TESTS)
+add_subdirectory(tests)
+endif(ENTROPY_TESTS)
+ 
