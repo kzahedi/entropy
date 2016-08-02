@@ -113,11 +113,18 @@ Container* Csv::read(string filename, vector<int> indices)
   {
     boost::char_separator<char> sep(",");
     tokenizer<boost::char_separator<char> > tk(line,sep);
+    vector<string> vec;
     for(tokenizer<boost::char_separator<char> >::iterator i(tk.begin()); i!=tk.end();++i) 
     {
-      (*c) << atof((*i).c_str());
+      vec.push_back(*i);
+    }
+
+    for(vector<int>::iterator i = indices.begin(); i != indices.end(); i++)
+    {
+      (*c) << atof(vec[*i].c_str());
     }
   }
+
 
   return c;
 }

@@ -13,8 +13,18 @@ from decimal import *
 from convertfunctions import *
 
 parser = argparse.ArgumentParser(description="Arguments:")
-parser.add_argument("-d", type=str, default=None, help="Parent directory.")
+parser.add_argument("-d",  type=str, default=None, help="Parent directory.")
+parser.add_argument("-wi", type=str, default=None, help="W indices.")
+parser.add_argument("-ai", type=str, default=None, help="A indices.")
+parser.add_argument("-wb", type=int, default=300, help="W bins.")
+parser.add_argument("-ab", type=int, default=300, help="A bins.")
 args = parser.parse_args()
+
+option_string = "--wbins " + str(args.wb) + " --abins " + str(args.ab)
+if args.wi is not None:
+    option_string = option_string + " --wi " + args.wi
+if args.ai is not None:
+    option_string = option_string + " --ai " + args.ai
 
 c_states = "control.states.csv"
 s_states = "hand.sofastates.txt"
@@ -63,7 +73,8 @@ sofa_min_values = None
 sofa_max_values = None
 for c in sofacsvstates:
 
-    print "reading " + c 
+    print "reading " + "/".join(c.split("/")[-3:])
+
     fd = open(c,"r")
     lines = fd.readlines()
     fd.close()
@@ -122,5 +133,5 @@ for c in controlstates:
 
 
 for a in analysisdirs:
-    print "rbo_mc -d " + a
-    os.system("rbo_mc -d " + a)
+    print "rbo_mc " + option_string + " -d " + "/".join(a.split("/")[-3:])
+    os.system("rbo_mc " + option_string + " -d " + a)
