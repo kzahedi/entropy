@@ -121,3 +121,6 @@ for c in controlstates:
     shutil.copyfile(c, c.replace("raw","analysis"))
 
 
+for a in analysisdirs:
+    print "rbo_mc -d " + a
+    os.system("rbo_mc -d " + a)
