@@ -67,72 +67,106 @@ int main(int argc, char** argv)
   string w_states      = string(FLAGS_d) + "/hand.sofastates.csv";
   string a_states      = string(FLAGS_d) + "/control.states.csv";
 
-  cout << "Files:" << endl;
-  cout << "  W domain: " << w_domain_file << endl;
-  cout << "  A domain: " << a_domain_file << endl;
-  cout << "  W states: " << w_states      << endl;
-  cout << "  A states: " << a_states      << endl;
+  VLOG(1) << "Files:";
+  VLOG(1) << "  W domain: " << w_domain_file;
+  VLOG(1) << "  A domain: " << a_domain_file;
+  VLOG(1) << "  W states: " << w_states     ;
+  VLOG(1) << "  A states: " << a_states     ;
 
   Csv* csv = new Csv();
 
+  // W data
   Container* w_domains = NULL;
+  Container* W         = NULL;
   if(FLAGS_wi == "")
   {
     w_domains = csv->read(w_domain_file);
+    W         = csv->read(w_states);
   }
   else
   {
     vector<int> w_indices = int_tokenizer(FLAGS_wi);
     w_domains = csv->read(w_domain_file, w_indices);
+    W         = csv->read(w_states, w_indices);
   }
 
+  VLOG(1) << "W domain file:";
+  VLOG(1) << *w_domains;
+  VLOG(1) << "W states:";
+  VLOG(1) << *W;
+
+  double **wdomain = new double*[W->columns()];
+  int *wbins = new int[W->columns()];
+  for(int i = 0; i < W->columns(); i++)
+  {
+    wdomain[i]    = new double[2];
+    wdomain[i][0] = (*w_domains)(0,i);
+    wdomain[i][1] = (*w_domains)(1,i);
+    wbins[i]      = FLAGS_wbins;
+  }
+
+  W->setDomains(wdomain);
+  W->setBinSizes(wbins);
+
+  Container* Wd = W->discretise();
+
+  // A data
   Container* a_domains = NULL;
+  Container* A         = NULL;
   if(FLAGS_ai == "")
   {
     a_domains = csv->read(a_domain_file);
+    A         = csv->read(a_states);
   }
   else
   {
     vector<int> a_indices = int_tokenizer(FLAGS_ai);
     a_domains = csv->read(a_domain_file, a_indices);
+    A         = csv->read(a_states, a_indices);
+  }
+  A         = A->drop(1); // header
+
+  VLOG(1) << "A domains:";
+  VLOG(1) << *a_domains;
+  VLOG(1) << "A states:";
+  VLOG(1) << *A;
+
+  double **adomain = new double*[A->columns()];
+  int *abins = new int[A->columns()];
+  for(int i = 0; i < A->columns(); i++)
+  {
+    adomain[i]    = new double[2];
+    adomain[i][0] = (*a_domains)(0,i);
+    adomain[i][1] = (*a_domains)(1,i);
+    abins[i]      = FLAGS_abins;
   }
 
-  cout << "W domain file:" << endl;
-  cout << *w_domains << endl;
+  A->setDomains(adomain);
+  A->setBinSizes(abins);
 
-  cout << "A domain file:" << endl;
-  cout << *a_domains << endl;
+  Container* Ad = A->discretise();
 
-  // double** w_domains = new double[e->wsize()];
-  // for(int i = 0; i < e->wsize(); i++)
-  // {
-    // w_domains[i] = new double[2];
-    // w_domains[i][0] = e->wmin(0,i);
-    // w_domains[i][1] = e->wmax(0,i);
-  // }
+  Container* W1 =  Wd->drop(-1);
+  Container* A1 =  Ad->drop(-1);
+  Container* W2 =  Wd->drop(1);
 
+  double     mc  = entropy::sparse::MC_W(W2, W1, A1);
+  Container* mcd = entropy::sparse::state::MC_W(W2, W1, A1);
 
+  cout << "MC: " << mc << endl;
 
+  stringstream sst;
+  sst.str("");
+  sst << FLAGS_d << "/mc_w-averaged.txt";
+  VLOG(10) << "writing \"" << sst.str() << "\"";
+  ofstream output;
+  output.open(sst.str());
+  output << mc << endl;
+  output.close();
 
-  // Container* W1 =  W->drop(-1);
-  // Container* A1 = dA->drop(-1);
-  // Container* W2 =  W->drop(W->rows() - A1->rows());
+  sst.str("");
+  sst << FLAGS_d << "/mc_w-state_dependent.csv";
+  csv->write(sst.str().c_str(), mcd);
 
-  // double     mc  = entropy::sparse::MC_W(W2, W1, A1);
-  // Container* mcd = entropy::sparse::state::MC_W(W2, W1, A1);
-
-  // sst.str("");
-  // sst << FLAGS_out << "-state-dependent.csv";
-  // csv->write(sst.str().c_str(), mcd);
-  // delete csv;
-
-  // cout << "MC: " << mc << endl;
-
-  // sst.str("");
-  // sst << FLAGS_out << "-averaged.txt";
-  // VLOG(10) << "writing \"" << sst.str() << "\"";
-  // ofstream output;
-  // output.open(sst.str());
-  // output << mc << endl;
-  // output.close();
+  VLOG(1) << "done.";
 }

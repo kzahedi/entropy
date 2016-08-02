@@ -9,6 +9,7 @@ import math
 import os
 import shutil
 import argparse
+from decimal import *
 from convertfunctions import *
 
 parser = argparse.ArgumentParser(description="Arguments:")
@@ -57,37 +58,18 @@ for i in sofastates:
             fd.write(convert_to_csv(d) + "\n")
         fd.close()
 
-
-# creating control domain file
-control_min_values = None
-control_max_values = None
-for c in controlstates:
-    fd = open(c,"r")
-    lines = fd.readlines()[1:]
-    fd.close()
-
-    for line in lines:
-        values = [float(v) for v in line.split(",")]
-        if control_min_values is None:
-            control_min_values = [v for v in values]
-            control_max_values = [v for v in values]
-        else:
-            for i in range(0, len(values)):
-                if values[i] > control_max_values[i]:
-                    control_max_values[i] = values[i]
-                if values[i] < control_min_values[i]:
-                    control_min_values[i] = values[i]
-
 # creating sofa domain file
 sofa_min_values = None
 sofa_max_values = None
 for c in sofacsvstates:
+
+    print "reading " + c 
     fd = open(c,"r")
-    lines = fd.readlines()[1:]
+    lines = fd.readlines()
     fd.close()
 
     for line in lines:
-        values = [float(v) for v in line.split(",")]
+        values = [Decimal(v) for v in line.split(",")]
         if sofa_min_values is None:
             sofa_min_values = [v for v in values]
             sofa_max_values = [v for v in values]
@@ -98,6 +80,34 @@ for c in sofacsvstates:
                 if values[i] < sofa_min_values[i]:
                     sofa_min_values[i] = values[i]
 
+print str(sofa_max_values[4])
+
+for w in wdomains:
+    fd = open(w,"w")
+    fd.write(",".join([str(v) for v in sofa_min_values]) + "\n")
+    fd.write(",".join([str(v) for v in sofa_max_values]) + "\n")
+    fd.close()
+
+# creating control domain file
+control_min_values = None
+control_max_values = None
+for c in controlstates:
+    fd = open(c,"r")
+    lines = fd.readlines()[1:]
+    fd.close()
+
+    for line in lines:
+        values = [Decimal(v) for v in line.split(",")]
+        if control_min_values is None:
+            control_min_values = [v for v in values]
+            control_max_values = [v for v in values]
+        else:
+            for i in range(0, len(values)):
+                if values[i] > control_max_values[i]:
+                    control_max_values[i] = values[i]
+                if values[i] < control_min_values[i]:
+                    control_min_values[i] = values[i]
+
 
 for a in adomains:
     fd = open(a,"w")
@@ -105,11 +115,6 @@ for a in adomains:
     fd.write(",".join([str(v) for v in control_max_values]) + "\n")
     fd.close()
 
-for w in wdomains:
-    fd = open(w,"w")
-    fd.write(",".join([str(v) for v in sofa_min_values]) + "\n")
-    fd.write(",".join([str(v) for v in sofa_max_values]) + "\n")
-    fd.close()
 
 # copy control states
 for c in controlstates:
