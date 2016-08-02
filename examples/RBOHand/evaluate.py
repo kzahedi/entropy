@@ -39,8 +39,9 @@ for s in subdirectories:
         print "creating " + args.d + s + "/analysis"
         os.mkdir(args.d + "/" + s + "/analysis")
     except:
-        shutil.rmtree(args.d + "/" + s + "/analysis")
-        os.mkdir(args.d + "/" + s + "/analysis")
+        print args.d + s + "/analysis already existed"
+        # shutil.rmtree(args.d + "/" + s + "/analysis")
+        # os.mkdir(args.d + "/" + s + "/analysis")
 
 subdirectories = [args.d + "/"  + v             for v in subdirectories]
 controlstates  = [v + "/raw/" + c_states        for v in subdirectories]
@@ -75,23 +76,22 @@ for c in sofacsvstates:
 
     print "reading " + "/".join(c.split("/")[-3:])
 
-    fd = open(c,"r")
-    lines = fd.readlines()
-    fd.close()
+    if os.path.exists(c):
+        fd = open(c,"r")
+        lines = fd.readlines()
+        fd.close()
 
-    for line in lines:
-        values = [Decimal(v) for v in line.split(",")]
-        if sofa_min_values is None:
-            sofa_min_values = [v for v in values]
-            sofa_max_values = [v for v in values]
-        else:
-            for i in range(0, len(values)):
-                if values[i] > sofa_max_values[i]:
-                    sofa_max_values[i] = values[i]
-                if values[i] < sofa_min_values[i]:
-                    sofa_min_values[i] = values[i]
-
-print str(sofa_max_values[4])
+        for line in lines:
+            values = [Decimal(v) for v in line.split(",")]
+            if sofa_min_values is None:
+                sofa_min_values = [v for v in values]
+                sofa_max_values = [v for v in values]
+            else:
+                for i in range(0, len(values)):
+                    if values[i] > sofa_max_values[i]:
+                        sofa_max_values[i] = values[i]
+                    if values[i] < sofa_min_values[i]:
+                        sofa_min_values[i] = values[i]
 
 for w in wdomains:
     fd = open(w,"w")
@@ -103,21 +103,23 @@ for w in wdomains:
 control_min_values = None
 control_max_values = None
 for c in controlstates:
-    fd = open(c,"r")
-    lines = fd.readlines()[1:]
-    fd.close()
 
-    for line in lines:
-        values = [Decimal(v) for v in line.split(",")]
-        if control_min_values is None:
-            control_min_values = [v for v in values]
-            control_max_values = [v for v in values]
-        else:
-            for i in range(0, len(values)):
-                if values[i] > control_max_values[i]:
-                    control_max_values[i] = values[i]
-                if values[i] < control_min_values[i]:
-                    control_min_values[i] = values[i]
+    if os.path.exists(c):
+        fd = open(c,"r")
+        lines = fd.readlines()[1:]
+        fd.close()
+
+        for line in lines:
+            values = [Decimal(v) for v in line.split(",")]
+            if control_min_values is None:
+                control_min_values = [v for v in values]
+                control_max_values = [v for v in values]
+            else:
+                for i in range(0, len(values)):
+                    if values[i] > control_max_values[i]:
+                        control_max_values[i] = values[i]
+                    if values[i] < control_min_values[i]:
+                        control_min_values[i] = values[i]
 
 
 for a in adomains:
