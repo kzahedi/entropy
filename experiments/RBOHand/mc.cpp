@@ -46,21 +46,23 @@ DEFINE_bool(csv,    false, "write all data that is used for the analysis into cs
 
 void check_domains(string label, DContainer *domain)
 {
-  bool found = false;
   for(int i = 0; i < domain->columns(); i++)
   {
     if(fabs((*domain)(0,i) - (*domain)(1,i)) < 0.00001)
     {
-      found = true;
-      cerr << "ERROR: In " << label << " domains: found " << 
-        "[" << (*domain)(0,i) << ", " << (*domain)(1,i) << "] at index " << i << endl;
+      // found = true;
+      cout << "WARNING: In " << label << " domains: found " << 
+        "[" << (*domain)(0,i) << ", " << (*domain)(1,i) << "] at index " << i;
+      (*domain)(0,i) = (*domain)(0,i) - 1.0;
+      (*domain)(1,i) = (*domain)(1,i) + 1.0;
+      cout << ". setting to [" << (*domain)(0,i) << ", " << (*domain)(1,i) << "] at index " << i << endl;
     }
   }
-  if(found) 
-  {
-    cout << *domain << endl;
-    exit(-1);
-  }
+  // if(found) 
+  // {
+    // cout << *domain << endl;
+    // exit(-1);
+  // }
 }
 
 vector<int> int_tokenizer(string s)
