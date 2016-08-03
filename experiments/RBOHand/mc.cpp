@@ -37,11 +37,12 @@ vector<double> amax;
 
 vector<string> files;
 
-DEFINE_string(d,    "",   "directory");
-DEFINE_string(wi,   "",   "W column indices");
-DEFINE_string(ai,   "",   "A column indices");
-DEFINE_int64(wbins, 1000, "world state bins");
-DEFINE_int64(abins, 100,  "action bins");
+DEFINE_string(d,    "",    "directory");
+DEFINE_string(wi,   "",    "W column indices");
+DEFINE_string(ai,   "",    "A column indices");
+DEFINE_int64(wbins, 1000,  "world state bins");
+DEFINE_int64(abins, 100,   "action bins");
+DEFINE_bool(csv,    false, "write all data that is used for the analysis into csv files");
 
 void check_domains(string label, Container *domain)
 {
@@ -109,7 +110,6 @@ int main(int argc, char** argv)
   if(FLAGS_wi == "")
   {
     w_domains = csv->read(w_domain_file);
-    check_domains("W", w_domains);
     W         = csv->read(w_states);
     VLOG(100) << "W domain:";
     VLOG(100) << *w_domains;
@@ -128,7 +128,6 @@ int main(int argc, char** argv)
   {
     w_indices = int_tokenizer(FLAGS_wi);
     w_domains = csv->read(w_domain_file, w_indices);
-    check_domains("W", w_domains);
     W         = csv->read(w_states, w_indices);
     VLOG(100) << "W domain:";
     VLOG(100) << *w_domains;
@@ -150,6 +149,8 @@ int main(int argc, char** argv)
     }
   }
 
+
+  check_domains("W", w_domains);
   VLOG(1) << "W min/max:";
   for(int i = 0; i < 3; i++) VLOG(1) << w_min[i] << ", " << w_max[i];
 
@@ -190,24 +191,25 @@ int main(int argc, char** argv)
 
   Container* Wd = W->discretise();
 
+  VLOG(100) << "Wd: " << endl << *Wd;
+
   // A data
   Container* a_domains = NULL;
   Container* A         = NULL;
   if(FLAGS_ai == "")
   {
     a_domains = csv->read(a_domain_file);
-    check_domains("A", a_domains);
     A         = csv->read(a_states);
   }
   else
   {
     vector<int> a_indices = int_tokenizer(FLAGS_ai);
     a_domains = csv->read(a_domain_file, a_indices);
-    check_domains("A", a_domains);
     A         = csv->read(a_states, a_indices);
   }
   A         = A->drop(1); // header
 
+  check_domains("A", a_domains);
   VLOG(1) << "A domains:";
   VLOG(1) << *a_domains;
   VLOG(1) << "A states:";
@@ -234,6 +236,30 @@ int main(int argc, char** argv)
   Container* W1 =  Wd->drop(-1);
   Container* A1 =  Ad->drop(-1);
   Container* W2 =  Wd->drop(1);
+
+
+  if(FLAGS_csv)
+  {
+    Container *Wdc = W->discretiseByColumn();
+    csv->write(FLAGS_d + "/W.csv",   W);
+    csv->write(FLAGS_d + "/Wd.csv",  Wd);
+    csv->write(FLAGS_d + "/Wdc.csv", Wdc);
+    csv->write(FLAGS_d + "/W1.csv",  W1);
+    csv->write(FLAGS_d + "/W2.csv",  W2);
+    csv->write(FLAGS_d + "/W_domains.csv", w_domains);
+    ofstream o(FLAGS_d + "/W_min_max.csv");
+    o << w_min[0] << "," << w_min[1] << "," << w_min[2] << endl;
+    o << w_max[0] << "," << w_max[1] << "," << w_max[2] << endl;
+    o.close();
+
+    Container *Adc = A->discretiseByColumn();
+    csv->write(FLAGS_d + "/A.csv",   A);
+    csv->write(FLAGS_d + "/A1.csv",  A1);
+    csv->write(FLAGS_d + "/Ad.csv",  Ad);
+    csv->write(FLAGS_d + "/Adc.csv", Adc);
+    csv->write(FLAGS_d + "/A_domains.csv", a_domains);
+  }
+  
 
   double     mc  = entropy::sparse::MC_W(W2, W1, A1);
   Container* mcd = entropy::sparse::state::MC_W(W2, W1, A1);

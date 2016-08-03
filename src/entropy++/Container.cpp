@@ -280,34 +280,36 @@ void Container::setDiscretisationMode(int mode)
 
 void Container::__strip()
 {
-  vector<int> values;
-
-  for(int r = 0; r < _rows; r++)
+  for(int c = 0; c < _columns; c++)
   {
-    int  value = (int)_data[r][0];
-    bool found = false;
-    for(int i = 0; i < (int)values.size(); i++)
+    vector<int> values;
+    for(int r = 0; r < _rows; r++)
     {
-      if(value == values[i])
+      int  value = (int)_data[r][c];
+      bool found = false;
+      for(int i = 0; i < (int)values.size(); i++)
       {
-        found = true;
-        break;
+        if(value == values[i])
+        {
+          found = true;
+          break;
+        }
+      }
+      if(found == false)
+      {
+        values.push_back(value);
       }
     }
-    if(found == false)
-    {
-      values.push_back(value);
-    }
-  }
 
-  for(int r = 0; r < _rows; r++)
-  {
-    int value = (int)_data[r][0];
-    for(int i = 0; i < (int)values.size(); i++)
+    for(int r = 0; r < _rows; r++)
     {
-      if(value == values[i])
+      int value = (int)_data[r][c];
+      for(int i = 0; i < (int)values.size(); i++)
       {
-        _data[r][0] = (double)i;
+        if(value == values[i])
+        {
+          _data[r][c] = (double)i;
+        }
       }
     }
   }
@@ -521,13 +523,18 @@ Container* Container::combineDiscretisedColumns()
   Container *copy = new Container(_rows, 1);
   __copyProperties(copy);
 
+  int maxBins[_columns];
+  for(int c = 0; c < _columns; c++)
+  {
+    maxBins[c] = max(c);
+  }
   for(int r = 0; r < _rows; r++)
   {
     int v = 0;
     int f = 1;
     for(int c = 0; c < _columns; c++)
     {
-      if(c > 0) f = f * _bins[c-1];
+      if(c > 0) f = f * maxBins[c-1];
       v += f * get(r,c);
     }
     *copy << v;
