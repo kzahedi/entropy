@@ -5,20 +5,11 @@
 # /plots    erzeugen
 # boolean flags zum an-/abschalten von funktionen
 
-import math
-import os
-import shutil
 import argparse
-from decimal import *
-from convertfunctions import *
+import matplotlib
 
 parser = argparse.ArgumentParser(description="Arguments:")
 parser.add_argument("-d",  type=str, default=None, help="Parent directory.")
-parser.add_argument("-wi", type=str, default=None, help="W indices.")
-parser.add_argument("-ai", type=str, default=None, help="A indices.")
-parser.add_argument("-wb", type=int, default=300, help="W bins.")
-parser.add_argument("-ab", type=int, default=300, help="A bins.")
-parser.add_argument("-wf", type=bool, default=True, help="Convert to wrist frame.")
 args = parser.parse_args()
 
 option_string = "--wbins " + str(args.wb) + " --abins " + str(args.ab)

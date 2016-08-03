@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include <stdlib.h>
+#include <math.h>
 
 #include <entropy++/Csv.h>
 #include <entropy++/sparse/MC_W.h>
@@ -42,6 +43,25 @@ DEFINE_string(ai,   "",   "A column indices");
 DEFINE_int64(wbins, 1000, "world state bins");
 DEFINE_int64(abins, 100,  "action bins");
 
+void check_domains(string label, Container *domain)
+{
+  bool found = false;
+  for(int i = 0; i < domain->columns(); i++)
+  {
+    if(fabs((*domain)(0,i) - (*domain)(1,i)) < 0.00001)
+    {
+      found = true;
+      cerr << "ERROR: In " << label << " domains: found " << 
+        "[" << (*domain)(0,i) << ", " << (*domain)(1,i) << "] at index " << i << endl;
+    }
+  }
+  if(found) 
+  {
+    cout << *domain << endl;
+    exit(-1);
+  }
+}
+
 vector<int> int_tokenizer(string s)
 {
   boost::char_separator<char> sep(",");
@@ -58,7 +78,12 @@ int main(int argc, char** argv)
 {
   google::ParseCommandLineFlags(&argc, &argv, true);
   google::InitGoogleLogging(argv[0]);
-  FLAGS_logtostderr = 1;
+  FLAGS_log_dir = ".";
+
+  // if(FLAGS_lf == false)
+  // {
+    // FLAGS_logtostderr = 1;
+  // }
 
   VLOG(10) << "Directory: " << FLAGS_d;
 
@@ -84,7 +109,10 @@ int main(int argc, char** argv)
   if(FLAGS_wi == "")
   {
     w_domains = csv->read(w_domain_file);
+    check_domains("W", w_domains);
     W         = csv->read(w_states);
+    VLOG(100) << "W domain:";
+    VLOG(100) << *w_domains;
     for(int i = 0; i < 3; i++)
     {
       w_min[i]  = (*w_domains)(0,i);
@@ -100,7 +128,10 @@ int main(int argc, char** argv)
   {
     w_indices = int_tokenizer(FLAGS_wi);
     w_domains = csv->read(w_domain_file, w_indices);
+    check_domains("W", w_domains);
     W         = csv->read(w_states, w_indices);
+    VLOG(100) << "W domain:";
+    VLOG(100) << *w_domains;
     for(int i = 0; i < 3; i++)
     {
       w_min[i] = -1000000.0;
@@ -119,6 +150,7 @@ int main(int argc, char** argv)
     }
   }
 
+  VLOG(1) << "W min/max:";
   for(int i = 0; i < 3; i++) VLOG(1) << w_min[i] << ", " << w_max[i];
 
   VLOG(1) << "W domain file:";
@@ -153,6 +185,9 @@ int main(int argc, char** argv)
   W->setDomains(wdomain);
   W->setBinSizes(wbins);
 
+  VLOG(100) << "W:";
+  VLOG(100) << *W;
+
   Container* Wd = W->discretise();
 
   // A data
@@ -161,12 +196,14 @@ int main(int argc, char** argv)
   if(FLAGS_ai == "")
   {
     a_domains = csv->read(a_domain_file);
+    check_domains("A", a_domains);
     A         = csv->read(a_states);
   }
   else
   {
     vector<int> a_indices = int_tokenizer(FLAGS_ai);
     a_domains = csv->read(a_domain_file, a_indices);
+    check_domains("A", a_domains);
     A         = csv->read(a_states, a_indices);
   }
   A         = A->drop(1); // header
@@ -188,6 +225,9 @@ int main(int argc, char** argv)
 
   A->setDomains(adomain);
   A->setBinSizes(abins);
+
+  VLOG(100) << "A:";
+  VLOG(100) << *A;
 
   Container* Ad = A->discretise();
 

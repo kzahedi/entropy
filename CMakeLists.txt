@@ -52,11 +52,11 @@ option(COMPILE_RBO     "Compile MC example for RBOHand data" OFF)
 option(ENTROPY_TESTS   "Compile test cases" OFF)
 
 if(COMPILE_HOPPING)
-  add_subdirectory(examples/hopping)
+  add_subdirectory(experiments/hopping)
 endif(COMPILE_HOPPING)
 
 if(COMPILE_RBO)
-  add_subdirectory(examples/RBOHand)
+  add_subdirectory(experiments/RBOHand)
 endif(COMPILE_RBO)
 
 if(ENTROPY_TESTS)
