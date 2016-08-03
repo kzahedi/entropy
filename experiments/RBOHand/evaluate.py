@@ -18,6 +18,7 @@ parser.add_argument("-ai", type=str, default=None, help="A indices.")
 parser.add_argument("-wb", type=int, default=300, help="W bins.")
 parser.add_argument("-ab", type=int, default=300, help="A bins.")
 parser.add_argument("-wf", type=bool, default=True, help="Convert to wrist frame.")
+parser.add_argument("-csv", type=bool, default=True, help="Export data.")
 args = parser.parse_args()
 
 option_string = "--wbins " + str(args.wb) + " --abins " + str(args.ab)
@@ -25,6 +26,8 @@ if args.wi is not None:
     option_string = option_string + " --wi " + args.wi
 if args.ai is not None:
     option_string = option_string + " --ai " + args.ai
+if args.csv is True:
+    option_string = option_string + " -cvs"
 
 c_states = "control.states.csv"
 s_states = "hand.sofastates.txt"
