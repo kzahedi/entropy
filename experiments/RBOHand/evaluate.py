@@ -43,13 +43,13 @@ for s in subdirectories:
         # shutil.rmtree(args.d + "/" + s + "/analysis")
         # os.mkdir(args.d + "/" + s + "/analysis")
 
-subdirectories = [args.d + "/"  + v             for v in subdirectories]
-controlstates  = [v + "/raw/" + c_states        for v in subdirectories]
-sofastates     = [v + "/raw/" + s_states        for v in subdirectories]
-sofacsvstates  = [v + "/analysis/" + s_csv      for v in subdirectories]
-analysisdirs   = [v + "/analysis/"              for v in subdirectories]
-wdomains       = [v + "/analysis/W.domains.csv" for v in subdirectories]
-adomains       = [v + "/analysis/A.domains.csv" for v in subdirectories]
+subdirectories = [os.path.normpath(args.d + "/"  + v)             for v in subdirectories]
+controlstates  = [os.path.normpath(v + "/raw/" + c_states)        for v in subdirectories]
+sofastates     = [os.path.normpath(v + "/raw/" + s_states)        for v in subdirectories]
+sofacsvstates  = [os.path.normpath(v + "/analysis/" + s_csv)      for v in subdirectories]
+analysisdirs   = [os.path.normpath(v + "/analysis/")              for v in subdirectories]
+wdomains       = [os.path.normpath(v + "/analysis/W.domains.csv") for v in subdirectories]
+adomains       = [os.path.normpath(v + "/analysis/A.domains.csv") for v in subdirectories]
 
 # convert sofa state files
 for i in sofastates:
