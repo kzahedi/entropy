@@ -18,9 +18,9 @@ CPPUNIT_TEST_SUITE_REGISTRATION( cmiTest );
 void cmiTest::testSinus()
 {
 
-  Container X(1000,1);
-  Container Y(1000,1);
-  Container Z(1000,1);
+  DContainer X(1000,1);
+  DContainer Y(1000,1);
+  DContainer Z(1000,1);
 
   for(float i = 0; i < 1000.0; i = i + 1.0)
   {
@@ -46,9 +46,9 @@ void cmiTest::testSinus()
   Z.setDomains(dom);
   Z.setBinSizes(bins);
 
-  Container *dx = X.discretise();
-  Container *dy = Y.discretise();
-  Container *dz = Z.discretise();
+  DContainer *dx = X.discretise();
+  DContainer *dy = Y.discretise();
+  DContainer *dz = Z.discretise();
 
   double s = CMI(dx, dy, dz);
 
@@ -61,9 +61,9 @@ void cmiTest::testSinus()
 
 void cmiTest::testSparseVsNonSparse()
 {
-  Container X(1000,1);
-  Container Y(1000,1);
-  Container Z(1000,1);
+  DContainer X(1000,1);
+  DContainer Y(1000,1);
+  DContainer Z(1000,1);
 
   for(float i = 0; i < 1000.0; i = i + 1.0)
   {
@@ -89,9 +89,9 @@ void cmiTest::testSparseVsNonSparse()
   Z.setDomains(dom);
   Z.setBinSizes(bins);
 
-  Container *dx = X.discretise();
-  Container *dy = Y.discretise();
-  Container *dz = Z.discretise();
+  DContainer *dx = X.discretise();
+  DContainer *dy = Y.discretise();
+  DContainer *dz = Z.discretise();
 
   double s1 = CMI(dx, dy, dz);
   double s2 = entropy::sparse::CMI(dx, dy, dz);
@@ -107,9 +107,9 @@ void cmiTest::testMatrixWiseComparision()
   //
   // Generating data
   //
-  Container X(1000,1);
-  Container Y(1000,1);
-  Container Z(1000,1);
+  DContainer X(1000,1);
+  DContainer Y(1000,1);
+  DContainer Z(1000,1);
 
   for(float i = 0; i < 1000.0; i = i + 1.0)
   {
@@ -135,9 +135,9 @@ void cmiTest::testMatrixWiseComparision()
   Z.setDomains(dom);
   Z.setBinSizes(bins);
 
-  Container *dx = X.discretise();
-  Container *dy = Y.discretise();
-  Container *dz = Z.discretise();
+  DContainer *dx = X.discretise();
+  DContainer *dy = Y.discretise();
+  DContainer *dz = Z.discretise();
 
   //
   // array version

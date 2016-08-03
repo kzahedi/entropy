@@ -14,7 +14,7 @@ Csv::Csv()
 {
 }
 
-Container* Csv::read(string filename)
+DContainer* Csv::read(string filename)
 {
   ifstream ifs(filename.c_str());
   string   line;
@@ -39,7 +39,7 @@ Container* Csv::read(string filename)
   ifs.close();
   ifs.open(filename.c_str());
 
-  Container *c = new Container(nrOfLines, nrOfColumns);
+  DContainer *c = new DContainer(nrOfLines, nrOfColumns);
 
   while (std::getline(ifs, line))
   {
@@ -54,7 +54,7 @@ Container* Csv::read(string filename)
   return c;
 }
 
-Container* Csv::read(string filename, int n, ...)
+DContainer* Csv::read(string filename, int n, ...)
 {
   vector<int> indices;
   va_list ap;
@@ -75,7 +75,7 @@ Container* Csv::read(string filename, int n, ...)
   ifs.close();
   ifs.open(filename.c_str());
 
-  Container *c = new Container(nrOfLines, indices.size());
+  DContainer *c = new DContainer(nrOfLines, indices.size());
 
   while (std::getline(ifs, line))
   {
@@ -96,7 +96,7 @@ Container* Csv::read(string filename, int n, ...)
   return c;
 }
 
-Container* Csv::read(string filename, vector<int> indices)
+DContainer* Csv::read(string filename, vector<int> indices)
 {
   ifstream ifs(filename.c_str());
   string   line;
@@ -108,7 +108,7 @@ Container* Csv::read(string filename, vector<int> indices)
   ifs.close();
   ifs.open(filename.c_str());
 
-  Container *c = new Container(nrOfLines, indices.size());
+  DContainer *c = new DContainer(nrOfLines, indices.size());
 
   while (std::getline(ifs, line))
   {
@@ -129,7 +129,7 @@ Container* Csv::read(string filename, vector<int> indices)
 
   return c;
 }
-void Csv::write(string filename, Container* container)
+void Csv::write(string filename, DContainer* container)
 {
   ofstream out(filename.c_str());
   for(int r = 0; r < container->rows(); r++)

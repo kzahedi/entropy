@@ -10,7 +10,7 @@ using namespace std;
 using namespace entropy::sparse::state;
 
 
-Container* __empericalMIssd(Container* X, Container* Y)
+DContainer* __empericalMIssd(DContainer* X, DContainer* Y)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -69,7 +69,7 @@ Container* __empericalMIssd(Container* X, Container* Y)
     }
   }
 
-  Container *r = new Container(X->rows(), 1);
+  DContainer *r = new DContainer(X->rows(), 1);
 
   for(int i = 0; i < X->rows(); i++)
   {
@@ -82,7 +82,7 @@ Container* __empericalMIssd(Container* X, Container* Y)
   return r;
 }
 
-Container* entropy::sparse::state::MI(Container* X, Container* Y, int mode)
+DContainer* entropy::sparse::state::MI(DContainer* X, DContainer* Y, int mode)
 {
   switch(mode)
   {

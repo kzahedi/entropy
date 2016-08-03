@@ -15,7 +15,7 @@ Entropy::~Entropy()
 {
 }
 
-double Entropy::calulate(Container* X)
+double Entropy::calulate(DContainer* X)
 {
   switch(_mode)
   {
@@ -29,7 +29,7 @@ double Entropy::calulate(Container* X)
   return 0.0;
 }
 
-double Entropy::__empericalEntropy(Container* X)
+double Entropy::__empericalEntropy(DContainer* X)
 {
   assert(X->isDiscretised());
 

@@ -8,7 +8,7 @@ namespace entropy
 {
   namespace state
   {
-    Container* MI(Container* X, Container* Y, int mode = EMPERICAL);
+    DContainer* MI(DContainer* X, DContainer* Y, int mode = EMPERICAL);
   }
 }
 

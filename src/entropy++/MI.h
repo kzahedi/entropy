@@ -4,6 +4,6 @@
 #include <entropy++/Container.h>
 #include <entropy++/defs.h>
 
-double MI(Container* X, Container* Y, int mode = EMPERICAL);
+double MI(DContainer* X, DContainer* Y, int mode = EMPERICAL);
 
 #endif // __MI_H__

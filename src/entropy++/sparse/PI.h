@@ -8,8 +8,8 @@ namespace entropy
 {
   namespace sparse
   {
-    double PI(Container* X, int mode = EMPERICAL);
-    double PIn(Container* X, int mode = EMPERICAL);
+    double PI(DContainer* X, int mode = EMPERICAL);
+    double PIn(DContainer* X, int mode = EMPERICAL);
   }
 }
 

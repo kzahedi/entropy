@@ -9,7 +9,7 @@
 using namespace std;
 using namespace entropy::sparse;
 
-double __empericalMIs(Container* X, Container* Y)
+double __empericalMIs(DContainer* X, DContainer* Y)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -71,7 +71,7 @@ double __empericalMIs(Container* X, Container* Y)
   return r;
 }
 
-double entropy::sparse::MI(Container* X, Container* Y, int mode)
+double entropy::sparse::MI(DContainer* X, DContainer* Y, int mode)
 {
   switch(mode)
   {

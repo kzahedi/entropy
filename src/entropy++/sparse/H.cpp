@@ -9,7 +9,7 @@
 using namespace std;
 using namespace entropy::sparse;
 
-double __empericalHs(Container* X)
+double __empericalHs(DContainer* X)
 {
   assert(X->isDiscretised());
 
@@ -49,7 +49,7 @@ double __empericalHs(Container* X)
   return -r;
 }
 
-double entropy::sparse::H(Container* X, int mode)
+double entropy::sparse::H(DContainer* X, int mode)
 {
   switch(mode)
   {

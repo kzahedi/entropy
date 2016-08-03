@@ -13,10 +13,10 @@ class Csv
   public:
     Csv();
 
-    Container* read(string filename, int n, ...);
-    Container* read(string filename);
-    Container* read(string filename, vector<int>);
-    void write(string filename, Container* c);
+    DContainer* read(string filename, int n, ...);
+    DContainer* read(string filename);
+    DContainer* read(string filename, vector<int>);
+    void write(string filename, DContainer* c);
 
   private:
 };

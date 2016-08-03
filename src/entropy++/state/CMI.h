@@ -8,7 +8,7 @@ namespace entropy
 {
   namespace state
   {
-    Container* CMI(Container* X, Container* Y, Container* Z, int mode);
+    DContainer* CMI(DContainer* X, DContainer* Y, DContainer* Z, int mode);
   }
 }
 

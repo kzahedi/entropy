@@ -3,6 +3,6 @@
 
 #include <entropy++/Container.h>
 
-double MC_MI(Container* W2, Container* W1, Container* S1, Container* A1, int mode = EMPERICAL);
+double MC_MI(DContainer* W2, DContainer* W1, DContainer* S1, DContainer* A1, int mode = EMPERICAL);
 
 #endif // __MC_MI_H__

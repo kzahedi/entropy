@@ -7,7 +7,7 @@
 using namespace std;
 
 
-double __empericalMI(Container* X, Container* Y)
+double __empericalMI(DContainer* X, DContainer* Y)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -111,7 +111,7 @@ double __empericalMI(Container* X, Container* Y)
   return r;
 }
 
-double MI(Container* X, Container* Y, int mode)
+double MI(DContainer* X, DContainer* Y, int mode)
 {
   switch(mode)
   {

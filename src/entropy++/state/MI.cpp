@@ -7,7 +7,7 @@
 using namespace std;
 using namespace entropy::state;
 
-Container* __empericalMIsd(Container* X, Container* Y)
+DContainer* __empericalMIsd(DContainer* X, DContainer* Y)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -109,7 +109,7 @@ Container* __empericalMIsd(Container* X, Container* Y)
     }
   }
 
-  Container* r_misd = new Container(X->rows(), 1);
+  DContainer* r_misd = new DContainer(X->rows(), 1);
   for(int i = 0; i < X->rows(); i++)
   {
     int x = X->get(i,0);
@@ -128,7 +128,7 @@ Container* __empericalMIsd(Container* X, Container* Y)
   return r_misd;
 }
 
-Container* entropy::state::MI(Container* X, Container* Y, int mode)
+DContainer* entropy::state::MI(DContainer* X, DContainer* Y, int mode)
 {
   switch(mode)
   {

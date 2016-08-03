@@ -18,8 +18,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION( miTest );
 void miTest::testSinus()
 {
 
-  Container X(1000,1);
-  Container Y(1000,1);
+  DContainer X(1000,1);
+  DContainer Y(1000,1);
   for(float i = 0; i < 1000.0; i = i + 1.0)
   {
     X << cos(i/10.0);
@@ -40,8 +40,8 @@ void miTest::testSinus()
   Y.setDomains(dom);
   Y.setBinSizes(bins);
 
-  Container *dx = X.discretise();
-  Container *dy = Y.discretise();
+  DContainer *dx = X.discretise();
+  DContainer *dy = Y.discretise();
 
   double s = MI(dx, dy);
 
@@ -54,8 +54,8 @@ void miTest::testSinus()
 
 void miTest::testSparseVsNonSparse()
 {
-  Container X(1000,1);
-  Container Y(1000,1);
+  DContainer X(1000,1);
+  DContainer Y(1000,1);
   for(float i = 0; i < 1000.0; i = i + 1.0)
   {
     X << cos(i/10.0);
@@ -76,8 +76,8 @@ void miTest::testSparseVsNonSparse()
   Y.setDomains(dom);
   Y.setBinSizes(bins);
 
-  Container *dx = X.discretise();
-  Container *dy = Y.discretise();
+  DContainer *dx = X.discretise();
+  DContainer *dy = Y.discretise();
 
   double s1 = MI(dx, dy);
   double s2 = entropy::sparse::MI(dx, dy);

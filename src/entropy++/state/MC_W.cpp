@@ -4,7 +4,7 @@
 
 using namespace entropy::state;
 
-Container* entropy::state::MC_W(Container* W2, Container* W1, Container* A1, int mode)
+DContainer* entropy::state::MC_W(DContainer* W2, DContainer* W1, DContainer* A1, int mode)
 {
   return CMI(W2, W1, A1, mode);
 }

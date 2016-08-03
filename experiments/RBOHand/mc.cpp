@@ -44,7 +44,7 @@ DEFINE_int64(wbins, 1000,  "world state bins");
 DEFINE_int64(abins, 100,   "action bins");
 DEFINE_bool(csv,    false, "write all data that is used for the analysis into csv files");
 
-void check_domains(string label, Container *domain)
+void check_domains(string label, DContainer *domain)
 {
   bool found = false;
   for(int i = 0; i < domain->columns(); i++)
@@ -102,8 +102,8 @@ int main(int argc, char** argv)
   Csv* csv = new Csv();
 
   // W data
-  Container* w_domains = NULL;
-  Container* W         = NULL;
+  DContainer* w_domains = NULL;
+  DContainer* W         = NULL;
   double w_min[3];
   double w_max[3];
   vector<int> w_indices;
@@ -189,13 +189,13 @@ int main(int argc, char** argv)
   VLOG(100) << "W:";
   VLOG(100) << *W;
 
-  Container* Wd = W->discretise();
+  DContainer* Wd = W->discretise();
 
   VLOG(100) << "Wd: " << endl << *Wd;
 
   // A data
-  Container* a_domains = NULL;
-  Container* A         = NULL;
+  DContainer* a_domains = NULL;
+  DContainer* A         = NULL;
   if(FLAGS_ai == "")
   {
     a_domains = csv->read(a_domain_file);
@@ -231,16 +231,16 @@ int main(int argc, char** argv)
   VLOG(100) << "A:";
   VLOG(100) << *A;
 
-  Container* Ad = A->discretise();
+  DContainer* Ad = A->discretise();
 
-  Container* W1 =  Wd->drop(-1);
-  Container* A1 =  Ad->drop(-1);
-  Container* W2 =  Wd->drop(1);
+  DContainer* W1 =  Wd->drop(-1);
+  DContainer* A1 =  Ad->drop(-1);
+  DContainer* W2 =  Wd->drop(1);
 
 
   if(FLAGS_csv)
   {
-    Container *Wdc = W->discretiseByColumn();
+    DContainer *Wdc = W->discretiseByColumn();
     csv->write(FLAGS_d + "/W.csv",   W);
     csv->write(FLAGS_d + "/Wd.csv",  Wd);
     csv->write(FLAGS_d + "/Wdc.csv", Wdc);
@@ -252,7 +252,7 @@ int main(int argc, char** argv)
     o << w_max[0] << "," << w_max[1] << "," << w_max[2] << endl;
     o.close();
 
-    Container *Adc = A->discretiseByColumn();
+    DContainer *Adc = A->discretiseByColumn();
     csv->write(FLAGS_d + "/A.csv",   A);
     csv->write(FLAGS_d + "/A1.csv",  A1);
     csv->write(FLAGS_d + "/Ad.csv",  Ad);
@@ -262,7 +262,7 @@ int main(int argc, char** argv)
   
 
   double     mc  = entropy::sparse::MC_W(W2, W1, A1);
-  Container* mcd = entropy::sparse::state::MC_W(W2, W1, A1);
+  DContainer* mcd = entropy::sparse::state::MC_W(W2, W1, A1);
 
   cout << "MC: " << mc << endl;
 

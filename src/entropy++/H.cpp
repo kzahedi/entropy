@@ -6,9 +6,7 @@
 
 using namespace std;
 
-
-
-double __empericalH(Container* X)
+double __empericalH(DContainer* X)
 {
   assert(X->isDiscretised());
 
@@ -53,7 +51,7 @@ double __empericalH(Container* X)
   return r;
 }
 
-double H(Container* X, int mode)
+double H(DContainer* X, int mode)
 {
   switch(mode)
   {

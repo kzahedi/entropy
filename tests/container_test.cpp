@@ -14,7 +14,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( containerTest );
 void containerTest::testFilling()
 {
 
-  Container container(2,3);
+  DContainer container(2,3);
 
   CPPUNIT_ASSERT_EQUAL(2, container.rows());
   CPPUNIT_ASSERT_EQUAL(3, container.columns());
@@ -54,14 +54,14 @@ void containerTest::testFilling()
 
 void containerTest::testDropping()
 {
-  Container c(10,3);
+  DContainer c(10,3);
 
   for(int i = 0; i < 30; i++)
   {
     c << i;
   }
 
-  Container *d = c.drop(3);
+  DContainer *d = c.drop(3);
 
   CPPUNIT_ASSERT_EQUAL(7, d->rows());
   CPPUNIT_ASSERT_EQUAL(3, d->columns());
@@ -76,7 +76,7 @@ void containerTest::testDropping()
     }
   }
 
-  Container *e = d->drop(-3);
+  DContainer *e = d->drop(-3);
 
   CPPUNIT_ASSERT_EQUAL(4, e->rows());
   CPPUNIT_ASSERT_EQUAL(3, e->columns());
@@ -94,7 +94,7 @@ void containerTest::testDropping()
 
 void containerTest::testUniformDiscretisationUnary()
 {
-  Container c(11,1);
+  DContainer c(11,1);
 
   for(int i = 0; i < 11; i++)
   {
@@ -112,7 +112,7 @@ void containerTest::testUniformDiscretisationUnary()
   c.setBinSizes(bins);
   c.setDomains(domain);
 
-  Container *d = c.discretise();
+  DContainer *d = c.discretise();
 
   CPPUNIT_ASSERT_EQUAL(0, (int)d->get(0,  0));
   CPPUNIT_ASSERT_EQUAL(1, (int)d->get(1,  0));
@@ -133,7 +133,7 @@ void containerTest::testUniformDiscretisationUnary()
 
 void containerTest::testUniformDiscretisation()
 {
-  Container c(11,3);
+  DContainer c(11,3);
 
   for(int i = 0; i < 11; i++)
   {
@@ -164,7 +164,7 @@ void containerTest::testUniformDiscretisation()
   c.setBinSizes(bins);
   c.setDomains(domain);
 
-  Container *d = c.discretise();
+  DContainer *d = c.discretise();
 
   CPPUNIT_ASSERT_EQUAL(0,  (int)d->get(0,  0)); // 210
   CPPUNIT_ASSERT_EQUAL(1,  (int)d->get(1,  0)); // 321
@@ -187,8 +187,8 @@ void containerTest::testUniformDiscretisation()
 
 void containerTest::testCopy()
 {
-  Container c(10,3);
-  Container d(0,0);
+  DContainer c(10,3);
+  DContainer d(0,0);
 
   for(int i = 0; i < 30; i++) c << i;
 
@@ -212,7 +212,7 @@ void containerTest::testCopy()
 
 void containerTest::testMax()
 {
-  Container c(10,3);
+  DContainer c(10,3);
 
   for(int i = 0; i < 30; i++)
   {
@@ -228,7 +228,7 @@ void containerTest::testMax()
 
 void containerTest::testMin()
 {
-  Container c(10,3);
+  DContainer c(10,3);
 
   for(int i = 0; i < 30; i++)
   {
@@ -246,7 +246,7 @@ void containerTest::testExtractColumns()
 {
   int rows    = 50;
   int columns = 5;
-  Container c(rows,columns);
+  DContainer c(rows,columns);
   for(int i = 0; i < rows; i++)
   {
     for(int j = 0; j < columns; j++)
@@ -256,7 +256,7 @@ void containerTest::testExtractColumns()
     }
   }
 
-  Container *onethreefive = c.columns(3,0,2,4);
+  DContainer *onethreefive = c.columns(3,0,2,4);
 
   for(int i = 0; i < rows; i++)
   {
@@ -271,7 +271,7 @@ void containerTest::testNormaliseColumn()
 {
   int rows    = 50;
   int columns = 5;
-  Container c(rows,columns);
+  DContainer c(rows,columns);
   int index = 0;
   for(int i = 0; i < rows; i++)
   {
@@ -300,7 +300,7 @@ void containerTest::testCopyFunc()
 {
   int rows    = 50;
   int columns = 5;
-  Container c(rows,columns);
+  DContainer c(rows,columns);
   int index = 0;
   for(int i = 0; i < rows; i++)
   {
@@ -310,7 +310,7 @@ void containerTest::testCopyFunc()
     }
   }
 
-  Container *d = c.copy();
+  DContainer *d = c.copy();
   for(int i = 0; i < rows; i++)
   {
     for(int j = 0; j < columns; j++)
@@ -322,8 +322,8 @@ void containerTest::testCopyFunc()
 
 void containerTest::testMerge()
 {
-  Container c(10,3);
-  Container d(10,5);
+  DContainer c(10,3);
+  DContainer d(10,5);
 
   for(int i = 0; i < 30; i++) c << i;
   for(int i = 0; i < 50; i++) d << i;
@@ -354,7 +354,7 @@ void containerTest::testMerge()
 
 void containerTest::testFillMode()
 {
-  Container container(2,3);
+  DContainer container(2,3);
   container.setFillMode(FILL_MODE_BY_ROW);
 
   CPPUNIT_ASSERT_EQUAL(2, container.rows());
@@ -391,7 +391,7 @@ void containerTest::testFillMode()
     }
   }
 
-  Container container2(2,3);
+  DContainer container2(2,3);
   container2.setFillMode(FILL_MODE_BY_COLUMN);
 
   for(int i = 0; i < 2 * 3; i++)

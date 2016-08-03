@@ -11,11 +11,11 @@ class Entropy
     Entropy();
     ~Entropy();
 
-    double calulate(Container* X);
+    double calulate(DContainer* X);
 
   private:
 
-    double __empericalEntropy(Container* X);
+    double __empericalEntropy(DContainer* X);
 
     int _mode;
 };

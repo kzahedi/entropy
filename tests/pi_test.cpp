@@ -18,7 +18,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( piTest );
 void piTest::testSinus()
 {
 
-  Container container(1000,2);
+  DContainer container(1000,2);
   for(float i = 0; i < 1000.0; i = i + 1.0)
   {
     container << cos(i/10.0);
@@ -40,7 +40,7 @@ void piTest::testSinus()
   container.setDomains(dom);
   container.setBinSizes(bins);
 
-  Container *d  = container.discretise();
+  DContainer *d  = container.discretise();
 
   double s = PI(d);
 
@@ -52,7 +52,7 @@ void piTest::testSinus()
 
 void piTest::testSparseVsNonSparse()
 {
-  Container container(1000,2);
+  DContainer container(1000,2);
   for(float i = 0; i < 1000.0; i = i + 1.0)
   {
     container << cos(i/10.0);
@@ -74,7 +74,7 @@ void piTest::testSparseVsNonSparse()
   container.setDomains(dom);
   container.setBinSizes(bins);
 
-  Container *d  = container.discretise();
+  DContainer *d  = container.discretise();
 
   // PI  pi;
   // PIs pis;

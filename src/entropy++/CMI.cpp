@@ -6,7 +6,7 @@
 
 using namespace std;
 
-double __empericalCMI(Container* X, Container* Y, Container* Z)
+double __empericalCMI(DContainer* X, DContainer* Y, DContainer* Z)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -214,7 +214,7 @@ double __empericalCMI(Container* X, Container* Y, Container* Z)
   return r;
 }
 
-double CMI(Container* X, Container* Y, Container *Z, int mode)
+double CMI(DContainer* X, DContainer* Y, DContainer *Z, int mode)
 {
   switch(mode)
   {

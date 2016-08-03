@@ -13,6 +13,7 @@ using namespace std;
 
 Container::Container(int rows, int columns)
 {
+  // Done
   _data         = new double*[rows];
   _domains      = new double*[columns];
   _bins         = new int[columns];
@@ -49,6 +50,7 @@ Container::Container(int rows, int columns)
 // Container(const Container);
 Container& Container::operator=(const Container &c)
 {
+  // done
   if(_data != NULL)
   {
     for(int r = 0; r < _rows;    r++) delete _data[r];
@@ -111,6 +113,7 @@ Container& Container::operator=(const Container &c)
 
 Container::~Container()
 {
+  //done 
   if(_data != NULL)
   {
     for(int r = 0; r < _rows;    r++) delete _data[r];

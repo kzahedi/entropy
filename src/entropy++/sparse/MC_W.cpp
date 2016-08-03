@@ -4,7 +4,7 @@
 
 using namespace entropy::sparse;
 
-double entropy::sparse::MC_W(Container* W2, Container* W1, Container* A1, int mode)
+double entropy::sparse::MC_W(DContainer* W2, DContainer* W1, DContainer* A1, int mode)
 {
   return CMI(W2, W1, A1, mode);
 }

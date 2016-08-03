@@ -9,7 +9,7 @@ using namespace std;
 using namespace entropy::sparse;
 
 
-double __empericalCMIs(Container* X, Container* Y, Container* Z)
+double __empericalCMIs(DContainer* X, DContainer* Y, DContainer* Z)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -128,7 +128,7 @@ double __empericalCMIs(Container* X, Container* Y, Container* Z)
 //
 // I(X;Y|Z) = \sum_{x,y,z} p(x,y,z) log( p(x,y|z) / (p(x|z) * p(y|z)))
 //
-double entropy::sparse::CMI(Container* X, Container* Y, Container *Z, int mode)
+double entropy::sparse::CMI(DContainer* X, DContainer* Y, DContainer *Z, int mode)
 {
   switch(mode)
   {
