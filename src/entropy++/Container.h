@@ -12,6 +12,7 @@
 #include <vector>
 
 # define MIN(a,b) (((a)<(b))?a:b)
+# define MAX(a,b) (((a)>(b))?a:b)
 
 using namespace std;
 
@@ -144,7 +145,7 @@ class Container
       return *this;
     }
 
-    const Container<T>& operator<<(const double& value) const
+    const Container& operator<<(const T& value) const
     {
       assert(_fillIndex < _rows * _columns);
 
@@ -163,7 +164,7 @@ class Container
           break;
       }
       _data[r][c] = value;
-      Container<T> *co = (Container<T>*)this;
+      Container *co = (Container*)this;
       co->_fillIndex++;
 
       return *this;
@@ -438,7 +439,7 @@ class Container
       Container<unsigned long> *copy = new Container<unsigned long>(_rows, 1);
       // __copyProperties(copy);
       copy->isDiscretised(_discretised);
-
+      
       int maxBins[_columns];
       for(int c = 0; c < _columns; c++)
       {
@@ -446,11 +447,11 @@ class Container
       }
       for(int r = 0; r < _rows; r++)
       {
-        int v = 0;
-        int f = 1;
+        unsigned long v = 0;
+        unsigned long f = 1;
         for(int c = 0; c < _columns; c++)
         {
-          if(c > 0) f = f * maxBins[c-1];
+          if(c > 0) f = f * MAX(maxBins[c-1],1);
           v += f * get(r,c);
         }
         *copy << v;
@@ -524,10 +525,10 @@ class Container
         for(int r = 0; r < _rows; r++)
         {
           ASSERT(_domains[c][0] <= get(r,c) && get(r,c) <= _domains[c][1], "get(" << r << "," << c << ") = " << get(r,c) << endl << "Domain " << _domains[c][0] << ", " << _domains[c][1] << endl);
-          int mapped  = (int)(((get(r,c)       - _domains[c][0])
+          unsigned long mapped  = (unsigned long)(((get(r,c)       - _domains[c][0])
                                / (_domains[c][1] - _domains[c][0]))
                               * _bins[c]);
-          int cropped = (int)MIN(_bins[c]-1, mapped);
+          unsigned long cropped = (unsigned long)MIN(_bins[c]-1, mapped);
           copy->set(r, c, cropped);
         }
       }

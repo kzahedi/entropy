@@ -117,18 +117,23 @@ DContainer* Csv::read(string filename, vector<int> indices)
     vector<string> vec;
     for(tokenizer<boost::char_separator<char> >::iterator i(tk.begin()); i!=tk.end();++i) 
     {
+      // cout << *i << " ";
       vec.push_back(*i);
     }
+    // cout << endl;
 
     for(vector<int>::iterator i = indices.begin(); i != indices.end(); i++)
     {
-      (*c) << atof(vec[*i].c_str());
+      // cout << vec[*i].c_str() << endl;
+      // cout << atof(vec[*i].c_str()) << endl;
+      (*c) << (double)atof(vec[*i].c_str());
     }
   }
 
 
   return c;
 }
+
 void Csv::write(string filename, DContainer* container)
 {
   ofstream out(filename.c_str());

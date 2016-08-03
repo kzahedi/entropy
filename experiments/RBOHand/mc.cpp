@@ -241,6 +241,8 @@ int main(int argc, char** argv)
   if(FLAGS_csv)
   {
     ULContainer *Wdc = W->discretiseByColumn();
+    VLOG(100) << "Wdc: " << endl << *Wdc;
+    VLOG(100) << "Wd: " << endl << *Wd;
     csv->write(FLAGS_d + "/W.csv",   W);
     csv->write(FLAGS_d + "/Wd.csv",  Wd);
     csv->write(FLAGS_d + "/Wdc.csv", Wdc);

@@ -132,9 +132,16 @@ for a in adomains:
     fd.write(",".join([str(v) for v in control_max_values]) + "\n")
     fd.close()
 
-# copy control states
+# copy control states - remove first line
 for c in controlstates:
-    shutil.copyfile(c, c.replace("raw","analysis"))
+    fd = open(c,"r")
+    lines = fd.readlines()
+    fd.close()
+    fd = open(c.replace("raw","analysis"),"w")
+    for line in lines[1:]:
+        fd.write(line)
+    fd.close()
+    # shutil.copyfile(c, c.replace("raw","analysis"))
 
 for a in analysisdirs:
     print "./rbo_mc " + option_string + " -d " + "/".join(a.split("/")[-3:])
