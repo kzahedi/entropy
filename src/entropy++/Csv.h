@@ -17,6 +17,7 @@ class Csv
     DContainer* read(string filename);
     DContainer* read(string filename, vector<int>);
     void write(string filename, DContainer* c);
+    void write(string filename, ULContainer* c);
 
   private:
 };

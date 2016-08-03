@@ -112,7 +112,7 @@ void containerTest::testUniformDiscretisationUnary()
   c.setBinSizes(bins);
   c.setDomains(domain);
 
-  DContainer *d = c.discretise();
+  ULContainer *d = c.discretise();
 
   CPPUNIT_ASSERT_EQUAL(0, (int)d->get(0,  0));
   CPPUNIT_ASSERT_EQUAL(1, (int)d->get(1,  0));
@@ -164,7 +164,7 @@ void containerTest::testUniformDiscretisation()
   c.setBinSizes(bins);
   c.setDomains(domain);
 
-  DContainer *d = c.discretise();
+  ULContainer *d = c.discretise();
 
   CPPUNIT_ASSERT_EQUAL(0,  (int)d->get(0,  0)); // 210
   CPPUNIT_ASSERT_EQUAL(1,  (int)d->get(1,  0)); // 321

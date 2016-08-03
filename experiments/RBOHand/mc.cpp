@@ -189,7 +189,7 @@ int main(int argc, char** argv)
   VLOG(100) << "W:";
   VLOG(100) << *W;
 
-  DContainer* Wd = W->discretise();
+  ULContainer* Wd = W->discretise();
 
   VLOG(100) << "Wd: " << endl << *Wd;
 
@@ -231,16 +231,16 @@ int main(int argc, char** argv)
   VLOG(100) << "A:";
   VLOG(100) << *A;
 
-  DContainer* Ad = A->discretise();
+  ULContainer* Ad = A->discretise();
 
-  DContainer* W1 =  Wd->drop(-1);
-  DContainer* A1 =  Ad->drop(-1);
-  DContainer* W2 =  Wd->drop(1);
+  ULContainer* W1 =  Wd->drop(-1);
+  ULContainer* A1 =  Ad->drop(-1);
+  ULContainer* W2 =  Wd->drop(1);
 
 
   if(FLAGS_csv)
   {
-    DContainer *Wdc = W->discretiseByColumn();
+    ULContainer *Wdc = W->discretiseByColumn();
     csv->write(FLAGS_d + "/W.csv",   W);
     csv->write(FLAGS_d + "/Wd.csv",  Wd);
     csv->write(FLAGS_d + "/Wdc.csv", Wdc);
@@ -252,7 +252,7 @@ int main(int argc, char** argv)
     o << w_max[0] << "," << w_max[1] << "," << w_max[2] << endl;
     o.close();
 
-    DContainer *Adc = A->discretiseByColumn();
+    ULContainer *Adc = A->discretiseByColumn();
     csv->write(FLAGS_d + "/A.csv",   A);
     csv->write(FLAGS_d + "/A1.csv",  A1);
     csv->write(FLAGS_d + "/Ad.csv",  Ad);

@@ -4,6 +4,6 @@
 #include <entropy++/Container.h>
 #include <entropy++/defs.h>
 
-double PI(DContainer* X, int mode = EMPERICAL);
+double PI(ULContainer* X, int mode = EMPERICAL);
 
 #endif // __PI_H__

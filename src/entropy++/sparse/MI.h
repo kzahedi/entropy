@@ -8,7 +8,7 @@ namespace entropy
 {
   namespace sparse
   {
-    double MI(DContainer* X, DContainer* Y, int mode = EMPERICAL);
+    double MI(ULContainer* X, ULContainer* Y, int mode = EMPERICAL);
   }
 }
 

@@ -4,7 +4,7 @@
 
 using namespace entropy::state;
 
-DContainer* entropy::state::MC_MI(DContainer* W2, DContainer* W1, DContainer* S1, DContainer* A1, int mode)
+DContainer* entropy::state::MC_MI(ULContainer* W2, ULContainer* W1, ULContainer* S1, ULContainer* A1, int mode)
 {
   DContainer *mi_w2_w1 = entropy::state::MI(W2, W1, mode);
   DContainer *mi_a1_s1 = entropy::state::MI(S1, A1, mode);

@@ -4,6 +4,6 @@
 #include <entropy++/Container.h>
 #include <entropy++/defs.h>
 
-double H(DContainer* X, int mode = EMPERICAL);
+double H(IContainer* X, int mode = EMPERICAL);
 
 #endif // __H_H__

@@ -8,7 +8,7 @@ namespace entropy
 {
   namespace sparse
   {
-    double H(DContainer* X, int = EMPERICAL);
+    double H(ULContainer* X, int = EMPERICAL);
   }
 }
 

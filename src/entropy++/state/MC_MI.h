@@ -7,7 +7,7 @@ namespace entropy
 {
   namespace state
   {
-    DContainer* MC_MI(DContainer* W2, DContainer* W1, DContainer* S1, DContainer* A1, int mode = EMPERICAL);
+    DContainer* MC_MI(ULContainer* W2, ULContainer* W1, ULContainer* S1, ULContainer* A1, int mode = EMPERICAL);
   }
 }
 

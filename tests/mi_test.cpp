@@ -40,8 +40,8 @@ void miTest::testSinus()
   Y.setDomains(dom);
   Y.setBinSizes(bins);
 
-  DContainer *dx = X.discretise();
-  DContainer *dy = Y.discretise();
+  ULContainer *dx = X.discretise();
+  ULContainer *dy = Y.discretise();
 
   double s = MI(dx, dy);
 
@@ -76,8 +76,8 @@ void miTest::testSparseVsNonSparse()
   Y.setDomains(dom);
   Y.setBinSizes(bins);
 
-  DContainer *dx = X.discretise();
-  DContainer *dy = Y.discretise();
+  ULContainer *dx = X.discretise();
+  ULContainer *dy = Y.discretise();
 
   double s1 = MI(dx, dy);
   double s2 = entropy::sparse::MI(dx, dy);

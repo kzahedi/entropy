@@ -46,9 +46,9 @@ void cmiTest::testSinus()
   Z.setDomains(dom);
   Z.setBinSizes(bins);
 
-  DContainer *dx = X.discretise();
-  DContainer *dy = Y.discretise();
-  DContainer *dz = Z.discretise();
+  ULContainer *dx = X.discretise();
+  ULContainer *dy = Y.discretise();
+  ULContainer *dz = Z.discretise();
 
   double s = CMI(dx, dy, dz);
 
@@ -89,9 +89,9 @@ void cmiTest::testSparseVsNonSparse()
   Z.setDomains(dom);
   Z.setBinSizes(bins);
 
-  DContainer *dx = X.discretise();
-  DContainer *dy = Y.discretise();
-  DContainer *dz = Z.discretise();
+  ULContainer *dx = X.discretise();
+  ULContainer *dy = Y.discretise();
+  ULContainer *dz = Z.discretise();
 
   double s1 = CMI(dx, dy, dz);
   double s2 = entropy::sparse::CMI(dx, dy, dz);
@@ -135,9 +135,9 @@ void cmiTest::testMatrixWiseComparision()
   Z.setDomains(dom);
   Z.setBinSizes(bins);
 
-  DContainer *dx = X.discretise();
-  DContainer *dy = Y.discretise();
-  DContainer *dz = Z.discretise();
+  ULContainer *dx = X.discretise();
+  ULContainer *dy = Y.discretise();
+  ULContainer *dz = Z.discretise();
 
   //
   // array version

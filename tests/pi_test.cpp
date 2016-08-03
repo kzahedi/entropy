@@ -40,7 +40,7 @@ void piTest::testSinus()
   container.setDomains(dom);
   container.setBinSizes(bins);
 
-  DContainer *d  = container.discretise();
+  ULContainer *d  = container.discretise();
 
   double s = PI(d);
 
@@ -74,7 +74,7 @@ void piTest::testSparseVsNonSparse()
   container.setDomains(dom);
   container.setBinSizes(bins);
 
-  DContainer *d  = container.discretise();
+  ULContainer *d  = container.discretise();
 
   // PI  pi;
   // PIs pis;

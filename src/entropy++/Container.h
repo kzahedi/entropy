@@ -25,7 +25,7 @@ class Container
 {
   public:
 
-    Container(int rows, int columns)
+    Container<T>(int rows, int columns)
     {
       _data         = new T*[rows];
       _domains      = new double*[columns];
@@ -82,7 +82,7 @@ class Container
 
 
     // Container(const Container);
-    Container& operator=(const Container& c)
+    Container<T>& operator=(const Container<T>& c)
     {
       if(_data != NULL)
       {
@@ -144,7 +144,7 @@ class Container
       return *this;
     }
 
-    const Container& operator<<(const double& value) const
+    const Container<T>& operator<<(const double& value) const
     {
       assert(_fillIndex < _rows * _columns);
 
@@ -163,14 +163,14 @@ class Container
           break;
       }
       _data[r][c] = value;
-      Container *co = (Container*)this;
+      Container<T> *co = (Container<T>*)this;
       co->_fillIndex++;
 
       return *this;
     }
 
     // merge
-    Container& operator+=(const Container& c)
+    Container<T>& operator+=(const Container<T>& c)
     {
       int newrows    = MIN(this->_rows, c._rows);
       int newcolumns = this->_columns + c._columns;
@@ -219,14 +219,14 @@ class Container
 
     }
 
-    double  operator()(const int row, const int column) const
+    T  operator()(const int row, const int column) const
     {
       assert(row    < _rows);
       assert(column < _columns);
       return _data[row][column];
     }
 
-    double& operator()(const int row, const int column)
+    T& operator()(const int row, const int column)
     {
       assert(row    < _rows);
       assert(column < _columns);
@@ -312,7 +312,7 @@ class Container
       return _columns;
     }
 
-    Container* columns(int n, ...)
+    Container<T>* columns(int n, ...)
     {
       vector<int> indices;
       va_list ap;
@@ -323,7 +323,7 @@ class Container
       }
       va_end(ap);
 
-      Container *extracted = new Container(this->rows(), n);
+      Container<T> *extracted = new Container<T>(this->rows(), n);
 
       for(int r = 0; r < _rows; r++)
       {
@@ -336,9 +336,9 @@ class Container
       return extracted;
     }
 
-    Container* copy()
+    Container<T>* copy()
     {
-      Container *copy = new Container(_rows, _columns);
+      Container<T> *copy = new Container<T>(_rows, _columns);
       __copyProperties(copy);
 
       for(int r = 0; r < _rows; r++)
@@ -361,7 +361,7 @@ class Container
       _discretised = b;
     }
 
-    Container* drop(int n)
+    Container<T>* drop(int n)
     {
       if(n > 0) return __dropFirst(n);
       if(n < 0) return __dropLast(n);
@@ -399,10 +399,10 @@ class Container
       return s;
     }
 
-    Container* discretise()
+    Container<unsigned long>* discretise()
     {
-      Container *dis = NULL;
-      Container *com = NULL;
+      Container<unsigned long> *dis = NULL;
+      Container<unsigned long> *com = NULL;
       switch(_mode)
       {
         case UNIFORM:
@@ -418,7 +418,7 @@ class Container
       return NULL;
     }
 
-    Container* discretiseByColumn()
+    Container<unsigned long>* discretiseByColumn()
     {
       switch(_mode)
       {
@@ -432,11 +432,12 @@ class Container
       return NULL;
     }
 
-    Container* combineDiscretisedColumns()
+    Container<unsigned long>* combineDiscretisedColumns()
     {
       assert(_discretised == true);
-      Container *copy = new Container(_rows, 1);
-      __copyProperties(copy);
+      Container<unsigned long> *copy = new Container<unsigned long>(_rows, 1);
+      // __copyProperties(copy);
+      copy->isDiscretised(_discretised);
 
       int maxBins[_columns];
       for(int c = 0; c < _columns; c++)
@@ -454,11 +455,11 @@ class Container
         }
         *copy << v;
       }
-      copy->__strip();
+      copy->relabel();
       return copy;
     }
 
-    friend std::ostream& operator<<(std::ostream& str, const Container& container)
+    friend std::ostream& operator<<(std::ostream& str, const Container<T>& container)
     {
       str << "Container content:" << endl;
       for(int r = 0; r < container._rows; r++)
@@ -473,30 +474,7 @@ class Container
       return str;
     };
 
-  private:
-    Container* __uniformDiscretisationByColumn()
-    {
-      Container *copy = new Container(_rows, _columns);
-      __copyProperties(copy);
-      for(int c = 0; c < _columns; c++)
-      {
-        vector<int> values;
-        for(int r = 0; r < _rows; r++)
-        {
-          ASSERT(_domains[c][0] <= get(r,c) && get(r,c) <= _domains[c][1], "get(" << r << "," << c << ") = " << get(r,c) << endl << "Domain " << _domains[c][0] << ", " << _domains[c][1] << endl);
-          int mapped  = (int)(((get(r,c)       - _domains[c][0])
-                               / (_domains[c][1] - _domains[c][0]))
-                              * _bins[c]);
-          int cropped = (int)MIN(_bins[c]-1, mapped);
-          copy->set(r, c, cropped);
-        }
-      }
-      copy->__strip();
-      copy->_discretised = true;
-      return copy;
-    }
-
-    void __strip()
+    void relabel()
     {
       for(int c = 0; c < _columns; c++)
       {
@@ -533,6 +511,31 @@ class Container
       }
     }
 
+
+  private:
+    Container<unsigned long>* __uniformDiscretisationByColumn()
+    {
+      Container<unsigned long> *copy = new Container<unsigned long>(_rows, _columns);
+      // __copyProperties(copy);
+      copy->isDiscretised(_discretised);
+      for(int c = 0; c < _columns; c++)
+      {
+        vector<int> values;
+        for(int r = 0; r < _rows; r++)
+        {
+          ASSERT(_domains[c][0] <= get(r,c) && get(r,c) <= _domains[c][1], "get(" << r << "," << c << ") = " << get(r,c) << endl << "Domain " << _domains[c][0] << ", " << _domains[c][1] << endl);
+          int mapped  = (int)(((get(r,c)       - _domains[c][0])
+                               / (_domains[c][1] - _domains[c][0]))
+                              * _bins[c]);
+          int cropped = (int)MIN(_bins[c]-1, mapped);
+          copy->set(r, c, cropped);
+        }
+      }
+      copy->relabel();
+      copy->isDiscretised(true);
+      return copy;
+    }
+
     void __copyProperties(Container* dst)
     {
       dst->_binsGiven    = _binsGiven;
@@ -555,9 +558,9 @@ class Container
       }
     }
 
-    Container* __dropFirst(int n)
+    Container<T>* __dropFirst(int n)
     {
-      Container *copy = new Container(_rows-abs(n), _columns);
+      Container<T> *copy = new Container<T>(_rows-abs(n), _columns);
       __copyProperties(copy);
 
       for(int i = 0; i < _rows-abs(n); i++)
@@ -570,9 +573,9 @@ class Container
       return copy;
     }
 
-    Container* __dropLast(int n)
+    Container<T>* __dropLast(int n)
     {
-      Container *copy = new Container(_rows-abs(n), _columns);
+      Container<T> *copy = new Container<T>(_rows-abs(n), _columns);
       __copyProperties(copy);
 
       for(int i = 0; i < _rows - abs(n); i++)

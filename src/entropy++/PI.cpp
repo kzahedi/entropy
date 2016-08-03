@@ -16,7 +16,7 @@ using namespace std;
 // }
 
 
-double __empericalPI(DContainer* X)
+double __empericalPI(ULContainer* X)
 {
   assert(X->isDiscretised());
 
@@ -110,7 +110,7 @@ double __empericalPI(DContainer* X)
   return r;
 }
 
-double PI(DContainer* X, int mode)
+double PI(ULContainer* X, int mode)
 {
   switch(mode)
   {

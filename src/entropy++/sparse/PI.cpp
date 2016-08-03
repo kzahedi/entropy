@@ -8,7 +8,7 @@
 using namespace std;
 using namespace entropy::sparse;
 
-double __empericalPIs(DContainer* X)
+double __empericalPIs(ULContainer* X)
 {
   assert(X->isDiscretised());
 
@@ -66,7 +66,7 @@ double __empericalPIs(DContainer* X)
   return r;
 }
 
-double entropy::sparse::PI(DContainer* X, int mode)
+double entropy::sparse::PI(ULContainer* X, int mode)
 {
   switch(mode)
   {

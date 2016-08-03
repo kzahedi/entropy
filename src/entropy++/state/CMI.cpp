@@ -8,7 +8,7 @@ using namespace std;
 using namespace entropy::state;
 
 
-DContainer* __empericalCMIsd(DContainer* X, DContainer* Y, DContainer* Z)
+DContainer* __empericalCMIsd(ULContainer* X, ULContainer* Y, ULContainer* Z)
 {
   assert(X->isDiscretised());
   assert(Y->isDiscretised());
@@ -231,7 +231,7 @@ DContainer* __empericalCMIsd(DContainer* X, DContainer* Y, DContainer* Z)
   return r;
 }
 
-DContainer* entropy::state::CMI(DContainer* X, DContainer* Y, DContainer *Z, int mode)
+DContainer* entropy::state::CMI(ULContainer* X, ULContainer* Y, ULContainer *Z, int mode)
 {
   switch(mode)
   {
