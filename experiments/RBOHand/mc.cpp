@@ -272,7 +272,7 @@ int main(int argc, char** argv)
 
   stringstream sst;
   sst.str("");
-  sst << FLAGS_d << "/mc_w-averaged.txt";
+  sst << FLAGS_d << "/mc_w-averaged_" << FLAGS_wbins << "_" << FLAGS_abins << ".txt";
   VLOG(10) << "writing \"" << sst.str() << "\"";
   ofstream output;
 #ifdef __APPLE__
@@ -284,7 +284,7 @@ int main(int argc, char** argv)
   output.close();
 
   sst.str("");
-  sst << FLAGS_d << "/mc_w-state_dependent.csv";
+  sst << FLAGS_d << "/mc_w-state_dependent_" << FLAGS_wbins << "_" << FLAGS_abins << ".csv";
   csv->write(sst.str().c_str(), mcd);
 
   VLOG(1) << "done.";
