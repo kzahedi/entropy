@@ -247,7 +247,7 @@ int main(int argc, char** argv)
     csv->write(FLAGS_d + "/W1.csv",  W1);
     csv->write(FLAGS_d + "/W2.csv",  W2);
     csv->write(FLAGS_d + "/W_domains.csv", w_domains);
-    ofstream o(FLAGS_d + "/W_min_max.csv");
+    ofstream o(string(FLAGS_d + "/W_min_max.csv").c_str());
     o << w_min[0] << "," << w_min[1] << "," << w_min[2] << endl;
     o << w_max[0] << "," << w_max[1] << "," << w_max[2] << endl;
     o.close();
