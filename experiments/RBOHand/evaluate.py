@@ -17,8 +17,10 @@ parser.add_argument("-wi", type=str, default=None, help="W indices.")
 parser.add_argument("-ai", type=str, default=None, help="A indices.")
 parser.add_argument("-wb", type=int, default=300, help="W bins.")
 parser.add_argument("-ab", type=int, default=300, help="A bins.")
+parser.add_argument("-start", type=int, default=0, help="start time index")
 parser.add_argument("-wf", type=bool, default=True, help="Convert to wrist frame.")
 parser.add_argument("-csv", type=bool, default=True, help="Export data.")
+parser.add_argument("-redoall", type=bool, default=False, help="Redo all steps.")
 args = parser.parse_args()
 
 option_string = "--wbins " + str(args.wb) + " --abins " + str(args.ab)
@@ -59,7 +61,7 @@ converted_a_file = False
 for i in sofastates:
     o = i.replace(".txt",".csv")
     o = o.replace("raw","analysis")
-    if os.path.exists(i) == True and os.path.exists(o) == False:
+    if os.path.exists(i) == True and (os.path.exists(o) == False or args.redoall == True):
         converted_a_file = True
         print "working on " + i.split("/")[-3]
         fd = open(i, "r")
@@ -75,7 +77,7 @@ for i in sofastates:
 
         print "writing " + "/".join(o.split("/")[-3:])
         fd = open(o,"w")
-        for d in data:
+        for d in data[0+args.start:]:
             fd.write(convert_to_csv(d) + "\n")
         fd.close()
 
@@ -117,8 +119,9 @@ if converted_a_file is True:
 
         if os.path.exists(c):
             fd = open(c,"r")
-            lines = fd.readlines()[1:]
+            lines = fd.readlines()[1+args.start:]
             fd.close()
+            lines = lines[1+args.start:len(lines)-1]
 
             for line in lines:
                 values = [Decimal(v) for v in line.split(",")]
@@ -144,7 +147,7 @@ if converted_a_file is True:
         lines = fd.readlines()
         fd.close()
         fd = open(c.replace("raw","analysis"),"w")
-        for line in lines[1:]:
+        for line in lines[1+args.start:len(lines)-1]:
             fd.write(line)
         fd.close()
         # shutil.copyfile(c, c.replace("raw","analysis"))
