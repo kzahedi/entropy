@@ -3,10 +3,10 @@
 
 *.csv
 
-examples/RBOHand/.ipynb_checkpoints/Untitled-checkpoint.ipynb
+experiments/RBOHand/.ipynb_checkpoints/*.ipynb
 
-experiments/RBOHand/Untitled.ipynb
+experiments/RBOHand/rbo_mc.*
 
-experiments/RBOHand/rbo_mc
+experiments/RBOHand/test.jl
 
 experiments/RBOHand/rbo_mc
