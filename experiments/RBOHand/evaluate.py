@@ -27,7 +27,7 @@ if args.wi is not None:
 if args.ai is not None:
     option_string = option_string + " --ai " + args.ai
 if args.csv is True:
-    option_string = option_string + " -cvs"
+    option_string = option_string + " -csv"
 
 c_states = "control.states.csv"
 s_states = "hand.sofastates.txt"
@@ -55,8 +55,12 @@ wdomains       = [os.path.normpath(v + "/analysis/W.domains.csv") for v in subdi
 adomains       = [os.path.normpath(v + "/analysis/A.domains.csv") for v in subdirectories]
 
 # convert sofa state files
+converted_a_file = False
 for i in sofastates:
-    if os.path.exists(i):
+    o = i.replace(".txt",".csv")
+    o = o.replace("raw","analysis")
+    if os.path.exists(i) == True and os.path.exists(o) == False:
+        converted_a_file = True
         print "working on " + i.split("/")[-3]
         fd = open(i, "r")
         lines = fd.readlines()
@@ -69,8 +73,6 @@ for i in sofastates:
         else:
             data = [get_position(line) for line in lines if "T=" not in line]
 
-        o = i.replace(".txt",".csv")
-        o = o.replace("raw","analysis")
         print "writing " + "/".join(o.split("/")[-3:])
         fd = open(o,"w")
         for d in data:
@@ -78,73 +80,74 @@ for i in sofastates:
         fd.close()
 
 # creating sofa domain file
-sofa_min_values = None
-sofa_max_values = None
-for c in sofacsvstates:
+if converted_a_file is True:
+    sofa_min_values = None
+    sofa_max_values = None
+    for c in sofacsvstates:
 
-    print "reading " + "/".join(c.split("/")[-3:])
+        print "reading " + "/".join(c.split("/")[-3:])
 
-    if os.path.exists(c):
+        if os.path.exists(c):
+            fd = open(c,"r")
+            lines = fd.readlines()
+            fd.close()
+
+            for line in lines:
+                values = [Decimal(v) for v in line.split(",")]
+                if sofa_min_values is None:
+                    sofa_min_values = [v for v in values]
+                    sofa_max_values = [v for v in values]
+                else:
+                    for i in range(0, len(values)):
+                        if values[i] > sofa_max_values[i]:
+                            sofa_max_values[i] = values[i]
+                        if values[i] < sofa_min_values[i]:
+                            sofa_min_values[i] = values[i]
+
+    for w in wdomains:
+        fd = open(w,"w")
+        fd.write(",".join([str(v) for v in sofa_min_values]) + "\n")
+        fd.write(",".join([str(v) for v in sofa_max_values]) + "\n")
+        fd.close()
+
+    # creating control domain file
+    control_min_values = None
+    control_max_values = None
+    for c in controlstates:
+
+        if os.path.exists(c):
+            fd = open(c,"r")
+            lines = fd.readlines()[1:]
+            fd.close()
+
+            for line in lines:
+                values = [Decimal(v) for v in line.split(",")]
+                if control_min_values is None:
+                    control_min_values = [v for v in values]
+                    control_max_values = [v for v in values]
+                else:
+                    for i in range(0, len(values)):
+                        if values[i] > control_max_values[i]:
+                            control_max_values[i] = values[i]
+                        if values[i] < control_min_values[i]:
+                            control_min_values[i] = values[i]
+
+    for a in adomains:
+        fd = open(a,"w")
+        fd.write(",".join([str(v) for v in control_min_values]) + "\n")
+        fd.write(",".join([str(v) for v in control_max_values]) + "\n")
+        fd.close()
+
+    # copy control states - remove first line
+    for c in controlstates:
         fd = open(c,"r")
         lines = fd.readlines()
         fd.close()
-
-        for line in lines:
-            values = [Decimal(v) for v in line.split(",")]
-            if sofa_min_values is None:
-                sofa_min_values = [v for v in values]
-                sofa_max_values = [v for v in values]
-            else:
-                for i in range(0, len(values)):
-                    if values[i] > sofa_max_values[i]:
-                        sofa_max_values[i] = values[i]
-                    if values[i] < sofa_min_values[i]:
-                        sofa_min_values[i] = values[i]
-
-for w in wdomains:
-    fd = open(w,"w")
-    fd.write(",".join([str(v) for v in sofa_min_values]) + "\n")
-    fd.write(",".join([str(v) for v in sofa_max_values]) + "\n")
-    fd.close()
-
-# creating control domain file
-control_min_values = None
-control_max_values = None
-for c in controlstates:
-
-    if os.path.exists(c):
-        fd = open(c,"r")
-        lines = fd.readlines()[1:]
+        fd = open(c.replace("raw","analysis"),"w")
+        for line in lines[1:]:
+            fd.write(line)
         fd.close()
-
-        for line in lines:
-            values = [Decimal(v) for v in line.split(",")]
-            if control_min_values is None:
-                control_min_values = [v for v in values]
-                control_max_values = [v for v in values]
-            else:
-                for i in range(0, len(values)):
-                    if values[i] > control_max_values[i]:
-                        control_max_values[i] = values[i]
-                    if values[i] < control_min_values[i]:
-                        control_min_values[i] = values[i]
-
-for a in adomains:
-    fd = open(a,"w")
-    fd.write(",".join([str(v) for v in control_min_values]) + "\n")
-    fd.write(",".join([str(v) for v in control_max_values]) + "\n")
-    fd.close()
-
-# copy control states - remove first line
-for c in controlstates:
-    fd = open(c,"r")
-    lines = fd.readlines()
-    fd.close()
-    fd = open(c.replace("raw","analysis"),"w")
-    for line in lines[1:]:
-        fd.write(line)
-    fd.close()
-    # shutil.copyfile(c, c.replace("raw","analysis"))
+        # shutil.copyfile(c, c.replace("raw","analysis"))
 
 for a in analysisdirs:
     print "./rbo_mc " + option_string + " -d " + "/".join(a.split("/")[-3:])
