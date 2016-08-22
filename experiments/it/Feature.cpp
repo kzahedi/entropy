@@ -55,6 +55,14 @@ Feature::Feature(DContainer &aX, DContainer &aY,  double** lambda){
 	assert((*_X).columns()==1);
 	assert((*_Y).columns()==1);
 }
+Feature:: ~Feature(){
+	if(_lambda != NULL){
+		for(int c = 0; c < _sizeX; c++) delete _lambda[c];
+		        delete _lambda;
+	}
+	_X=NULL;
+	_Y=NULL;
+}
 
 double Feature::getlambda(int i, int j) {
 	assert(i < _sizeX && j < _sizeY);

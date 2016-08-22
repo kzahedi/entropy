@@ -119,6 +119,8 @@ for(int m=0;m<8; m++){
   double t= MA[1,2]->getlambda(2,2);
   cout << n << endl;
   cout << t << endl;
-  cout << MA[1,2] << endl;
-
+  Feature *T= MA[1,2];
+  cout <<(*MA[1,2])<< endl;
+  MA[1,2]->~Feature();
+  cout <<(*T);
 }
