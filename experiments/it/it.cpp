@@ -3,6 +3,7 @@
 #include <entropy++/sparse/MC_W.h>
 #include <entropy++/sparse/state/MC_W.h>
 #include <entropy++/sparse/state/MC_MI.h>
+#include <entropy++/Matrix.h>
 
 #include <string>
 #include <iostream>
@@ -10,6 +11,8 @@
 #include <vector>
 #include "Feature.h"
 #include "FeatureMatrix.h"
+
+
 
 
 int main(int argc, char **argv)
@@ -111,7 +114,7 @@ for(int m=0;m<8; m++){
   cout << "hier" << endl;
   double m = FA[1,2]->value(1,1);
   cout <<m << endl;
-  FeatureMatrix *FM= new FeatureMatrix(*X,*Y,1);
+  FeatureMatrix *FM= new FeatureMatrix(*X,*Y,*eX,*eY,1);
   Feature **MA;
   MA= FM->FA;
   double n= MA[1,2]->value(1,1);
@@ -121,6 +124,13 @@ for(int m=0;m<8; m++){
   cout << t << endl;
   Feature *T= MA[1,2];
   cout <<(*MA[1,2])<< endl;
-  MA[1,2]->~Feature();
-  cout <<(*T);
+
+
+  Matrix *M= new Matrix(8,7);
+  (*M)(1,1)=1;
+  cout << (*M)<< endl;
+  int o= (*M).rows();
+  cout <<o ;
 }
+
+

@@ -15,10 +15,10 @@ class FeatureMatrix
 {
 public:
 	Feature** FA;
-	FeatureMatrix(DContainer &aX, DContainer &aY,double la);
+	FeatureMatrix(DContainer &aX, DContainer &aY, DContainer &eX, DContainer &eY,double la);
 
 private:
-	Feature** getArray(DContainer &aX, DContainer &aY, double la);
+	Feature** getFeatures(DContainer &aX, DContainer &aY, double la);
 	int _sizeX;
 	int _sizeY;
 

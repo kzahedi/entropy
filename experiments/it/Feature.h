@@ -9,7 +9,7 @@
 #include <iostream>
 #include <ostream>
 #include <math.h>
-#include <vector>
+#include <entropy++/Matrix.h>
 
 using namespace std;
 
@@ -19,7 +19,7 @@ public:
 
 	Feature();
 	Feature(DContainer &aX, DContainer &aY, double valuelambda);
-	Feature(DContainer &aX, DContainer &aY,  double** lambda);
+	Feature(DContainer &aX, DContainer &aY,  Matrix lambda);
 	Feature(bool binaer,double valuelambda);
 	~Feature();
 
@@ -31,6 +31,7 @@ public:
 			}
 			str<< endl;
 		}
+
 	   return str;
 	};
 
@@ -48,8 +49,7 @@ private:
 	int _sizeY;
 	DContainer *_X;
 	DContainer *_Y;
-	double** _lambda;
-
+	Matrix *_lambda;
 };
 
 #endif
