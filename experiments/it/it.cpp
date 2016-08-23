@@ -97,50 +97,20 @@ int main(int argc, char **argv)
 	ma[0][1][0].push_back(2);
 	cout << ma[0][1][0][0] << endl;
 
-  DContainer *X = new DContainer(5,1);
-  		*X << 1 << 3<< 1 << 4 <<0;
-  DContainer *Y = new DContainer(4,1);
-  	  	*Y << 1 << 1 << 1 <<0 ;
+  DContainer *X = new DContainer(2,1);
+  		*X << 3 << 0;
+  DContainer *Y = new DContainer(2,1);
+  	  	*Y << 2 << 0;
   DContainer *eX = new DContainer(5,2);
-  		*eX << 2 << 1 << 0 << 1 << 1;
+  		*eX << 3 << 3 << 0 << 3;
   	cout << (*eX) << endl;
   DContainer *eY = new DContainer(2,2);
-  		*eY << 1 << 1 <<3 << 0;
 
-  FeatureMatrix *FM= new FeatureMatrix(*X,*Y,*eX,*eY,1);
-  Feature **MA;
-  MA= FM->FA;
-  Feature F= MA[1][1];
-  cout<< F << endl;
-	int sizeValX=(*eX).rows();
-	int sizeValY=(*eY).rows();
-	int sizecolX=(*eX).columns();
-	int sizecolY=(*eY).columns();
-	vector<vector<int> > V(2,vector<int>(0));
-	vector<vector<int> > mat[sizeValX][sizeValY];
-			for(int i=0;i<sizeValX;i++){
-				  for(int j=0;j<sizeValY;j++){
-					  mat[i][j]= V;
-				  }
-			}
-	for(int i=0;i<sizeValX;i++){
-		for(int j=0;j<sizeValY;j++){
-			for(int varFeati=0;varFeati<sizecolX;varFeati++){
-				for(int varFeatj=0;varFeatj<sizecolY;varFeatj++){
-					cout  << MA[varFeati][varFeatj].value((*eX)(i,varFeati),(*eY)(j,varFeatj))<< endl;
-					if(MA[varFeati][varFeatj].value((*eX)(i,varFeati),(*eY)(j,varFeatj))!=0){
-						mat[i][j][0].push_back (varFeati);
-						mat[i][j][1].push_back (varFeatj);
-					cout << mat[i][j][0][0];
-					cout << mat[i][j][1][0]<< endl;
-					}
-				}
-			}
-		}
-	}
-	cout << "hier";
+  		*eY << 2 << 2 << 2 << -2;
+  	 	cout << (*eY) << endl;
 
-
-
+  FeatureMatrix *FM= new FeatureMatrix(*eX,*eY,*X,*Y,1);
+  double m= FM->getFeatureArrayvalue(1,1,1,0);
+  cout << m << endl;
 
 }

@@ -60,8 +60,7 @@ double Feature::getlambda(int i, int j) {
 	return (*_lambda)(i,j);
 }
 
-void Feature::setlambda(int i, int j, double newvalue)
-{
+void Feature::setlambda(int i, int j, double newvalue){
 	assert(i < _sizeX && j < _sizeY);
 	(*_lambda)(i,j) = newvalue;
 }

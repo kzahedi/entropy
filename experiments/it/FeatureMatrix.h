@@ -14,15 +14,27 @@ using namespace std;
 class FeatureMatrix
 {
 public:
-	Feature** FA;   																				//ueber get
+
 	FeatureMatrix(DContainer &aX, DContainer &aY, DContainer &eX, DContainer &eY,double la);
+	~FeatureMatrix();
+	double getFeatureArraylambda(int i, int j,int k, int l);
+	double getFeatureArrayvalue(int i, int j, int k, int l);
+	void setFeatureArraylambda(int i, int j,int k, int l,double lambdavalue);
+	vector<int> getMatrixIndexX(int i, int j);
+	vector<int> getMatrixIndexY(int i, int j);
+
 private:
-	Feature** getFeatures(DContainer &aX, DContainer &aY, double la);
+	Feature** FeatureArray(DContainer &eX, DContainer &eY,DContainer &aX, DContainer &aY, double la);
 	void getMatrix(DContainer &eX, DContainer &eY,double la);
-	int _sizeX;
-	int _sizeY;
 
-
+	int _sizeColValX;
+	int _sizeColValY;
+	int _sizeRowValX;
+	int _sizeRowValY;
+	DContainer *valX;
+	DContainer *valY;
+	Feature** _FA;
+	vector<vector<int> > **_mat;
 };
 
 #endif
