@@ -14,13 +14,14 @@ using namespace std;
 class FeatureMatrix
 {
 public:
-	Feature** FA;
+	Feature** FA;   																				//ueber get
 	FeatureMatrix(DContainer &aX, DContainer &aY, DContainer &eX, DContainer &eY,double la);
-
 private:
 	Feature** getFeatures(DContainer &aX, DContainer &aY, double la);
+	void getMatrix(DContainer &eX, DContainer &eY,double la);
 	int _sizeX;
 	int _sizeY;
+
 
 };
 

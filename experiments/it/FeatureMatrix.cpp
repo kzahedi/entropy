@@ -1,8 +1,8 @@
 #include "FeatureMatrix.h"
-#include "Feature.h"
-
 
 FeatureMatrix::FeatureMatrix(DContainer &aX, DContainer &aY, DContainer &eX, DContainer &eY, double valuelambda){
+		DContainer *valX= &eX;
+		DContainer *valY= &eY;
 		DContainer *X= &aX;
 		DContainer *Y= &aY;
 		FA=getFeatures(*X, *Y,valuelambda);
@@ -26,6 +26,31 @@ Feature** FeatureMatrix:: getFeatures(DContainer &aX, DContainer &aY, double val
 		}
 		return FA;
 	}
- //#include <tuple>
-// typedef std::tuple<int,int> Tuple;
-// Tuple** matrix;
+
+void FeatureMatrix:: getMatrix(DContainer &eX, DContainer &eY,double la){
+		DContainer *valX= &eX;
+		DContainer *valY= &eY;
+		int sizeValX=(*valX).rows();
+		int sizeValY=(*valY).rows();
+		int sizecolX=(*valX).columns();
+		int sizecolY=(*valY).columns();
+		vector<vector<int> > V(2,vector<int>(0));
+		vector<vector<int> >mat[sizeValX][sizeValY];
+				for(int i=0;i<sizeValX;i++){
+					  for(int j=0;j<sizeValY;j++){
+						  mat[i][j]= V;
+					  }
+				}
+		for(int i=0;i<sizeValX;i++){
+			for(int j=0;j<sizeValY;j++){
+				for(int varFeati=0;varFeati<sizecolX;varFeati++){
+					for(int varFeatj=0;varFeatj<sizecolY;varFeatj++){
+						if(FA[varFeati][varFeatj].value((*valX)(i,varFeati),(*valY)(j,varFeatj))!=0){
+							mat[i][j][0].push_back(varFeati);
+							mat[i][j][1].push_back(varFeatj);
+						}
+					}
+				}
+			}
+		}
+}

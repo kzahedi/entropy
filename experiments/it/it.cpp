@@ -4,6 +4,7 @@
 #include <entropy++/sparse/state/MC_W.h>
 #include <entropy++/sparse/state/MC_MI.h>
 #include <entropy++/Matrix.h>
+#include <entropy++/SparseMatrix.h>
 
 #include <string>
 #include <iostream>
@@ -86,51 +87,60 @@ int main(int argc, char **argv)
 	  a[m]= new double[3];
 
   }*/
+	vector<vector<int> > W(2,vector<int>(0));
+	vector<vector<int> > ma[1][2];
+	for(int i=0; i<1;i++){
+		for(int j=0;j<2;j++){
+			ma[i][j]=W;
+		}
+	}
+	ma[0][1][0].push_back(2);
+	cout << ma[0][1][0][0] << endl;
 
-  DContainer *X = new DContainer(10,1);
-  	*X << 1 << 1 << 1 << 1;
-  DContainer *Y = new DContainer(7,1);
-    *Y << 1 << 1 << 1 ;
-  DContainer *eX = new DContainer(8,1);
-  				*eX << 1 << 1 << 1 << 1 << 1;
-  DContainer *eY = new DContainer(7,1);
-  				*eY << 1 << 1 << 1;
-  double a=(*X)(1,0);
-  cout << a << endl;
-  Feature **FA;
-  FA = new Feature*[8];
-for(int m=0; m< 8; m++){
-  FA[m]= new Feature[7];
-}
-for(int m=0;m<8; m++){
-  for(int k=0;k<7;k++){
-	  Feature *K=new Feature(*X,*Y,1);
-	  FA[m][k]=*K;
-  }
-}
+  DContainer *X = new DContainer(5,1);
+  		*X << 1 << 3<< 1 << 4 <<0;
+  DContainer *Y = new DContainer(4,1);
+  	  	*Y << 1 << 1 << 1 <<0 ;
+  DContainer *eX = new DContainer(5,2);
+  		*eX << 2 << 1 << 0 << 1 << 1;
+  	cout << (*eX) << endl;
+  DContainer *eY = new DContainer(2,2);
+  		*eY << 1 << 1 <<3 << 0;
 
-  double b=(*Y)(2,0);
-  cout << a << endl;
-  cout << "hier" << endl;
-  double m = FA[1,2]->value(1,1);
-  cout <<m << endl;
   FeatureMatrix *FM= new FeatureMatrix(*X,*Y,*eX,*eY,1);
   Feature **MA;
   MA= FM->FA;
-  double n= MA[1,2]->value(1,1);
-  MA[1,2]->setlambda(2,2,1.5);
-  double t= MA[1,2]->getlambda(2,2);
-  cout << n << endl;
-  cout << t << endl;
-  Feature *T= MA[1,2];
-  cout <<(*MA[1,2])<< endl;
+  Feature F= MA[1][1];
+  cout<< F << endl;
+	int sizeValX=(*eX).rows();
+	int sizeValY=(*eY).rows();
+	int sizecolX=(*eX).columns();
+	int sizecolY=(*eY).columns();
+	vector<vector<int> > V(2,vector<int>(0));
+	vector<vector<int> > mat[sizeValX][sizeValY];
+			for(int i=0;i<sizeValX;i++){
+				  for(int j=0;j<sizeValY;j++){
+					  mat[i][j]= V;
+				  }
+			}
+	for(int i=0;i<sizeValX;i++){
+		for(int j=0;j<sizeValY;j++){
+			for(int varFeati=0;varFeati<sizecolX;varFeati++){
+				for(int varFeatj=0;varFeatj<sizecolY;varFeatj++){
+					cout  << MA[varFeati][varFeatj].value((*eX)(i,varFeati),(*eY)(j,varFeatj))<< endl;
+					if(MA[varFeati][varFeatj].value((*eX)(i,varFeati),(*eY)(j,varFeatj))!=0){
+						mat[i][j][0].push_back (varFeati);
+						mat[i][j][1].push_back (varFeatj);
+					cout << mat[i][j][0][0];
+					cout << mat[i][j][1][0]<< endl;
+					}
+				}
+			}
+		}
+	}
+	cout << "hier";
 
 
-  Matrix *M= new Matrix(8,7);
-  (*M)(1,1)=1;
-  cout << (*M)<< endl;
-  int o= (*M).rows();
-  cout <<o ;
+
+
 }
-
-
