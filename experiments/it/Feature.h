@@ -2,7 +2,6 @@
 #define __FEATURE_H__
 
 #include <entropy++/Container.h>
-
 #include <entropy++/defs.h>
 #include <assert.h>
 #include <cstdlib>

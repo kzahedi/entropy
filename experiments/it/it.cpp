@@ -12,6 +12,7 @@
 #include <vector>
 #include "Feature.h"
 #include "FeatureMatrix.h"
+#include "GIS.h"
 
 
 
@@ -95,22 +96,70 @@ int main(int argc, char **argv)
 		}
 	}
 	ma[0][1][0].push_back(2);
-	cout << ma[0][1][0][0] << endl;
+	//cout << ma[0][1][0][0] << endl;
 
   DContainer *X = new DContainer(2,1);
-  		*X << 3 << 0;
+  		*X << 1 << 1;
   DContainer *Y = new DContainer(2,1);
-  	  	*Y << 2 << 0;
-  DContainer *eX = new DContainer(5,2);
-  		*eX << 3 << 3 << 0 << 3;
+  	  	*Y << 1 << 1;
+  DContainer *eX = new DContainer(4,2);
+  		*eX << 1 << 1 << 1 << 3;
   	cout << (*eX) << endl;
   DContainer *eY = new DContainer(2,2);
 
-  		*eY << 2 << 2 << 2 << -2;
-  	 	cout << (*eY) << endl;
+  		*eY << 1 << 1 << 1 << -2;
+  	  	int size= (*eX).rows();
+  	  	cout << size << endl;
+  	 cout << (*eY) << endl;
 
   FeatureMatrix *FM= new FeatureMatrix(*eX,*eY,*X,*Y,1);
+
+
   double m= FM->getFeatureArrayvalue(1,1,1,0);
   cout << m << endl;
+  double** observed;
+  observed = new double*[2];
+  for(int i=0; i<2; i++){
+	  observed[i]=new double[2];
+  }
+
+	//vector observed
+	for(int i=0;i<2;i++ ){
+		for(int j=0; j< 2;j++){
+			for(int k=0; k< FM->getMatrixIndexX(i,j).size();k++){
+				observed[FM->getMatrixIndexX(i,j)[k]][FM->getMatrixIndexY(i,j)[k]]++;
+			}
+		}
+	}
+
+	int currmax=0;
+	int curr=0;
+	for(int i=0; i< 4;i++){
+		for(int j=0; j< 2;j++){
+
+			for(int featxi=0; featxi < 2; featxi++){
+				for(int featyj=0; featyj < 2; featyj++){
+					for(int k=0; k< FM->getMatrixIndexX(i,j).size();k++){
+						if(FM->getMatrixIndexX(i,j)[k]==featxi && FM->getMatrixIndexY(i,j)[k]==featyj){
+							curr++;
+
+
+						}
+					}
+				}
+			}
+		if(curr> currmax) currmax=curr;
+		curr=0;
+		}
+	}
+	const int c= currmax;
+
+
+	cout << c << endl;
+	cout << "hier2" << endl;
+
+	GIS *G = new GIS(*eX,*eY,*X,*Y,1);
+
+
 
 }

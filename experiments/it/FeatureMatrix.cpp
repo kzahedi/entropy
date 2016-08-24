@@ -7,8 +7,8 @@ FeatureMatrix::FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DCo
 		DContainer *Y= &aY;
 		_sizeColValY= (*valY).columns();
 		_sizeColValX= (*valX).columns();
-		_sizeRowValX= (*valX).columns();
-		_sizeRowValY= (*valY).columns();
+		_sizeRowValX= (*valX).rows();
+		_sizeRowValY= (*valY).rows();
 		_FA=FeatureArray(*valX,*valY,*X, *Y,valuelambda);
 		getMatrix(*valX, *valY, valuelambda);
 }
@@ -40,9 +40,9 @@ double FeatureMatrix:: getFeatureArrayvalue(int i, int j,int RowValX, int RowVal
 		return value;
 }
 
-void FeatureMatrix::setFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY,double lambdavalue){
+void FeatureMatrix::setFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY,double valuelambda){
 		assert(i<_sizeColValX && j<_sizeColValY);
-		_FA[i][j].setlambda(ilambdaX,ilambdaY,lambdavalue);
+		_FA[i][j].setlambda(ilambdaX,ilambdaY,valuelambda);
 }
 
 vector<int> FeatureMatrix::getMatrixIndexX(int i, int j){
