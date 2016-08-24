@@ -17,9 +17,10 @@ public:
 
 	FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue);
 	~FeatureMatrix();
-	double getFeatureArraylambda(int i, int j,int k, int l);
-	double getFeatureArrayvalue(int i, int j, int k, int l);
-	void setFeatureArraylambda(int i, int j,int k, int l,double lambdavalue);
+	double getFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY);
+	double getFeatureArrayvalue(int i, int j,int RowValX, int RowValY);
+	void setFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY,double valuelambda);
+	int getFeatureArraydelta(int i, int j,int idelta, int jdelta, int RowValX, int RowValY);
 	vector<int> getMatrixIndexX(int i, int j);
 	vector<int> getMatrixIndexY(int i, int j);
 
@@ -31,8 +32,12 @@ private:
 	int _sizeColValY;
 	int _sizeRowValX;
 	int _sizeRowValY;
-	DContainer *valX;
-	DContainer *valY;
+	int _sizeX;
+	int _sizeY;
+	DContainer *_valX;
+	DContainer *_valY;
+	DContainer *_X;
+	DContainer *_Y;
 	Feature** _FA;
 	vector<vector<int> > **_mat;
 };

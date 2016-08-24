@@ -36,14 +36,12 @@ public:
 
 	double getlambda(int i, int j);
 	void setlambda(int i, int j, double newvalue );
+	int delta(double ax, double ay, double x, double y);
 	double value(double x,double y);
 	Feature& operator=(const Feature& c);
 
 
 private:
-
-	int __delta(double ax, double ay, double x, double y);
-
 	int _sizeX;
 	int _sizeY;
 	DContainer *_X;

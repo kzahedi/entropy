@@ -13,6 +13,8 @@ public:
 	~GIS();
 private:
 	void gislambda(FeatureMatrix &FM);
+	int _sizeX;
+	int _sizeY;
 	int _sizeColValX;
 	int _sizeColValY;
 	int _sizeRowValX;

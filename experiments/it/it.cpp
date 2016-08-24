@@ -114,7 +114,7 @@ int main(int argc, char **argv)
 
   FeatureMatrix *FM= new FeatureMatrix(*eX,*eY,*X,*Y,1);
 
-
+  /*
   double m= FM->getFeatureArrayvalue(1,1,1,0);
   cout << m << endl;
   double** observed;
@@ -157,9 +157,22 @@ int main(int argc, char **argv)
 
 	cout << c << endl;
 	cout << "hier2" << endl;
-
-	GIS *G = new GIS(*eX,*eY,*X,*Y,1);
-
+	GIS *G = new GIS(*eX,*eY,*X,*Y,1); */
+	double**** observed;
+	observed = new double***[2];
+	for(int i=0; i<2; i++){
+		observed[i]=new double**[2];
+		for( int j=0;j< 2;j++){
+			observed[i][j]=new double*[2];
+			for(int k=0; k< 2; k++){
+				observed[i][j][k]= new double[2];
+				for(int l=0; l< 2;l++){
+					observed[i][j][k][l]=0;
+				}
+			}
+		}
+	}
+cout << "hier ";
 
 
 }

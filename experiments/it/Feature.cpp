@@ -70,7 +70,7 @@ double Feature::value(double x,double y){
 			for(int j=0; j< _sizeY; j++){
 				double a=(*_X).get(i,0);
 				double b=(*_Y).get(j,0);
-				val= val + (*_lambda)(i,j)*__delta(a, b, x, y);
+				val= val + (*_lambda)(i,j)*delta(a, b, x, y);
 			}
 		}
 		return val;
@@ -89,7 +89,7 @@ Feature& Feature::operator=(const Feature& c){
 
 	return *this;
 }
-int Feature::__delta(double ax, double ay, double x, double y){     // alphabet x,y und eingegebenes x,y
+int Feature::delta(double ax, double ay, double x, double y){     // alphabet x,y und eingegebenes x,y
 	if(ax== x && ay== y){
 		return 1;
 	}

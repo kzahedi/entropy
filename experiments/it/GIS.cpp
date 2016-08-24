@@ -5,6 +5,8 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
 			DContainer *valY= &eY;
 			DContainer *X= &aX;
 			DContainer *Y= &aY;
+			_sizeX = (*X).rows();
+			_sizeY = (*Y).rows();
 			_sizeColValY= (*valY).columns();
 			_sizeColValX= (*valX).columns();
 			_sizeRowValX= (*valX).rows();
@@ -18,18 +20,23 @@ GIS::~GIS() {
 }
 
 void GIS:: gislambda(FeatureMatrix &FM){
-	double** observed;
-	observed = new double*[_sizeColValX];
+	double**** observed;
+	observed = new double***[_sizeColValX];
 	for(int i=0; i<_sizeColValX; i++){
-		observed[i]=new double[_sizeColValY];
-	}
-	for(int i=0; i<_sizeColValX; i++){
-		for(int j=0; j< _sizeColValY;j++){
-			observed[i][j]=0;
+		observed[i]=new double**[_sizeColValY];
+		for( int j=0;j< _sizeColValY;j++){
+			observed[i][j]=new double*[_sizeX];
+			for(int k=0; k< _sizeX; k++){
+				observed[i][j][k]= new double[_sizeY];
+				for(int l=0; l< _sizeY;l++){
+					observed[i][j][k][l]=0;
+				}
+			}
 		}
 	}
+
 	//vector observed
-	for(int i=0;i<_sizeColValX;i++ ){
+	/*for(int i=0;i<_sizeColValX;i++ ){
 		for(int j=0; j< _sizeColValY;j++){
 			for(int k=0; k< FM.getMatrixIndexX(i,j).size();k++){
 				observed[FM.getMatrixIndexX(i,j)[k]][FM.getMatrixIndexY(i,j)[k]]++;
@@ -55,7 +62,7 @@ void GIS:: gislambda(FeatureMatrix &FM){
 		curr=0;
 		}
 	}
-	cout << Featconst<< endl;
+	*/
 
 
 
