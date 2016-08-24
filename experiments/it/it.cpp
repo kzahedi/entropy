@@ -98,12 +98,12 @@ int main(int argc, char **argv)
 	ma[0][1][0].push_back(2);
 	//cout << ma[0][1][0][0] << endl;
 
-  DContainer *X = new DContainer(2,1);
-  		*X << 1 << 1;
-  DContainer *Y = new DContainer(2,1);
-  	  	*Y << 1 << 1;
+  DContainer *X = new DContainer(3,1);
+  		*X << 1 << 2 << 3;
+  DContainer *Y = new DContainer(1,1);
+  	  	*Y << 1;
   DContainer *eX = new DContainer(4,2);
-  		*eX << 1 << 1 << 1 << 3;
+  		*eX << 3 << 1 << 1 << 3;
   	cout << (*eX) << endl;
   DContainer *eY = new DContainer(2,2);
 
@@ -113,6 +113,11 @@ int main(int argc, char **argv)
   	 cout << (*eY) << endl;
 
   FeatureMatrix *FM= new FeatureMatrix(*eX,*eY,*X,*Y,1);
+
+  int j= (*FM).getMatrixIndexX(0,0)[1];
+  int p= (*FM).getMatrixIndexdX(0,0)[0];
+
+
 
   /*
   double m= FM->getFeatureArrayvalue(1,1,1,0);
@@ -157,7 +162,7 @@ int main(int argc, char **argv)
 
 	cout << c << endl;
 	cout << "hier2" << endl;
-	GIS *G = new GIS(*eX,*eY,*X,*Y,1); */
+	 */
 	double**** observed;
 	observed = new double***[2];
 	for(int i=0; i<2; i++){
@@ -174,5 +179,6 @@ int main(int argc, char **argv)
 	}
 cout << "hier ";
 
+GIS *G = new GIS(*eX,*eY,*X,*Y,1);
 
 }

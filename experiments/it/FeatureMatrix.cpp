@@ -55,6 +55,7 @@ int FeatureMatrix:: getFeatureArraydelta(int i, int j,int idelta, int jdelta, in
 		assert(RowValX <_sizeRowValX && RowValY <_sizeRowValY);
 		assert(idelta < _sizeX && jdelta << _sizeY);
 		int delta=_FA[i][j].delta((*_X).get(idelta,0),(*_Y).get(jdelta,0), (*_valX)(RowValX,i),(*_valY)(RowValY,j));
+		return delta;
 }
 
 vector<int> FeatureMatrix::getMatrixIndexX(int i, int j){
@@ -67,7 +68,16 @@ vector<int> FeatureMatrix:: getMatrixIndexY(int i, int j){
 		vector<int> indY = _mat[i][j][1];
 		return indY;
 }
-
+vector<int> FeatureMatrix:: getMatrixIndexdX(int i,int j){
+		assert(i<_sizeRowValX && j< _sizeRowValY );
+		vector<int> dindX = _mat[i][j][2];
+		return dindX;
+}
+vector<int> FeatureMatrix:: getMatrixIndexdY(int i,int j){
+		assert(i<_sizeRowValX && j< _sizeRowValY );
+		vector<int> dindY = _mat[i][j][3];
+		return dindY;
+}
 
 Feature** FeatureMatrix:: FeatureArray(DContainer &eX, DContainer &eY,DContainer &aX, DContainer &aY, double valuelambda){
 		DContainer *valX= &eX;
@@ -89,7 +99,7 @@ Feature** FeatureMatrix:: FeatureArray(DContainer &eX, DContainer &eY,DContainer
 void FeatureMatrix:: getMatrix(DContainer &eX, DContainer &eY,double valuelambda){
 		DContainer *valX= &eX;
 		DContainer *valY= &eY;
-		vector<vector<int> > V(2,vector<int>(0));
+		vector<vector<int> > V(4,vector<int>(0));
 
 		_mat = new vector<vector<int> >*[_sizeRowValX];
 		for(int i=0;i<_sizeRowValX;i++){
@@ -104,8 +114,16 @@ void FeatureMatrix:: getMatrix(DContainer &eX, DContainer &eY,double valuelambda
 				for(int varFeati=0;varFeati<_sizeColValX;varFeati++){
 					for(int varFeatj=0;varFeatj<_sizeColValY;varFeatj++){
 						if(_FA[varFeati][varFeatj].value((*valX)(i,varFeati),(*valY)(j,varFeatj))!=0){
-							_mat[i][j][0].push_back(varFeati);
-							_mat[i][j][1].push_back(varFeatj);
+							for(int deltai=0; deltai<_sizeX; deltai++ ){
+								for(int deltaj=0; deltaj<_sizeY; deltaj++){
+									if(_FA[varFeati][varFeatj].delta((*_X).get(deltai,0),(*_Y).get(deltaj,0),(*_valX).get(i, varFeati),(*_valY).get(j,varFeatj))!=0 ){
+										_mat[i][j][0].push_back(varFeati);
+										_mat[i][j][1].push_back(varFeatj);
+										_mat[i][j][2].push_back(deltai);
+										_mat[i][j][3].push_back(deltaj);
+									}
+								}
+							}
 						}
 					}
 				}

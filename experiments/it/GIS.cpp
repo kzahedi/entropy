@@ -36,33 +36,45 @@ void GIS:: gislambda(FeatureMatrix &FM){
 	}
 
 	//vector observed
-	/*for(int i=0;i<_sizeColValX;i++ ){
+	for(int i=0;i<_sizeColValX;i++ ){
 		for(int j=0; j< _sizeColValY;j++){
 			for(int k=0; k< FM.getMatrixIndexX(i,j).size();k++){
-				observed[FM.getMatrixIndexX(i,j)[k]][FM.getMatrixIndexY(i,j)[k]]++;
-				double m=observed[FM.getMatrixIndexX(i,j)[k]][FM.getMatrixIndexY(i,j)[k]];
+				observed[FM.getMatrixIndexX(i,j)[k]][FM.getMatrixIndexY(i,j)[k]][FM.getMatrixIndexdX(i,j)[k]][FM.getMatrixIndexdY(i,j)[k]]++;
 			}
 		}
 	}
-	//constant c
-	int Featconst=0;
+	//constant c for delta
+	int** Featconst;
+	Featconst = new int*[_sizeColValX];
+	for(int i=0; i< _sizeColValX;i++){
+		Featconst[i]=new int[_sizeColValY];
+		for(int j=0; j< _sizeColValY; j++){
+			Featconst[i][j]=0;
+		}
+	}
 	int curr=0;
-	for(int i=0; i< _sizeRowValX;i++){
-		for(int j=0; j< _sizeRowValY;j++){
-			for(int featxi=0; featxi < _sizeColValX; featxi++){
-				for(int featyj=0; featyj < _sizeColValX; featyj++){
-					for(int k=0; k< FM.getMatrixIndexX(i,j).size();k++){
-						if(FM.getMatrixIndexX(i,j)[k]==featxi && FM.getMatrixIndexY(i,j)[k]==featyj){
-							curr++;
+	for(int delti=0; delti< _sizeColValX; delti++){
+		for(int deltj=0; deltj< _sizeColValY; deltj++){
+
+			for(int i=0; i< _sizeRowValX;i++){
+				for(int j=0; j< _sizeRowValY;j++){
+
+					for(int deltxi=0; deltxi < _sizeX; deltxi++){
+						for(int deltyj=0; deltyj < _sizeY; deltyj++){
+							for(int k=0; k< FM.getMatrixIndexX(i,j).size();k++){
+								if(FM.getMatrixIndexdX(i,j)[k]==deltxi && FM.getMatrixIndexdY(i,j)[k]==deltyj){
+									curr++;
+								}
+							}
 						}
 					}
+					if(curr> Featconst[delti][deltj]) Featconst[delti][deltj]=curr;
+					curr=0;
 				}
 			}
-		if(curr> Featconst) Featconst=curr;
-		curr=0;
 		}
 	}
-	*/
+
 
 
 

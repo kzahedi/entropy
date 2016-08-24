@@ -14,7 +14,6 @@ using namespace std;
 class FeatureMatrix
 {
 public:
-
 	FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue);
 	~FeatureMatrix();
 	double getFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY);
@@ -23,6 +22,8 @@ public:
 	int getFeatureArraydelta(int i, int j,int idelta, int jdelta, int RowValX, int RowValY);
 	vector<int> getMatrixIndexX(int i, int j);
 	vector<int> getMatrixIndexY(int i, int j);
+	vector<int> getMatrixIndexdX(int i,int j);
+	vector<int> getMatrixIndexdY(int i,int j);
 
 private:
 	Feature** FeatureArray(DContainer &eX, DContainer &eY,DContainer &aX, DContainer &aY, double la);
