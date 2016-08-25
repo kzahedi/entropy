@@ -94,7 +94,7 @@ Feature** FeatureMatrix:: FeatureArray(DContainer &eX, DContainer &eY,DContainer
 		  }
 		}
 		return FA;
-	}
+}
 
 void FeatureMatrix:: getMatrix(DContainer &eX, DContainer &eY,double valuelambda){
 		DContainer *valX= &eX;

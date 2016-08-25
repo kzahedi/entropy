@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 
   DContainer *X = new DContainer(3,1);
   		*X << 1 << 2 << 3;
-  DContainer *Y = new DContainer(1,1);
+  DContainer *Y = new DContainer(2,1);
   	  	*Y << 1;
   DContainer *eX = new DContainer(4,2);
   		*eX << 3 << 1 << 1 << 3;
@@ -180,5 +180,7 @@ int main(int argc, char **argv)
 cout << "hier ";
 
 GIS *G = new GIS(*eX,*eY,*X,*Y,1);
+
+
 
 }
