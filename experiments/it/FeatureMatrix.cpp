@@ -43,7 +43,6 @@ double FeatureMatrix:: getFeatureArraylambda(int i, int j,int ilambdaX, int ilam
 double FeatureMatrix:: getFeatureArrayvalue(int i, int j,int RowValX, int RowValY){
 		assert(i<_sizeColValX && j<_sizeColValY);
 		double value=_FA[i][j].value((*_valX)(RowValX,i),(*_valY)(RowValY,j));
-		//cout << _FA[i][j] << endl;												//
 		return value;
 }
 double FeatureMatrix:: getFeatureArrayvalueforval(int i, int j,int x, int y){
