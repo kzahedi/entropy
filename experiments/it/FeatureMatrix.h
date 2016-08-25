@@ -18,6 +18,7 @@ public:
 	~FeatureMatrix();
 	double getFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY);
 	double getFeatureArrayvalue(int i, int j,int RowValX, int RowValY);
+	double getFeatureArrayvalueforval(int i, int j,int x, int y);
 	void setFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY,double valuelambda);
 	int getFeatureArraydelta(int i, int j,int idelta, int jdelta, int RowValX, int RowValY);
 	vector<int> getMatrixIndexX(int i, int j);

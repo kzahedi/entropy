@@ -10,6 +10,7 @@
 class GIS {
 public:
 	GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double la);
+	double gis(int x,int y, FeatureMatrix &FM);
 	~GIS();
 private:
 	void gis(FeatureMatrix &FM);
@@ -20,6 +21,8 @@ private:
 	int _sizeColValY;
 	int _sizeRowValX;
 	int _sizeRowValY;
+	DContainer *_valY;
+	DContainer *_valX;
 	double** __getFeatconst(FeatureMatrix &FM);
 	void __getexp(FeatureMatrix &FM, double**** &expect, double*** &exponent,double** &normaliser);
 };

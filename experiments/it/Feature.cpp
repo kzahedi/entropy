@@ -70,7 +70,7 @@ double Feature::value(double x,double y){
 			for(int j=0; j< _sizeY; j++){
 				double a=(*_X).get(i,0);
 				double b=(*_Y).get(j,0);
-				val= val + (*_lambda)(i,j)*delta(a, b, x, y);
+				val+= (*_lambda)(i,j)*delta(a, b, x, y);
 			}
 		}
 		return val;

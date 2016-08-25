@@ -98,16 +98,16 @@ int main(int argc, char **argv)
 	ma[0][1][0].push_back(2);
 	//cout << ma[0][1][0][0] << endl;
 
-  DContainer *X = new DContainer(3,1);
-  		*X << 1 << 2 << 3;
+  DContainer *X = new DContainer(2,1);
+  		*X << 0 << 1;
   DContainer *Y = new DContainer(2,1);
-  	  	*Y << 1;
-  DContainer *eX = new DContainer(4,2);
-  		*eX << 3 << 1 << 1 << 3;
+  	  	*Y << 0 << 1;
+  DContainer *eX = new DContainer(10,2);
+  		*eX << 1 << 0 << 1 << 0 << 1 << 0 << 1 << 0 << 0 << 0;
   	cout << (*eX) << endl;
-  DContainer *eY = new DContainer(2,2);
+  DContainer *eY = new DContainer(10,2);
 
-  		*eY << 1 << 1 << 1 << -2;
+  		*eY << 0 << 1 << 0 << 1<< 0 << 1 << 0 << 1 <<1 << 1;
   	  	int size= (*eX).rows();
   	  	cout << size << endl;
   	 cout << (*eY) << endl;
@@ -177,10 +177,12 @@ int main(int argc, char **argv)
 			}
 		}
 	}
-cout << "hier ";
+//cout << "hier " << endl;
 
-GIS *G = new GIS(*eX,*eY,*X,*Y,1);
-
+GIS *G = new GIS(*eX,*eY,*X,*Y,0.5);
+double pq;
+pq =(*G).gis(0,1,*FM);
+//cout << pq << endl;
 
 
 }
