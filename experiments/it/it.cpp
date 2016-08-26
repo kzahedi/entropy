@@ -102,10 +102,10 @@ int main(int argc, char **argv)
   		*X << 0 << 1;
   DContainer *Y = new DContainer(2,1);
   	  	*Y << 0 << 1;
-  DContainer *eX = new DContainer(10,5);
-  		*eX << 1 << 0 << 1 << 0 << 1 << 0 << 1 << 0 << 0 << 0<< 1 << 0 << 1 << 0 << 1 << 0 << 1 << 0 << 0 << 0;
+  DContainer *eX = new DContainer(10,6);
+  		*eX << 1 << 0 << 1 << 0 << 0 << 0 << 1 << 0 << 0 << 0<< 1 << 0 << 1 << 0 << 0 << 0 << 1 << 0 << 0 << 0;
   	cout << (*eX) << endl;
-  DContainer *eY = new DContainer(10,5);
+  DContainer *eY = new DContainer(10,6);
 
   		*eY << 0 << 1 << 0 << 1<< 0 << 1 << 0 << 1 <<1 << 1<< 1 << 0 << 1 << 0 << 1 << 0 << 1 << 0 << 0 << 0;
   	  	int size= (*eX).rows();
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
 
 GIS *G = new GIS(*eX,*eY,*X,*Y,0.5);
 double pq;
-pq =(*G).gis(3,4);
+pq =(*G).gis(1,1,0,0);
 cout << pq << endl;
 
 

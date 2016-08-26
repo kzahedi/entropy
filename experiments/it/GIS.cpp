@@ -3,23 +3,27 @@
 GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue) {
 			_valX= &eX;
 			_valY= &eY;
-			DContainer *X= &aX;
-			DContainer *Y= &aY;
-			_sizeX = (*X).rows();
-			_sizeY = (*Y).rows();
+			_X= &aX;
+			_Y= &aY;
+			_sizeX = (*_X).rows();
+			_sizeY = (*_Y).rows();
 			_sizeColValY= (*_valY).columns();
 			_sizeColValX= (*_valX).columns();
 			_sizeRowValX= (*_valX).rows();
 			_sizeRowValY= (*_valY).rows();
-			_FM=new FeatureMatrix(*_valX,*_valY,*X,*Y,lambdavalue);
+			_FM=new FeatureMatrix(*_valX,*_valY,*_X,*_Y,lambdavalue);
 			__gis();
 }
 
-double GIS::gis(int i,int j){
+double GIS::gis(int Feati,int Featj,double ValX,double ValY){
+	double norm=0;
+	double exponent= exp((*_FM).getFeatureArrayvalue(Feati,Featj,ValX,ValY) );
+	//cout << exponent<< endl;
+	for(int yi=0;yi<_sizeY;yi++){
+		norm+= exp( (*_FM).getFeatureArrayvalue(Feati,Featj,ValX,(*_Y)(yi,0)));
+	}
 
-			return (*_FM).getFeatureArrayvalue(i,j,(*_valX)(i,1),(*_valY)(j,1));
-						//cout << exponent << endl;
-
+	return exponent/norm;
 }
 GIS::~GIS() {
 }
@@ -157,7 +161,7 @@ void GIS:: __gis(){
 				normaliser[i][j]=0;
 			}
 		}
-	for(int i=0; i<10;i++){
+	for(int i=0; i<50;i++){
 		__getexp(expected,exponent,normaliser);
 		for(int Feati=0; Feati<_sizeColValX;Feati++){
 			for(int Featj=0; Featj< _sizeColValY;Featj++){
