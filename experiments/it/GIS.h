@@ -9,12 +9,13 @@
 
 class GIS {
 public:
-	GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double la);
+	GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double la,int maxit, double konv);
 	double gis(int Feati,int Featj,double ValX,double ValY);
 	~GIS();
+
 private:
-	void __gis();
 	double**** __getobs();
+	void __gis(int maxit, double konv);
 	int _sizeX;
 	int _sizeY;
 	int _sizeColValX;

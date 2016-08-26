@@ -100,14 +100,14 @@ int main(int argc, char **argv)
 
   DContainer *X = new DContainer(2,1);
   		*X << 0 << 1;
+
   DContainer *Y = new DContainer(2,1);
   	  	*Y << 0 << 1;
-  DContainer *eX = new DContainer(10,6);
-  		*eX << 1 << 0 << 1 << 0 << 0 << 0 << 1 << 0 << 0 << 0<< 1 << 0 << 1 << 0 << 0 << 0 << 1 << 0 << 0 << 0;
+  DContainer *eX = new DContainer(4,4);
+  *eX << 0 << 1 << 1 << 1 << 1 << 1 << 1 << 1;
   	cout << (*eX) << endl;
-  DContainer *eY = new DContainer(10,6);
-
-  		*eY << 0 << 1 << 0 << 1<< 0 << 1 << 0 << 1 <<1 << 1<< 1 << 0 << 1 << 0 << 1 << 0 << 1 << 0 << 0 << 0;
+  DContainer *eY = new DContainer(8,1);
+  *eY << 0 << 1 << 1 << 1 << 1 << 1 << 1 << 1;
   	  	int size= (*eX).rows();
   	  	cout << size << endl;
   	 cout << (*eY) << endl;
@@ -179,10 +179,11 @@ int main(int argc, char **argv)
 	}
 //cout << "hier " << endl;
 
-GIS *G = new GIS(*eX,*eY,*X,*Y,0.5);
+GIS *G = new GIS(*eX,*eY,*X,*Y,2,200,0.1);
 double pq;
-pq =(*G).gis(1,1,0,0);
+pq =(*G).gis(3,0,1,1);
 cout << pq << endl;
+
 
 
 }
