@@ -24,8 +24,7 @@ double GIS::gis(int Feati,int Featj,double ValX,double ValY){
 
 	return exponent/norm;
 }
-GIS::~GIS() {
-}
+
 double**** GIS:: __getobs(){
 	double**** observed;
 		observed = new double***[_sizeColValX];
@@ -52,6 +51,7 @@ double**** GIS:: __getobs(){
 		}
 		return observed;
 
+
 }
 double** GIS::__getFeatconst(){
 	double** Featconst;
@@ -72,7 +72,8 @@ double** GIS::__getFeatconst(){
 					for(int deltxi=0; deltxi < _sizeX; deltxi++){
 						for(int deltyj=0; deltyj < _sizeY; deltyj++){
 							for(int k=0; k< (*_FM).getMatrixIndexX(i,j).size();k++){
-								if((*_FM).getMatrixIndexdX(i,j)[k]==deltxi && (*_FM).getMatrixIndexdY(i,j)[k]==deltyj){
+								if((*_FM).getMatrixIndexX(i,j)[k]==delti && (*_FM).getMatrixIndexY(i,j)[k]==deltj
+									&&(*_FM).getMatrixIndexdX(i,j)[k]==deltxi && (*_FM).getMatrixIndexdY(i,j)[k]==deltyj){
 									curr++;
 								}
 							}
@@ -113,10 +114,12 @@ void GIS:: __getexp(double**** &expect, double*** &exponent,double** &normaliser
 					}
 				normaliser[Feati][Featj]+=exp(exponent[Feati][Featj][yj]);
 				}
+				//cout << normaliser[0][0] << endl;
 				for(int yj=0; yj< _sizeY; yj++){
 					for(int k=0; k< (*_FM).getMatrixIndexX(xi,yj).size();k++){
 						if((*_FM).getMatrixIndexX(xi,yj)[k]==Feati && (*_FM).getMatrixIndexY(xi,yj)[k]==Featj){
-						expect[Feati][Featj][(*_FM).getMatrixIndexdX(xi,yj)[k]][(*_FM).getMatrixIndexdY(xi,yj)[k]]+= exp(exponent[Feati][Featj][yj])/normaliser[Feati][Featj];
+						expect[Feati][Featj][(*_FM).getMatrixIndexdX(xi,yj)[k]][(*_FM).getMatrixIndexdY(xi,yj)[k]]+=(*_FM).getFeatureArraydelta(Feati,Featj,(*_FM).getMatrixIndexdX(xi,yj)[k],(*_FM).getMatrixIndexdY(xi,yj)[k],xi,yj)*exp(exponent[Feati][Featj][yj]);
+						// /normaliser[Feati][Featj]
 						}
 					}
 				}
@@ -167,7 +170,7 @@ void GIS:: __gis(int maxit, double konv){
 		}
 	int i=0;
 	double l=1;
-	while(i<maxit&& (l>=konv || l<=-konv)){
+	while(i<maxit){ // && (l>=konv || l<=-konv)
 		l=0;
 		__getexp(expected,exponent,normaliser);
 		for(int Feati=0; Feati<_sizeColValX;Feati++){
@@ -180,10 +183,9 @@ void GIS:: __gis(int maxit, double konv){
 								double p=(observ[Feati][Featj][lambdai][lambdaj]/expected[Feati][Featj][lambdai][lambdaj]);
 								newl= oldl + (1/featconst[Feati][Featj])*log(p);
 								l+=(observ[Feati][Featj][lambdai][lambdaj]-expected[Feati][Featj][lambdai][lambdaj]);
-
 							}
 							else{
-								newl=0; //
+								newl=0;
 							}
 							(*_FM).setFeatureArraylambda(Feati,Featj,lambdai,lambdaj,newl);
 					}
@@ -191,6 +193,7 @@ void GIS:: __gis(int maxit, double konv){
 			}
 		}
 		i++;
+		//cout << l << endl;
 	}
 
 }

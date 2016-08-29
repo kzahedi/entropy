@@ -89,7 +89,8 @@ Feature& Feature::operator=(const Feature& c){
 
 	return *this;
 }
-int Feature::delta(double ax, double ay, double x, double y){     // alphabet x,y und eingegebenes x,y
+// alphabet ax,ay und eingegebenes x,y
+int Feature::delta(double ax, double ay, double x, double y){
 	if(ax== x && ay== y){
 		return 1;
 	}

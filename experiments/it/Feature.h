@@ -21,7 +21,6 @@ public:
 	Feature(DContainer &aX, DContainer &aY,  Matrix lambda);
 	Feature(bool binaer,double valuelambda);
 	~Feature();
-
 	friend std::ostream& operator<<(std::ostream& str,Feature& feature){
 		str<< "Feature:" <<endl;
 		for(int i=0; i<feature._sizeX; i++){

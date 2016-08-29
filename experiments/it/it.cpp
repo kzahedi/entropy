@@ -104,15 +104,16 @@ int main(int argc, char **argv)
   DContainer *Y = new DContainer(2,1);
   	  	*Y << 0 << 1;
   DContainer *eX = new DContainer(4,4);
-  *eX << 0 << 1 << 1 << 1 << 1 << 1 << 1 << 1;
+  *eX << 1 << 1 << 1 << 0 << 0 << 0 << 1 << 0 << 1 << 1 << 0 << 0 <<1 << 1 << 1 << 0;
   	cout << (*eX) << endl;
-  DContainer *eY = new DContainer(8,1);
-  *eY << 0 << 1 << 1 << 1 << 1 << 1 << 1 << 1;
+  DContainer *eY = new DContainer(8,3);
+  *eY << 0 << 1 << 1 << 0 << 0 << 1 << 0  << 0  << 1 << 0 << 0 << 1;
   	  	int size= (*eX).rows();
   	  	cout << size << endl;
   	 cout << (*eY) << endl;
 
   FeatureMatrix *FM= new FeatureMatrix(*eX,*eY,*X,*Y,1);
+
 
   int j= (*FM).getMatrixIndexX(0,0)[1];
   int p= (*FM).getMatrixIndexdX(0,0)[0];
@@ -179,11 +180,49 @@ int main(int argc, char **argv)
 	}
 //cout << "hier " << endl;
 
-GIS *G = new GIS(*eX,*eY,*X,*Y,2,200,0.1);
+//GIS *G = new GIS(*eX,*eY,*X,*Y,2,250,0.1);
 double pq;
-pq =(*G).gis(3,0,1,1);
-cout << pq << endl;
-
-
+//pq =(*G).gis(1,2,1,0);
+for(int i=0; i< 4; i++){
+	for(int j=0;j<3;j++){
+		//cout << (*G).gis(i,j,0,1)<< endl;
+		//cout << (*G).gis(i,j,1,0)<< endl;
+		//cout << (*G).gis(i,j,1,1)<< endl;
+		//cout << (*G).gis(i,j,0,0)<< endl;
+		//cout << endl;
+	}
+}
+int x=rand();
+srand (time(NULL));
+int y= rand() % 2;
+cout << y << endl;
+DContainer *zX = new DContainer(2,1);
+*zX << 0 << 1;
+ DContainer *zY = new DContainer(2,1);
+ *zY << 0 << 1;
+ DContainer *zeX = new DContainer(4,5);
+ for(int i=0;i< 4;i++ ){
+	 for(int j=0;j<5;j++){
+		 *zeX << rand() % 2;
+	 }
+ }
+ cout << (*zeX) << endl;
+ DContainer *zeY = new DContainer(8,4);
+ for(int i=0;i< 8;i++ ){
+	 for(int j=0;j<4;j++){
+		 *zeY << rand() % 2;
+	 }
+ }
+ cout << (*zeY) << endl;
+ GIS *Test = new GIS(*zeX,*zeY,*zX,*zY,2,20,0.1);
+ for(int i=0; i< 5; i++){
+ 	for(int j=0;j<4;j++){
+ 		cout << (*Test).gis(i,j,0,1)<< endl;
+ 		cout << (*Test).gis(i,j,1,0)<< endl;
+ 		cout << (*Test).gis(i,j,1,1)<< endl;
+ 		cout << (*Test).gis(i,j,0,0)<< endl;
+ 		cout << endl;
+ 	}
+ }
 
 }

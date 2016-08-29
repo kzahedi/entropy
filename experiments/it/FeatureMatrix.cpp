@@ -45,11 +45,7 @@ double FeatureMatrix:: getFeatureArrayvalue(int i, int j,int RowValX, int RowVal
 		double value=_FA[i][j].value((*_valX)(RowValX,i),(*_valY)(RowValY,j));
 		return value;
 }
-double FeatureMatrix:: getFeatureArrayvalueforval(int i, int j,int x, int y){
-		assert(i<_sizeColValX && j<_sizeColValY);
-		double value=_FA[i][j].value(x,y);
-		return value;
-}
+
 
 void FeatureMatrix::setFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY,double valuelambda){
 		assert(i<_sizeColValX && j<_sizeColValY);
@@ -58,7 +54,7 @@ void FeatureMatrix::setFeatureArraylambda(int i, int j,int ilambdaX, int ilambda
 int FeatureMatrix:: getFeatureArraydelta(int i, int j,int idelta, int jdelta, int RowValX, int RowValY){
 		assert(i<_sizeColValX && j<_sizeColValY);
 		assert(RowValX <_sizeRowValX && RowValY <_sizeRowValY);
-		assert(idelta < _sizeX && jdelta << _sizeY);
+		assert(idelta < _sizeX && jdelta < _sizeY);
 		int delta=_FA[i][j].delta((*_X).get(idelta,0),(*_Y).get(jdelta,0), (*_valX)(RowValX,i),(*_valY)(RowValY,j));
 		return delta;
 }
@@ -134,4 +130,5 @@ void FeatureMatrix:: getMatrix(DContainer &eX, DContainer &eY,double valuelambda
 				}
 			}
 		}
+
 }

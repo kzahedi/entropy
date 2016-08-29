@@ -11,11 +11,12 @@ class GIS {
 public:
 	GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double la,int maxit, double konv);
 	double gis(int Feati,int Featj,double ValX,double ValY);
-	~GIS();
 
 private:
 	double**** __getobs();
 	void __gis(int maxit, double konv);
+	double** __getFeatconst();
+	void __getexp(double**** &expect, double*** &exponent,double** &normaliser);
 	int _sizeX;
 	int _sizeY;
 	int _sizeColValX;
@@ -27,8 +28,6 @@ private:
 	DContainer *_X;
 	DContainer *_valY;
 	DContainer *_valX;
-	double** __getFeatconst();
-	void __getexp(double**** &expect, double*** &exponent,double** &normaliser);
 };
 
 #endif
