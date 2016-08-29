@@ -15,6 +15,7 @@ class FeatureMatrix
 {
 public:
 	FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue);
+	FeatureMatrix();
 	~FeatureMatrix();
 	double getFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY);
 	double getFeatureArrayvalue(int i, int j,int RowValX, int RowValY);

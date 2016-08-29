@@ -14,6 +14,21 @@ FeatureMatrix::FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DCo
 		_FA=FeatureArray(valuelambda);
 		getMatrix(valuelambda);
 }
+FeatureMatrix::FeatureMatrix(){
+		_valX= new DContainer(0,0);
+		_valY= new DContainer(0,0);
+		_X= new DContainer(0,0);
+		_Y= new DContainer(0,0);
+		_sizeColValY= 0;
+		_sizeColValX= 0;
+		_sizeRowValX= 0;
+		_sizeRowValY= 0;
+		_sizeX = (*_X).rows();
+		_sizeY = (*_Y).rows();
+		_FA=FeatureArray(0);
+		getMatrix(0);
+
+}
 FeatureMatrix:: ~FeatureMatrix(){
 		for(int i=0; i<_sizeColValX;i++){
 			for(int j=0; j<_sizeColValY;j++){
@@ -28,10 +43,6 @@ FeatureMatrix:: ~FeatureMatrix(){
 			}
 		}
 		delete _mat;
-		_X=NULL;
-		_Y=NULL;
-		_valX=NULL;
-		_valY=NULL;
 }
 // Indizes von Feature und von Lambda
 double FeatureMatrix:: getFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY){

@@ -105,12 +105,12 @@ int main(int argc, char **argv)
   	  	*Y << 0 << 1;
   DContainer *eX = new DContainer(4,4);
   *eX << 1 << 1 << 1 << 0 << 0 << 0 << 1 << 0 << 1 << 1 << 0 << 0 <<1 << 1 << 1 << 0;
-  	cout << (*eX) << endl;
+  	//cout << (*eX) << endl;
   DContainer *eY = new DContainer(8,3);
   *eY << 0 << 1 << 1 << 0 << 0 << 1 << 0  << 0  << 1 << 0 << 0 << 1;
   	  	int size= (*eX).rows();
-  	  	cout << size << endl;
-  	 cout << (*eY) << endl;
+  	  //	cout << size << endl;
+  	// cout << (*eY) << endl;
 
   //FeatureMatrix *FM= new FeatureMatrix(*eX,*eY,*X,*Y,1);
 
@@ -195,7 +195,7 @@ for(int i=0; i< 4; i++){
 int x=rand();
 srand (time(NULL));
 int y= rand() % 2;
-cout << y << endl;
+//cout << y << endl;
 DContainer *zX = new DContainer(2,1);
 *zX << 0 << 1;
  DContainer *zY = new DContainer(2,1);
@@ -206,7 +206,7 @@ DContainer *zX = new DContainer(2,1);
 		 *zeX << rand() % 2;
 	 }
  }
- cout << (*zeX) << endl;
+ //cout << (*zeX) << endl;
  DContainer *zeY = new DContainer(4,4);
  for(int i=0;i< 4;i++ ){
 	 for(int j=0;j<4;j++){
@@ -214,7 +214,7 @@ DContainer *zX = new DContainer(2,1);
 	 }
  }
  FeatureMatrix *FM= new FeatureMatrix(*eX,*eY,*X,*Y,1);
- cout << (*zeY) << endl;
+ //cout << (*zeY) << endl;
  GIS *Test = new GIS(*zeX,*zeY,*zX,*zY,0.1,20,0.1);
 
  for(int i=0; i< 5; i++){

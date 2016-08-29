@@ -14,7 +14,19 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
 			_FM=new FeatureMatrix(*_valX,*_valY,*_X,*_Y,lambdavalue);
 			__gis(maxit, konv);
 }
-
+GIS::GIS(int sizeaX, int sizeaY, int sizeRowX, int sizeRowY, int sizeColX, int sizeColY ){
+		_sizeX=sizeaX;
+		_sizeY=sizeaY;
+		_sizeColValX=sizeColX;
+		_sizeColValY=sizeColY;
+		_sizeRowValX=sizeRowX;
+		_sizeRowValY=sizeRowY;
+		_valX= new DContainer(_sizeRowValX,_sizeColValX);
+		_valY= new DContainer(_sizeRowValY,_sizeRowValX);
+		_X=new DContainer(_sizeX,0);
+		_Y=new DContainer(_sizeY,0);
+		_FM=new FeatureMatrix(*_valX,*_valY,*_X,*_Y,0);
+}
 double GIS::gis(int Feati,int Featj,double ValX,double ValY){
 	double norm=0;
 	double exponent= exp((*_FM).getFeatureArrayvalue(Feati,Featj,ValX,ValY) );
@@ -24,7 +36,12 @@ double GIS::gis(int Feati,int Featj,double ValX,double ValY){
 
 	return exponent/norm;
 }
-
+void GIS::setFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY,double valuelambda){
+	//
+}
+double GIS::getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY){
+	//
+}
 double**** GIS:: __getobs(){
 	double**** observed;
 		observed = new double***[_sizeColValX];
@@ -193,7 +210,6 @@ void GIS:: __gis(int maxit, double konv){
 			}
 		}
 		i++;
-		cout << l << endl;
 	}
 
 }
