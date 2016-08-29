@@ -11,8 +11,8 @@ FeatureMatrix::FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DCo
 		_sizeRowValY= (*_valY).rows();
 		_sizeX = (*_X).rows();
 		_sizeY = (*_Y).rows();
-		_FA=FeatureArray(*_valX,*_valY,*_X, *_Y,valuelambda);
-		getMatrix(*_valX, *_valY, valuelambda);
+		_FA=FeatureArray(valuelambda);
+		getMatrix(valuelambda);
 }
 FeatureMatrix:: ~FeatureMatrix(){
 		for(int i=0; i<_sizeColValX;i++){
@@ -23,7 +23,7 @@ FeatureMatrix:: ~FeatureMatrix(){
 		delete _FA;
 
 		for(int i=0;i<_sizeRowValX;i++){
-			for(int j=0;j<_sizeRowValY;j++){
+			for(int j=0;j<_sizeY;j++){
 				_mat[i][j].clear();
 			}
 		}
@@ -65,59 +65,53 @@ vector<int> FeatureMatrix::getMatrixIndexX(int i, int j){
 		return indX;
 }
 vector<int> FeatureMatrix:: getMatrixIndexY(int i, int j){
-		assert(i<_sizeRowValX && j< _sizeRowValY );
+		assert(i<_sizeRowValX && j< _sizeY );
 		vector<int> indY = _mat[i][j][1];
 		return indY;
 }
 vector<int> FeatureMatrix:: getMatrixIndexdX(int i,int j){
-		assert(i<_sizeRowValX && j< _sizeRowValY );
+		assert(i<_sizeRowValX && j< _sizeY );
 		vector<int> dindX = _mat[i][j][2];
 		return dindX;
 }
 vector<int> FeatureMatrix:: getMatrixIndexdY(int i,int j){
-		assert(i<_sizeRowValX && j< _sizeRowValY );
+		assert(i<_sizeRowValX && j< _sizeY );
 		vector<int> dindY = _mat[i][j][3];
 		return dindY;
 }
 
-Feature** FeatureMatrix:: FeatureArray(DContainer &eX, DContainer &eY,DContainer &aX, DContainer &aY, double valuelambda){
-		DContainer *valX= &eX;
-		DContainer *valY= &eY;
-		DContainer *X = &aX;
-		DContainer *Y = &aY;
+Feature** FeatureMatrix:: FeatureArray( double valuelambda){
 		Feature **FA;
 		FA = new Feature*[_sizeColValX];
 		for(int m=0; m< _sizeColValX; m++){
 		  FA[m]= new Feature[_sizeColValY];
 		  for(int k=0;k<_sizeColValY;k++){
-			  Feature *K=new Feature(*X,*Y,valuelambda);
+			  Feature *K=new Feature(*_X,*_Y,valuelambda);
 			  FA[m][k]=*K;
 		  }
 		}
 		return FA;
 }
 
-void FeatureMatrix:: getMatrix(DContainer &eX, DContainer &eY,double valuelambda){
-		DContainer *valX= &eX;
-		DContainer *valY= &eY;
+void FeatureMatrix:: getMatrix(double valuelambda){
 		vector<vector<int> > V(4,vector<int>(0));
 
 		_mat = new vector<vector<int> >*[_sizeRowValX];
 		for(int i=0;i<_sizeRowValX;i++){
-			_mat[i]= new vector<vector<int> >[_sizeRowValY];
-			for(int j=0;j<_sizeRowValY;j++){
+			_mat[i]= new vector<vector<int> >[_sizeY];
+			for(int j=0;j<_sizeY;j++){
 				_mat[i][j]= V;
 			}
 		}
 
 		for(int i=0;i<_sizeRowValX;i++){
-			for(int j=0;j<_sizeRowValY;j++){
+			for(int j=0;j<_sizeY;j++){
 				for(int varFeati=0;varFeati<_sizeColValX;varFeati++){
 					for(int varFeatj=0;varFeatj<_sizeColValY;varFeatj++){
-						if(_FA[varFeati][varFeatj].value((*valX)(i,varFeati),(*valY)(j,varFeatj))!=0){
+						if(_FA[varFeati][varFeatj].value((*_valX)(i,varFeati),(*_Y)(j,0))!=0){
 							for(int deltai=0; deltai<_sizeX; deltai++ ){
 								for(int deltaj=0; deltaj<_sizeY; deltaj++){
-									if(_FA[varFeati][varFeatj].delta((*_X).get(deltai,0),(*_Y).get(deltaj,0),(*_valX).get(i, varFeati),(*_valY).get(j,varFeatj))!=0 ){
+									if(_FA[varFeati][varFeatj].delta((*_X).get(deltai,0),(*_Y).get(deltaj,0),(*_valX).get(i, varFeati),(*_valY).get(j,0))!=0 ){
 										_mat[i][j][0].push_back(varFeati);
 										_mat[i][j][1].push_back(varFeatj);
 										_mat[i][j][2].push_back(deltai);

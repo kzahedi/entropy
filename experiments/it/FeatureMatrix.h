@@ -26,8 +26,8 @@ public:
 	vector<int> getMatrixIndexdY(int i,int j);
 
 private:
-	Feature** FeatureArray(DContainer &eX, DContainer &eY,DContainer &aX, DContainer &aY, double la);
-	void getMatrix(DContainer &eX, DContainer &eY,double la);
+	Feature** FeatureArray(double la);
+	void getMatrix(double la);
 
 	int _sizeColValX;
 	int _sizeColValY;

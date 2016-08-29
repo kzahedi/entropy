@@ -43,7 +43,7 @@ double**** GIS:: __getobs(){
 
 		//vector observed
 		for(int i=0;i<_sizeRowValX;i++ ){
-			for(int j=0; j< _sizeRowValY;j++){
+			for(int j=0; j< _sizeY;j++){
 				for(int k=0; k< (*_FM).getMatrixIndexX(i,j).size();k++){
 					observed[(*_FM).getMatrixIndexX(i,j)[k]][(*_FM).getMatrixIndexY(i,j)[k]][(*_FM).getMatrixIndexdX(i,j)[k]][(*_FM).getMatrixIndexdY(i,j)[k]]++;
 				}
@@ -67,7 +67,7 @@ double** GIS::__getFeatconst(){
 		for(int deltj=0; deltj< _sizeColValY; deltj++){
 
 			for(int i=0; i< _sizeRowValX;i++){
-				for(int j=0; j< _sizeRowValY;j++){
+				for(int j=0; j< _sizeY;j++){
 
 					for(int deltxi=0; deltxi < _sizeX; deltxi++){
 						for(int deltyj=0; deltyj < _sizeY; deltyj++){
@@ -112,7 +112,7 @@ void GIS:: __getexp(double**** &expect, double*** &exponent,double** &normaliser
 							exponent[Feati][Featj][yj]+= (*_FM).getFeatureArraylambda(Feati, Featj,(*_FM).getMatrixIndexdX(xi,yj)[k], (*_FM).getMatrixIndexdY(xi,yj)[k]);
 						}
 					}
-				normaliser[Feati][Featj]+=exp(exponent[Feati][Featj][yj]);
+				//normaliser[Feati][Featj]+=exp(exponent[Feati][Featj][yj]);
 				}
 				//cout << normaliser[0][0] << endl;
 				for(int yj=0; yj< _sizeY; yj++){
@@ -170,7 +170,7 @@ void GIS:: __gis(int maxit, double konv){
 		}
 	int i=0;
 	double l=1;
-	while(i<maxit){ // && (l>=konv || l<=-konv)
+	while(i<maxit && (l>=konv || l<=-konv)){
 		l=0;
 		__getexp(expected,exponent,normaliser);
 		for(int Feati=0; Feati<_sizeColValX;Feati++){
@@ -193,7 +193,7 @@ void GIS:: __gis(int maxit, double konv){
 			}
 		}
 		i++;
-		//cout << l << endl;
+		cout << l << endl;
 	}
 
 }

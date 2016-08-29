@@ -112,11 +112,11 @@ int main(int argc, char **argv)
   	  	cout << size << endl;
   	 cout << (*eY) << endl;
 
-  FeatureMatrix *FM= new FeatureMatrix(*eX,*eY,*X,*Y,1);
+  //FeatureMatrix *FM= new FeatureMatrix(*eX,*eY,*X,*Y,1);
 
 
-  int j= (*FM).getMatrixIndexX(0,0)[1];
-  int p= (*FM).getMatrixIndexdX(0,0)[0];
+  //int j= FM->getMatrixIndexX(0,0)[1];
+  //int p= (*FM).getMatrixIndexdX(0,0)[0];
 
 
 
@@ -207,14 +207,16 @@ DContainer *zX = new DContainer(2,1);
 	 }
  }
  cout << (*zeX) << endl;
- DContainer *zeY = new DContainer(8,4);
- for(int i=0;i< 8;i++ ){
+ DContainer *zeY = new DContainer(4,4);
+ for(int i=0;i< 4;i++ ){
 	 for(int j=0;j<4;j++){
 		 *zeY << rand() % 2;
 	 }
  }
+ FeatureMatrix *FM= new FeatureMatrix(*eX,*eY,*X,*Y,1);
  cout << (*zeY) << endl;
- GIS *Test = new GIS(*zeX,*zeY,*zX,*zY,2,20,0.1);
+ GIS *Test = new GIS(*zeX,*zeY,*zX,*zY,0.1,20,0.1);
+
  for(int i=0; i< 5; i++){
  	for(int j=0;j<4;j++){
  		cout << (*Test).gis(i,j,0,1)<< endl;
@@ -224,5 +226,5 @@ DContainer *zX = new DContainer(2,1);
  		cout << endl;
  	}
  }
-
+ //cout << (double)rand()/RAND_MAX << endl;
 }
