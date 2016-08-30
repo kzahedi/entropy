@@ -19,7 +19,7 @@
 
 int main(int argc, char **argv)
 {
-
+ cout << "hier" << endl;
 
   /*IContainer *X = new IContainer(20,1);
     Feature **FA;
@@ -103,12 +103,12 @@ int main(int argc, char **argv)
 
   DContainer *Y = new DContainer(2,1);
   	  	*Y << 0 << 1;
-  DContainer *eX = new DContainer(4,4);
-  *eX << 1 << 1 << 1 << 0 << 0 << 0 << 1 << 0 << 1 << 1 << 0 << 0 <<1 << 1 << 1 << 0;
+ // DContainer *eX = new DContainer(4,4);
+  //*eX << 1 << 1 << 1 << 0 << 0 << 0 << 1 << 0 << 1 << 1 << 0 << 0 <<1 << 1 << 1 << 0;
   	//cout << (*eX) << endl;
   DContainer *eY = new DContainer(8,3);
   *eY << 0 << 1 << 1 << 0 << 0 << 1 << 0  << 0  << 1 << 0 << 0 << 1;
-  	  	int size= (*eX).rows();
+  //	  	int size= (*eX).rows();
   	  //	cout << size << endl;
   	// cout << (*eY) << endl;
 
@@ -193,7 +193,7 @@ for(int i=0; i< 4; i++){
 	}
 }
 int x=rand();
-srand (time(NULL));
+
 int y= rand() % 2;
 //cout << y << endl;
 DContainer *zX = new DContainer(2,1);
@@ -213,18 +213,123 @@ DContainer *zX = new DContainer(2,1);
 		 *zeY << rand() % 2;
 	 }
  }
- FeatureMatrix *FM= new FeatureMatrix(*eX,*eY,*X,*Y,1);
+ //FeatureMatrix *FM= new FeatureMatrix(*eX,*eY,*X,*Y,1);
  //cout << (*zeY) << endl;
- GIS *Test = new GIS(*zeX,*zeY,*zX,*zY,0.1,20,0.1);
+ //GIS *Test = new GIS(*zeX,*zeY,*zX,*zY,0.1,20,0.1);
 
- for(int i=0; i< 5; i++){
- 	for(int j=0;j<4;j++){
- 		cout << (*Test).gis(i,j,0,1)<< endl;
- 		cout << (*Test).gis(i,j,1,0)<< endl;
- 		cout << (*Test).gis(i,j,1,1)<< endl;
- 		cout << (*Test).gis(i,j,0,0)<< endl;
- 		cout << endl;
- 	}
- }
+ //for(int i=0; i< 5; i++){
+ 	//for(int j=0;j<4;j++){
+ 		//cout << (*Test).gis(i,j,0,1)<< endl;
+ 		//cout << (*Test).gis(i,j,1,0)<< endl;
+ 		//cout << (*Test).gis(i,j,1,1)<< endl;
+ 		//cout << (*Test).gis(i,j,0,0)<< endl;
+ 		//cout << endl;
+ 	//}
+// }
  //cout << (double)rand()/RAND_MAX << endl;
+/* DContainer *eX = new DContainer(10,1);
+ for(int i=0;i< 10;i++ ){
+	 for(int j=0;j<1;j++){
+		 *eX << rand() % 2;
+	 }
+ }
+ cout << (*eX) << endl;
+ GIS *Test = new GIS(1,*eX);
+ Test->setFeatureArraylambda(0,0,1,0,1);
+ Test->setFeatureArraylambda(0,0,1,1,0);
+ Test->setFeatureArraylambda(0,0,0,0,1);
+ Test->setFeatureArraylambda(0,0,0,1,5);
+
+ double** prop;
+ prop=new double*[2];
+ for(int i=0;i<2;i++){
+	 prop[i]=new double[10];
+	 for(int j=0;j<10;j++){
+		 prop[i][j]=0;
+	 }
+ }
+	 for(int i=0;i<10;i++){
+		 for(int propi=0;propi<2;propi++){
+				 for(int j=0;j<2;j++){
+					 prop[propi][i]=Test->gis(0,0,(*eX)(j,0),propi);
+					 //cout << prop[propi][i] << endl;
+			 }
+		 }
+	 }
+
+ cout <<Test->gis(0,0,0,0) << endl;
+ cout <<Test->gis(0,0,1,0) << endl;
+ cout <<Test->gis(0,0,0,1) << endl;
+ cout <<Test->gis(0,0,1,1) << endl;
+
+srand(time(NULL));
+cout << (double)rand()/RAND_MAX << endl;
+cout << (double)rand()/RAND_MAX << endl;
+cout << (double)rand()/RAND_MAX << endl;
+cout << (double)rand()/RAND_MAX << endl;
+cout << (double)rand()/RAND_MAX << endl;
+cout << (double)rand()/RAND_MAX << endl;
+*/
+ srand(time(NULL));
+ DContainer *eX = new DContainer(100,1);
+ for(int i=0;i< 100;i++ ){
+	 for(int j=0;j<1;j++){
+		 *eX << rand() % 2;
+	 }
+ }
+ //cout << (*eX) << endl;
+ GIS *Test = new GIS(1,*eX);
+ Test->setFeatureArraylambda(0,0,1,0,2);
+ Test->setFeatureArraylambda(0,0,1,1,0);
+ Test->setFeatureArraylambda(0,0,0,0,1);
+ Test->setFeatureArraylambda(0,0,0,1,5);
+
+ double** prop;
+ prop=new double*[100];
+ for(int i=0;i<100;i++){
+	 prop[i]=new double[2];
+	 for(int j=0;j<2;j++){
+		 prop[i][j]=0;
+	 }
+ }
+
+ for(int i=0;i<100;i++){
+	for(int propi=0;propi<2;propi++){
+			prop[i][propi]=Test->gis(0,0,(*eX)(i,0),propi);
+		 }
+	 }
+ DContainer *esY=new DContainer(100,1);
+
+ for(int i=0;i<100;i++){
+	 double z=(double)rand()/RAND_MAX;
+	 double s=0;
+	 int ind=0;
+	 for(int j=0;j<2,s<z;j++){
+			s+=prop[i][j];
+			ind=j;
+		 }
+	 (*esY) << ind;
+
+	 }
+ cout << (*esY) << endl;
+
+ GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,2000,0.01);
+
+ cout << (*zTest).getFeatureArraylambda(0,0,0,0) << endl;
+ cout << (*zTest).getFeatureArraylambda(0,0,0,1) << endl;
+ cout <<(*zTest).getFeatureArraylambda(0,0,1,0) << endl;
+ cout <<(*zTest).getFeatureArraylambda(0,0,1,1)<< endl;
+ cout << endl;
+ cout <<zTest->gis(0,0,0,0) << endl;
+ cout <<zTest->gis(0,0,1,0) << endl;
+ cout <<zTest->gis(0,0,0,1) << endl;
+ cout <<zTest->gis(0,0,1,1) << endl;
+ cout << endl;
+ cout <<Test->gis(0,0,0,0) << endl;
+ cout <<Test->gis(0,0,1,0) << endl;
+ cout <<Test->gis(0,0,0,1) << endl;
+ cout <<Test->gis(0,0,1,1) << endl;
 }
+
+
+
