@@ -61,18 +61,14 @@ void itTest:: OneXOneY()
 		 (*esY) << ind;
 		 }
 
-	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,2000,0.01);
+	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,50,0.01);
 
 	 cout << endl;
-	 cout <<zTest->gis(0,0,0,0) << endl;
-	 cout <<zTest->gis(0,0,1,0) << endl;
-	 cout <<zTest->gis(0,0,0,1) << endl;
-	 cout <<zTest->gis(0,0,1,1) << endl;
+	 cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0)  << endl;
+	 cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
+	 cout <<zTest->gis(0,0,0,1)-Test->gis(0,0,0,1)  << endl;
+	 cout <<zTest->gis(0,0,1,1)-Test->gis(0,0,1,1) << endl;
 	 cout << endl;
-	 cout <<Test->gis(0,0,0,0) << endl;
-	 cout <<Test->gis(0,0,1,0) << endl;
-	 cout <<Test->gis(0,0,0,1) << endl;
-	 cout <<Test->gis(0,0,1,1) << endl;
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(0,0,0,0)+zTest->gis(0,0,0,1),0.1);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(0,0,1,0)+zTest->gis(0,0,1,1),0.1);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,0,0) ,zTest->gis(0,0,0,0),0.1);
@@ -134,7 +130,7 @@ void itTest:: TwoXOneY()
 		 (*esY) << ind;
 
 	 }
-	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,2000,0.01);
+	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,50,0.01);
 
 	 cout << endl;
 	 cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0)  << endl;

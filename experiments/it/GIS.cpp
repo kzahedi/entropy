@@ -265,7 +265,7 @@ void GIS:: __gis(int maxit, double konv){
 							l+=fabs((observ[Feati][Featj][lambdai][lambdaj]-expected[Feati][Featj][lambdai][lambdaj]));
 							if(fabs(newl>100)){
 							//__normaliselambdafeat();
-							//__normaliselambda();
+							__normaliselambda();
 							norm =true;
 							}
 					}

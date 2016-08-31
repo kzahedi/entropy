@@ -41,6 +41,7 @@ using namespace entropy::sparse::state;
 
 int main(int argc, char **argv)
 {
+
   if(argc != 2)
   {
     cout << "usage: " << argv[0] << " <directory>" << endl;
@@ -49,41 +50,43 @@ int main(int argc, char **argv)
 
   string d = string(argv[1]);
 
+  cout << "hier 0" << endl;
+
   Csv *csv = new Csv();
 
-  Container *dcmot  = csv->read(d + "/dcmot.csv",  4,
+  DContainer *dcmot  = csv->read(d + "/dcmot.csv",  4,
                                 POS_MATLAB_INDEX,
                                 VEL_MATLAB_INDEX,
                                 ACC_MATLAB_INDEX,
                                 ACT_MATLAB_INDEX);
 
-  Container *muslin = csv->read(d + "/muslin.csv", 5,
+  DContainer *muslin = csv->read(d + "/muslin.csv", 5,
                                 POS_MATLAB_INDEX,
                                 VEL_MATLAB_INDEX,
                                 ACC_MATLAB_INDEX,
                                 ACT_MATLAB_INDEX,
                                 MUSCLE_SENSOR_INPUT_MATLAB_INDEX);
 
-  Container *musfib = csv->read(d + "/musfib.csv", 5,
+  DContainer *musfib = csv->read(d + "/musfib.csv", 5,
                                 POS_MATLAB_INDEX,
                                 VEL_MATLAB_INDEX,
                                 ACC_MATLAB_INDEX,
                                 ACT_MATLAB_INDEX,
                                 MUSCLE_SENSOR_INPUT_MATLAB_INDEX);
 
-  Container *dcmotW  = dcmot->columns(3, 0, 1, 2);
-  Container *dcmotS  = dcmot->columns(2, 0, 1);
-  Container *dcmotA  = dcmot->columns(1, 3);
+  DContainer *dcmotW  = dcmot->columns(3, 0, 1, 2);
+  DContainer *dcmotS  = dcmot->columns(2, 0, 1);
+  DContainer *dcmotA  = dcmot->columns(1, 3);
   delete dcmot;
 
-  Container *muslinW = muslin->columns(3, 0, 1, 2);
-  Container *muslinS = muslin->columns(1, 4);
-  Container *muslinA = muslin->columns(1, 3);
+  DContainer *muslinW = muslin->columns(3, 0, 1, 2);
+  DContainer *muslinS = muslin->columns(1, 4);
+  DContainer *muslinA = muslin->columns(1, 3);
   delete muslin;
 
-  Container *musfibW = musfib->columns(3, 0, 1, 2);
-  Container *musfibS = musfib->columns(1, 4);
-  Container *musfibA = musfib->columns(1, 3);
+  DContainer *musfibW = musfib->columns(3, 0, 1, 2);
+  DContainer *musfibS = musfib->columns(1, 4);
+  DContainer *musfibA = musfib->columns(1, 3);
   delete musfib;
 
   double p_min = MIN3(dcmotW->min(0), muslinW->min(0), musfibW->min(0));
@@ -121,7 +124,7 @@ int main(int argc, char **argv)
   muslinW->normaliseColumn(0, p_min,  p_max);
   muslinW->normaliseColumn(1, v_min,  v_max);
   muslinW->normaliseColumn(2, a_min,  a_max);
-
+  cout << "hier 1" << endl;
   muslinS->normaliseColumn(0, mi_min, mi_max);
 
   // normalising MusFib
@@ -187,43 +190,43 @@ int main(int argc, char **argv)
   musfibA->setBinSizes(abins);
 
   cout << "discretising dcmot W" << endl;
-  Container *DdcmotW  = dcmotW->discretise(); delete dcmotW;
+  ULContainer *DdcmotW  = dcmotW->discretise(); delete dcmotW;
   cout << "discretising dcmot S" << endl;
-  Container *DdcmotS  = dcmotS->discretise(); delete dcmotS;
+  ULContainer *DdcmotS  = dcmotS->discretise(); delete dcmotS;
   cout << "discretising dcmot A" << endl;
-  Container *DdcmotA  = dcmotA->discretise(); delete dcmotA;
-  Container *dcW2 = DdcmotW->drop(1);
-  Container *dcW1 = DdcmotW->drop(-1);
-  Container *dcA1 = DdcmotA->drop(-1);
-  Container *dcS1 = DdcmotS->drop(-1);
+  ULContainer *DdcmotA  = dcmotA->discretise(); delete dcmotA;
+  ULContainer *dcW2 = DdcmotW->drop(1);
+  ULContainer *dcW1 = DdcmotW->drop(-1);
+  ULContainer *dcA1 = DdcmotA->drop(-1);
+  ULContainer *dcS1 = DdcmotS->drop(-1);
 
   cout << "discretising muslin W" << endl;
-  Container *DmuslinW  = muslinW->discretise(); delete muslinW;
+  ULContainer *DmuslinW  = muslinW->discretise(); delete muslinW;
   cout << "discretising muslin S" << endl;
-  Container *DmuslinS  = muslinS->discretise(); delete muslinS;
+  ULContainer *DmuslinS  = muslinS->discretise(); delete muslinS;
   cout << "discretising muslin A" << endl;
-  Container *DmuslinA  = muslinA->discretise(); delete muslinA;
-  Container *mlW2 = DmuslinW->drop(1);
-  Container *mlW1 = DmuslinW->drop(-1);
-  Container *mlA1 = DmuslinA->drop(-1);
-  Container *mlS1 = DmuslinS->drop(-1);
+  ULContainer *DmuslinA  = muslinA->discretise(); delete muslinA;
+  ULContainer *mlW2 = DmuslinW->drop(1);
+  ULContainer *mlW1 = DmuslinW->drop(-1);
+  ULContainer *mlA1 = DmuslinA->drop(-1);
+  ULContainer *mlS1 = DmuslinS->drop(-1);
 
   cout << "discretising musfib W" << endl;
-  Container *DmusfibW  = musfibW->discretise(); delete musfibW;
+  ULContainer *DmusfibW  = musfibW->discretise(); delete musfibW;
   cout << "discretising musfib S" << endl;
-  Container *DmusfibS  = musfibS->discretise(); delete musfibS;
+  ULContainer *DmusfibS  = musfibS->discretise(); delete musfibS;
   cout << "discretising musfib A" << endl;
-  Container *DmusfibA  = musfibA->discretise(); delete musfibA;
-  Container *mfW2 = DmusfibW->drop(1);
-  Container *mfW1 = DmusfibW->drop(-1);
-  Container *mfA1 = DmusfibA->drop(-1);
-  Container *mfS1 = DmusfibS->drop(-1);
+  ULContainer *DmusfibA  = musfibA->discretise(); delete musfibA;
+  ULContainer *mfW2 = DmusfibW->drop(1);
+  ULContainer *mfW1 = DmusfibW->drop(-1);
+  ULContainer *mfA1 = DmusfibA->drop(-1);
+  ULContainer *mfS1 = DmusfibS->drop(-1);
 
   cout << "Calculating DCMot:" << endl;
   double     dcmc_w   = entropy::sparse::MC_W(dcW2, dcW1, dcA1);
   double     dcmc_mi  = entropy::sparse::MC_MI(dcW2, dcW1, dcS1, dcA1);
-  Container* dcmc_mid = entropy::sparse::state::MC_MI(dcW2, dcW1, dcS1, dcA1);
-  Container* dcmc_wd  = entropy::sparse::state::MC_W(dcW2, dcW1, dcA1);
+  DContainer* dcmc_mid = entropy::sparse::state::MC_MI(dcW2, dcW1, dcS1, dcA1);
+  DContainer* dcmc_wd  = entropy::sparse::state::MC_W(dcW2, dcW1, dcA1);
   double     s        = dcmc_mid->columnSum(0) / ((double)dcmc_mid->rows());
   double     ss       = dcmc_wd->columnSum(0)  / ((double)dcmc_mid->rows());
   cout << "  DCMot MC_W:  " << dcmc_w  << endl;
@@ -238,8 +241,8 @@ int main(int argc, char **argv)
   cout << "Calculating MusLin:" << endl;
   double     mlmc_w   = entropy::sparse::MC_W(mlW2, mlW1, mlA1);
   double     mlmc_mi  = entropy::sparse::MC_MI(mlW2, mlW1, mlS1, mlA1);
-  Container* mlmc_mid = entropy::sparse::state::MC_MI(mlW2, mlW1, mlS1, mlA1);
-  Container* mlmc_wd  = entropy::sparse::state::MC_W(mlW2, mlW1, mlA1);
+  DContainer* mlmc_mid = entropy::sparse::state::MC_MI(mlW2, mlW1, mlS1, mlA1);
+  DContainer* mlmc_wd  = entropy::sparse::state::MC_W(mlW2, mlW1, mlA1);
   double     t        = mlmc_mid->columnSum(0) / ((double)mlmc_mid->rows());
   double     tt       = mlmc_wd->columnSum(0) / ((double)mlmc_wd->rows());
   cout << "MusLin MC_W:  " << mlmc_w  << endl;
@@ -254,8 +257,8 @@ int main(int argc, char **argv)
   cout << "Calculating MusFib:" << endl;
   double     mfmc_w   = entropy::sparse::MC_W(mfW2, mfW1, mfA1);
   double     mfmc_mi  = entropy::sparse::MC_MI(mfW2, mfW1, mfS1, mfA1);
-  Container* mfmc_mid = entropy::sparse::state::MC_MI(mfW2, mfW1, mfS1, mfA1);
-  Container* mfmc_wd  = entropy::sparse::state::MC_W(mfW2, mfW1, mfA1);
+  DContainer* mfmc_mid = entropy::sparse::state::MC_MI(mfW2, mfW1, mfS1, mfA1);
+  DContainer* mfmc_wd  = entropy::sparse::state::MC_W(mfW2, mfW1, mfA1);
   double     u        = mfmc_mid->columnSum(0) / ((double)mfmc_mid->rows());
   double     uu       = mfmc_wd->columnSum(0)  / ((double)mfmc_mid->rows());
   cout << "MusFib MC_W:  " << mfmc_w  << endl;

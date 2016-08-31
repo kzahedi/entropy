@@ -312,7 +312,7 @@ cout << (double)rand()/RAND_MAX << endl;
 
 	 }
 
- GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,3000,0.01);
+ GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,4000,0.01);
 
  cout << endl;
  cout <<zTest->gis(0,0,0,0) << endl;
