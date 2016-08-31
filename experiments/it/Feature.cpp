@@ -94,7 +94,8 @@ int Feature::delta(double ax, double ay, double x, double y){
 	if(ax== x && ay== y){
 		return 1;
 	}
-	else return 0;
+  else return 0;
+  // else return -1;
 }
 
 

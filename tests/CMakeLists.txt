@@ -10,6 +10,9 @@ target_link_libraries(matrix-tests    Entropy++ cppunit dl)
 add_executable(pi-tests               main.cpp  pi_test.cpp)
 target_link_libraries(pi-tests        Entropy++ cppunit dl)
 
+add_executable(it-tests               main.cpp  it_test.cpp)
+target_link_libraries(it-tests        Entropy++ cppunit eit)
+
 add_executable(mi-tests               main.cpp  mi_test.cpp)
 target_link_libraries(mi-tests        Entropy++ cppunit dl)
 
