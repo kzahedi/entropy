@@ -285,46 +285,5 @@ void GIS:: __gis(int maxit, double konv){
 		//cout << l << endl;
 	}
 	cout << norm << endl;
-                  }
-            else
-            {
-              newl=0;
-            }
-              (*_FM).setFeatureArraylambda(Feati,Featj,lambdai,lambdaj,newl);
-              l+=fabs((observ[Feati][Featj][lambdai][lambdaj]-expected[Feati][Featj][lambdai][lambdaj]));
-              // if(fabs(newl)>100){
-              //__normaliselambdafeat();
-              //__normaliselambda();
-              // norm =true;
-              // }
-          }
-        }
-      }
-    }
-    i++;
-    //cout << l << endl;
-  }
-  cout << norm << endl;
-                  }
-            else
-            {
-              newl=0;
-            }
-              (*_FM).setFeatureArraylambda(Feati,Featj,lambdai,lambdaj,newl);
-              l+=fabs((observ[Feati][Featj][lambdai][lambdaj]-expected[Feati][Featj][lambdai][lambdaj]));
-              // if(fabs(newl)>100){
-              //__normaliselambdafeat();
-              //__normaliselambda();
-              // norm =true;
-              // }
-          }
-        }
-      }
-    }
-    i++;
-    //cout << l << endl;
-  }
-  cout << norm << endl;
-
 }
 
