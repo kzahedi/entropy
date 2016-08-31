@@ -20,8 +20,8 @@ private:
 	void __gis(int maxit, double konv);
 	double __getFeatconst();
 	void __getexp(double**** &expect, double*** &exponent,double** &normaliser);
-	void __normalizelambda();
-	void __normalizelambdafeat();
+	void __normaliselambda();
+	void __normaliselambdafeat();
 
 	int _sizeX;
 	int _sizeY;

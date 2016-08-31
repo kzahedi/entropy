@@ -138,7 +138,7 @@ void GIS:: __getexp(double**** &expect, double*** &exponent,double** &normaliser
 		}
 	}
 }
-void GIS:: __normalizelambdafeat(){
+void GIS:: __normaliselambdafeat(){
 	double** sumlambda;
 	sumlambda=new double*[_sizeColValX];
 	for(int i=0;i<_sizeColValX;i++){
@@ -169,7 +169,7 @@ void GIS:: __normalizelambdafeat(){
 	}
 
 }
-void GIS:: __normalizelambda(){
+void GIS:: __normaliselambda(){
 	double sumlambda;
 	double newl=0;
 	for(int Feati=0;Feati< _sizeColValX;Feati++){
@@ -236,6 +236,7 @@ void GIS:: __gis(int maxit, double konv){
 		}
 	int i=0;
 	double l=1;
+	bool norm=false;
 	while(i<maxit && fabs(l)>=konv ){
 		l=0;
 		__getexp(expected,exponent,normaliser);
@@ -246,14 +247,15 @@ void GIS:: __gis(int maxit, double konv){
 						double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,lambdai,lambdaj);
 						double newl=0;
 						//cout << "exp" << expected[Feati][Featj][lambdai][lambdaj] << endl;
-						if(expected[Feati][Featj][lambdai][lambdaj]==0){ expected[Feati][Featj][lambdai][lambdaj]=1;}
+						if(expected[Feati][Featj][lambdai][lambdaj]==0){ expected[Feati][Featj][lambdai][lambdaj]=0.01;}
 						//cout << "exp " <<  expected[Feati][Featj][lambdai][lambdaj] << endl;
 						//cout << observ[Feati][Featj][lambdai][lambdaj] << endl;
 						if(expected[Feati][Featj][lambdai][lambdaj]!=0 && observ[Feati][Featj][lambdai][lambdaj]!=0 ){
 		 								double p=(observ[Feati][Featj][lambdai][lambdaj]/expected[Feati][Featj][lambdai][lambdaj]);
 										//cout << "obs " <<  observ[Feati][Featj][lambdai][lambdaj] << endl;
 										//cout << expected[Feati][Featj][lambdai][lambdaj] << endl;
-										//cout << p << endl;
+		 								//cout << p << endl;
+										//cout << log(p) << endl;
 		 								newl= oldl + (1/featconst)*log(p);
 		 								//cout << "oldl "<< oldl << " "<< newl << endl;
 
@@ -262,8 +264,9 @@ void GIS:: __gis(int maxit, double konv){
 							(*_FM).setFeatureArraylambda(Feati,Featj,lambdai,lambdaj,newl);
 							l+=fabs((observ[Feati][Featj][lambdai][lambdaj]-expected[Feati][Featj][lambdai][lambdaj]));
 							if(fabs(newl>100)){
-							__normalizelambdafeat();
-							//cout << "jetzt" << endl;
+							//__normaliselambdafeat();
+							//__normaliselambda();
+							norm =true;
 							}
 					}
 				}
@@ -272,6 +275,7 @@ void GIS:: __gis(int maxit, double konv){
 		i++;
 		//cout << l << endl;
 	}
+	cout << norm << endl;
 
 }
 
