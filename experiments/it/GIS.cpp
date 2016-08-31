@@ -79,38 +79,29 @@ double**** GIS:: __getobs(){
 
 
 }
-double** GIS::__getFeatconst(){
-	double** Featconst;
-	Featconst = new double*[_sizeColValX];
-	for(int i=0; i< _sizeColValX;i++){
-		Featconst[i]=new double[_sizeColValY];
-		for(int j=0; j< _sizeColValY; j++){
-			Featconst[i][j]=0;
-		}
-	}
+double GIS::__getFeatconst(){
+	double Featconst=1;
+
 	int curr=0;
-	for(int delti=0; delti< _sizeColValX; delti++){
-		for(int deltj=0; deltj< _sizeColValY; deltj++){
+	for(int i=0; i< _sizeRowValX;i++){
+		for(int j=0; j< _sizeY;j++){
 
-			for(int i=0; i< _sizeRowValX;i++){
-				for(int j=0; j< _sizeY;j++){
-
+			for(int delti=0; delti< _sizeColValX; delti++){
+				for(int deltj=0; deltj< _sizeColValY; deltj++){
 					for(int deltxi=0; deltxi < _sizeX; deltxi++){
 						for(int deltyj=0; deltyj < _sizeY; deltyj++){
 							for(int k=0; k< (*_FM).getMatrixIndexX(i,j).size();k++){
-								if((*_FM).getMatrixIndexX(i,j)[k]==delti && (*_FM).getMatrixIndexY(i,j)[k]==deltj
-									&&(*_FM).getMatrixIndexdX(i,j)[k]==deltxi && (*_FM).getMatrixIndexdY(i,j)[k]==deltyj){
 									curr++;
-								}
 							}
 						}
 					}
-					if(curr> Featconst[delti][deltj]) Featconst[delti][deltj]=curr;
+					if(curr> Featconst) Featconst=curr;
 					curr=0;
 				}
 			}
 		}
 	}
+	cout << Featconst << endl;
 	return Featconst;
 
 }
@@ -132,7 +123,10 @@ void GIS:: __getexp(double**** &expect, double*** &exponent,double** &normaliser
 				normaliser[Feati][Featj]=0;
 				for(int yj=0; yj< _sizeY; yj++){
 					exponent[Feati][Featj][yj]=_FM->getFeatureArrayvalueval(Feati,Featj,(*_valX)(xi,Feati), (*_Y)(yj,0));
-				normaliser[Feati][Featj]+=exp(exponent[Feati][Featj][yj]);
+					normaliser[Feati][Featj]+=exp(exponent[Feati][Featj][yj]);
+				//cout << _FM->getFeatureArrayvalueval(Feati,Featj,(*_valX)(xi,Feati), (*_Y)(yj,0)) << endl;
+				//cout << exp(_FM->getFeatureArrayvalueval(Feati,Featj,(*_valX)(xi,Feati), (*_Y)(yj,0))) << endl;
+				//cout << exp(exponent[Feati][Featj][yj]) << endl;
 				}
 				for(int yj=0; yj< _sizeY; yj++){
 					for(int k=0; k< (*_FM).getMatrixIndexX(xi,yj).size();k++){
@@ -145,13 +139,37 @@ void GIS:: __getexp(double**** &expect, double*** &exponent,double** &normaliser
 		}
 	}
 }
+void GIS:: __normalizelambda(){
+	double sumlambda;
+	double newl=0;
+	for(int Feati=0;Feati< _sizeColValX;Feati++){
+		for(int Featj=0;Featj< _sizeColValY;Featj++){
+			for(int deltai=0;deltai< _sizeX; deltai++){
+				for(int deltaj=0;deltaj<_sizeY;deltaj++){
+					sumlambda+=fabs(_FM->getFeatureArraylambda(Feati,Featj,deltai,deltaj));
+				}
+			}
+		}
+	}
+	for(int Feati=0;Feati< _sizeColValX;Feati++){
+		for(int Featj=0;Featj< _sizeColValY;Featj++){
+			for(int deltai=0;deltai< _sizeX; deltai++){
+				for(int deltaj=0;deltaj<_sizeY;deltaj++){
+					newl=_FM->getFeatureArraylambda(Feati,Featj,deltai,deltaj)/sumlambda;
+					_FM->setFeatureArraylambda(Feati,Featj,deltai,deltaj,newl);
+				}
+			}
+		}
+	}
+
+}
 
 void GIS:: __gis(int maxit, double konv){
 	//observed
 	double**** observ = __getobs();
 
 	//constant c for delta
-	double** featconst = __getFeatconst();
+	double featconst = __getFeatconst();
 
 	//array for exp
 	double**** expected;
@@ -197,26 +215,33 @@ void GIS:: __gis(int maxit, double konv){
 				for(int lambdai=0; lambdai< _sizeX; lambdai++){
 					for(int lambdaj=0; lambdaj< _sizeY; lambdaj++){
 						double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,lambdai,lambdaj);
-						double newl;
-							if(expected[Feati][Featj][lambdai][lambdaj]!=0 && observ[Feati][Featj][lambdai][lambdaj]!=0 ){
-								double p=(observ[Feati][Featj][lambdai][lambdaj]/expected[Feati][Featj][lambdai][lambdaj]);
-								//cout << "obs " <<  observ[Feati][Featj][lambdai][lambdaj] << endl;
-								//cout << expected[Feati][Featj][lambdai][lambdaj] << endl;
-								//cout << p << endl;
-								newl= oldl + (1/featconst[Feati][Featj])*log(p);
-								//cout << "oldl "<< oldl << " "<< newl << endl;
-								l+=(observ[Feati][Featj][lambdai][lambdaj]-expected[Feati][Featj][lambdai][lambdaj]);
-							}
-							else{
-								newl=0;
-							}
+						double newl=0;
+						//cout << "exp" << expected[Feati][Featj][lambdai][lambdaj] << endl;
+						if(expected[Feati][Featj][lambdai][lambdaj]==0){ expected[Feati][Featj][lambdai][lambdaj]=1;}
+						//cout << "exp " <<  expected[Feati][Featj][lambdai][lambdaj] << endl;
+						//cout << observ[Feati][Featj][lambdai][lambdaj] << endl;
+						if(expected[Feati][Featj][lambdai][lambdaj]!=0 && observ[Feati][Featj][lambdai][lambdaj]!=0 ){
+		 								double p=(observ[Feati][Featj][lambdai][lambdaj]/expected[Feati][Featj][lambdai][lambdaj]);
+										//cout << "obs " <<  observ[Feati][Featj][lambdai][lambdaj] << endl;
+										//cout << expected[Feati][Featj][lambdai][lambdaj] << endl;
+										//cout << p << endl;
+		 								newl= oldl + (1/featconst)*log(p);
+		 								//cout << "oldl "<< oldl << " "<< newl << endl;
+
+		 							}
+						else{newl=0;}
 							(*_FM).setFeatureArraylambda(Feati,Featj,lambdai,lambdaj,newl);
+							l+=fabs((observ[Feati][Featj][lambdai][lambdaj]-expected[Feati][Featj][lambdai][lambdaj]));
+							if(newl>100 || newl < -100){
+							__normalizelambda();
+							cout << "jetzt" << endl;
+							}
 					}
 				}
 			}
 		}
 		i++;
-		//cout << l << endl;
+		cout << l << endl;
 	}
 
 }

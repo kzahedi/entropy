@@ -18,8 +18,9 @@ public:
 private:
 	double**** __getobs();
 	void __gis(int maxit, double konv);
-	double** __getFeatconst();
+	double __getFeatconst();
 	void __getexp(double**** &expect, double*** &exponent,double** &normaliser);
+	void __normalizelambda();
 
 	int _sizeX;
 	int _sizeY;
