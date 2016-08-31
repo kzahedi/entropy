@@ -101,7 +101,6 @@ double GIS::__getFeatconst(){
 			}
 		}
 	}
-	cout << Featconst << endl;
 	return Featconst;
 
 }
@@ -139,6 +138,37 @@ void GIS:: __getexp(double**** &expect, double*** &exponent,double** &normaliser
 		}
 	}
 }
+void GIS:: __normalizelambdafeat(){
+	double** sumlambda;
+	sumlambda=new double*[_sizeColValX];
+	for(int i=0;i<_sizeColValX;i++){
+		sumlambda[i]=new double[_sizeColValX];
+		for(int j=0;j<_sizeColValY;j++){
+			sumlambda[i][j]=0;
+		}
+	}
+	double newl=0;
+	for(int Feati=0;Feati< _sizeColValX;Feati++){
+		for(int Featj=0;Featj< _sizeColValY;Featj++){
+			for(int deltai=0;deltai< _sizeX; deltai++){
+				for(int deltaj=0;deltaj<_sizeY;deltaj++){
+					sumlambda[Feati][Featj]+=fabs(_FM->getFeatureArraylambda(Feati,Featj,deltai,deltaj));
+				}
+			}
+		}
+	}
+	for(int Feati=0;Feati< _sizeColValX;Feati++){
+		for(int Featj=0;Featj< _sizeColValY;Featj++){
+			for(int deltai=0;deltai< _sizeX; deltai++){
+				for(int deltaj=0;deltaj<_sizeY;deltaj++){
+					newl=_FM->getFeatureArraylambda(Feati,Featj,deltai,deltaj)/sumlambda[Feati][Featj];
+					_FM->setFeatureArraylambda(Feati,Featj,deltai,deltaj,newl);
+				}
+			}
+		}
+	}
+
+}
 void GIS:: __normalizelambda(){
 	double sumlambda;
 	double newl=0;
@@ -163,7 +193,6 @@ void GIS:: __normalizelambda(){
 	}
 
 }
-
 void GIS:: __gis(int maxit, double konv){
 	//observed
 	double**** observ = __getobs();
@@ -207,7 +236,7 @@ void GIS:: __gis(int maxit, double konv){
 		}
 	int i=0;
 	double l=1;
-	while(i<maxit && (l>=konv || l<=-konv)){
+	while(i<maxit && fabs(l)>=konv ){
 		l=0;
 		__getexp(expected,exponent,normaliser);
 		for(int Feati=0; Feati<_sizeColValX;Feati++){
@@ -232,16 +261,16 @@ void GIS:: __gis(int maxit, double konv){
 						else{newl=0;}
 							(*_FM).setFeatureArraylambda(Feati,Featj,lambdai,lambdaj,newl);
 							l+=fabs((observ[Feati][Featj][lambdai][lambdaj]-expected[Feati][Featj][lambdai][lambdaj]));
-							if(newl>100 || newl < -100){
-							__normalizelambda();
-							cout << "jetzt" << endl;
+							if(fabs(newl>100)){
+							__normalizelambdafeat();
+							//cout << "jetzt" << endl;
 							}
 					}
 				}
 			}
 		}
 		i++;
-		cout << l << endl;
+		//cout << l << endl;
 	}
 
 }

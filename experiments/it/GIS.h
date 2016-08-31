@@ -21,6 +21,7 @@ private:
 	double __getFeatconst();
 	void __getexp(double**** &expect, double*** &exponent,double** &normaliser);
 	void __normalizelambda();
+	void __normalizelambdafeat();
 
 	int _sizeX;
 	int _sizeY;
