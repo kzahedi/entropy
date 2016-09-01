@@ -26,7 +26,7 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
       _sizeRowValX= (*_valX).rows();
       _sizeRowValY= (*_valY).rows();
       _FM=new FeatureMatrix(*_valX,*_valY,*_X,*_Y,lambdavalue);
-      conv= __gis(maxit, konv, true);
+      conv= __gis(maxit, konv,true);
 }
 // ColValY - Anzahl der Y-Knoten
 GIS::GIS(int ColValY, DContainer &eX){
@@ -47,9 +47,32 @@ GIS::GIS(int ColValY, DContainer &eX){
 double GIS::gis(int Feati,int Featj,double ValX,double ValY){
   double norm=0;
   double exponent=0;
-    exponent= exp((*_FM).getFeatureArrayvalueval(Feati,Featj,ValX,ValY) );
+  	  exponent= exp((*_FM).getFeatureArrayvalueval(Feati,Featj,ValX,ValY) );
   for(int yi=0;yi<_sizeY;yi++){
-    norm+= exp( (*_FM).getFeatureArrayvalueval(Feati,Featj,ValX,(*_Y)(yi,0)));
+	    norm+= exp( (*_FM).getFeatureArrayvalueval(Feati,Featj,ValX,(*_Y)(yi,0)));
+  }
+  return exponent/norm;
+}
+double GIS::gis(int rowX,vector<vector<double> > Y, int rowY){
+  double feat=0;
+  double featnorm=0;
+  double norm=0;
+  double exponent=0;
+  for(int Featx=0;Featx< _sizeColValX;Featx++){
+	  for(int Featy=0;Featy< _sizeColValY;Featy++){
+		  feat+=(*_FM).getFeatureArrayvalueval(Featx,Featy,(*_valX)(rowX,Featx),Y[rowY][Featy]);
+  	  }
+    }
+    exponent= exp(feat);
+    for(int yi=0;yi<Y.size();yi++){
+	  for(int Featx=0;Featx< _sizeColValX;Featx++){
+		  for(int Featy=0;Featy< _sizeColValY;Featy++){
+			  	 featnorm+= (*_FM).getFeatureArrayvalueval(Featx,Featy,(*_valX)(rowX,Featx),Y[yi][Featy]);
+			  }
+	  }
+
+	  norm+=exp(featnorm);
+	  featnorm=0;
   }
   return exponent/norm;
 }
@@ -90,7 +113,7 @@ double**** GIS:: __getobs(){
         for(int Featj=0;Featj< _sizeColValY; Featj++){
           for(int delti=0; delti< _sizeX; delti++){
             for(int deltj=0;deltj<_sizeY; deltj++){
-            	if(_FM->getFeatureArraydeltaval(Feati,Featj,delti,deltj,(*_valX)(i,Feati),(*_valY)(i,Featj))!=-1){
+            	if(_FM->getFeatureArraydeltaval(Feati,Featj,delti,deltj,(*_valX)(i,Feati),(*_valY)(i,Featj))==1){
             		observed[Feati][Featj][delti][deltj]++;
             	}
             }
@@ -233,7 +256,7 @@ void GIS:: __gis(int maxit, double konv){
                     newl= oldl + (1/featconst)*log(p);
                   //  if (lambdai == 0 && lambdaj == 0)
                     //  cout << " n: " << newl << endl;
-                    //cout << "oldl "<< oldl << " "<< newl << endl;
+                    cout << "oldl "<< oldl << " "<< newl << endl;
 
 		 							}
 						else{
@@ -307,9 +330,14 @@ vector<double> GIS:: __gis(int maxit, double konv, bool test){
 	                    double p=(observ[Feati][Featj][lambdai][lambdaj]/expected[Feati][Featj][lambdai][lambdaj]);
 	                    newl= oldl + (1/featconst)*log(p);
 	            }
+	            if(Feati==0 && Featj==0){
+	            //	 cout << "obs " <<  observ[Feati][Featj][lambdai][lambdaj] << endl;
+	            //	 cout << expected[Feati][Featj][lambdai][lambdaj] << endl;
+	            }
 				else{
 						newl=0;
 				}
+               // cout << "oldl "<< oldl << " "<< newl << endl;
 				(*_FM).setFeatureArraylambda(Feati,Featj,lambdai,lambdaj,newl);
 				l+=fabs((observ[Feati][Featj][lambdai][lambdaj]-expected[Feati][Featj][lambdai][lambdaj]));
 			   }

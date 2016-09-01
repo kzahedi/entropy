@@ -273,86 +273,84 @@ cout << (double)rand()/RAND_MAX << endl;
  int n=100;
  DContainer *eX = new DContainer(n,2);
  for(int i=0;i< n;i++ ){
-	 for(int j=0;j<2;j++){
-		 *eX << rand() % 2;
-	 }
- }
- cout <<  *eX << endl;
-
- GIS *Test = new GIS(1,*eX);
-
- Test->setFeatureArraylambda(0,0,1,0,7);
- Test->setFeatureArraylambda(0,0,1,1,5);
- Test->setFeatureArraylambda(0,0,0,0,2);
- Test->setFeatureArraylambda(0,0,0,1,2);
- Test->setFeatureArraylambda(1,0,1,0,5);
- Test->setFeatureArraylambda(1,0,1,1,5);
- Test->setFeatureArraylambda(1,0,0,0,0);
- Test->setFeatureArraylambda(1,0,0,1,0);
-
- double** prop;
- prop=new double*[n];
- for(int i=0;i<n;i++){
-	 prop[i]=new double[2];
-	 for(int j=0;j<2;j++){
-		 prop[i][j]=0;
-	 }
- }
- for(int i=0;i<n;i++){
-	for(int propi=0;propi<2;propi++){
-			prop[i][propi]=Test->gis(0,0,(*eX)(i,0),propi)*Test->gis(1,0,(*eX)(i,1),propi);
+	for(int j=0;j<2;j++){
+		*eX << rand() % 2;
 	}
  }
- DContainer *esY=new DContainer(n,1);
+ cout << (*eX) << endl;
 
- for(int i=0;i<n;i++){
-	 double z=(double)rand()/RAND_MAX;
-	 double s=0;
-	 int ind=0;
-	 for(int j=0;j<2 && s<z;j++){
-			s+=prop[i][j];
-			ind=j;
+ GIS *Test = new GIS(2,*eX);
+
+	 Test->setFeatureArraylambda(0,0,1,0,4);
+	 Test->setFeatureArraylambda(0,0,1,1,0);
+	 Test->setFeatureArraylambda(0,0,0,0,1);
+	 Test->setFeatureArraylambda(0,0,0,1,5);
+
+	 Test->setFeatureArraylambda(1,0,1,0,2);
+	 Test->setFeatureArraylambda(1,0,1,1,0);
+	 Test->setFeatureArraylambda(1,0,0,0,0);
+	 Test->setFeatureArraylambda(1,0,0,1,1);
+
+	 Test->setFeatureArraylambda(0,1,1,0,0);
+	 Test->setFeatureArraylambda(0,1,1,1,0);
+	 Test->setFeatureArraylambda(0,1,0,0,3);
+	 Test->setFeatureArraylambda(0,1,0,1,5);
+
+	 Test->setFeatureArraylambda(1,1,1,0,1);
+	 Test->setFeatureArraylambda(1,1,1,1,0);
+	 Test->setFeatureArraylambda(1,1,0,0,2);
+	 Test->setFeatureArraylambda(1,1,0,1,1);
+
+	 double** prop;
+	 prop=new double*[n];
+	 for(int i=0;i<n;i++){
+		 prop[i]=new double[4];
+		 for(int j=0;j<4;j++){
+			 prop[i][j]=0;
+		 }
+	 }
+	 //V(4,vector<int>(0))
+	//	vector<vector<int> > V(4,vector<int>(0));
+	 vector<vector<double> > val(4,vector<double>(2));
+	 val[0][0]=0;
+	 val[0][1]=0;
+	 val[1][0]=1;
+	 val[1][1]=0;
+	 val[2][0]=0;
+	 val[2][1]=1;
+	 val[3][1]=1;
+	 val[3][1]=1;
+	 for(int i=0;i<n;i++){
+		for(int propi=0;propi<4;propi++){
+				prop[i][propi]=2;
+		}
 	 }
 
-	 (*esY) << ind;
+	 for(int i=0;i<n;i++){
+		prop[i][0]=Test->gis(i,val,0);
+		prop[i][1]=Test->gis(i,val,1);
+		prop[i][2]=Test->gis(i,val,2);
+		prop[i][3]=Test->gis(i,val,3);
+		cout << prop[i][0] + prop [i][1] + prop [i][2] + prop[i][3] << endl;
+	 }
 
- }
-
- cout << (*esY) << endl;
- GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,80,0.0001,true);
- cout << endl;
- cout << zTest->getFeatureArraylambda(0,0,1,0) << endl;
- cout << zTest->getFeatureArraylambda(0,0,1,1) << endl;
- cout << zTest->getFeatureArraylambda(0,0,0,0) << endl;
- cout << zTest->getFeatureArraylambda(0,0,0,1) << endl;
- cout << zTest->getFeatureArraylambda(1,0,1,0) << endl;
- cout << zTest->getFeatureArraylambda(1,0,1,1) << endl;
- cout << zTest->getFeatureArraylambda(1,0,0,0) << endl;
- cout << zTest->getFeatureArraylambda(1,0,0,1) << endl;
-
- cout << endl;
- cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0)  << endl;
- cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
- cout <<zTest->gis(0,0,0,1)-Test->gis(0,0,0,1) << endl;
- cout <<zTest->gis(0,0,1,1)-Test->gis(0,0,1,1) << endl;
- cout <<zTest->gis(1,0,0,0)-Test->gis(1,0,0,0) << endl;
- cout <<zTest->gis(1,0,1,0)-Test->gis(1,0,1,0) << endl;
- cout <<zTest->gis(1,0,0,1)-Test->gis(1,0,0,1) << endl;
- cout <<zTest->gis(1,0,1,1)-Test->gis(1,0,1,1) << endl;
- cout << endl;
-
- cout << Test->gis(0,0,0,0)  << endl;
- cout << Test->gis(0,0,1,0) << endl;
- cout << Test->gis(0,0,0,1) << endl;
- cout << Test->gis(0,0,1,1) << endl;
- cout << Test->gis(1,0,0,0) << endl;
- cout << Test->gis(1,0,1,0) << endl;
- cout << Test->gis(1,0,0,1) << endl;
- cout << Test->gis(1,0,1,1) << endl;
-
- for(int i=0; i< zTest->getsizeconv(); i++ ){
-	 cout << zTest->getconv(i) << endl;
- }
+	 DContainer *esY=new DContainer(n,2);
+	 for(int i=0;i<n;i++){
+		 double z=(double)rand()/RAND_MAX;
+		 double s=0;
+		 int ind=0;
+		 for(int j=0;j<4 && s<z;j++){
+				s+=prop[i][j];
+				ind=j;
+		// cout << i << " s " << s << " z " << z << " ind " << ind << endl;
+		 }
+		 if(ind==0) (*esY) << 0 << 0;
+		 if(ind==1) (*esY) << 1 << 0;
+		 if(ind==2) (*esY) << 0 << 1;
+		 if(ind==3) (*esY) << 1 << 1;
+		// cout << "s" << s << " z " << z << " ind " << ind << endl;
+	 }
+	 //cout << (*esY) << endl;
 }
 
 

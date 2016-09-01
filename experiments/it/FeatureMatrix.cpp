@@ -131,18 +131,23 @@ void FeatureMatrix:: getMatrix(double valuelambda){
 						if(_FA[varFeati][varFeatj].value((*_valX)(i,varFeati),(*_Y)(j,0))!=0){
 							for(int deltai=0; deltai<_sizeX; deltai++ ){
 								for(int deltaj=0; deltaj<_sizeY; deltaj++){
-									if(_FA[varFeati][varFeatj].delta((*_X).get(deltai,0),(*_Y).get(deltaj,0),(*_valX).get(i, varFeati),(*_valY).get(j,0))!=0 ){
+									if(_FA[varFeati][varFeatj].delta((*_X).get(deltai,0),(*_Y).get(deltaj,0),(*_valX).get(i, varFeati),(*_valY).get(j,0))!=0){
+										//cout << "hier" << i << j <<"  " <<  varFeati << " " << varFeatj << " " << deltai << " " << deltaj << endl;
 										_mat[i][j][0].push_back(varFeati);
 										_mat[i][j][1].push_back(varFeatj);
 										_mat[i][j][2].push_back(deltai);
 										_mat[i][j][3].push_back(deltaj);
 									}
+									else{cout << "hier" << endl;
 								}
 							}
 						}
 					}
 				}
-			}
-		}
+			//	cout << "k " << _mat[i][j][0].size() << endl;
 
+			}
+		//	cout << "neu" << endl;
+		}
+		}
 }
