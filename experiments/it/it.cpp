@@ -277,17 +277,18 @@ cout << (double)rand()/RAND_MAX << endl;
 		 *eX << rand() % 2;
 	 }
  }
+ cout <<  *eX << endl;
 
  GIS *Test = new GIS(1,*eX);
 
- Test->setFeatureArraylambda(0,0,1,0,0);
- Test->setFeatureArraylambda(0,0,1,1,0);
- Test->setFeatureArraylambda(0,0,0,0,1);
- Test->setFeatureArraylambda(0,0,0,1,5);
- Test->setFeatureArraylambda(1,0,1,0,2);
- Test->setFeatureArraylambda(1,0,1,1,0);
+ Test->setFeatureArraylambda(0,0,1,0,7);
+ Test->setFeatureArraylambda(0,0,1,1,5);
+ Test->setFeatureArraylambda(0,0,0,0,2);
+ Test->setFeatureArraylambda(0,0,0,1,2);
+ Test->setFeatureArraylambda(1,0,1,0,5);
+ Test->setFeatureArraylambda(1,0,1,1,5);
  Test->setFeatureArraylambda(1,0,0,0,0);
- Test->setFeatureArraylambda(1,0,0,1,1);
+ Test->setFeatureArraylambda(1,0,0,1,0);
 
  double** prop;
  prop=new double*[n];
@@ -312,10 +313,13 @@ cout << (double)rand()/RAND_MAX << endl;
 			s+=prop[i][j];
 			ind=j;
 	 }
+
 	 (*esY) << ind;
 
  }
- GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,300000,0.01);
+
+ cout << (*esY) << endl;
+ GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,80,0.0001,true);
  cout << endl;
  cout << zTest->getFeatureArraylambda(0,0,1,0) << endl;
  cout << zTest->getFeatureArraylambda(0,0,1,1) << endl;
@@ -337,6 +341,18 @@ cout << (double)rand()/RAND_MAX << endl;
  cout <<zTest->gis(1,0,1,1)-Test->gis(1,0,1,1) << endl;
  cout << endl;
 
+ cout << Test->gis(0,0,0,0)  << endl;
+ cout << Test->gis(0,0,1,0) << endl;
+ cout << Test->gis(0,0,0,1) << endl;
+ cout << Test->gis(0,0,1,1) << endl;
+ cout << Test->gis(1,0,0,0) << endl;
+ cout << Test->gis(1,0,1,0) << endl;
+ cout << Test->gis(1,0,0,1) << endl;
+ cout << Test->gis(1,0,1,1) << endl;
+
+ for(int i=0; i< zTest->getsizeconv(); i++ ){
+	 cout << zTest->getconv(i) << endl;
+ }
 }
 
 
