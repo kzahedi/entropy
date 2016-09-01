@@ -268,7 +268,7 @@ cout << (double)rand()/RAND_MAX << endl;
 cout << (double)rand()/RAND_MAX << endl;
 cout << (double)rand()/RAND_MAX << endl;
 cout << (double)rand()/RAND_MAX << endl;
-*/
+
  srand(time(NULL));
  int n=100;
  DContainer *eX = new DContainer(n,2);
@@ -352,6 +352,21 @@ cout << (double)rand()/RAND_MAX << endl;
 	 }
 	 //cout << (*esY) << endl;
 }
-
+ */
+ DContainer *valtX= new DContainer(10,3);
+ *valtX << 1 << 1 << 1 << 1 << 1 << 1;
+ DContainer *valtY= new DContainer(10,2);
+ FeatureMatrix *test=new FeatureMatrix(*valtX,*valtY,*X,*Y,1.0);
+ vector<int> eins = test->getMatrixIndexX(3,0);
+ vector<int> zwei = test->getMatrixIndexY(3,0);
+ vector<int> drei = test->getMatrixIndexdX(3,0);
+ vector<int> vier = test->getMatrixIndexdY(3,0);
+for(int k=0;k<test->getMatrixIndexX(0,0).size();k++){
+	cout << eins[k];
+	cout << zwei[k];
+	cout << drei[k];
+	cout << vier[k] << endl;
+}
+}
 
 

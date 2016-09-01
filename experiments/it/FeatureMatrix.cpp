@@ -138,7 +138,6 @@ void FeatureMatrix:: getMatrix(double valuelambda){
 										_mat[i][j][2].push_back(deltai);
 										_mat[i][j][3].push_back(deltaj);
 									}
-									else{cout << "hier" << endl;
 								}
 							}
 						}
@@ -148,6 +147,5 @@ void FeatureMatrix:: getMatrix(double valuelambda){
 
 			}
 		//	cout << "neu" << endl;
-		}
 		}
 }

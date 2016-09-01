@@ -247,15 +247,15 @@ void GIS:: __gis(int maxit, double konv){
                     //cout << expected[Feati][Featj][lambdai][lambdaj] << endl;
                     //cout << p << endl;
                     //cout << log(p) << endl;
-                   // if (lambdai == 0 && lambdaj == 0)
-                   // {
-                    //  cout << observ[Feati][Featj][lambdai][lambdaj] << " " <<
-                     //  expected[Feati][Featj][lambdai][lambdaj] << endl;
-                     // cout << "o: " << oldl << " fc: " << featconst << " p: " << p << " l: " << log(p);
-                   // }
+                    if (lambdai == 0 && lambdaj == 0)
+                    {
+                      cout << observ[Feati][Featj][lambdai][lambdaj] << " " <<
+                      expected[Feati][Featj][lambdai][lambdaj] << endl;
+                      cout << "o: " << oldl << " fc: " << featconst << " p: " << p << " l: " << log(p);
+                    }
                     newl= oldl + (1/featconst)*log(p);
-                  //  if (lambdai == 0 && lambdaj == 0)
-                    //  cout << " n: " << newl << endl;
+                   if (lambdai == 0 && lambdaj == 0)
+                      cout << " n: " << newl << endl;
                     cout << "oldl "<< oldl << " "<< newl << endl;
 
 		 							}
@@ -331,13 +331,13 @@ vector<double> GIS:: __gis(int maxit, double konv, bool test){
 	                    newl= oldl + (1/featconst)*log(p);
 	            }
 	            if(Feati==0 && Featj==0){
-	            //	 cout << "obs " <<  observ[Feati][Featj][lambdai][lambdaj] << endl;
-	            //	 cout << expected[Feati][Featj][lambdai][lambdaj] << endl;
+	            	// cout << "obs " <<  observ[Feati][Featj][lambdai][lambdaj] << endl;
+	            	// cout << expected[Feati][Featj][lambdai][lambdaj] << endl;
 	            }
 				else{
 						newl=0;
 				}
-               // cout << "oldl "<< oldl << " "<< newl << endl;
+                // cout << "oldl "<< oldl << " "<< newl << endl;
 				(*_FM).setFeatureArraylambda(Feati,Featj,lambdai,lambdaj,newl);
 				l+=fabs((observ[Feati][Featj][lambdai][lambdaj]-expected[Feati][Featj][lambdai][lambdaj]));
 			   }
