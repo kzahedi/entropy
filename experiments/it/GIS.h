@@ -20,24 +20,28 @@ public:
 	int    getsizeconv();
 
 private:
-	double**** __getobs();
-	double __getFeatconst();
-	void __getexp(double**** &expect, double*** &exponent,double** &normaliser);
-	vector<double> __gis(int maxit, double konv, bool test);
+	double**** 		__getobs();
+	double 			__getFeatconst();
+	void 			__getexp();
+	vector<double> 	__gis(int maxit, double konv, bool test);
 
-	vector<double> conv;
-	int _sizeX;
-	int _sizeY;
-	int _sizeColValX;
-	int _sizeColValY;
-	int _sizeRowValX;
-	int _sizeRowValY;
+	double****		_expected;
+	double**** 		_observed;
+	double*** 		_exponent;
+	double** 		_normaliser;
+	vector<double> 	_conv;
+	int 			_sizeX;
+	int 			_sizeY;
+	int 			_sizeColValX;
+	int 			_sizeColValY;
+	int 			_sizeRowValX;
+	int 			_sizeRowValY;
 
-	FeatureMatrix *_FM;
-	DContainer *_Y;
-	DContainer *_X;
-	DContainer *_valY;
-	DContainer *_valX;
+	FeatureMatrix 	*_FM;
+	DContainer 		*_Y;
+	DContainer 		*_X;
+	DContainer 		*_valY;
+	DContainer 		*_valX;
 };
 
 #endif
