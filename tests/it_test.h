@@ -6,6 +6,7 @@ class itTest : public CppUnit::TestFixture
   CPPUNIT_TEST(OneXOneY);
   CPPUNIT_TEST(TwoXOneY);
   CPPUNIT_TEST(TwoXTwoY);
+  CPPUNIT_TEST(NotBinary);
   CPPUNIT_TEST_SUITE_END();
 
   public:
@@ -13,5 +14,6 @@ class itTest : public CppUnit::TestFixture
     void OneXOneY();
     void TwoXOneY();
     void TwoXTwoY();
+    void NotBinary();
 
 };

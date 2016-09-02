@@ -354,7 +354,7 @@ cout << (double)rand()/RAND_MAX << endl;
 }
  */
  srand(time(NULL));
- int n=100;
+ int n=10000;
  DContainer *eX = new DContainer(n,2);
  for(int i=0;i< n;i++ ){
 	for(int j=0;j<2;j++){
@@ -363,7 +363,7 @@ cout << (double)rand()/RAND_MAX << endl;
  }
 
 
- GIS *Test = new GIS(2,*eX);
+ GIS *Test = new GIS(2,*eX,*zX,*zY);
 
 	 Test->setFeatureArraylambda(0,0,1,0,4);
 	 Test->setFeatureArraylambda(0,0,1,1,0);
@@ -424,9 +424,9 @@ cout << (double)rand()/RAND_MAX << endl;
 		 if(ind==3) (*esY) << 1 << 1;
 
 	 }
-	 cout << "hier" << endl;
-	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,500,0.01,true);
-	 cout << "hier" << endl;
+
+	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,10000,0.01,true);
+
 		 cout << endl;
 		 cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0)  << endl;
 		 cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) << endl;

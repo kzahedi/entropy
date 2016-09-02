@@ -9,9 +9,10 @@
 
 class GIS {
 public:
-	GIS(int ColValY,DContainer &eX);
+	GIS(int ColValY,DContainer &eX,DContainer &aX, DContainer &aY);
 	GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double la, int maxit, double konv);
 	GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test);
+	~GIS();
 	double gis(int rowX,vector<vector<double> > Y, int rowY);
 	double gis(int Feati,int Featj,double ValX,double ValY);
 	void setFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY,double valuelambda);
@@ -21,7 +22,7 @@ public:
 
 private:
 	double**** 		__getobs();
-	double 			__getFeatconst();
+	double   		__getFeatconst();
 	void 			__getexp();
 	vector<double> 	__gis(int maxit, double konv, bool test);
 

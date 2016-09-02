@@ -83,25 +83,40 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
       _conv= __gis(maxit, konv,true);
 }
 // ColValY - Anzahl der Y-Knoten
-GIS::GIS(int ColValY, DContainer &eX){
-    _sizeX=2;
-    _sizeY=2;
+GIS::GIS(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY){
+    _X= &aX;
+    _Y= &aY;
+    _sizeX=_X->rows();
+    _sizeY=_Y->rows();
     _valX= &eX;
     _sizeColValY= ColValY;
     _sizeColValX= (*_valX).columns();
     _sizeRowValX= (*_valX).rows();
     _valY= new DContainer(_sizeRowValX,ColValY);
     _sizeRowValY= 0;
-    _X=new DContainer(_sizeX,1);
-    (*_X) << 0 << 1;
-    _Y=new DContainer(_sizeY,1);
-    (*_Y) << 0 << 1;
     _FM=new FeatureMatrix(*_valX,*_valY,*_X,*_Y,0);
+
+    _exponent = new double**[0];
+    _normaliser= new double*[0];
+    _expected = new double***[0];
+    _observed = new double***[0];
+
+}
+
+GIS::~GIS(){
+	for(int j=0;j<_sizeColValY;j++){
+		delete [] _normaliser[j];
+	}
+
+	//double****		_expected;
+	//double**** 		_observed;
+	//double*** 		_exponent;
+	_conv.clear();
 }
 double GIS::gis(int Feati,int Featj,double ValX,double ValY){
   double norm=0;
   double exponent=0;
-  	  exponent= exp((*_FM).getFeatureArrayvalue(Feati,Featj,ValX,ValY) );
+  exponent= exp((*_FM).getFeatureArrayvalue(Feati,Featj,ValX,ValY) );
   for(int yi=0;yi<_sizeY;yi++){
 	    norm+= exp( (*_FM).getFeatureArrayvalue(Feati,Featj,ValX,(*_Y)(yi,0)));
   }
@@ -121,8 +136,8 @@ double GIS::gis(int rowX,vector<vector<double> > Y, int rowY){
     for(int yi=0;yi<Y.size();yi++){
 	  for(int Featx=0;Featx< _sizeColValX;Featx++){
 		  for(int Featy=0;Featy< _sizeColValY;Featy++){
-			  	 featnorm+= (*_FM).getFeatureArrayvalue(Featx,Featy,(*_valX)(rowX,Featx),Y[yi][Featy]);
-			  }
+			  featnorm+= (*_FM).getFeatureArrayvalue(Featx,Featy,(*_valX)(rowX,Featx),Y[yi][Featy]);
+		  }
 	  }
 
 	  norm+=exp(featnorm);
@@ -177,29 +192,28 @@ double**** GIS:: __getobs(){
     return _observed;
 }
 double GIS::__getFeatconst(){
-  double Featconst=1;
+	double Featconst=1;
 
-  int curr=0;
-  for(int i=0; i< _sizeRowValX;i++){
-    for(int j=0; j< _sizeY;j++){
+	int curr=0;
+	for(int i=0; i< _sizeRowValX;i++){
+		for(int j=0; j< _sizeY;j++){
 
-      for(int delti=0; delti< _sizeColValX; delti++){
-        for(int deltj=0; deltj< _sizeColValY; deltj++){
-          for(int deltxi=0; deltxi < _sizeX; deltxi++){
-            for(int deltyj=0; deltyj < _sizeY; deltyj++){
-              for(int k=0; k< (*_FM).getMatrixIndexX(i,j).size();k++){
-                  curr++;
-              }
-            }
-          }
-          if(curr> Featconst) Featconst=curr;
-          curr=0;
-        }
-      }
-    }
-  }
-  return Featconst;
-
+			for(int delti=0; delti< _sizeColValX; delti++){
+				for(int deltj=0; deltj< _sizeColValY; deltj++){
+					for(int deltxi=0; deltxi < _sizeX; deltxi++){
+						for(int deltyj=0; deltyj < _sizeY; deltyj++){
+							for(int k=0; k< (*_FM).getMatrixIndexX(i,j).size();k++){
+									curr++;
+							}
+						}
+					}
+					if(curr> Featconst) Featconst=curr;
+					curr=0;
+				}
+			}
+		}
+	}
+	return Featconst;
 }
 void GIS:: __getexp(){
 

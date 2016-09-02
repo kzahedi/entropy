@@ -17,7 +17,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( itTest );
 void itTest::OneXOneY()
 {
 	 srand(time(NULL));
-	 int n=1000;
+	 int n=100;
 	 DContainer *eX = new DContainer(n,1);
 	 for(int i=0;i< n;i++ ){
 		 for(int j=0;j<1;j++){
@@ -29,7 +29,7 @@ void itTest::OneXOneY()
 	  DContainer *zY = new DContainer(2,1);
 	 *zY << 0 << 1;
 
-	 GIS *Test = new GIS(1,*eX);
+	 GIS *Test = new GIS(1,*eX,*zX,*zY);
 	 Test->setFeatureArraylambda(0,0,1,0,0);
 	 Test->setFeatureArraylambda(0,0,1,1,0);
 	 Test->setFeatureArraylambda(0,0,0,0,1);
@@ -61,20 +61,22 @@ void itTest::OneXOneY()
 			 }
 		 (*esY) << ind;
 		 }
-	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,5000,0.01,true);
+	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,500,0.01,true);
 
-	 cout << endl;
-	 cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0)  << endl;
-	 cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
-	 cout <<zTest->gis(0,0,0,1)-Test->gis(0,0,0,1)  << endl;
-	 cout <<zTest->gis(0,0,1,1)-Test->gis(0,0,1,1) << endl;
-	 cout << endl;
+	 //cout << endl;
+	 //cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0) << endl;
+	 //cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
+	 //cout <<zTest->gis(0,0,0,1)-Test->gis(0,0,0,1) << endl;
+	 //cout <<zTest->gis(0,0,1,1)-Test->gis(0,0,1,1) << endl;
+	 //cout << endl;
+
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(0,0,0,0)+zTest->gis(0,0,0,1),0.1);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(0,0,1,0)+zTest->gis(0,0,1,1),0.1);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,0,0) ,zTest->gis(0,0,0,0),0.2);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,0,1) ,zTest->gis(0,0,0,1),0.2);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,1,0) ,zTest->gis(0,0,1,0),0.2);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,1,1) ,zTest->gis(0,0,1,1),0.2);
+
 	 for(int i=0; i< zTest->getsizeconv()-1; i++ ){
 		 CPPUNIT_ASSERT 	(zTest->getconv(i)>= zTest->getconv(i+1) );
 	 }
@@ -84,7 +86,7 @@ void itTest::OneXOneY()
 void itTest::TwoXOneY()
 {
 	 srand(time(NULL));
-	 int n=1000;
+	 int n=100;
 	 DContainer *eX = new DContainer(n,2);
 	 for(int i=0;i< n;i++ ){
 		 for(int j=0;j<2;j++){
@@ -97,7 +99,7 @@ void itTest::TwoXOneY()
 	  DContainer *zY = new DContainer(2,1);
 	 *zY << 0 << 1;
 
-	 GIS *Test = new GIS(1,*eX);
+	 GIS *Test = new GIS(1,*eX,*zX,*zY);
 
 	 Test->setFeatureArraylambda(0,0,1,0,4);
 	 Test->setFeatureArraylambda(0,0,1,1,0);
@@ -139,17 +141,18 @@ void itTest::TwoXOneY()
 		 (*esY) << ind;
 
 	 }
-	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,5000,0.01,true);
-	 cout << endl;
-	 cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0)  << endl;
-	 cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
-	 cout <<zTest->gis(0,0,0,1)-Test->gis(0,0,0,1) << endl;
-	 cout <<zTest->gis(0,0,1,1)-Test->gis(0,0,1,1) << endl;
-	 cout <<zTest->gis(1,0,0,0)-Test->gis(1,0,0,0) << endl;
-	 cout <<zTest->gis(1,0,1,0)-Test->gis(1,0,1,0) << endl;
-	 cout <<zTest->gis(1,0,0,1)-Test->gis(1,0,0,1) << endl;
-	 cout <<zTest->gis(1,0,1,1)-Test->gis(1,0,1,1) << endl;
-	 cout << endl;
+	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,500,0.01,true);
+	 //cout << endl;
+	 //cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0)  << endl;
+	 //cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
+	 //cout <<zTest->gis(0,0,0,1)-Test->gis(0,0,0,1) << endl;
+	 //cout <<zTest->gis(0,0,1,1)-Test->gis(0,0,1,1) << endl;
+	 //cout <<zTest->gis(1,0,0,0)-Test->gis(1,0,0,0) << endl;
+	 //cout <<zTest->gis(1,0,1,0)-Test->gis(1,0,1,0) << endl;
+	 //cout <<zTest->gis(1,0,0,1)-Test->gis(1,0,0,1) << endl;
+	 //cout <<zTest->gis(1,0,1,1)-Test->gis(1,0,1,1) << endl;
+	 //cout << endl;
+
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(0,0,0,0)+zTest->gis(0,0,0,1),0.1);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(0,0,1,0)+zTest->gis(0,0,1,1),0.1);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(1,0,0,0)+zTest->gis(1,0,0,1),0.1);
@@ -176,7 +179,7 @@ void itTest::TwoXTwoY(){
 	 DContainer *zY = new DContainer(2,1);
 		*zY << 0 << 1;
 
-	 GIS *Test = new GIS(2,*eX);
+	 GIS *Test = new GIS(2,*eX,*zX,*zY);
 
 		 Test->setFeatureArraylambda(0,0,1,0,4);
 		 Test->setFeatureArraylambda(0,0,1,1,0);
@@ -239,27 +242,27 @@ void itTest::TwoXTwoY(){
 
 		 }
 
-		 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,5000,0.01,true);
-			 cout << endl;
-			 cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0)  << endl;
-			 cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
-			 cout <<zTest->gis(0,0,0,1)-Test->gis(0,0,0,1) << endl;
-			 cout <<zTest->gis(0,0,1,1)-Test->gis(0,0,1,1) << endl;
-			 cout << endl;
-			 cout <<zTest->gis(1,0,0,0)-Test->gis(1,0,0,0) << endl;
-			 cout <<zTest->gis(1,0,1,0)-Test->gis(1,0,1,0) << endl;
-			 cout <<zTest->gis(1,0,0,1)-Test->gis(1,0,0,1) << endl;
-			 cout <<zTest->gis(1,0,1,1)-Test->gis(1,0,1,1) << endl;
-			 cout << endl;
-			 cout <<zTest->gis(0,1,0,0)-Test->gis(0,1,0,0) << endl;
-			 cout <<zTest->gis(0,1,1,0)-Test->gis(0,1,1,0) << endl;
-			 cout <<zTest->gis(0,1,0,1)-Test->gis(0,1,0,1) << endl;
-			 cout <<zTest->gis(0,1,1,1)-Test->gis(0,1,1,1) << endl;
-			 cout << endl;
-			 cout <<zTest->gis(1,1,0,0)-Test->gis(1,1,0,0) << endl;
-			 cout <<zTest->gis(1,1,1,0)-Test->gis(1,1,1,0) << endl;
-			 cout <<zTest->gis(1,1,0,1)-Test->gis(1,1,0,1) << endl;
-			 cout <<zTest->gis(1,1,1,1)-Test->gis(1,1,1,1) << endl;
+		 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,500,0.01,true);
+			 //cout << endl;
+			 //cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,9)  << endl;
+			 //cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
+			 //cout <<zTest->gis(0,0,0,1)-Test->gis(0,0,0,1) << endl;
+			 //cout <<zTest->gis(0,0,1,1)-Test->gis(0,0,1,1) << endl;
+			 //cout << endl;
+			 //cout <<zTest->gis(1,0,0,0)-Test->gis(1,0,0,5) << endl;
+			 //cout <<zTest->gis(1,0,1,0)-Test->gis(1,0,1,0) << endl;
+			 //cout <<zTest->gis(1,0,0,1)-Test->gis(1,0,0,0) << endl;
+			 //cout <<zTest->gis(1,0,1,1)-Test->gis(1,0,1,1) << endl;
+			 //cout << endl;
+			 //cout <<zTest->gis(0,1,0,0)-Test->gis(0,1,0,0) << endl;
+			 //cout <<zTest->gis(0,1,1,0)-Test->gis(0,1,1,3) << endl;
+			 //cout <<zTest->gis(0,1,0,1)-Test->gis(0,1,0,1) << endl;
+			 //cout <<zTest->gis(0,1,1,1)-Test->gis(0,1,1,1) << endl;
+			 //cout << endl;
+			 //cout <<zTest->gis(1,1,0,0)-Test->gis(1,1,0,2) << endl;
+			 //cout <<zTest->gis(1,1,1,0)-Test->gis(1,1,1,0) << endl;
+			 //cout <<zTest->gis(1,1,0,1)-Test->gis(1,1,0,1) << endl;
+			 //cout <<zTest->gis(1,1,1,1)-Test->gis(1,1,1,1) << endl;
 
 			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(0,0,0,0)+zTest->gis(0,0,0,1),0.1);
 			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(0,0,1,0)+zTest->gis(0,0,1,1),0.1);
@@ -270,10 +273,91 @@ void itTest::TwoXTwoY(){
 			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(1,1,0,0)+zTest->gis(1,1,0,1),0.1);
 			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(1,1,1,0)+zTest->gis(1,1,1,1),0.1);
 
-			 for(int i=0; i< zTest->getsizeconv()-1; i++ ){
-			//	 cout << zTest->getconv(i)  << " " << zTest->getconv(i+1) << endl;
-			//	 CPPUNIT_ASSERT 	(zTest->getconv(i) >= zTest->getconv(i+1) );
-			 }
+			 //for(int i=0; i< zTest->getsizeconv()-1; i++ ){
+				// cout << zTest->getconv(i)  << " " << zTest->getconv(i+1) << endl;
+				// CPPUNIT_ASSERT 	(zTest->getconv(i) >= zTest->getconv(i+1) );
+			 //}
 
 }
+void itTest::NotBinary(){
+	 srand(time(NULL));
+		 int n=100;
+		 DContainer *eX = new DContainer(n,1);
+		 for(int i=0;i< n;i++ ){
+			 for(int j=0;j<1;j++){
+				 *eX << rand() % 4;
+			 }
+		 }
+		 DContainer *zX = new DContainer(4,1);
+		 *zX << 0 << 1 << 2 << 3;
+		  DContainer *zY = new DContainer(2,1);
+		 *zY << 0 << 1;
 
+		 GIS *Test = new GIS(2,*eX,*zX,*zY);
+		 Test->setFeatureArraylambda(0,0,0,0,1);
+		 Test->setFeatureArraylambda(0,0,0,1,0);
+		 Test->setFeatureArraylambda(0,0,1,0,3);
+		 Test->setFeatureArraylambda(0,0,1,1,2);
+		 Test->setFeatureArraylambda(0,0,2,0,1);
+		 Test->setFeatureArraylambda(0,0,2,1,0);
+		 Test->setFeatureArraylambda(0,0,3,0,1);
+		 Test->setFeatureArraylambda(0,0,3,1,5);
+
+		 double** prop;
+		 prop=new double*[n];
+		 for(int i=0;i<n;i++){
+			 prop[i]=new double[2];
+			 for(int j=0;j<2;j++){
+				 prop[i][j]=0;
+			 }
+		 }
+
+		 for(int i=0;i<n;i++){
+			for(int propi=0;propi<2;propi++){
+					prop[i][propi]=Test->gis(0,0,(*eX)(i,0),propi);
+				 }
+			 }
+		 DContainer *esY=new DContainer(n,1);
+
+		 for(int i=0;i<n;i++){
+			 double z=(double)rand()/RAND_MAX;
+			 double s=0;
+			 int ind=0;
+			 for(int j=0;j<2 && s<z;j++){
+					s+=prop[i][j];
+					ind=j;
+				 }
+			 (*esY) << ind;
+			 }
+		 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,500,0.01,true);
+
+		 //cout << endl;
+		 //cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0) << endl;
+		 //cout <<zTest->gis(0,0,0,1)-Test->gis(0,0,0,1) << endl;
+		 //cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
+		 //cout <<zTest->gis(0,0,1,1)-Test->gis(0,0,1,1) << endl;
+		 //cout <<zTest->gis(0,0,2,0)-Test->gis(0,0,0,0) << endl;
+		 //cout <<zTest->gis(0,0,2,1)-Test->gis(0,0,0,1) << endl;
+		 //cout <<zTest->gis(0,0,3,0)-Test->gis(0,0,1,0) << endl;
+		 //cout <<zTest->gis(0,0,3,1)-Test->gis(0,0,1,1) << endl;
+		 //cout << endl;
+
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(0,0,0,0)+zTest->gis(0,0,0,1),0.1);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(0,0,1,0)+zTest->gis(0,0,1,1),0.1);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(0,0,2,0)+zTest->gis(0,0,2,1),0.1);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->gis(0,0,3,0)+zTest->gis(0,0,3,1),0.1);
+
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,0,0) ,zTest->gis(0,0,0,0),0.2);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,0,1) ,zTest->gis(0,0,0,1),0.2);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,1,0) ,zTest->gis(0,0,1,0),0.2);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,1,1) ,zTest->gis(0,0,1,1),0.2);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,2,0) ,zTest->gis(0,0,2,0),0.2);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,2,1) ,zTest->gis(0,0,2,1),0.2);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,3,0) ,zTest->gis(0,0,3,0),0.2);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,3,1) ,zTest->gis(0,0,3,1),0.2);
+
+		 for(int i=0; i< zTest->getsizeconv()-1; i++ ){
+			 CPPUNIT_ASSERT 	(zTest->getconv(i)>= zTest->getconv(i+1) );
+		 }
+
+	}
