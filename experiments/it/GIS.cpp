@@ -349,3 +349,4 @@ vector<double> GIS:: __gis(int maxit, double konv, bool test){
 	  	}
 	return conv;
 }
+

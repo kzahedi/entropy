@@ -353,20 +353,103 @@ cout << (double)rand()/RAND_MAX << endl;
 	 //cout << (*esY) << endl;
 }
  */
- DContainer *valtX= new DContainer(10,3);
- *valtX << 1 << 1 << 1 << 1 << 1 << 1;
- DContainer *valtY= new DContainer(10,2);
- FeatureMatrix *test=new FeatureMatrix(*valtX,*valtY,*X,*Y,1.0);
- vector<int> eins = test->getMatrixIndexX(3,0);
- vector<int> zwei = test->getMatrixIndexY(3,0);
- vector<int> drei = test->getMatrixIndexdX(3,0);
- vector<int> vier = test->getMatrixIndexdY(3,0);
-for(int k=0;k<test->getMatrixIndexX(0,0).size();k++){
-	cout << eins[k];
-	cout << zwei[k];
-	cout << drei[k];
-	cout << vier[k] << endl;
-}
-}
+ srand(time(NULL));
+ int n=100;
+ DContainer *eX = new DContainer(n,2);
+ for(int i=0;i< n;i++ ){
+	for(int j=0;j<2;j++){
+		*eX << rand() % 2;
+	}
+ }
 
+
+ GIS *Test = new GIS(2,*eX);
+
+	 Test->setFeatureArraylambda(0,0,1,0,4);
+	 Test->setFeatureArraylambda(0,0,1,1,0);
+	 Test->setFeatureArraylambda(0,0,0,0,1);
+	 Test->setFeatureArraylambda(0,0,0,1,5);
+
+	 Test->setFeatureArraylambda(1,0,1,0,2);
+	 Test->setFeatureArraylambda(1,0,1,1,3);
+	 Test->setFeatureArraylambda(1,0,0,0,0);
+	 Test->setFeatureArraylambda(1,0,0,1,1);
+
+	 Test->setFeatureArraylambda(0,1,1,0,0);
+	 Test->setFeatureArraylambda(0,1,1,1,0);
+	 Test->setFeatureArraylambda(0,1,0,0,3);
+	 Test->setFeatureArraylambda(0,1,0,1,5);
+
+	 Test->setFeatureArraylambda(1,1,1,0,1);
+	 Test->setFeatureArraylambda(1,1,1,1,3);
+	 Test->setFeatureArraylambda(1,1,0,0,2);
+	 Test->setFeatureArraylambda(1,1,0,1,1);
+
+	 double** prop;
+	 prop=new double*[n];
+	 for(int i=0;i<n;i++){
+		 prop[i]=new double[4];
+		 for(int j=0;j<4;j++){
+			 prop[i][j]=0;
+		 }
+	 }
+
+	vector<vector<double> > val(4,vector<double>(2));
+		 val[0][0]=0;
+		 val[0][1]=0;
+		 val[1][0]=1;
+		 val[1][1]=0;
+		 val[2][0]=0;
+		 val[2][1]=1;
+		 val[3][1]=1;
+		 val[3][1]=1;
+	for(int i=0;i<n;i++){
+		for(int propi=0;propi<4;propi++){
+				prop[i][propi]=Test->gis(i,val,propi);
+			}
+		 }
+	 DContainer *esY=new DContainer(n,2);
+
+	 for(int i=0;i<n;i++){
+		 double z=(double)rand()/RAND_MAX;
+		 double s=0;
+		 int ind=0;
+		 for(int j=0;j<4 && s<z;j++){
+				s+=prop[i][j];
+				ind=j;
+		 }
+		 if(ind==0) (*esY) << 0 << 0;
+		 if(ind==1) (*esY) << 1 << 0;
+		 if(ind==2) (*esY) << 0 << 1;
+		 if(ind==3) (*esY) << 1 << 1;
+
+	 }
+	 cout << "hier" << endl;
+	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,500,0.01,true);
+	 cout << "hier" << endl;
+		 cout << endl;
+		 cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0)  << endl;
+		 cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
+		 cout <<zTest->gis(0,0,0,1)-Test->gis(0,0,0,1) << endl;
+		 cout <<zTest->gis(0,0,1,1)-Test->gis(0,0,1,1) << endl;
+		 cout << endl;
+		 cout <<zTest->gis(1,0,0,0)-Test->gis(1,0,0,0) << endl;
+		 cout <<zTest->gis(1,0,1,0)-Test->gis(1,0,1,0) << endl;
+		 cout <<zTest->gis(1,0,0,1)-Test->gis(1,0,0,1) << endl;
+		 cout <<zTest->gis(1,0,1,1)-Test->gis(1,0,1,1) << endl;
+		 cout << endl;
+		 cout <<zTest->gis(0,1,0,0)-Test->gis(0,1,0,0) << endl;
+		 cout <<zTest->gis(0,1,1,0)-Test->gis(0,1,1,0) << endl;
+		 cout <<zTest->gis(0,1,0,1)-Test->gis(0,1,0,1) << endl;
+		 cout <<zTest->gis(0,1,1,1)-Test->gis(0,1,1,1) << endl;
+		 cout << endl;
+		 cout <<zTest->gis(1,1,0,0)-Test->gis(1,1,0,0) << endl;
+		 cout <<zTest->gis(1,1,1,0)-Test->gis(1,1,1,0) << endl;
+		 cout <<zTest->gis(1,1,0,1)-Test->gis(1,1,0,1) << endl;
+		 cout <<zTest->gis(1,1,1,1)-Test->gis(1,1,1,1) << endl;
+
+
+
+
+}
 

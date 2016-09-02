@@ -95,7 +95,6 @@ int Feature::delta(double ax, double ay, double x, double y){
 		return 1;
 	}
   else return -1;
-  // else return -1;
 }
 
 
