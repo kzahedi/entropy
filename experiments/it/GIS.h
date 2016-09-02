@@ -21,7 +21,6 @@ public:
 
 private:
 	double**** __getobs();
-	void __gis(int maxit, double konv);
 	double __getFeatconst();
 	void __getexp(double**** &expect, double*** &exponent,double** &normaliser);
 	vector<double> __gis(int maxit, double konv, bool test);
@@ -42,3 +41,4 @@ private:
 };
 
 #endif
+

@@ -17,12 +17,10 @@ public:
 	FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue);
 	FeatureMatrix();
 	~FeatureMatrix();
-	double getFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY);
-	double getFeatureArrayvalue(int i, int j,int RowValX, int RowValY);
-	double getFeatureArrayvalueval(int i, int j,double ValX, double ValY);
-	void setFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY,double valuelambda);
-	int getFeatureArraydelta(int i, int j,int idelta, int jdelta, int RowValX, int RowValY);
-	int getFeatureArraydeltaval(int i, int j,int idelta, int jdelta, double ValX, double ValY);
+	double 	getFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY);
+	double 	getFeatureArrayvalue(int i, int j,double ValX, double ValY);
+	void 	setFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY,double valuelambda);
+	int 	getFeatureArraydelta(int i, int j,int idelta, int jdelta, double ValX, double ValY);
 	vector<int> getMatrixIndexX(int i, int j);
 	vector<int> getMatrixIndexY(int i, int j);
 	vector<int> getMatrixIndexdX(int i,int j);
