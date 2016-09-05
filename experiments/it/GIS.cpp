@@ -270,7 +270,7 @@ vector<double> GIS:: __gis(int maxit, double konv, bool test){
 	    }
 	  int i=0;
 	  double l=1;
-	  while(i<maxit && fabs(l)>=konv ){
+	  while(i<maxit ){ //&& fabs(l)>=konv
 	    l=0;
 	    __getexp();
 	    for(int Feati=0; Feati<_sizeColValX;Feati++){
@@ -296,6 +296,7 @@ vector<double> GIS:: __gis(int maxit, double konv, bool test){
 		 if(test){
 			 _conv.push_back(l);
 		 }
+		 cout << l << endl;
 	  	}
 	return _conv;
 }

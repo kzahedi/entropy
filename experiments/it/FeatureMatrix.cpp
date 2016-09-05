@@ -12,7 +12,7 @@ FeatureMatrix::FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DCo
 		_sizeX = (*_X).rows();
 		_sizeY = (*_Y).rows();
 		_FA=FeatureArray(valuelambda);
-		getMatrix(valuelambda);
+		_getMatrix(valuelambda);
 }
 FeatureMatrix::FeatureMatrix(){
 		_valX= new DContainer(0,0);
@@ -26,7 +26,7 @@ FeatureMatrix::FeatureMatrix(){
 		_sizeX = (*_X).rows();
 		_sizeY = (*_Y).rows();
 		_FA=FeatureArray(0);
-		getMatrix(0);
+		_getMatrix(0);
 
 }
 FeatureMatrix:: ~FeatureMatrix(){
@@ -87,7 +87,6 @@ vector<int> FeatureMatrix:: getMatrixIndexdY(int i,int j){
 		vector<int> dindY = _mat[i][j][3];
 		return dindY;
 }
-
 Feature** FeatureMatrix:: FeatureArray( double valuelambda){
 		Feature **FA;
 		FA = new Feature*[_sizeColValX];
@@ -101,7 +100,7 @@ Feature** FeatureMatrix:: FeatureArray( double valuelambda){
 		return FA;
 }
 
-void FeatureMatrix:: getMatrix(double valuelambda){
+void FeatureMatrix:: _getMatrix(double valuelambda){
 		vector<vector<int> > V(4,vector<int>(0));
 
 		_mat = new vector<vector<int> >*[_sizeRowValX];

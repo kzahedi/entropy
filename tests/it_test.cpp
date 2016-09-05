@@ -351,6 +351,7 @@ void itTest::NotBinary(){
 		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,0,1) ,zTest->gis(0,0,0,1),0.2);
 		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,1,0) ,zTest->gis(0,0,1,0),0.2);
 		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,1,1) ,zTest->gis(0,0,1,1),0.2);
+
 		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,2,0) ,zTest->gis(0,0,2,0),0.2);
 		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,2,1) ,zTest->gis(0,0,2,1),0.2);
 		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->gis(0,0,3,0) ,zTest->gis(0,0,3,0),0.2);

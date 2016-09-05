@@ -1,4 +1,4 @@
-add_library(eit Feature.cpp FeatureMatrix.cpp GIS.cpp)
+add_library(eit Feature.cpp FeatureMatrix.cpp GIS.cpp InstanceMatrix.cpp)
 target_link_libraries(eit Entropy++ boost_filesystem boost_system m)
 
 add_executable(it it.cpp)
