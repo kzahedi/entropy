@@ -13,13 +13,28 @@
 #include "Feature.h"
 #include "FeatureMatrix.h"
 #include "GIS.h"
-
+#include "InstanceMatrix.h"
 
 
 
 int main(int argc, char **argv)
 {
+	DContainer *X= new DContainer(2,1);
+	(*X) << 0 << 1 ;
+	DContainer *Y= new DContainer(2,1);
+	(*Y) << 0 << 1 ;
+	DContainer *valX = new DContainer(10,2);
+	(*valX) << 0 << 1 << 1 << 1 << 0 << 1 << 0 << 1 << 1 << 0 << 0 << 0 << 0 << 1 << 0 << 1  << 0;
+	cout << (*valX) << endl;
+	DContainer *valY = new DContainer(10,1);
+	InstanceMatrix *test = new InstanceMatrix(*valX,*valY,*X,*Y,1);
 
+	for(int i=0;i<8;i++){
+		cout << test->getInstanceMatrixX(0,0,0,1)[i] << " " <<  test ->getInstanceMatrixY(0,0,0,1)[i] << endl;
+		cout << endl;
+	}
+}
+/*
 	vector<vector<int> > W(2,vector<int>(0));
 	vector<vector<int> > ma[1][2];
 	for(int i=0; i<1;i++){
@@ -150,7 +165,7 @@ DContainer *zX = new DContainer(2,1);
 
 	 }
 
-	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,1000000,0.00000001);
+	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,1000000,0.001);
 
 		 cout << endl;
 		 cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0)  << endl;
@@ -173,8 +188,8 @@ DContainer *zX = new DContainer(2,1);
 		 cout <<zTest->gis(1,1,0,1)-Test->gis(1,1,0,1) << endl;
 		 cout <<zTest->gis(1,1,1,1)-Test->gis(1,1,1,1) << endl;
 
+*/
 
 
 
-}
 

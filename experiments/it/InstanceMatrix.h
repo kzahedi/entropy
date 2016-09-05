@@ -9,6 +9,7 @@
 #include <ostream>
 #include <math.h>
 #include <entropy++/Matrix.h>
+#include "Feature.h"
 
 using namespace std;
 
@@ -18,12 +19,12 @@ public:
 	//InstanceMatrix();
 	InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, double valuelambda);
 	~InstanceMatrix();
-	// Matrix indizes Abfragen vier eingaben, vektorx als ausgabe
-	// Matrix abfragen, vier eingaben, vektor y als ausgabe
-	double 	getFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY);
-	double 	getFeatureArrayvalue(int i, int j,double ValX, double ValY);
-	void 	setFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY,double valuelambda);
-	int 	getFeatureArraydelta(int i, int j,int idelta, int jdelta, double ValX, double ValY);
+	vector<int> getInstanceMatrixX(int Feati,int Featj,int delti,int deltj);
+	vector<int> getInstanceMatrixY(int Feati,int Featj,int delti,int deltj);
+	double 	getFeatureArraylambda(int Feati,int Featj,int ilambdaX,int ilambdaY);
+	double 	getFeatureArrayvalue(int Feati,int Featj,double ValX,double ValY);
+	void 	setFeatureArraylambda(int Feati,int Featj,int ilambdaX,int ilambdaY,double valuelambda);
+	int 	getFeatureArraydelta(int Feati,int Featj,int idelta,int jdelta, double ValX, double ValY);
 
 private:
 	Feature** FeatureArray(double valuelambda);

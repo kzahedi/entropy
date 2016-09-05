@@ -13,6 +13,7 @@ InstanceMatrix:: InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, 
 	_sizeY = (*_Y).rows();
 	_FA=FeatureArray(valuelambda);
 	_getMatrix(valuelambda);
+	cout << _mat[0][0][1][1][0].size()<< endl;
 }
 InstanceMatrix:: ~InstanceMatrix(){
 	// matrix
@@ -22,6 +23,16 @@ InstanceMatrix:: ~InstanceMatrix(){
 		}
 	}
 	delete _FA;
+	for(int i=0;i<_sizeColValX;i++){
+		for(int j=0;j<_sizeColValY;j++){
+			for(int k=0;k<_sizeX;k++){
+				for(int l=0;l<_sizeY;l++){
+					_mat[i][j][k][l].clear();
+				}
+			}
+		}
+	}
+	delete _mat;
 }
 Feature** InstanceMatrix :: FeatureArray( double valuelambda){
 		Feature **FA;
@@ -34,6 +45,17 @@ Feature** InstanceMatrix :: FeatureArray( double valuelambda){
 		  }
 		}
 		return FA;
+}
+vector<int> InstanceMatrix::getInstanceMatrixX(int Feati,int Featj,int delti,int deltj){
+		assert(Feati<_sizeColValX && Featj<_sizeColValY);
+		assert(delti<_sizeX && deltj< _sizeY);
+		return _mat[Feati][Featj][delti][deltj][0];
+
+}
+vector<int> InstanceMatrix::getInstanceMatrixY(int Feati,int Featj,int delti,int deltj){
+		assert(Feati<_sizeColValX && Featj<_sizeColValY);
+		assert(delti<_sizeX && deltj< _sizeY);
+		return _mat[Feati][Featj][delti][deltj][1];
 }
 // Indizes von Feature und von Lambda
 double InstanceMatrix:: getFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY){
@@ -80,6 +102,7 @@ void InstanceMatrix::_getMatrix(double valuelambda){
 						for(int xi=0; xi< _sizeRowValX; xi++){
 							for(int y=0; y<_sizeY; y++){
 								if(_FA[Feati][Featj].delta(_X->get(delti,0),_Y->get(deltj,0),_valX->get(xi,Feati),_Y->get(y,0))==1){
+									cout << "feati " << Feati << " featj " << Featj << " delti " << delti << " deltj " << deltj << " xi " <<  xi << endl;
 									_mat[Feati][Featj][delti][deltj][0].push_back(xi);
 									_mat[Feati][Featj][delti][deltj][1].push_back(y);
 								}
@@ -91,3 +114,4 @@ void InstanceMatrix::_getMatrix(double valuelambda){
 		}
 
 }
+
