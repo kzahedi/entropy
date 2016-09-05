@@ -1,6 +1,6 @@
 #include "SCGIS.h"
 
-SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int maxit, double konv, double valuelambda){
+SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test){
     _valX= &eX;
     _valY= &eY;
     _X= &aX;
@@ -11,7 +11,7 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int 
     _sizeColValX= (*_valX).columns();
     _sizeRowValX= (*_valX).rows();
     _sizeRowValY= (*_valY).rows();
-    _FM= new InstanceMatrix(*_valX,*_valY,*_X,*_Y,valuelambda);
+    _FM= new InstanceMatrix(*_valX,*_valY,*_X,*_Y,lambdavalue);
     _observed=__getobs();
 
     _exponent= new double***[_sizeColValX];
@@ -34,7 +34,7 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int 
     	for(int j=0;j<_sizeColValY;j++){
     		_normaliser[i][j]=new double[_sizeRowValX];
     		for(int k=0;k<_sizeRowValX;k++){
-    			_normaliser[i][j][k]=2;
+    			_normaliser[i][j][k]=_sizeY;
     		}
     	}
     }
@@ -58,7 +58,13 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int 
     		_delta[i][j]=0;
     	}
     }
-    __scgis(maxit,konv);
+    __scgis(maxit,konv,test);
+}
+double SCGIS:: getconv(int i){
+	return _conv[i];
+}
+int SCGIS:: getsizeconv(){
+	return _conv.size();
 }
 double SCGIS::getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY){
   assert(Feati<_sizeColValX && Featj<_sizeColValY);
@@ -108,9 +114,11 @@ double**** SCGIS:: __getobs(){
     }
     return _observed;
 }
-void SCGIS:: __scgis(int maxit, double konv){
+void SCGIS:: __scgis(int maxit, double konv, bool test){
+	double l=1;
 	int i=0;
-while(i<maxit){
+while(i<maxit && l>konv){
+	l=0;
 	for(int Feati=0;Feati<_sizeColValX;Feati++){
 		for(int Featj=0;Featj<_sizeColValY;Featj++){
 			for(int delti=0;delti<_sizeX;delti++){
@@ -139,8 +147,8 @@ while(i<maxit){
 						//cout << " obs " << _observed[Feati][Featj][delti][deltj] << " exp " << _expected[Feati][Featj][delti][deltj] << " " << _observed[Feati][Featj][delti][deltj]/_expected[Feati][Featj][delti][deltj] << endl;
 						newl= _FM->getFeatureArraylambda(Feati,Featj,delti,deltj)+_delta[delti][deltj];
 					}
-					else{newl=0;}
-					cout << newl << endl;
+					else{newl=0; }
+					l+= _observed[Feati][Featj][delti][deltj]-_expected[Feati][Featj][delti][deltj];
 					_FM->setFeatureArraylambda(Feati,Featj,delti,deltj,newl);
 					for(int y=0;y<_sizeY;y++){
 						for(int k=0; k<_FM->getInstanceMatrixX(Feati,Featj,delti,deltj).size();k++){
@@ -162,5 +170,8 @@ while(i<maxit){
 		}
 	}
 	i++;
+	 if(test){
+		 _conv.push_back(l);
+	 }
 }
 }

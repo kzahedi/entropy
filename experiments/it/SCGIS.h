@@ -17,13 +17,15 @@ using namespace std;
 class SCGIS{
 
 public:
-	SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int maxit, double konv, double valuelambda);
+	SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test);
 	~SCGIS();
 	double scgis(int Feati,int Featj,double ValX,double ValY);
 	double	getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY);
+	double 	getconv(int i);
+	int    	getsizeconv();
 
 private:
-	void			__scgis(int maxit, double konv);
+	void			__scgis(int maxit, double konv,bool test);
 	double**** 		__getobs();
 
 	int 			_sizeX;
@@ -37,6 +39,7 @@ private:
 	double****		_exponent;
 	double***		_normaliser;
 	double**		_delta;
+	vector<double> 	_conv;
 
 	InstanceMatrix 	*_FM;
 	DContainer 		*_Y;

@@ -1,45 +1,6 @@
 #include "GIS.h"
 
-GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv) {
-      _valX= &eX;
-      _valY= &eY;
-      _X= &aX;
-      _Y= &aY;
-      _sizeX = (*_X).rows();
-      _sizeY = (*_Y).rows();
-      _sizeColValY= (*_valY).columns();
-      _sizeColValX= (*_valX).columns();
-      _sizeRowValX= (*_valX).rows();
-      _sizeRowValY= (*_valY).rows();
-      _FM=new FeatureMatrix(*_valX,*_valY,*_X,*_Y,lambdavalue);
-	  _exponent = new double**[_sizeColValX];
-	  for(int i=0; i<_sizeColValX; i++){
-	    _exponent[i]=new double*[_sizeColValY];
-	    for(int j=0;j<_sizeColValY;j++){
-	      _exponent[i][j]=new double[_sizeRowValY];
-	      }
-	    }
 
-	  _normaliser= new double*[_sizeColValX];
-	  for(int i=0; i< _sizeColValX; i++){
-	    _normaliser[i]=new double[_sizeColValY];
-	  }
-
-	  _expected = new double***[_sizeColValX];
-	  for(int i=0; i<_sizeColValX; i++){
-	    _expected[i]=new double**[_sizeColValY];
-	    for( int j=0;j< _sizeColValY;j++){
-	      _expected[i][j]=new double*[_sizeX];
-	      for(int k=0; k< _sizeX; k++){
-	        _expected[i][j][k]= new double[_sizeY];
-	        for(int l=0; l< _sizeY;l++){
-	          _expected[i][j][k][l]=0;
-	        }
-	      }
-	    }
-	  }
-      __gis(maxit, konv,false);
-}
 GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test) {
       _valX= &eX;
       _valY= &eY;
@@ -80,7 +41,7 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
 	      }
 	    }
 	  }
-      _conv= __gis(maxit, konv,true);
+      __gis(maxit, konv,test);
 }
 // ColValY - Anzahl der Y-Knoten
 GIS::GIS(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY){
@@ -248,7 +209,7 @@ void GIS:: __getexp(){
     }
   }
 }
-vector<double> GIS:: __gis(int maxit, double konv, bool test){
+void GIS:: __gis(int maxit, double konv, bool test){
 
       //observed
 	  double**** observ = __getobs();
@@ -270,7 +231,7 @@ vector<double> GIS:: __gis(int maxit, double konv, bool test){
 	    }
 	  int i=0;
 	  double l=1;
-	  while(i<maxit ){ //&& fabs(l)>=konv
+	  while(i<maxit && fabs(l)>=konv ){
 	    l=0;
 	    __getexp();
 	    for(int Feati=0; Feati<_sizeColValX;Feati++){
@@ -296,9 +257,7 @@ vector<double> GIS:: __gis(int maxit, double konv, bool test){
 		 if(test){
 			 _conv.push_back(l);
 		 }
-		 cout << l << endl;
 	  	}
-	return _conv;
 }
 
 

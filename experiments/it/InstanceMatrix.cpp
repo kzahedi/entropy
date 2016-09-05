@@ -13,7 +13,6 @@ InstanceMatrix:: InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, 
 	_sizeY = (*_Y).rows();
 	_FA=FeatureArray(valuelambda);
 	_getMatrix(valuelambda);
-	cout << _mat[0][0][1][1][0].size()<< endl;
 }
 InstanceMatrix:: ~InstanceMatrix(){
 	// matrix
@@ -102,7 +101,7 @@ void InstanceMatrix::_getMatrix(double valuelambda){
 						for(int xi=0; xi< _sizeRowValX; xi++){
 							for(int y=0; y<_sizeY; y++){
 								if(_FA[Feati][Featj].delta(_X->get(delti,0),_Y->get(deltj,0),_valX->get(xi,Feati),_Y->get(y,0))==1){
-									cout << "feati " << Feati << " featj " << Featj << " delti " << delti << " deltj " << deltj << " xi " <<  xi << endl;
+									//cout << "feati " << Feati << " featj " << Featj << " delti " << delti << " deltj " << deltj << " xi " <<  xi << endl;
 									_mat[Feati][Featj][delti][deltj][0].push_back(xi);
 									_mat[Feati][Featj][delti][deltj][1].push_back(y);
 								}
@@ -112,6 +111,5 @@ void InstanceMatrix::_getMatrix(double valuelambda){
 				}
 			}
 		}
-
 }
 
