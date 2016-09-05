@@ -11,7 +11,7 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int 
     _sizeColValX= (*_valX).columns();
     _sizeRowValX= (*_valX).rows();
     _sizeRowValY= (*_valY).rows();
-    _FM=new InstanceMatrix(*_valX,*_valY,*_X,*_Y,valuelambda);
+    _FM= new InstanceMatrix(*_valX,*_valY,*_X,*_Y,valuelambda);
     _observed=__getobs();
 
     _exponent= new double***[_sizeColValX];
@@ -34,7 +34,7 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int 
     	for(int j=0;j<_sizeColValY;j++){
     		_normaliser[i][j]=new double[_sizeRowValX];
     		for(int k=0;k<_sizeRowValX;k++){
-    			_normaliser[i][j][k]=_sizeColValY;
+    			_normaliser[i][j][k]=2;
     		}
     	}
     }
@@ -60,7 +60,22 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int 
     }
     __scgis(maxit,konv);
 }
+double SCGIS::getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY){
+  assert(Feati<_sizeColValX && Featj<_sizeColValY);
+  double lambda=_FM->getFeatureArraylambda(Feati,Featj, ilambdaX,ilambdaY);
+  return lambda;
+}
 SCGIS:: ~SCGIS(){}
+
+double SCGIS::scgis(int Feati,int Featj,double ValX,double ValY){
+  double norm=0;
+  double exponent=0;
+  exponent= exp((*_FM).getFeatureArrayvalue(Feati,Featj,ValX,ValY) );
+  for(int yi=0;yi<_sizeY;yi++){
+	    norm+= exp( (*_FM).getFeatureArrayvalue(Feati,Featj,ValX,(*_Y)(yi,0)));
+  }
+  return exponent/norm;
+}
 
 double**** SCGIS:: __getobs(){
     _observed = new double***[_sizeColValX];
@@ -104,21 +119,41 @@ while(i<maxit){
 					for(int y=0;y<_sizeY;y++){
 						for(int k=0; k<_FM->getInstanceMatrixX(Feati,Featj,delti,deltj).size();k++){
 							if(_FM->getInstanceMatrixY(Feati,Featj,delti,deltj)[k]==y){
-								double x=_FM->getInstanceMatrixX(Feati,Featj,delti,deltj)[k];
-								_expected[Feati][Featj][delti][deltj]+=exp(_exponent[Feati][Featj][x][y])/_normaliser[Feati][Featj][x];
+								int x=_FM->getInstanceMatrixX(Feati,Featj,delti,deltj)[k];
+								//cout << exp(_exponent[Feati][Featj][x][y]) << " norm " << _normaliser[Feati][Featj][x] << endl;
+								if(fabs(_normaliser[Feati][Featj][x])>0.0000001 ){
+									_expected[Feati][Featj][delti][deltj]+=exp(_exponent[Feati][Featj][x][y])/_normaliser[Feati][Featj][x];
+								//	cout << " expected " << _expected[Feati][Featj][delti][deltj] << " exponent " << exp(_exponent[Feati][Featj][x][y]) << " normaliser " << _normaliser[Feati][Featj][x] << endl;
+								}
+								else{cout << "norm " << _normaliser[Feati][Featj][x] << endl;}
 							}
 						}
 					}
-					_delta[delti][deltj]=log(_observed[Feati][Featj][delti][deltj]/_expected[Feati][Featj][delti][deltj]);
-					double newl= _FM->getFeatureArraylambda(Feati,Featj,delti,deltj)+_delta[delti][deltj];
+					 //cout << "normaliser " << _normaliser [Feati][Featj][0]<< endl;
+					//cout << "obs " << _observed[Feati][Featj][delti][deltj] << " exp " << _expected[Feati][Featj][delti][deltj] << endl;
+					double newl;
+		            if(fabs(_expected[Feati][Featj][delti][deltj]) < 0.00000001){_expected[Feati][Featj][delti][deltj]=0.01;}
+					if(fabs(_observed[Feati][Featj][delti][deltj])>0.0000001 ){
+						_delta[delti][deltj]=log(_observed[Feati][Featj][delti][deltj]/_expected[Feati][Featj][delti][deltj]);
+						//cout << " feati " << Feati << " featj " << Featj << " delti " << delti << " deltj " << deltj << " delta " << _delta[delti][deltj];
+						//cout << " obs " << _observed[Feati][Featj][delti][deltj] << " exp " << _expected[Feati][Featj][delti][deltj] << " " << _observed[Feati][Featj][delti][deltj]/_expected[Feati][Featj][delti][deltj] << endl;
+						newl= _FM->getFeatureArraylambda(Feati,Featj,delti,deltj)+_delta[delti][deltj];
+					}
+					else{newl=0;}
+					cout << newl << endl;
 					_FM->setFeatureArraylambda(Feati,Featj,delti,deltj,newl);
 					for(int y=0;y<_sizeY;y++){
 						for(int k=0; k<_FM->getInstanceMatrixX(Feati,Featj,delti,deltj).size();k++){
 							if(_FM->getInstanceMatrixY(Feati,Featj,delti,deltj)[k]==y){
-								double x=_FM->getInstanceMatrixX(Feati,Featj,delti,deltj)[k];
+								int x=_FM->getInstanceMatrixX(Feati,Featj,delti,deltj)[k];
+								//cout << "norma " << _normaliser[Feati][Featj][x];
 								_normaliser[Feati][Featj][x]-=exp(_exponent[Feati][Featj][x][y]);
+								//cout << " normb " << _normaliser[Feati][Featj][x];
 								_exponent[Feati][Featj][x][y]+=_delta[delti][deltj];
+								//cout << _delta[delti][deltj] << " feati " << Feati << " featj " << Featj << " delti " << delti << " deltj " << deltj << endl;
 								_normaliser[Feati][Featj][x]+=exp(_exponent[Feati][Featj][x][y]);
+								//cout << " normc " << _normaliser[Feati][Featj][x] << endl;
+								//cout << " exp " << _exponent[Feati][Featj][x][y] << endl;
 							}
 						}
 					}

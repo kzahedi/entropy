@@ -10,6 +10,7 @@
 #include <math.h>
 #include <entropy++/Matrix.h>
 #include "Feature.h"
+#include "InstanceMatrix.h"
 
 using namespace std;
 
@@ -18,6 +19,8 @@ class SCGIS{
 public:
 	SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int maxit, double konv, double valuelambda);
 	~SCGIS();
+	double scgis(int Feati,int Featj,double ValX,double ValY);
+	double	getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY);
 
 private:
 	void			__scgis(int maxit, double konv);

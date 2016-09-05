@@ -14,26 +14,84 @@
 #include "FeatureMatrix.h"
 #include "GIS.h"
 #include "InstanceMatrix.h"
+#include "SCGIS.h"
 
 
 
-int main(int argc, char **argv)
-{
-	DContainer *X= new DContainer(2,1);
-	(*X) << 0 << 1 ;
-	DContainer *Y= new DContainer(2,1);
-	(*Y) << 0 << 1 ;
-	DContainer *valX = new DContainer(10,2);
-	(*valX) << 0 << 1 << 1 << 1 << 0 << 1 << 0 << 1 << 1 << 0 << 0 << 0 << 0 << 1 << 0 << 1  << 0;
-	cout << (*valX) << endl;
-	DContainer *valY = new DContainer(10,1);
-	InstanceMatrix *test = new InstanceMatrix(*valX,*valY,*X,*Y,1);
-
-	for(int i=0;i<8;i++){
-		cout << test->getInstanceMatrixX(0,0,0,1)[i] << " " <<  test ->getInstanceMatrixY(0,0,0,1)[i] << endl;
-		cout << endl;
-	}
+int main(int argc, char **argv){
+srand(time(NULL));
+int n=10;
+DContainer *eX = new DContainer(n,1);
+for(int i=0;i< n;i++ ){
+	 for(int j=0;j<1;j++){
+		 *eX << rand() % 2;
+	 }
 }
+DContainer *zX = new DContainer(2,1);
+*zX << 0 << 1;
+ DContainer *zY = new DContainer(2,1);
+*zY << 0 << 1;
+
+GIS *Test = new GIS(1,*eX,*zX,*zY);
+Test->setFeatureArraylambda(0,0,1,0,4);
+Test->setFeatureArraylambda(0,0,1,1,0);
+Test->setFeatureArraylambda(0,0,0,0,1);
+Test->setFeatureArraylambda(0,0,0,1,1);
+
+double** prop;
+prop=new double*[n];
+for(int i=0;i<n;i++){
+	 prop[i]=new double[2];
+	 for(int j=0;j<2;j++){
+		 prop[i][j]=0;
+	 }
+}
+
+for(int i=0;i<n;i++){
+	for(int propi=0;propi<2;propi++){
+			prop[i][propi]=Test->gis(0,0,(*eX)(i,0),propi);
+		 }
+	 }
+DContainer *esY=new DContainer(n,1);
+
+for(int i=0;i<n;i++){
+	 double z=(double)rand()/RAND_MAX;
+	 double s=0;
+	 int ind=0;
+	 for(int j=0;j<2 && s<z;j++){
+			s+=prop[i][j];
+			ind=j;
+		 }
+	 (*esY) << ind;
+	 }
+GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,50,0.01,true);
+SCGIS *bTest = new SCGIS(*eX,*esY,*zX,*zY,50,0.01,1);
+cout <<Test->gis(0,0,0,0) << endl;
+cout <<Test->gis(0,0,1,0) << endl;
+cout <<Test->gis(0,0,0,1) << endl;
+cout <<Test->gis(0,0,1,1)<< endl;
+cout << endl;
+cout <<zTest->gis(0,0,0,0) << endl;
+cout <<zTest->gis(0,0,1,0) << endl;
+cout <<zTest->gis(0,0,0,1) << endl;
+cout <<zTest->gis(0,0,1,1)<< endl;
+cout << endl;
+cout <<bTest->scgis(0,0,0,0) << endl;
+cout <<bTest->scgis(0,0,1,0) << endl;
+cout <<bTest->scgis(0,0,0,1) << endl;
+cout <<bTest->scgis(0,0,1,1)<< endl;
+cout << endl;
+cout << zTest->getFeatureArraylambda(0,0,1,0) << endl;
+cout << zTest->getFeatureArraylambda(0,0,1,1) << endl;
+cout << zTest->getFeatureArraylambda(0,0,0,0) << endl;
+cout << zTest->getFeatureArraylambda(0,0,0,1) << endl;
+cout << endl;
+cout << bTest->getFeatureArraylambda(0,0,1,0) << endl;
+cout << bTest->getFeatureArraylambda(0,0,1,1) << endl;
+cout << bTest->getFeatureArraylambda(0,0,0,0) << endl;
+cout << bTest->getFeatureArraylambda(0,0,0,1) << endl;
+}
+
 /*
 	vector<vector<int> > W(2,vector<int>(0));
 	vector<vector<int> > ma[1][2];
