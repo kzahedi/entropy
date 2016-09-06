@@ -19,7 +19,8 @@ class SCGIS{
 public:
 	SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test);
 	~SCGIS();
-	double scgis(int Feati,int Featj,double ValX,double ValY);
+	double 	prop(int Feati,int Featj,double ValX,double ValY);
+	double 	prop(int rowX,vector<vector<double> > Y, int rowY);
 	double	getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY);
 	double 	getconv(int i);
 	int    	getsizeconv();

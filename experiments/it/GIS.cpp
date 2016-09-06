@@ -107,7 +107,7 @@ GIS::~GIS(){
 	_FM->~FeatureMatrix();
 	_conv.clear();
 }
-double GIS::gis(int Feati,int Featj,double ValX,double ValY){
+double GIS::prop(int Feati,int Featj,double ValX,double ValY){
   double norm=0;
   double exponent=0;
   exponent= exp((*_FM).getFeatureArrayvalue(Feati,Featj,ValX,ValY) );
@@ -116,7 +116,7 @@ double GIS::gis(int Feati,int Featj,double ValX,double ValY){
   }
   return exponent/norm;
 }
-double GIS::gis(int rowX,vector<vector<double> > Y, int rowY){
+double GIS::prop(int rowX,vector<vector<double> > Y, int rowY){
   double feat=0;
   double featnorm=0;
   double norm=0;
@@ -264,7 +264,7 @@ void GIS:: __gis(int maxit, double konv, bool test){
 	    }
 	  int i=0;
 	  double l=1;
-	  while(i<maxit && fabs(l)>=konv ){
+	  while(i<maxit  && fabs(l)>=konv){
 	    l=0;
 	    __getexp();
 	    for(int Feati=0; Feati<_sizeColValX;Feati++){
@@ -274,7 +274,7 @@ void GIS:: __gis(int maxit, double konv, bool test){
 	            double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,lambdai,lambdaj);
 	            double newl=0;
 	            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) < 0.00000001){_expected[Feati][Featj][lambdai][lambdaj]=0.01;}
-	            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) > 0.0000001 && fabs(observ[Feati][Featj][lambdai][lambdaj]) > 0.00000001 ){
+	            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) > 0.00000001 && fabs(observ[Feati][Featj][lambdai][lambdaj]) > 0.00000001 ){
 	                    newl= oldl + (1/featconst)*log(observ[Feati][Featj][lambdai][lambdaj]/_expected[Feati][Featj][lambdai][lambdaj]);
 	            }
 				else{

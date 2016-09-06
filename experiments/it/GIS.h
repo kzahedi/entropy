@@ -12,8 +12,8 @@ public:
 	GIS(int ColValY,DContainer &eX,DContainer &aX, DContainer &aY);
 	GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test);
 	~GIS();
-	double 	gis(int rowX,vector<vector<double> > Y, int rowY);
-	double 	gis(int Feati,int Featj,double ValX,double ValY);
+	double 	prop(int rowX,vector<vector<double> > Y, int rowY);
+	double 	prop(int Feati,int Featj,double ValX,double ValY);
 	void 	setFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY,double valuelambda);
 	double	getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY);
 	double 	getconv(int i);

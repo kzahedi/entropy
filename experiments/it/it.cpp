@@ -6,6 +6,7 @@
 #include <entropy++/Matrix.h>
 #include <entropy++/SparseMatrix.h>
 
+#include <time.h>
 #include <string>
 #include <iostream>
 #include <math.h>
@@ -15,12 +16,13 @@
 #include "GIS.h"
 #include "InstanceMatrix.h"
 #include "SCGIS.h"
+#include "Comp.h"
 
 
 
 int main(int argc, char **argv){
 	srand(time(NULL));
-		 int n=100;
+		 int n=100000;
 		 DContainer *eX = new DContainer(n,1);
 		 for(int i=0;i< n;i++ ){
 			 for(int j=0;j<1;j++){
@@ -49,7 +51,7 @@ int main(int argc, char **argv){
 
 		 for(int i=0;i<n;i++){
 			for(int propi=0;propi<2;propi++){
-					prop[i][propi]=Test->gis(0,0,(*eX)(i,0),propi);
+					prop[i][propi]=Test->prop(0,0,(*eX)(i,0),propi);
 				 }
 			 }
 		 DContainer *esY=new DContainer(n,1);
@@ -64,24 +66,8 @@ int main(int argc, char **argv){
 				 }
 			 (*esY) << ind;
 			 }
-		 SCGIS *zTest = new SCGIS(*eX,*esY,*zX,*zY,1,500,0.01,true);
-
-		 cout << endl;
-		 cout <<zTest->scgis(0,0,0,0)-Test->gis(0,0,0,0) << endl;
-		 cout <<zTest->scgis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
-		 cout <<zTest->scgis(0,0,0,1)-Test->gis(0,0,0,1) << endl;
-		 cout <<zTest->scgis(0,0,1,1)-Test->gis(0,0,1,1) << endl;
-		 cout << zTest->getFeatureArraylambda(0,0,0,0) <<endl;
-		 cout << zTest->getFeatureArraylambda(0,0,1,0) <<endl;
-		 cout << zTest->getFeatureArraylambda(0,0,0,1) <<endl;
-		 cout << zTest->getFeatureArraylambda(0,0,1,1) <<endl;
-		 cout << endl;
-		 Test->~GIS();
-		 zTest->~SCGIS();
-
-		 GIS *mTest = new GIS(*eX,*esY,*zX,*zY,1,500,0.01,true);
-		 mTest->~GIS();
-
+		 //GIS &exact, DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int maxit, double konv
+		 Comp *test = new Comp(*Test,*eX,*esY,*zX,*zY,2000,0.000001);
 /*srand(time(NULL));
 int n=1000;
 DContainer *eX = new DContainer(n,1);
