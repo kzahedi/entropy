@@ -18,7 +18,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( itTest );
 void itTest::OneXOneY()
 {
 	 srand(time(NULL));
-	 int n=100;
+	 int n=1000;
 	 DContainer *eX = new DContainer(n,1);
 	 for(int i=0;i< n;i++ ){
 		 for(int j=0;j<1;j++){
@@ -81,12 +81,13 @@ void itTest::OneXOneY()
 	 for(int i=0; i< zTest->getsizeconv()-1; i++ ){
 		 CPPUNIT_ASSERT 	(zTest->getconv(i)>= zTest->getconv(i+1) );
 	 }
-
+	 Test->~GIS();
+	 zTest->~GIS();
 }
 void itTest::SCOneXOneY()
 {
 	srand(time(NULL));
-		 int n=100;
+		 int n=1000;
 		 DContainer *eX = new DContainer(n,1);
 		 for(int i=0;i< n;i++ ){
 			 for(int j=0;j<1;j++){
@@ -130,7 +131,7 @@ void itTest::SCOneXOneY()
 				 }
 			 (*esY) << ind;
 			 }
-		 SCGIS *zTest = new SCGIS(*eX,*esY,*zX,*zY,1,500,0.01,true);
+		 SCGIS *zTest = new SCGIS(*eX,*esY,*zX,*zY,1,5000,0.01,true);
 
 		 cout << endl;
 		 cout <<zTest->scgis(0,0,0,0)-Test->gis(0,0,0,0) << endl;
@@ -154,6 +155,8 @@ void itTest::SCOneXOneY()
 		 for(int i=0; i< zTest->getsizeconv()-1; i++ ){
 			 CPPUNIT_ASSERT 	(zTest->getconv(i)>= zTest->getconv(i+1) );
 		 }
+		 Test->~GIS();
+		 zTest->~SCGIS();
 }
 void itTest::TwoXOneY()
 {
@@ -233,12 +236,12 @@ void itTest::TwoXOneY()
 	 for(int i=0; i< zTest->getsizeconv()-1; i++ ){
 		 CPPUNIT_ASSERT 	(zTest->getconv(i)>= zTest->getconv(i+1) );
 	 }
-
-
+	 Test->~GIS();
+	 zTest->~GIS();
 }
 void itTest::SCTwoXOneY()
 {	 srand(time(NULL));
-	 int n=100;
+	 int n=1000;
 	 DContainer *eX = new DContainer(n,2);
 	 for(int i=0;i< n;i++ ){
 		 for(int j=0;j<2;j++){
@@ -293,7 +296,7 @@ void itTest::SCTwoXOneY()
 		 (*esY) << ind;
 
 	 }
-	 SCGIS *zTest = new SCGIS(*eX,*esY,*zX,*zY,1,500,0.01,true);
+	 SCGIS *zTest = new SCGIS(*eX,*esY,*zX,*zY,1,5000,0.01,true);
 	 cout << endl;
 	 cout <<zTest->scgis(0,0,0,0)-Test->gis(0,0,0,0)  << endl;
 	 cout <<zTest->scgis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
@@ -314,7 +317,8 @@ void itTest::SCTwoXOneY()
 		// cout << "conv "<< zTest->getconv(i) << " " << zTest->getconv(i+1) << endl;
 		 CPPUNIT_ASSERT 	(zTest->getconv(i)>= zTest->getconv(i+1) );
 	 }
-
+	 Test->~GIS();
+	 zTest->~SCGIS();
 
 }
 void itTest::TwoXTwoY(){
@@ -430,6 +434,8 @@ void itTest::TwoXTwoY(){
 				// cout << zTest->getconv(i)  << " " << zTest->getconv(i+1) << endl;
 				// CPPUNIT_ASSERT 	(zTest->getconv(i) >= zTest->getconv(i+1) );
 			 //}
+			 Test->~GIS();
+			 zTest->~GIS();
 
 }
 void itTest::SCTwoXTwoY()
@@ -510,24 +516,24 @@ GIS *Test = new GIS(2,*eX,*zX,*zY);
 
 	 }
 
-	 SCGIS *zTest = new SCGIS(*eX,*esY,*zX,*zY,1,500,0.01,true);
+	 SCGIS *zTest = new SCGIS(*eX,*esY,*zX,*zY,1,5000,0.01,true);
 		 cout << endl;
-		 cout <<zTest->scgis(0,0,0,0)-Test->gis(0,0,0,9)  << endl;
+		 cout <<zTest->scgis(0,0,0,0)-Test->gis(0,0,0,0)  << endl;
 		 cout <<zTest->scgis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
 		 cout <<zTest->scgis(0,0,0,1)-Test->gis(0,0,0,1) << endl;
 		 cout <<zTest->scgis(0,0,1,1)-Test->gis(0,0,1,1) << endl;
 		 cout << endl;
-		 cout <<zTest->scgis(1,0,0,0)-Test->gis(1,0,0,5) << endl;
+		 cout <<zTest->scgis(1,0,0,0)-Test->gis(1,0,0,0) << endl;
 		 cout <<zTest->scgis(1,0,1,0)-Test->gis(1,0,1,0) << endl;
-		 cout <<zTest->scgis(1,0,0,1)-Test->gis(1,0,0,0) << endl;
+		 cout <<zTest->scgis(1,0,0,1)-Test->gis(1,0,0,1) << endl;
 		 cout <<zTest->scgis(1,0,1,1)-Test->gis(1,0,1,1) << endl;
 		 cout << endl;
 		 cout <<zTest->scgis(0,1,0,0)-Test->gis(0,1,0,0) << endl;
-		 cout <<zTest->scgis(0,1,1,0)-Test->gis(0,1,1,3) << endl;
+		 cout <<zTest->scgis(0,1,1,0)-Test->gis(0,1,1,0) << endl;
 		 cout <<zTest->scgis(0,1,0,1)-Test->gis(0,1,0,1) << endl;
 		 cout <<zTest->scgis(0,1,1,1)-Test->gis(0,1,1,1) << endl;
 		 cout << endl;
-		 cout <<zTest->scgis(1,1,0,0)-Test->gis(1,1,0,2) << endl;
+		 cout <<zTest->scgis(1,1,0,0)-Test->gis(1,1,0,0) << endl;
 		 cout <<zTest->scgis(1,1,1,0)-Test->gis(1,1,1,0) << endl;
 		 cout <<zTest->scgis(1,1,0,1)-Test->gis(1,1,0,1) << endl;
 		 cout <<zTest->scgis(1,1,1,1)-Test->gis(1,1,1,1) << endl;
@@ -545,6 +551,9 @@ GIS *Test = new GIS(2,*eX,*zX,*zY);
 			// cout << zTest->getconv(i)  << " " << zTest->getconv(i+1) << endl;
 			 CPPUNIT_ASSERT 	(zTest->getconv(i) >= zTest->getconv(i+1) );
 		 }
+		 Test->~GIS();
+		 zTest->~SCGIS();
+
 
 }
 void itTest::NotBinary(){
@@ -628,5 +637,8 @@ void itTest::NotBinary(){
 		 for(int i=0; i< zTest->getsizeconv()-1; i++ ){
 			 CPPUNIT_ASSERT 	(zTest->getconv(i)>= zTest->getconv(i+1) );
 		 }
+		 zTest->~GIS();
+		 Test->~GIS();
+
 
 	}

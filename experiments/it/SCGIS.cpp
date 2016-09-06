@@ -71,7 +71,58 @@ double SCGIS::getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilam
   double lambda=_FM->getFeatureArraylambda(Feati,Featj, ilambdaX,ilambdaY);
   return lambda;
 }
-SCGIS:: ~SCGIS(){}
+SCGIS:: ~SCGIS(){
+	_FM->~InstanceMatrix();
+
+	for(int i=0; i<_sizeColValX;i++){
+		for(int j=0;j<_sizeColValY;j++){
+			for(int k=0;k<_sizeX;k++){
+				delete [] _observed[i][j][k];
+			}
+			delete [] _observed[i][j];
+		}
+		delete [] _observed[i];
+	}
+	delete [] _observed;
+
+	for(int i=0;i< _sizeColValX;i++){
+		for(int j=0;j<_sizeColValY;j++){
+			for(int k=0;k<_sizeX;k++){
+				delete [] _expected[i][j][k];
+			}
+			delete [] _expected[i][j];
+		}
+		delete [] _expected[i];
+	}
+	delete [] _expected;
+
+	for(int i=0;i<_sizeColValX;i++){
+		for(int j=0;j<_sizeColValY;j++){
+			for(int k=0;k<_sizeRowValX;k++){
+				delete [] _exponent[i][j][k];
+			}
+			delete [] _exponent[i][j];
+		}
+		delete [] _exponent[i];
+	}
+	delete [] _exponent;
+
+	for(int i=0;i<_sizeColValX;i++){
+		for(int j=0; j<_sizeColValY;j++){
+			delete [] _normaliser[i][j];
+		}
+		delete [] _normaliser[i];
+	}
+	delete [] _normaliser;
+
+	for(int i=0;i<_sizeX;i++){
+		delete [] _delta[i];
+	}
+	delete [] _delta;
+
+	_conv.clear();
+
+}
 
 double SCGIS::scgis(int Feati,int Featj,double ValX,double ValY){
   double norm=0;

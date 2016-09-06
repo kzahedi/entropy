@@ -76,6 +76,12 @@ int main(int argc, char **argv){
 		 cout << zTest->getFeatureArraylambda(0,0,0,1) <<endl;
 		 cout << zTest->getFeatureArraylambda(0,0,1,1) <<endl;
 		 cout << endl;
+		 Test->~GIS();
+		 zTest->~SCGIS();
+
+		 GIS *mTest = new GIS(*eX,*esY,*zX,*zY,1,500,0.01,true);
+		 mTest->~GIS();
+
 /*srand(time(NULL));
 int n=1000;
 DContainer *eX = new DContainer(n,1);

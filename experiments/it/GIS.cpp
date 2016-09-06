@@ -57,21 +57,54 @@ GIS::GIS(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY){
     _sizeRowValY= 0;
     _FM=new FeatureMatrix(*_valX,*_valY,*_X,*_Y,0);
 
-    _exponent = new double**[0];
-    _normaliser= new double*[0];
-    _expected = new double***[0];
-    _observed = new double***[0];
+    _exponent = NULL;
+    _normaliser= NULL;
+    _expected = NULL;
+    _observed = NULL;
 
 }
 
 GIS::~GIS(){
-	for(int j=0;j<_sizeColValY;j++){
-		delete [] _normaliser[j];
+	if(_observed!=NULL){
+	for(int i=0;i<_sizeColValX;i++){
+	   for(int j=0;j<_sizeColValY;j++){
+	      for(int k=0;k<_sizeX;k++){
+	         delete [] _observed[i][j][k];
+		  }
+		  delete [] _observed[i][j];
+	   }
+	   delete [] _observed[i];
 	}
-
-	//double****		_expected;
-	//double**** 		_observed;
-	//double*** 		_exponent;
+	delete [] _observed;
+	}
+	if(_expected != NULL){
+	   for(int i=0;i<_sizeColValX;i++){
+	      for(int j=0;j<_sizeColValY;j++){
+		     for(int k=0;k<_sizeX;k++){
+			    delete [] _expected[i][j][k];
+			 }
+			 delete [] _expected[i][j];
+		  }
+		  delete[] _expected[i];
+	   }
+	   delete[] _expected;
+	}
+	if(_normaliser != NULL){
+		for(int m=0;m<_sizeColValX;m++){
+			delete [] _normaliser[m];
+		}
+		delete [] _normaliser;
+	}
+	if(_exponent != NULL){
+		for(int i=0;i<_sizeColValX;i++){
+			for(int j=0;j<_sizeColValY;j++){
+				delete [] _exponent[i][j];
+			}
+			delete [] _exponent[i];
+		}
+		delete [] _exponent;
+	}
+	_FM->~FeatureMatrix();
 	_conv.clear();
 }
 double GIS::gis(int Feati,int Featj,double ValX,double ValY){
