@@ -96,7 +96,7 @@ GIS *Test = new GIS(2,*eX,*zX,*zY);
 		 if(ind==3) (*esY) << 1 << 1;
 
 	 }
-		 Comp *test = new Comp(*Test,*eX,*esY,*zX,*zY,2000,0.000001);
+		 Comp *test = new Comp(*Test,*eX,*esY,*zX,*zY,20000,0.00000001);
 
 test->comparison(0);
 /*srand(time(NULL));

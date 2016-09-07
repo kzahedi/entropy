@@ -233,8 +233,8 @@ while(i<maxit && fabs(l)>konv ){
 						}
 					}
 					double newl;
-		            if(fabs(_expected[Feati][Featj][delti][deltj]) < 0.00000001){_expected[Feati][Featj][delti][deltj]=0.01;}
-					if(fabs(_observed[Feati][Featj][delti][deltj])>0.00000001 ){
+		            if(fabs(_expected[Feati][Featj][delti][deltj])<0.00000001){_expected[Feati][Featj][delti][deltj]=0.01;}
+					if(fabs(_observed[Feati][Featj][delti][deltj])>0.00000001){
 						_delta[delti][deltj]=log(_observed[Feati][Featj][delti][deltj]/_expected[Feati][Featj][delti][deltj]);
 						newl= _FM->getFeatureArraylambda(Feati,Featj,delti,deltj)+_delta[delti][deltj];
 					}

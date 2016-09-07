@@ -3,8 +3,8 @@
 Feature::Feature() {
 	_X = new DContainer(0, 0);
 	_Y = new DContainer(0, 0);
-	_sizeY = (*_Y).rows();
-	_sizeX = (*_X).rows();
+	_sizeY = _Y->rows();
+	_sizeX = _X->rows();
 	_lambda = new Matrix(_sizeX,_sizeY);
 }
 
@@ -12,10 +12,10 @@ Feature::Feature() {
 Feature::Feature(DContainer &aX, DContainer &aY, double valuelambda){
 	_X= &aX;
 	_Y= &aY;
-	assert((*_X).columns()==1);
-	assert((*_Y).columns()==1);
-	_sizeY= (*_Y).rows();
-	_sizeX= (*_X).rows();
+	assert(_X->columns()==1);
+	assert(_Y->columns()==1);
+	_sizeY=_Y->rows();
+	_sizeX=_X->rows();
 	_lambda = new Matrix(_sizeX,_sizeY);
 	for(int i=0; i< _sizeX; i++){
 		for(int j=0; j< _sizeY; j++){
@@ -29,8 +29,8 @@ Feature::Feature(bool binaer,double valuelambda){
 		*_X << 1 << -1;
 		_Y= new DContainer(2,1);
 		*_Y << 1 << -1;
-		_sizeY= (*_Y).rows();
-		_sizeX= (*_X).rows();
+		_sizeY= _Y->rows();
+		_sizeX= _X->rows();
 		_lambda = new Matrix(_sizeX,_sizeY);
 				for(int i=0; i< _sizeX; i++){
 					for(int j=0; j< _sizeY; j++){
@@ -42,10 +42,10 @@ Feature::Feature(DContainer &aX, DContainer &aY, Matrix lambda){
 	_lambda=&lambda;
 	_X= &aX;
 	_Y= &aY;
-	_sizeY= (*_Y).rows();
-	_sizeX= (*_X).rows();
-	assert((*_X).columns()==1);
-	assert((*_Y).columns()==1);
+	_sizeY= _Y->rows();
+	_sizeX= _X->rows();
+	assert(_X->columns()==1);
+	assert(_Y->columns()==1);
 	assert(_lambda->rows()==(_sizeX));
 	assert(_lambda->cols()==(_sizeY));
 }
@@ -68,8 +68,8 @@ double Feature::value(double x,double y){
 		double val=0;
 		for(int i=0; i< _sizeX; i++){
 			for(int j=0; j< _sizeY; j++){
-				double a=(*_X).get(i,0);
-				double b=(*_Y).get(j,0);
+				double a=_X->get(i,0);
+				double b=_Y->get(j,0);
 				val+= (*_lambda)(i,j)*delta(a, b, x, y);
 			}
 		}

@@ -21,9 +21,7 @@ class Comp{
 public:
 	Comp(GIS &exact, DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int maxit, double konv);
 	~Comp();
-	vector<double> comptimeKL( vector<vector<double> > y,int RowY);
 	vector<double> KL(vector< vector<double> > y, int RowY );
-	//uebersicht
 	void comparison(int RowY);
 
 private:
@@ -34,12 +32,15 @@ private:
 	DContainer 		*_X;
 	DContainer 		*_valY;
 	DContainer 		*_valX;
+	int 			_sizeColValY;
+	int				_sizeColValX;
 	vector<double>	_timediff;
 	vector<vector<double> > _alphY;
 	vector<vector<double> > _alphX;
 
 	vector<vector<double> > __getY();
 	vector<vector<double> > __getX();
+
 	void 	__comptime(int maxit, double konv);
 	void    __fill(vector<double> fill, int i, vector<vector<double> > &Y);
 	void    __fillx(vector<double> fill, int i, vector<vector<double> > &Y);

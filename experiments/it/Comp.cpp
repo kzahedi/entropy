@@ -6,9 +6,27 @@ Comp::Comp(GIS &exact, DContainer &eX, DContainer &eY, DContainer &aX, DContaine
     _valY= &eY;
     _X= &aX;
     _Y= &aY;
+    _sizeColValY=_valY->columns();
+    _sizeColValX=_valX->columns();
     __comptime(maxit,konv);
     _alphY=__getY();
     _alphX=__getX();
+
+}
+Comp::	~Comp(){
+	_timediff.clear();
+	for(int i=0;i<_alphX.size();i++){
+		_alphX[i].clear();
+	}
+	_alphX.clear();
+
+	for(int i=0;i<_alphY.size();i++){
+		_alphY[i].clear();
+	}
+	_alphY.clear();
+	_exact->~GIS();
+	_gisTest->~GIS();
+	_scgisTest->~SCGIS();
 }
 void Comp::__comptime(int maxit, double konv){
 	time_t befor1;
@@ -27,12 +45,12 @@ void Comp::__comptime(int maxit, double konv){
 void Comp:: comparison(int RowY){
 		cout << "Comparison: " << endl;
 		cout << endl;
-		cout << "time:  GIS: " << _timediff[0] << " SCGIS " << _timediff[1] << endl;
+		cout << "time:  GIS: " << _timediff[0] << "s SCGIS " << _timediff[1] << "s" << endl;
 		cout << endl;
-		vector<double> kl = comptimeKL(_alphY,RowY);
+		vector<double> kl = KL(_alphY,RowY);
 		cout << "KL-distance: GIS: " << kl[0] << " SCGIS " << kl[1] << endl;
-		cout << "KL-time: GIS: " << kl[2] << " SCGIS " << kl[3] << endl;
-		cout << "alphY :" << endl;
+
+		/*cout << "alphY :" << endl;
 		for(int i=0;i<_alphY.size();i++){
 			for(int j=0;j<_alphY[i].size();j++){
 				cout << _alphY[i][j] << " " ;
@@ -46,7 +64,7 @@ void Comp:: comparison(int RowY){
 			}
 			cout << endl;
 		}
-		cout << _alphX.size() << endl;
+		cout << _alphX.size() << endl; */
 }
 vector<double> Comp:: KL(vector<vector<double> > y, int RowY ){
 	vector<double> dist(2);
@@ -57,6 +75,9 @@ vector<double> Comp:: KL(vector<vector<double> > y, int RowY ){
 		p1=_gisTest->prop(_alphX,RowX,y,RowY);
 		p2=_scgisTest->prop(_alphX,RowX,y,RowY);
 		q= _exact->prop(_alphX,RowX,y,RowY);
+		if(fabs(p1)<0.00000001){ p1=0.000001;}
+		if(fabs(p2)<0.00000001){ p2=0.000001;}
+		if(fabs( q)<0.00000001){ q =0.000001;}
 		dist[0]+= p1*log(p1/q);
 		dist[1]+= p2*log(p2/q);
 	}
@@ -64,48 +85,22 @@ vector<double> Comp:: KL(vector<vector<double> > y, int RowY ){
 }
 vector<vector<double> > Comp::__getY(){
 	vector<double> fill(0);
-	vector<vector<double> > Y(pow(_Y->rows(),_valY->columns()),vector<double>(_valY->columns()));
+	vector<vector<double> > Y(pow(_Y->rows(),_sizeColValY),vector<double>(_sizeColValY));
 	__fill(fill,0,Y);
 	return Y;
 }
 vector<vector<double> > Comp::__getX(){
 	vector<double> fillx(0);
-	vector<vector<double> > X(pow(_X->rows(),_valX->columns()),vector<double>(_valX->columns()));
+	vector<vector<double> > X(pow(_X->rows(),_sizeColValX),vector<double>(_sizeColValX));
 	__fillx(fillx,0,X);
 	return X;
 }
-vector<double> Comp:: comptimeKL( vector<vector<double> > y,int RowY){
-	time_t befor1;
-	time_t befor2;
-	time_t after1;
-	time_t after2;
-	vector<double> dist(4);
-	double p1=0;
-	double p2=0;
-	double q=0;
-	befor1=time(NULL);											// q=0 abfangen
-	for(int RowX=0;RowX< _alphX.size() ;RowX++){
-		p1=_gisTest->prop(_alphX,RowX,y,RowY);
-		q= _exact->prop(_alphX,RowX,y,RowY);
-		dist[0]+= p1*log(p1/q);
-	}
-	after1=time(NULL);
-	dist[3]=difftime(after1,befor1);
-	befor2=time(NULL);
-	for(int RowX=0;RowX<_alphX.size();RowX++){
-		p2=_scgisTest->prop(_alphX,RowX,y,RowY);
-		q= _exact->prop(_alphX,RowX,y,RowY);
-		dist[1]+= p2*log(p2/q);
-	}
-	after2=time(NULL);
-	dist[4]=difftime(after2,befor2);
-	return dist;
-}
+// nicht schoen, aber es funktioniert
 void  Comp::  __fill(vector<double> fill, int i, vector<vector<double> > &Y){
-	if(_valY->columns()==i){
-		static int j=0;								// nicht schoen, aber es funktioniert
-		for(int l=0;l<_valY->columns();l++){
-		Y[j][l]=fill[l];
+	if(_sizeColValY==i){
+		static int j=0;
+		for(int l=0;l<_sizeColValY;l++){
+			Y[j][l]=fill[l];
 		}
 		j++;
 		fill.pop_back();
@@ -120,10 +115,10 @@ void  Comp::  __fill(vector<double> fill, int i, vector<vector<double> > &Y){
 	}
 }
 void  Comp:: __fillx(vector<double> fillx, int i, vector<vector<double> > &X){
-	if(_valX->columns()==i){
-		static int j=0;								// nicht schoen, aber es funktioniert
-		for(int l=0;l<_valX->columns();l++){
-		X[j][l]=fillx[l];
+	if(_sizeColValX==i){
+		static int j=0;
+		for(int l=0;l<_sizeColValX;l++){
+			X[j][l]=fillx[l];
 		}
 		j++;
 		fillx.pop_back();

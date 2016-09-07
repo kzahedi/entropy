@@ -5,12 +5,12 @@ InstanceMatrix:: InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, 
 	_valY= &eY;
 	_X= &aX;
 	_Y= &aY;
-	_sizeColValY= (*_valY).columns();
-	_sizeColValX= (*_valX).columns();
-	_sizeRowValX= (*_valX).rows();
-	_sizeRowValY= (*_valY).rows();
-	_sizeX = (*_X).rows();
-	_sizeY = (*_Y).rows();
+	_sizeColValY= _valY->columns();
+	_sizeColValX= _valX->columns();
+	_sizeRowValX= _valX->rows();
+	_sizeRowValY= _valY->rows();
+	_sizeX = _X->rows();
+	_sizeY = _Y->rows();
 	_FA=FeatureArray(valuelambda);
 	_getMatrix(valuelambda);
 }
