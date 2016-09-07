@@ -22,7 +22,7 @@
 
 int main(int argc, char **argv){
 	srand(time(NULL));
-		 int n=100000;
+		 int n=1000;
 		 DContainer *eX = new DContainer(n,1);
 		 for(int i=0;i< n;i++ ){
 			 for(int j=0;j<1;j++){
@@ -54,7 +54,7 @@ int main(int argc, char **argv){
 					prop[i][propi]=Test->prop(0,0,(*eX)(i,0),propi);
 				 }
 			 }
-		 DContainer *esY=new DContainer(n,1);
+		 DContainer *esY=new DContainer(n,3);
 
 		 for(int i=0;i<n;i++){
 			 double z=(double)rand()/RAND_MAX;
@@ -66,8 +66,20 @@ int main(int argc, char **argv){
 				 }
 			 (*esY) << ind;
 			 }
-		 //GIS &exact, DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int maxit, double konv
 		 Comp *test = new Comp(*Test,*eX,*esY,*zX,*zY,2000,0.000001);
+vector<vector < double > > y= test->getY();
+cout << y.size() << endl;
+cout << y[1].size() << endl;
+cout << y[0].size() << endl;
+for(int i=0;i<y.size();i++){
+	for(int j=0;j<y[i].size();j++){
+		cout << y[i][j] << " " ;
+	}
+	cout << endl;
+}
+
+cout << "hier" << endl;
+
 /*srand(time(NULL));
 int n=1000;
 DContainer *eX = new DContainer(n,1);

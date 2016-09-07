@@ -23,6 +23,7 @@ public:
 	~Comp();
 	vector<double> comptimeKL(int maxit, double konv, vector<double> y);
 	vector<double> KL(vector<double> y );
+	vector<vector<double> > getY();
 	//uebersicht
 
 private:
@@ -35,10 +36,10 @@ private:
 	DContainer 		*_valX;
 	vector<double>	_timediff;
 
-	vector<vector<double> > getY();
 	double 	__prop(GIS &test, int RowX, vector<double> Y);
 	double 	__prop(SCGIS &test, int RowX,vector<double> Y);
 	void 	__comptime(int maxit, double konv);
+	void    __fill(vector<double> fill, int i, vector<vector<double> > &Y);
 };
 
 #endif
