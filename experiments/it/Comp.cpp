@@ -8,7 +8,9 @@ Comp::Comp(GIS &exact, DContainer &eX, DContainer &eY, DContainer &aX, DContaine
     _Y= &aY;
     _sizeColValY=_valY->columns();
     _sizeColValX=_valX->columns();
+    cout << "hier1" << endl;
     __comptime(maxit,konv);
+    cout << "hier2" << endl;
     _alphY=__getY();
     _alphX=__getX();
 
@@ -34,7 +36,9 @@ void Comp::__comptime(int maxit, double konv){
 	time_t after1;
 	time_t after2;
 	befor1=time(NULL);
+	cout << "hier3" << endl;
 	_gisTest=new GIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,false);
+	cout << "hier4" << endl;
 	after1=time(NULL);
 	_timediff.push_back(difftime(after1,befor1));
 	befor2=time(NULL);

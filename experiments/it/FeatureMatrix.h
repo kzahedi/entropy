@@ -7,6 +7,7 @@
 #include <iostream>
 #include <math.h>
 #include <vector>
+#include <entropy++/SparseMatrix.h>
 #include "Feature.h"
 
 using namespace std;
@@ -41,7 +42,10 @@ private:
 	DContainer *_X;
 	DContainer *_Y;
 	Feature** _FA;
-	vector<vector<int> > **_mat;
+	SparseMatrix *_Feati;
+	SparseMatrix *_Featj;
+	SparseMatrix *_Delti;
+	SparseMatrix *_Deltj;
 };
 
 #endif

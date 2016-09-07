@@ -42,7 +42,9 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
 	      }
 	    }
 	  }
+	  cout << "hier 7" << endl;
       __gis(maxit, konv,test);
+      cout << "hier 8" << endl;
 }
 // ColValY - Anzahl der Y-Knoten
 GIS::GIS(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY){
@@ -267,7 +269,7 @@ void GIS:: __getexp(){
   }
 }
 void GIS:: __gis(int maxit, double konv, bool test){
-
+	cout << "hier 9" << endl;
       //observed
 	  double**** observ = __getobs();
 
@@ -290,7 +292,9 @@ void GIS:: __gis(int maxit, double konv, bool test){
 	  double l=1;
 	  while(i<maxit  && fabs(l)>=konv){
 	    l=0;
+
 	    __getexp();
+	    cout << "hier 10" << endl;
 	    for(int Feati=0; Feati<_sizeColValX;Feati++){
 	      for(int Featj=0; Featj< _sizeColValY;Featj++){
 	        for(int lambdai=0; lambdai< _sizeX; lambdai++){
@@ -315,6 +319,7 @@ void GIS:: __gis(int maxit, double konv, bool test){
 			 _conv.push_back(l);
 		 }
 	  	}
+	  cout << "hier 11 " << endl;
 }
 
 
