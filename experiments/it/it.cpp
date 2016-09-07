@@ -21,65 +21,84 @@
 
 
 int main(int argc, char **argv){
-	srand(time(NULL));
-		 int n=1000;
-		 DContainer *eX = new DContainer(n,1);
-		 for(int i=0;i< n;i++ ){
-			 for(int j=0;j<1;j++){
-				 *eX << rand() % 2;
-			 }
-		 }
-		 DContainer *zX = new DContainer(2,1);
-		 *zX << 0 << 1;
-		  DContainer *zY = new DContainer(2,1);
-		 *zY << 0 << 1;
-
-		 GIS *Test = new GIS(1,*eX,*zX,*zY);
-		 Test->setFeatureArraylambda(0,0,1,0,2);
-		 Test->setFeatureArraylambda(0,0,1,1,0);
-		 Test->setFeatureArraylambda(0,0,0,0,1);
-		 Test->setFeatureArraylambda(0,0,0,1,3);
-
-		 double** prop;
-		 prop=new double*[n];
-		 for(int i=0;i<n;i++){
-			 prop[i]=new double[2];
-			 for(int j=0;j<2;j++){
-				 prop[i][j]=0;
-			 }
-		 }
-
-		 for(int i=0;i<n;i++){
-			for(int propi=0;propi<2;propi++){
-					prop[i][propi]=Test->prop(0,0,(*eX)(i,0),propi);
-				 }
-			 }
-		 DContainer *esY=new DContainer(n,3);
-
-		 for(int i=0;i<n;i++){
-			 double z=(double)rand()/RAND_MAX;
-			 double s=0;
-			 int ind=0;
-			 for(int j=0;j<2 && s<z;j++){
-					s+=prop[i][j];
-					ind=j;
-				 }
-			 (*esY) << ind;
-			 }
-		 Comp *test = new Comp(*Test,*eX,*esY,*zX,*zY,2000,0.000001);
-vector<vector < double > > y= test->getY();
-cout << y.size() << endl;
-cout << y[1].size() << endl;
-cout << y[0].size() << endl;
-for(int i=0;i<y.size();i++){
-	for(int j=0;j<y[i].size();j++){
-		cout << y[i][j] << " " ;
+	 srand(time(NULL));
+int n=10000;
+DContainer *eX = new DContainer(n,2);
+for(int i=0;i< n;i++ ){
+	for(int j=0;j<2;j++){
+		*eX << rand() % 2;
 	}
-	cout << endl;
 }
 
-cout << "hier" << endl;
+DContainer *zX = new DContainer(2,1);
+	*zX << 0 << 1;
+DContainer *zY = new DContainer(2,1);
+	*zY << 0 << 1;
 
+GIS *Test = new GIS(2,*eX,*zX,*zY);
+
+	 Test->setFeatureArraylambda(0,0,0,0,1);
+	 Test->setFeatureArraylambda(0,0,1,0,4);
+	 Test->setFeatureArraylambda(0,0,0,1,5);
+	 Test->setFeatureArraylambda(0,0,1,1,0);
+
+	 Test->setFeatureArraylambda(1,0,0,0,0);
+	 Test->setFeatureArraylambda(1,0,1,0,2);
+	 Test->setFeatureArraylambda(1,0,0,1,1);
+	 Test->setFeatureArraylambda(1,0,1,1,3);
+
+	 Test->setFeatureArraylambda(0,1,0,0,3);
+	 Test->setFeatureArraylambda(0,1,1,0,2);
+	 Test->setFeatureArraylambda(0,1,0,1,5);
+	 Test->setFeatureArraylambda(0,1,1,1,3);
+
+	 Test->setFeatureArraylambda(1,1,0,0,2);
+	 Test->setFeatureArraylambda(1,1,1,0,1);
+	 Test->setFeatureArraylambda(1,1,0,1,1);
+	 Test->setFeatureArraylambda(1,1,1,1,3);
+
+	 double** prop;
+	 prop=new double*[n];
+	 for(int i=0;i<n;i++){
+		 prop[i]=new double[4];
+		 for(int j=0;j<4;j++){
+			 prop[i][j]=0;
+		 }
+	 }
+
+	vector<vector<double> > val(4,vector<double>(2));
+		 val[0][0]=0;
+		 val[0][1]=0;
+		 val[1][0]=1;
+		 val[1][1]=0;
+		 val[2][0]=0;
+		 val[2][1]=1;
+		 val[3][1]=1;
+		 val[3][1]=1;
+	for(int i=0;i<n;i++){
+		for(int propi=0;propi<4;propi++){
+				prop[i][propi]=Test->prop(i,val,propi);
+			}
+	}
+	 DContainer *esY=new DContainer(n,2);
+
+	 for(int i=0;i<n;i++){
+		 double z=(double)rand()/RAND_MAX;
+		 double s=0;
+		 int ind=0;
+		 for(int j=0;j<4 && s<z;j++){
+				s+=prop[i][j];
+				ind=j;
+		 }
+		 if(ind==0) (*esY) << 0 << 0;
+		 if(ind==1) (*esY) << 1 << 0;
+		 if(ind==2) (*esY) << 0 << 1;
+		 if(ind==3) (*esY) << 1 << 1;
+
+	 }
+		 Comp *test = new Comp(*Test,*eX,*esY,*zX,*zY,2000,0.000001);
+
+test->comparison(0);
 /*srand(time(NULL));
 int n=1000;
 DContainer *eX = new DContainer(n,1);
