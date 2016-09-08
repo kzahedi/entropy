@@ -65,45 +65,21 @@ int FeatureMatrix:: getFeatureArraydelta(int i, int j,int idelta, int jdelta, do
 		int delta=_FA[i][j].delta(_X->get(idelta,0),_Y->get(jdelta,0), ValX,ValY);
 		return delta;
 }
-vector<int> FeatureMatrix::getMatrixIndexX(int i, int j){
+int FeatureMatrix::getMatrixIndexX(int i, int j,int k){
 		assert(i<_sizeRowValX && j< _sizeRowValY );
-		int k=0;
-		vector<int> indX(0);
-		while((*_Feati)(i,j,k)!=-2){
-			indX.push_back((*_Feati)(i,j,k));
-			k++;
-		}
-		return indX;
+		return (*_Feati)(i,j,k);
 }
-vector<int> FeatureMatrix:: getMatrixIndexY(int i, int j){
+int FeatureMatrix:: getMatrixIndexY(int i, int j, int k){
 		assert(i<_sizeRowValX && j< _sizeY );
-		vector<int> indY(0);
-		int k=0;
-		while((*_Featj)(i,j,k)!=-2){
-			indY.push_back((*_Featj)(i,j,k));
-			k++;
-		}
-		return indY;
+		return (*_Featj)(i,j,k);
 }
-vector<int> FeatureMatrix:: getMatrixIndexdX(int i,int j){
+int FeatureMatrix:: getMatrixIndexdX(int i,int j,int k){
 		assert(i<_sizeRowValX && j< _sizeY );
-		vector<int> dindX(0);
-		int k=0;
-		while((*_Delti)(i,j,k)!=-2){
-			dindX.push_back((*_Delti)(i,j,k));
-			k++;
-		}
-		return dindX;
+		return (*_Delti)(i,j,k);
 }
-vector<int> FeatureMatrix:: getMatrixIndexdY(int i,int j){
+int FeatureMatrix:: getMatrixIndexdY(int i,int j,int k){
 		assert(i<_sizeRowValX && j< _sizeY );
-		vector<int> dindY(0);
-		int k=0;
-		while((*_Deltj)(i,j,k)!=-2){
-			dindY.push_back((*_Deltj)(i,j,k));
-			k++;
-		}
-		return dindY;
+		return (*_Deltj)(i,j,k);
 }
 Feature** FeatureMatrix:: FeatureArray( double valuelambda){
 		Feature **FA;
@@ -123,22 +99,20 @@ void FeatureMatrix:: _getMatrix(double valuelambda){
 	_Delti= new SparseMatrix(-2);
 	_Deltj= new SparseMatrix(-2);
 
-	cout << "erstellen Matrix" << endl;
-		for(int i=0;i<_sizeRowValX;i++){
-			for(int j=0;j<_sizeY;j++){
-				for(int varFeati=0;varFeati<_sizeColValX;varFeati++){
-					for(int varFeatj=0;varFeatj<_sizeColValY;varFeatj++){
-						if(_FA[varFeati][varFeatj].value((*_valX)(i,varFeati),(*_Y)(j,0))!=0){
-							for(int deltai=0; deltai<_sizeX; deltai++ ){
-								for(int deltaj=0; deltaj<_sizeY; deltaj++){
-									if(_FA[varFeati][varFeatj].delta((*_X).get(deltai,0),(*_Y).get(deltaj,0),(*_valX).get(i, varFeati),(*_Y).get(j,0))!=-1){
-										int k=0;
-										while((*_Feati)(i,j,k)!=-2){k++;}
-										(*_Feati)(i,j,k)=varFeati;
-										(*_Featj)(i,j,k)=varFeatj;
-										(*_Delti)(i,j,k)=deltai;
-										(*_Deltj)(i,j,k)=deltaj;
-									}
+	for(int i=0;i<_sizeRowValX;i++){
+		for(int j=0;j<_sizeY;j++){
+			for(int varFeati=0;varFeati<_sizeColValX;varFeati++){
+				for(int varFeatj=0;varFeatj<_sizeColValY;varFeatj++){
+					if(_FA[varFeati][varFeatj].value((*_valX)(i,varFeati),(*_Y)(j,0))!=0){
+						for(int deltai=0; deltai<_sizeX; deltai++ ){
+							for(int deltaj=0; deltaj<_sizeY; deltaj++){
+								if(_FA[varFeati][varFeatj].delta((*_X).get(deltai,0),(*_Y).get(deltaj,0),(*_valX).get(i, varFeati),(*_Y).get(j,0))!=-1){
+									int k=0;
+									while((*_Feati)(i,j,k)!=-2){k++;}
+									(*_Feati)(i,j,k)=varFeati;
+									(*_Featj)(i,j,k)=varFeatj;
+									(*_Delti)(i,j,k)=deltai;
+									(*_Deltj)(i,j,k)=deltaj;
 								}
 							}
 						}
@@ -146,5 +120,5 @@ void FeatureMatrix:: _getMatrix(double valuelambda){
 				}
 			}
 		}
-		cout << " fertig " << endl;
+	}
 }

@@ -16,7 +16,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( itTest );
 
 
 void itTest::OneXOneY()
-{
+{	cout << "OneXOneY" << endl;
 	 srand(time(NULL));
 	 int n=100;
 	 DContainer *eX = new DContainer(n,1);
@@ -62,8 +62,9 @@ void itTest::OneXOneY()
 			 }
 		 (*esY) << ind;
 		 }
-	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,500,0.0001,true);
 
+	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,500,0.0001,true);
+	 /*
 	 cout << "GIS "<< endl;
 	 cout <<zTest->prop(0,0,0,0)-Test->prop(0,0,0,0) << endl;
 	 cout <<zTest->prop(0,0,1,0)-Test->prop(0,0,1,0) << endl;
@@ -76,7 +77,7 @@ void itTest::OneXOneY()
 	 cout <<zTest->getFeatureArraylambda(0,0,0,1) << endl;
 	 cout <<zTest->getFeatureArraylambda(0,0,1,1) << endl;
 	 cout << endl;
-
+	*/
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(0,0,0,0)+zTest->prop(0,0,0,1),0.1);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(0,0,1,0)+zTest->prop(0,0,1,1),0.1);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->prop(0,0,0,0) ,zTest->prop(0,0,0,0),0.2);
@@ -96,7 +97,7 @@ void itTest::OneXOneY()
 	 zTest->~GIS();
 }
 void itTest::SCOneXOneY()
-{
+{cout << "SCOneXOneY" << endl;
 	srand(time(NULL));
 		 int n=100;
 		 DContainer *eX = new DContainer(n,1);
@@ -143,7 +144,7 @@ void itTest::SCOneXOneY()
 			 (*esY) << ind;
 			 }
 		 SCGIS *zTest = new SCGIS(*eX,*esY,*zX,*zY,1,500,0.0001,true);
-
+		 /*
 		 cout << "SCGIS " << endl;
 		 cout <<zTest->prop(0,0,0,0)-Test->prop(0,0,0,0) << endl;
 		 cout <<zTest->prop(0,0,1,0)-Test->prop(0,0,1,0) << endl;
@@ -155,7 +156,7 @@ void itTest::SCOneXOneY()
 		 cout << zTest->getFeatureArraylambda(0,0,0,1) <<endl;
 		 cout << zTest->getFeatureArraylambda(0,0,1,1) <<endl;
 		 cout << endl;
-
+		*/
 		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(0,0,0,0)+zTest->prop(0,0,0,1),0.1);
 		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(0,0,1,0)+zTest->prop(0,0,1,1),0.1);
 		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  Test->prop(0,0,0,0) ,zTest->prop(0,0,0,0),0.2);
@@ -175,7 +176,7 @@ void itTest::SCOneXOneY()
 		 zTest->~SCGIS();
 }
 void itTest::TwoXOneY()
-{
+{	cout << "TWoXOneY" << endl;
 	 srand(time(NULL));
 	 int n=100;
 	 DContainer *eX = new DContainer(n,2);
@@ -236,6 +237,7 @@ void itTest::TwoXOneY()
 
 	 }
 	 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,500,0.0001,true);
+	 /*
 	 cout << " GIS "<< endl;
 	 cout <<zTest->prop(0,0,0,0)-Test->prop(0,0,0,0)  << endl;
 	 cout <<zTest->prop(0,0,1,0)-Test->prop(0,0,1,0) << endl;
@@ -246,18 +248,7 @@ void itTest::TwoXOneY()
 	 cout <<zTest->prop(1,0,0,1)-Test->prop(1,0,0,1) << endl;
 	 cout <<zTest->prop(1,0,1,1)-Test->prop(1,0,1,1) << endl;
 	 cout << endl;
-	 cout << endl;
-	 cout <<zTest->getFeatureArraylambda(0,0,0,0) << endl;
-	 cout <<zTest->getFeatureArraylambda(0,0,1,0) << endl;
-	 cout <<zTest->getFeatureArraylambda(0,0,0,1) << endl;
-	 cout <<zTest->getFeatureArraylambda(0,0,1,1) << endl;
-	 cout << endl;
-	 cout <<zTest->getFeatureArraylambda(1,0,0,0) << endl;
-	 cout <<zTest->getFeatureArraylambda(1,0,1,0) << endl;
-	 cout <<zTest->getFeatureArraylambda(1,0,0,1) << endl;
-	 cout <<zTest->getFeatureArraylambda(1,0,1,1) << endl;
-	 cout << endl;
-
+	*/
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(0,0,0,0)+zTest->prop(0,0,0,1),0.1);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(0,0,1,0)+zTest->prop(0,0,1,1),0.1);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(1,0,0,0)+zTest->prop(1,0,0,1),0.1);
@@ -275,7 +266,8 @@ void itTest::TwoXOneY()
 	 zTest->~GIS();
 }
 void itTest::SCTwoXOneY()
-{	 srand(time(NULL));
+{	 cout << "SCTWoXOneY" << endl;
+	 srand(time(NULL));
 	 int n=100;
 	 DContainer *eX = new DContainer(n,2);
 	 for(int i=0;i< n;i++ ){
@@ -333,6 +325,7 @@ void itTest::SCTwoXOneY()
 
 	 }
 	 SCGIS *zTest = new SCGIS(*eX,*esY,*zX,*zY,1,500,0.0001,true);
+	 /*
 	 cout << "SCGIS " <<  endl;
 	 cout <<zTest->prop(0,0,0,0)-Test->prop(0,0,0,0)  << endl;
 	 cout <<zTest->prop(0,0,1,0)-Test->prop(0,0,1,0) << endl;
@@ -343,19 +336,7 @@ void itTest::SCTwoXOneY()
 	 cout <<zTest->prop(1,0,0,1)-Test->prop(1,0,0,1) << endl;
 	 cout <<zTest->prop(1,0,1,1)-Test->prop(1,0,1,1) << endl;
 	 cout << endl;
-	 cout << endl;
-	 cout <<zTest->getFeatureArraylambda(0,0,0,0) << endl;
-	 cout <<zTest->getFeatureArraylambda(0,0,1,0) << endl;
-	 cout <<zTest->getFeatureArraylambda(0,0,0,1) << endl;
-	 cout <<zTest->getFeatureArraylambda(0,0,1,1) << endl;
-	 cout << endl;
-	 cout <<zTest->getFeatureArraylambda(1,0,0,0) << endl;
-	 cout <<zTest->getFeatureArraylambda(1,0,1,0) << endl;
-	 cout <<zTest->getFeatureArraylambda(1,0,0,1) << endl;
-	 cout <<zTest->getFeatureArraylambda(1,0,1,1) << endl;
-	 cout << endl;
-
-
+	*/
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(0,0,0,0)+zTest->prop(0,0,0,1),0.1);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(0,0,1,0)+zTest->prop(0,0,1,1),0.1);
 	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(1,0,0,0)+zTest->prop(1,0,0,1),0.1);
@@ -374,6 +355,7 @@ void itTest::SCTwoXOneY()
 
 }
 void itTest::TwoXTwoY(){
+	 cout << "TwoXTwoY" << endl;
 	 srand(time(NULL));
 	 int n=100;
 	 DContainer *eX = new DContainer(n,2);
@@ -452,6 +434,7 @@ void itTest::TwoXTwoY(){
 		 }
 
 		 GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,500,0.0001,true);
+		 /*
 			 cout << "GIS " << endl;
 			 cout <<zTest->prop(0,0,0,0)-Test->prop(0,0,0,0)  << endl;
 			 cout <<zTest->prop(0,0,1,0)-Test->prop(0,0,1,0) << endl;
@@ -473,27 +456,7 @@ void itTest::TwoXTwoY(){
 			 cout <<zTest->prop(1,1,0,1)-Test->prop(1,1,0,1) << endl;
 			 cout <<zTest->prop(1,1,1,1)-Test->prop(1,1,1,1) << endl;
 			 cout << endl;
-			 cout <<zTest->getFeatureArraylambda(0,0,0,0) << endl;
-			 cout <<zTest->getFeatureArraylambda(0,0,1,0) << endl;
-			 cout <<zTest->getFeatureArraylambda(0,0,0,1) << endl;
-			 cout <<zTest->getFeatureArraylambda(0,0,1,1) << endl;
-			 cout << endl;
-			 cout <<zTest->getFeatureArraylambda(1,0,0,0) << endl;
-			 cout <<zTest->getFeatureArraylambda(1,0,1,0) << endl;
-			 cout <<zTest->getFeatureArraylambda(1,0,0,1) << endl;
-			 cout <<zTest->getFeatureArraylambda(1,0,1,1) << endl;
-			 cout << endl;
-			 cout <<zTest->getFeatureArraylambda(0,1,0,0) << endl;
-			 cout <<zTest->getFeatureArraylambda(0,1,1,0) << endl;
-			 cout <<zTest->getFeatureArraylambda(0,1,0,1) << endl;
-			 cout <<zTest->getFeatureArraylambda(0,1,1,1) << endl;
-			 cout << endl;
-			 cout <<zTest->getFeatureArraylambda(1,1,0,0) << endl;
-			 cout <<zTest->getFeatureArraylambda(1,1,1,0) << endl;
-			 cout <<zTest->getFeatureArraylambda(1,1,0,1) << endl;
-			 cout <<zTest->getFeatureArraylambda(1,1,1,1) << endl;
-			 cout << endl;
-
+			*/
 			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(0,0,0,0)+zTest->prop(0,0,0,1),0.1);
 			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(0,0,1,0)+zTest->prop(0,0,1,1),0.1);
 			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(1,0,0,0)+zTest->prop(1,0,0,1),0.1);
@@ -517,21 +480,23 @@ void itTest::TwoXTwoY(){
 
 }
 void itTest::SCTwoXTwoY()
-{	 srand(time(NULL));
-int n=100;
-DContainer *eX = new DContainer(n,2);
-for(int i=0;i< n;i++ ){
-	for(int j=0;j<2;j++){
-		*eX << rand() % 2;
+{
+	cout << "TwoXTwoY" << endl;
+	srand(time(NULL));
+	int n=100;
+	DContainer *eX = new DContainer(n,2);
+	for(int i=0;i< n;i++ ){
+	   for(int j=0;j<2;j++){
+	   *eX << rand() % 2;
 	}
 }
 
-DContainer *zX = new DContainer(2,1);
-	*zX << 0 << 1;
-DContainer *zY = new DContainer(2,1);
-	*zY << 0 << 1;
+	DContainer *zX = new DContainer(2,1);
+	   *zX << 0 << 1;
+	DContainer *zY = new DContainer(2,1);
+	   *zY << 0 << 1;
 
-GIS *Test = new GIS(2,*eX,*zX,*zY);
+	GIS *Test = new GIS(2,*eX,*zX,*zY);
 
  	 Test->setFeatureArraylambda(0,0,0,0,1);
  	 Test->setFeatureArraylambda(0,0,1,0,4);
@@ -595,6 +560,7 @@ GIS *Test = new GIS(2,*eX,*zX,*zY);
 	 }
 
 	 SCGIS *zTest = new SCGIS(*eX,*esY,*zX,*zY,1,500,0.0001,true);
+	 /*
 		 cout << "SCGIS " << endl;
 		 cout <<zTest->prop(0,0,0,0)-Test->prop(0,0,0,0)  << endl;
 		 cout <<zTest->prop(0,0,1,0)-Test->prop(0,0,1,0) << endl;
@@ -616,26 +582,7 @@ GIS *Test = new GIS(2,*eX,*zX,*zY);
 		 cout <<zTest->prop(1,1,0,1)-Test->prop(1,1,0,1) << endl;
 		 cout <<zTest->prop(1,1,1,1)-Test->prop(1,1,1,1) << endl;
 		 cout << endl;
-		 cout <<zTest->getFeatureArraylambda(0,0,0,0) << endl;
-		 cout <<zTest->getFeatureArraylambda(0,0,1,0) << endl;
-		 cout <<zTest->getFeatureArraylambda(0,0,0,1) << endl;
-		 cout <<zTest->getFeatureArraylambda(0,0,1,1) << endl;
-		 cout << endl;
-		 cout <<zTest->getFeatureArraylambda(1,0,0,0) << endl;
-		 cout <<zTest->getFeatureArraylambda(1,0,1,0) << endl;
-		 cout <<zTest->getFeatureArraylambda(1,0,0,1) << endl;
-		 cout <<zTest->getFeatureArraylambda(1,0,1,1) << endl;
-		 cout << endl;
-		 cout <<zTest->getFeatureArraylambda(0,1,0,0) << endl;
-		 cout <<zTest->getFeatureArraylambda(0,1,1,0) << endl;
-		 cout <<zTest->getFeatureArraylambda(0,1,0,1) << endl;
-		 cout <<zTest->getFeatureArraylambda(0,1,1,1) << endl;
-		 cout << endl;
-		 cout <<zTest->getFeatureArraylambda(1,1,0,0) << endl;
-		 cout <<zTest->getFeatureArraylambda(1,1,1,0) << endl;
-		 cout <<zTest->getFeatureArraylambda(1,1,0,1) << endl;
-		 cout <<zTest->getFeatureArraylambda(1,1,1,1) << endl;
-		 cout << endl;
+		 */
 		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(0,0,0,0)+zTest->prop(0,0,0,1),0.1);
 		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(0,0,1,0)+zTest->prop(0,0,1,1),0.1);
 		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,zTest->prop(1,0,0,0)+zTest->prop(1,0,0,1),0.1);
@@ -659,6 +606,7 @@ GIS *Test = new GIS(2,*eX,*zX,*zY);
 
 }
 void itTest::NotBinary(){
+	cout << "NotBinary" << endl;
 	 srand(time(NULL));
 		 int n=100;
 		 DContainer *eX = new DContainer(n,1);

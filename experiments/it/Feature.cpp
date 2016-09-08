@@ -25,19 +25,19 @@ Feature::Feature(DContainer &aX, DContainer &aY, double valuelambda){
 }
 //Eingabealphabete nur 1, -1
 Feature::Feature(bool binaer,double valuelambda){
-		_X= new DContainer(2,1);
-		*_X << 1 << -1;
-		_Y= new DContainer(2,1);
-		*_Y << 1 << -1;
-		_sizeY= _Y->rows();
-		_sizeX= _X->rows();
-		_lambda = new Matrix(_sizeX,_sizeY);
-				for(int i=0; i< _sizeX; i++){
-					for(int j=0; j< _sizeY; j++){
-						(*_lambda)(i,j)=valuelambda;
-					}
-				}
+	_X= new DContainer(2,1);
+	   *_X << 1 << -1;
+	_Y= new DContainer(2,1);
+	   *_Y << 1 << -1;
+	_sizeY= _Y->rows();
+	_sizeX= _X->rows();
+	_lambda = new Matrix(_sizeX,_sizeY);
+	for(int i=0; i< _sizeX; i++){
+	   for(int j=0; j< _sizeY; j++){
+	      (*_lambda)(i,j)=valuelambda;
+	   }
 	}
+}
 Feature::Feature(DContainer &aX, DContainer &aY, Matrix lambda){
 	_lambda=&lambda;
 	_X= &aX;
@@ -64,6 +64,7 @@ void Feature::setlambda(int i, int j, double newvalue){
 	assert(i < _sizeX && j < _sizeY);
 	(*_lambda)(i,j) = newvalue;
 }
+
 double Feature::value(double x,double y){
 		double val=0;
 		for(int i=0; i< _sizeX; i++){
@@ -74,7 +75,8 @@ double Feature::value(double x,double y){
 			}
 		}
 		return val;
-	}
+
+}
 Feature& Feature::operator=(const Feature& c){
 	this-> _sizeX= c._sizeX;
 	this-> _sizeY= c._sizeY;
@@ -94,7 +96,7 @@ int Feature::delta(double ax, double ay, double x, double y){
 	if(ax== x && ay== y){
 		return 1;
 	}
-  else return -1;
+	else return -1;
 }
 
 

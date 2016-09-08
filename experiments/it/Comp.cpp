@@ -1,5 +1,6 @@
 #include "Comp.h"
 
+//vergleichswerte, gemessene X,Y und Eingabealphabete
 Comp::Comp(GIS &exact, DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int maxit, double konv){
 	_exact= &exact;
     _valX= &eX;
@@ -8,9 +9,7 @@ Comp::Comp(GIS &exact, DContainer &eX, DContainer &eY, DContainer &aX, DContaine
     _Y= &aY;
     _sizeColValY=_valY->columns();
     _sizeColValX=_valX->columns();
-    cout << "hier1" << endl;
     __comptime(maxit,konv);
-    cout << "hier2" << endl;
     _alphY=__getY();
     _alphX=__getX();
 
@@ -30,15 +29,14 @@ Comp::	~Comp(){
 	_gisTest->~GIS();
 	_scgisTest->~SCGIS();
 }
+//GIS und SCGIS ausfuehren mit Zeitmessung
 void Comp::__comptime(int maxit, double konv){
 	time_t befor1;
 	time_t befor2;
 	time_t after1;
 	time_t after2;
 	befor1=time(NULL);
-	cout << "hier3" << endl;
 	_gisTest=new GIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,false);
-	cout << "hier4" << endl;
 	after1=time(NULL);
 	_timediff.push_back(difftime(after1,befor1));
 	befor2=time(NULL);
@@ -46,6 +44,7 @@ void Comp::__comptime(int maxit, double konv){
 	after2=time(NULL);
 	_timediff.push_back(difftime(after2,befor2));
 }
+//Ausgabe
 void Comp:: comparison(int RowY){
 		cout << "Comparison: " << endl;
 		cout << endl;
@@ -70,6 +69,7 @@ void Comp:: comparison(int RowY){
 		}
 		cout << _alphX.size() << endl; */
 }
+//Abstand
 vector<double> Comp:: KL(vector<vector<double> > y, int RowY ){
 	vector<double> dist(2);
 	double p1=0;

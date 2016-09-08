@@ -42,9 +42,7 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
 	      }
 	    }
 	  }
-	  cout << "hier 7" << endl;
       __gis(maxit, konv,test);
-      cout << "hier 8" << endl;
 }
 // ColValY - Anzahl der Y-Knoten
 GIS::GIS(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY){
@@ -222,8 +220,10 @@ double GIS::__getFeatconst(){
 				for(int deltj=0; deltj< _sizeColValY; deltj++){
 					for(int deltxi=0; deltxi < _sizeX; deltxi++){
 						for(int deltyj=0; deltyj < _sizeY; deltyj++){
-							for(int k=0; k< (*_FM).getMatrixIndexX(i,j).size();k++){
+							int k=0;
+							while((*_FM).getMatrixIndexX(i,j,k)!=-2){
 									curr++;
+									k++;
 							}
 						}
 					}
@@ -256,12 +256,14 @@ void GIS:: __getexp(){
           _normaliser[Feati][Featj]+=exp(_exponent[Feati][Featj][yj]);
         }
         for(int yj=0; yj< _sizeY; yj++){
-          for(int k=0; k< (*_FM).getMatrixIndexX(xi,yj).size();k++){
-            if((*_FM).getMatrixIndexX(xi,yj)[k]==Feati && (*_FM).getMatrixIndexY(xi,yj)[k]==Featj){
-              if((*_FM).getFeatureArraydelta(Feati,Featj,(*_FM).getMatrixIndexdX(xi,yj)[k],(*_FM).getMatrixIndexdY(xi,yj)[k],(*_valX)(xi,Feati),(*_Y)(yj,0))==1){
-            	_expected[Feati][Featj][(*_FM).getMatrixIndexdX(xi,yj)[k]][(*_FM).getMatrixIndexdY(xi,yj)[k]]+=exp(_exponent[Feati][Featj][yj])/_normaliser[Feati][Featj];
+          int k=0;
+          while((*_FM).getMatrixIndexX(xi,yj,k)!=-2){
+            if((*_FM).getMatrixIndexX(xi,yj,k)==Feati && (*_FM).getMatrixIndexY(xi,yj,k)==Featj){
+              if((*_FM).getFeatureArraydelta(Feati,Featj,(*_FM).getMatrixIndexdX(xi,yj,k),(*_FM).getMatrixIndexdY(xi,yj,k),(*_valX)(xi,Feati),(*_Y)(yj,0))==1){
+            	_expected[Feati][Featj][(*_FM).getMatrixIndexdX(xi,yj,k)][(*_FM).getMatrixIndexdY(xi,yj,k)]+=exp(_exponent[Feati][Featj][yj])/_normaliser[Feati][Featj];
               }
             }
+            k++;
           }
         }
       }
@@ -269,7 +271,6 @@ void GIS:: __getexp(){
   }
 }
 void GIS:: __gis(int maxit, double konv, bool test){
-	cout << "hier 9" << endl;
       //observed
 	  double**** observ = __getobs();
 
@@ -294,7 +295,7 @@ void GIS:: __gis(int maxit, double konv, bool test){
 	    l=0;
 
 	    __getexp();
-	    cout << "hier 10" << endl;
+
 	    for(int Feati=0; Feati<_sizeColValX;Feati++){
 	      for(int Featj=0; Featj< _sizeColValY;Featj++){
 	        for(int lambdai=0; lambdai< _sizeX; lambdai++){
@@ -318,8 +319,9 @@ void GIS:: __gis(int maxit, double konv, bool test){
 		 if(test){
 			 _conv.push_back(l);
 		 }
+
 	  	}
-	  cout << "hier 11 " << endl;
+
 }
 
 

@@ -22,10 +22,10 @@ public:
 	double 	getFeatureArrayvalue(int i, int j,double ValX, double ValY);
 	void 	setFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY,double valuelambda);
 	int 	getFeatureArraydelta(int i, int j,int idelta, int jdelta, double ValX, double ValY);
-	vector<int> getMatrixIndexX(int i, int j);
-	vector<int> getMatrixIndexY(int i, int j);
-	vector<int> getMatrixIndexdX(int i,int j);
-	vector<int> getMatrixIndexdY(int i,int j);
+	int getMatrixIndexX(int i, int j,int k);
+	int getMatrixIndexY(int i, int j,int k );
+	int getMatrixIndexdX(int i,int j,int k );
+	int getMatrixIndexdY(int i,int j,int k );
 
 private:
 	Feature** FeatureArray(double valuelambda);
