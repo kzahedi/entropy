@@ -25,6 +25,7 @@ private:
 	double   		__getFeatconst();
 	void 			__getexp();
 	void		 	__gis(int maxit, double konv, bool test);
+	void 			__gissmooth(int maxit, double konv, double lambdadelta, double sigma);
 
 	double****		_expected;
 	double**** 		_observed;

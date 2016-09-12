@@ -42,7 +42,8 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
 	      }
 	    }
 	  }
-      __gis(maxit, konv,test);
+	  _observed=__getobs();
+      __gissmooth(maxit, konv,0.5,0.5);
 }
 // ColValY - Anzahl der Y-Knoten
 GIS::GIS(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY){
@@ -268,8 +269,6 @@ void GIS:: __getexp(){
 }
 void GIS:: __gis(int maxit, double konv, bool test){
 
-      //observed
-	  double**** observ = __getobs();
 
 	  //constant c for delta
 	  double featconst = __getFeatconst();
@@ -298,14 +297,14 @@ void GIS:: __gis(int maxit, double konv, bool test){
 	            double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,lambdai,lambdaj);
 	            double newl=0;
 	            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) < 0.00000001){_expected[Feati][Featj][lambdai][lambdaj]=0.01;}
-	            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) > 0.00000001 && fabs(observ[Feati][Featj][lambdai][lambdaj]) > 0.00000001 ){
-	                    newl= oldl + (1/featconst)*log(observ[Feati][Featj][lambdai][lambdaj]/_expected[Feati][Featj][lambdai][lambdaj]);
+	            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) > 0.00000001 && fabs(_observed[Feati][Featj][lambdai][lambdaj]) > 0.00000001 ){
+	                    newl= oldl + (1/featconst)*log(_observed[Feati][Featj][lambdai][lambdaj]/_expected[Feati][Featj][lambdai][lambdaj]);
 	            }
 				else{
 						newl=0;
 				}
 				(*_FM).setFeatureArraylambda(Feati,Featj,lambdai,lambdaj,newl);
-				l+=fabs((observ[Feati][Featj][lambdai][lambdaj]-_expected[Feati][Featj][lambdai][lambdaj]));
+				l+=fabs((_observed[Feati][Featj][lambdai][lambdaj]-_expected[Feati][Featj][lambdai][lambdaj]));
 			   }
 			 }
 		   }
@@ -316,7 +315,85 @@ void GIS:: __gis(int maxit, double konv, bool test){
 		 }
 	  	}
 }
+void GIS::__gissmooth(int maxit, double konv, double lambdadeltaval, double sigma){
 
+	  //constant c for delta
+	  double featconst = __getFeatconst();
+
+	    for(int i=0; i<_sizeColValX; i++){
+	      for(int j=0;j<_sizeColValY;j++){
+	        for(int k=0;k< _sizeY;k++){
+	          _exponent[i][j][k]=0;
+	        }
+	      }
+	    }
+	    for(int i=0; i< _sizeColValX; i++){
+	      for(int j=0; j<_sizeColValY;j++){
+	       _normaliser[i][j]=0;
+	      }
+	    }
+	   // delta fuer die Newtonit.
+	  double**** lambdadelta= new double***[_sizeColValX];
+	  for(int i=0;i<_sizeColValX;i++){
+		  lambdadelta[i]= new double**[_sizeColValY];
+		  for(int j=0;j<_sizeColValY;j++){
+			  lambdadelta[i][j]= new double*[_sizeX];
+			  for(int k=0;k<_sizeX;k++){
+				  lambdadelta[i][j][k]= new double[_sizeY];
+				  for(int l=0;l<_sizeY;l++){
+					  lambdadelta[i][j][k][l]=lambdadeltaval;
+				  }
+			  }
+		  }
+	  }
+	  int i=0;
+	  double l=1;
+	  while(i<maxit  ){ //&& fabs(l)>=konv
+	    l=0;
+	    __getexp();
+	    for(int Feati=0; Feati<_sizeColValX;Feati++){
+	      for(int Featj=0; Featj< _sizeColValY;Featj++){
+	        for(int lambdai=0; lambdai< _sizeX; lambdai++){
+	          for(int lambdaj=0; lambdaj< _sizeY; lambdaj++){
+	        	double newl;
+	            double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,lambdai,lambdaj);
+	            double diff=2;
+	            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) < 0.00000001){_expected[Feati][Featj][lambdai][lambdaj]=0.01;}
+	            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) > 0.00000001 && fabs(_observed[Feati][Featj][lambdai][lambdaj]) > 0.00000001 ){
+	               while(fabs(diff)>0.001){
+
+	            	   double z= (oldl+lambdadelta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2)- _observed[Feati][Featj][lambdai][lambdaj]+ _expected[Feati][Featj][lambdai][lambdaj]*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst) ;
+	            	   double n= 1/(pow(sigma,2))+_expected[Feati][Featj][lambdai][lambdaj]*featconst*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst);
+		               if(Feati==0 && Featj==0 && lambdai==0 && lambdaj==0){
+		            	   cout << "sigmakram1 " << (oldl+lambdadelta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2) << "  " << lambdadelta[Feati][Featj][lambdai][lambdaj] << " " <<oldl<< " obs " <<_observed[Feati][Featj][lambdai][lambdaj] << endl;
+		            	   cout << "exponent1 " << _expected[Feati][Featj][lambdai][lambdaj]*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst) << " exponent2 " << _expected[Feati][Featj][lambdai][lambdaj]*featconst*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst) << endl;
+		            	   cout << "diff " << (z/n) << " z  " << z << " n " << n << " lambdadelta " << lambdadelta[Feati][Featj][lambdai][lambdaj] <<  endl;
+		            	   cout <<  - _observed[Feati][Featj][lambdai][lambdaj]+ _expected[Feati][Featj][lambdai][lambdaj]*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst) << endl;
+		            	   cout << "exponent1 " << (oldl+lambdadelta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2)- _observed[Feati][Featj][lambdai][lambdaj]+ _expected[Feati][Featj][lambdai][lambdaj]*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst) << endl;
+		               }
+	            	   lambdadelta[Feati][Featj][lambdai][lambdaj]= lambdadelta[Feati][Featj][lambdai][lambdaj]-(z/n);
+	            	   diff=(z/n);
+
+	               }
+	               newl= oldl-lambdadelta[Feati][Featj][lambdai][lambdaj];
+	            }
+	            else{newl=0; }
+	               _FM->setFeatureArraylambda(Feati,Featj,lambdai,lambdaj,newl);
+	              // cout << oldl << " new l " << newl << endl;
+	               l+=fabs(_expected[Feati][Featj][lambdai][lambdaj]*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst)+(oldl+lambdadelta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2)- _observed[Feati][Featj][lambdai][lambdaj]);
+	               if(Feati==0 && Featj==0 && lambdai==0 && lambdaj==0){
+	            	    cout << oldl << " newl " << newl << endl;
+	            	   cout << lambdadelta[Feati][Featj][lambdai][lambdaj]  << endl;
+
+	               }
+			   }
+			 }
+		   }
+		 }
+		 i++;
+		 cout << "l " <<l << endl;
+	  	}
+}
 
 
 
