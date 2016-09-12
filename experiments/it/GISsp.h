@@ -1,17 +1,17 @@
-#ifndef _GIS_H_
-#define _GIS_H_
+#ifndef _GISSP_H_
+#define _GISSP_H_
 #include <string>
 #include <iostream>
 #include <math.h>
 #include <vector>
 #include "Feature.h"
-#include "FeatureMatrix.h"
+#include "FeatureMatrixsp.h"
 
-class GIS {
+class GISsp {
 public:
-	GIS(int ColValY,DContainer &eX,DContainer &aX, DContainer &aY);
-	GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test);
-	~GIS();
+	GISsp(int ColValY,DContainer &eX,DContainer &aX, DContainer &aY);
+	GISsp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test);
+	~GISsp();
 	double 	prop(int rowX,vector<vector<double> > Y, int rowY);
 	double 	prop(int Feati,int Featj,double ValX,double ValY);
 	double 	prop(vector<vector<double> > X,int rowX,vector<vector<double> > Y, int rowY);
@@ -38,7 +38,7 @@ private:
 	int 			_sizeRowValX;
 	int 			_sizeRowValY;
 
-	FeatureMatrix 	*_FM;
+	FeatureMatrixsp *_FM;
 	DContainer 		*_Y;
 	DContainer 		*_X;
 	DContainer 		*_valY;

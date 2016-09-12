@@ -15,7 +15,9 @@
 #include "FeatureMatrix.h"
 #include "GIS.h"
 #include "InstanceMatrix.h"
+#include "FeatureMatrixsp.h"
 #include "SCGIS.h"
+#include "GISsp.h"
 #include "Comp.h"
 
 
@@ -25,9 +27,8 @@ int main(int argc, char **argv){
 SparseMatrix *Feat = new SparseMatrix(NAN);
 (*Feat)(3,4,1)=5;
 (*Feat)(3,4,2)=4;
-cout<< (*Feat)(3,4,3) << endl;
 	 srand(time(NULL));
-int n=1000;
+int n=10;
 DContainer *eX = new DContainer(n,2);
 for(int i=0;i< n;i++ ){
 	for(int j=0;j<2;j++){
@@ -101,7 +102,13 @@ GIS *Test = new GIS(2,*eX,*zX,*zY);
 		 if(ind==3) (*esY) << 1 << 1;
 
 	 }
-		 Comp *test = new Comp(*Test,*eX,*esY,*zX,*zY,200,0.00001);
+	 cout << pow(10,-7) << endl;
+	 cout << 0.0000001 << endl;
+		 Comp *test = new Comp(*Test,*eX,*esY,*zX,*zY,5000,0.0000001);
+	GISsp *test2 = new GISsp(*eX,*esY,*zX,*zY,1,20,0.1,true);
+	for(int i=0;i<20;i++){
+		cout << test2->getconv(i) << endl;
+	}
 
 test->comparison(0);
 /*srand(time(NULL));
