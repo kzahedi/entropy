@@ -43,7 +43,7 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
 	    }
 	  }
 	  _observed=__getobs();
-      __gissmooth(maxit, konv,0.5,0.5);
+      __gis(maxit, konv,true);
 }
 // ColValY - Anzahl der Y-Knoten
 GIS::GIS(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY){
@@ -287,7 +287,7 @@ void GIS:: __gis(int maxit, double konv, bool test){
 	    }
 	  int i=0;
 	  double l=1;
-	  while(i<maxit  && fabs(l)>=konv){
+	  while(i<maxit  ){//&& fabs(l)>=konv
 	    l=0;
 	    __getexp();
 	    for(int Feati=0; Feati<_sizeColValX;Feati++){
@@ -348,42 +348,43 @@ void GIS::__gissmooth(int maxit, double konv, double lambdadeltaval, double sigm
 	  }
 	  int i=0;
 	  double l=1;
-	  while(i<maxit  ){ //&& fabs(l)>=konv
+	  while(i<maxit && fabs(l)>=konv  ){
 	    l=0;
 	    __getexp();
 	    for(int Feati=0; Feati<_sizeColValX;Feati++){
 	      for(int Featj=0; Featj< _sizeColValY;Featj++){
 	        for(int lambdai=0; lambdai< _sizeX; lambdai++){
 	          for(int lambdaj=0; lambdaj< _sizeY; lambdaj++){
+	        	lambdadelta[Feati][Featj][lambdai][lambdaj]=lambdadeltaval;
 	        	double newl;
 	            double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,lambdai,lambdaj);
 	            double diff=2;
 	            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) < 0.00000001){_expected[Feati][Featj][lambdai][lambdaj]=0.01;}
 	            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) > 0.00000001 && fabs(_observed[Feati][Featj][lambdai][lambdaj]) > 0.00000001 ){
-	               while(fabs(diff)>0.001){
-
+	               while(diff>0.005){
 	            	   double z= (oldl+lambdadelta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2)- _observed[Feati][Featj][lambdai][lambdaj]+ _expected[Feati][Featj][lambdai][lambdaj]*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst) ;
 	            	   double n= 1/(pow(sigma,2))+_expected[Feati][Featj][lambdai][lambdaj]*featconst*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst);
 		               if(Feati==0 && Featj==0 && lambdai==0 && lambdaj==0){
-		            	   cout << "sigmakram1 " << (oldl+lambdadelta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2) << "  " << lambdadelta[Feati][Featj][lambdai][lambdaj] << " " <<oldl<< " obs " <<_observed[Feati][Featj][lambdai][lambdaj] << endl;
+		            	   cout << "sigmakram1 " << (oldl+lambdadelta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2) << "  "  <<oldl<< " obs " <<_observed[Feati][Featj][lambdai][lambdaj] << " exp " << _expected[Feati][Featj][lambdai][lambdaj]*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst)+(oldl+lambdadelta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2)<< endl;
 		            	   cout << "exponent1 " << _expected[Feati][Featj][lambdai][lambdaj]*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst) << " exponent2 " << _expected[Feati][Featj][lambdai][lambdaj]*featconst*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst) << endl;
-		            	   cout << "diff " << (z/n) << " z  " << z << " n " << n << " lambdadelta " << lambdadelta[Feati][Featj][lambdai][lambdaj] <<  endl;
-		            	   cout <<  - _observed[Feati][Featj][lambdai][lambdaj]+ _expected[Feati][Featj][lambdai][lambdaj]*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst) << endl;
-		            	   cout << "exponent1 " << (oldl+lambdadelta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2)- _observed[Feati][Featj][lambdai][lambdaj]+ _expected[Feati][Featj][lambdai][lambdaj]*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst) << endl;
+		            	   cout << "diff " << (z/n) << " z  " << z << " n " << n << endl;
 		               }
 	            	   lambdadelta[Feati][Featj][lambdai][lambdaj]= lambdadelta[Feati][Featj][lambdai][lambdaj]-(z/n);
 	            	   diff=(z/n);
 
+
 	               }
-	               newl= oldl-lambdadelta[Feati][Featj][lambdai][lambdaj];
+	               newl= oldl+lambdadelta[Feati][Featj][lambdai][lambdaj];
 	            }
 	            else{newl=0; }
 	               _FM->setFeatureArraylambda(Feati,Featj,lambdai,lambdaj,newl);
 	              // cout << oldl << " new l " << newl << endl;
-	               l+=fabs(_expected[Feati][Featj][lambdai][lambdaj]*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst)+(oldl+lambdadelta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2)- _observed[Feati][Featj][lambdai][lambdaj]);
+	               l+=fabs(_expected[Feati][Featj][lambdai][lambdaj]- _observed[Feati][Featj][lambdai][lambdaj]);
 	               if(Feati==0 && Featj==0 && lambdai==0 && lambdaj==0){
+	            	   cout << " lambdadelta " << lambdadelta[Feati][Featj][lambdai][lambdaj] <<  endl;
 	            	    cout << oldl << " newl " << newl << endl;
-	            	   cout << lambdadelta[Feati][Featj][lambdai][lambdaj]  << endl;
+	            	//   cout << " lambdadelta " << lambdadelta[Feati][Featj][lambdai][lambdaj]  << endl;
+	            	 //  cout << " diff " << diff << endl;
 
 	               }
 			   }
@@ -391,7 +392,7 @@ void GIS::__gissmooth(int maxit, double konv, double lambdadeltaval, double sigm
 		   }
 		 }
 		 i++;
-		 cout << "l " <<l << endl;
+		 cout << "l                 hier" <<l << endl;
 	  	}
 }
 

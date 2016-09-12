@@ -28,7 +28,7 @@ SparseMatrix *Feat = new SparseMatrix(NAN);
 (*Feat)(3,4,1)=5;
 (*Feat)(3,4,2)=4;
 	 srand(time(NULL));
-int n=100;
+int n=1000;
 DContainer *eX = new DContainer(n,2);
 for(int i=0;i< n;i++ ){
 	for(int j=0;j<2;j++){
@@ -102,7 +102,7 @@ GIS *Test = new GIS(2,*eX,*zX,*zY);
 		 if(ind==3) (*esY) << 1 << 1;
 
 	 }
-		 Comp *test = new Comp(*Test,*eX,*esY,*zX,*zY,10,0.01);
+		 Comp *test = new Comp(*Test,*eX,*esY,*zX,*zY,200,0.01);
 	//GISsp *test2 = new GISsp(*eX,*esY,*zX,*zY,1,20,0.1,true);
 	//for(int i=0;i<20;i++){
 //		cout << test2->getconv(i) << endl;
