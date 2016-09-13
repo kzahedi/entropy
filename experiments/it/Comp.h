@@ -27,6 +27,7 @@ public:
 private:
 	GIS 	*_exact;
 	GIS 	*_gisTest;
+	GIS		*_gissmooth;
 	SCGIS 	*_scgisTest;
 	DContainer 		*_Y;
 	DContainer 		*_X;
@@ -41,9 +42,11 @@ private:
 	vector<vector<double> > __getY();
 	vector<vector<double> > __getX();
 
+	void 	__comptimegiss(int maxit);
 	void 	__comptime(int maxit, double konv);
 	void    __fill(vector<double> fill, int i, vector<vector<double> > &Y);
 	void    __fillx(vector<double> fill, int i, vector<vector<double> > &Y);
+	double 	__empdistr(int RowX);
 };
 
 #endif

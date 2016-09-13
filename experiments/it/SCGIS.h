@@ -18,6 +18,7 @@ class SCGIS{
 
 public:
 	SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test);
+	SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, bool test);
 	~SCGIS();
 	double 	prop(int Feati,int Featj,double ValX,double ValY);
 	double 	prop(int rowX,vector<vector<double> > Y, int rowY);
@@ -27,6 +28,7 @@ public:
 	int    	getsizeconv();
 
 private:
+	void			__scgis(int maxit, bool test);
 	void			__scgis(int maxit, double konv,bool test);
 	double**** 		__getobs();
 

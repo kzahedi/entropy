@@ -11,6 +11,8 @@ class GIS {
 public:
 	GIS(int ColValY,DContainer &eX,DContainer &aX, DContainer &aY);
 	GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test);
+	GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, bool test);
+	GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, bool test,bool smooth);
 	~GIS();
 	double 	prop(int rowX,vector<vector<double> > Y, int rowY);
 	double 	prop(int Feati,int Featj,double ValX,double ValY);
@@ -25,7 +27,8 @@ private:
 	double   		__getFeatconst();
 	void 			__getexp();
 	void		 	__gis(int maxit, double konv, bool test);
-	void 			__gissmooth(int maxit, double konv, double lambdadelta, double sigma);
+	void 			__gis(int maxit, bool test);
+	void 			__gissmooth(int maxit, double konv, double lambdadelta, double sigma,bool test);
 
 	double****		_expected;
 	double**** 		_observed;
