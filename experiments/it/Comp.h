@@ -13,6 +13,8 @@
 #include "InstanceMatrix.h"
 #include "SCGIS.h"
 #include "GIS.h"
+#include "GISgp.h"
+#include "SCGISgp.h"
 
 using namespace std;
 
@@ -27,8 +29,9 @@ public:
 private:
 	GIS 	*_exact;
 	GIS 	*_gisTest;
-	GIS		*_gissmooth;
+	GISgp	*_gissmooth;
 	SCGIS 	*_scgisTest;
+	SCGISgp	*_scgisgp;
 	DContainer 		*_Y;
 	DContainer 		*_X;
 	DContainer 		*_valY;

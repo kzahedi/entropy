@@ -1,5 +1,5 @@
-#ifndef __SCGIS_H__
-#define __SCGIS_H__
+#ifndef __SCGISGP_H__
+#define __SCGISGP_H__
 
 #include <entropy++/Container.h>
 #include <entropy++/defs.h>
@@ -14,11 +14,10 @@
 
 using namespace std;
 
-class SCGIS{
-
+class SCGISgp{
 public:
-	SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test);
-	~SCGIS();
+	SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test);
+	~SCGISgp();
 	double 	prop(int Feati,int Featj,double ValX,double ValY);
 	double 	prop(int rowX,vector<vector<double> > Y, int rowY);
 	double 	prop(vector<vector<double> > X,int rowX,vector<vector<double> > Y, int rowY);
@@ -27,7 +26,7 @@ public:
 	int    	getsizeconv();
 
 private:
-	void			__scgis(int maxit, double konv,bool test);
+	void			__scgis(int maxit, double konv,bool test, double lambdadeltaval,double sigma);
 	double**** 		__getobs();
 
 	int 			_sizeX;
@@ -40,7 +39,7 @@ private:
 	double****		_expected;
 	double****		_exponent;
 	double***		_normaliser;
-	double**		_delta;
+	double****		_delta;
 	vector<double> 	_conv;
 
 	InstanceMatrix 	*_FM;
@@ -48,6 +47,7 @@ private:
 	DContainer 		*_X;
 	DContainer 		*_valY;
 	DContainer 		*_valX;
-
 };
+
+
 #endif
