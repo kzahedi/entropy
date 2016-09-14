@@ -23,8 +23,8 @@ class Comp{
 public:
 	Comp(GIS &exact, DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int maxit, double konv);
 	~Comp();
-	vector<double> KL(vector< vector<double> > y, int RowY );
-	void comparison(int RowY);
+	vector<double> KL(vector< vector<double> > y);
+	void comparison();
 
 private:
 	GIS 	*_exact;
@@ -49,7 +49,6 @@ private:
 	void 	__comptime(int maxit, double konv);
 	void    __fill(vector<double> fill, int i, vector<vector<double> > &Y);
 	void    __fillx(vector<double> fill, int i, vector<vector<double> > &Y);
-	double 	__empdistr(int RowX);
 };
 
 #endif

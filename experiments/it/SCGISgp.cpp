@@ -120,6 +120,35 @@ double SCGISgp:: prop(vector<vector<double> > X,int rowX,vector<vector<double> >
 	  }
 	  return exponent/norm;
 }
+double SCGISgp::	propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y){
+	double z=0;
+	double feat=0;
+	for(int y=0;y<Y.size();y++){
+		  for(int Featx=0;Featx< _sizeColValX;Featx++){
+			  for(int Featy=0;Featy< _sizeColValY;Featy++){
+				  feat+=(*_FM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[y][Featy]);
+		  	  }
+		    }
+		  z+=exp(feat);
+		  feat=0;
+	}
+	double n;
+	double nexp=0;
+	for(int x=0;x<X.size();x++){
+		for(int y=0;y<Y.size();y++){
+			  for(int Featx=0;Featx< _sizeColValX;Featx++){
+				  for(int Featy=0;Featy< _sizeColValY;Featy++){
+					  feat+=(*_FM).getFeatureArrayvalue(Featx,Featy,X[x][Featx],Y[y][Featy]);
+			  	  }
+			  }
+			  nexp +=exp(feat);
+			  feat=0;
+		}
+		n+=nexp;
+		nexp=0;
+	}
+	return z/n;
+}
 
 double**** SCGISgp:: __getobs(){
     _observed = new double***[_sizeColValX];

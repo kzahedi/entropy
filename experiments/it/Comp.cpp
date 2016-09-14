@@ -58,16 +58,16 @@ void Comp::__comptime(int maxit, double konv){
 	_timediff.push_back(difftime(after4,befor4));
 }
 //Ausgabe
-void Comp:: comparison(int RowY){
+void Comp:: comparison(){
 		cout << "Comparison: " << endl;
 		cout << endl;
 		cout << "time:  GIS: " << _timediff[0] <<"s GIS smoothed: " << _timediff[2]<< "s SCGIS: " << _timediff[1] <<   "s SCGIS smoothed: "  << _timediff[3] << "s" << endl;
 		cout << endl;
-		vector<double> kl = KL(_alphY,RowY);
+		vector<double> kl = KL(_alphY);
 		cout << "KL-distance: GIS: " << kl[0] << " GIS smoothed: "<< kl[2] << " SCGIS: " << kl[1] << " SCGIS smoothed: " << kl[3] <<endl;
 
 
-			 /*
+
 		cout << "alphY :" << endl;
 		for(int i=0;i<_alphY.size();i++){
 			for(int j=0;j<_alphY[i].size();j++){
@@ -82,53 +82,44 @@ void Comp:: comparison(int RowY){
 			}
 			cout << endl;
 		}
-		cout << _alphX.size() << endl; */
+		cout << _alphX.size() << endl;
 }
 //Abstand
-vector<double> Comp:: KL(vector<vector<double> > y, int RowY ){
+vector<double> Comp:: KL(vector<vector<double> > y ){
 	vector<double> dist(4);
 	double p1=0;
 	double p2=0;
 	double p3=0;
 	double p4=0;
 	double q=0;
-	double p=0;
+	double pm1=0;
+	double pm2=0;
+	double pm3=0;
+	double pm4=0;
 	for(int RowX=0;RowX<  _alphX.size() ;RowX++){
-		p=__empdistr(RowX);
+		pm1=_gisTest->propm(_alphX,RowX,y);
+		pm2=_scgisTest->propm(_alphX,RowX,y);
+		pm3=_gissmooth->propm(_alphX,RowX,y);
+		pm4=_scgisgp->propm(_alphX,RowX,y);
 		for(int sizeY=0;sizeY<y.size();sizeY++){
 			p1=_gisTest->prop(_alphX,RowX,y,sizeY);
 			p2=_scgisTest->prop(_alphX,RowX,y,sizeY);
 			p3=_gissmooth->prop(_alphX,RowX,y,sizeY);
 			p4=_scgisgp->prop(_alphX,RowX,y,sizeY);
-
-			q= _exact->prop(_alphX,RowX,y,RowY);
+			q= _exact->prop(_alphX,RowX,y,sizeY);
 			if(fabs(p1)<0.00000001){ p1=0.000001;}
 			if(fabs(p2)<0.00000001){ p2=0.000001;}
 			if(fabs(p3)<0.00000001){ p3=0.000001;}
 			if(fabs( q)<0.00000001){ q =0.000001;}
-			dist[0]+=p*p1*log(p1/q);
-			dist[1]+=p*p2*log(p2/q);
-			dist[2]+=p*p3*log(p3/q);
-			dist[3]+=p*p4*log(p4/q);
+			dist[0]+=pm1*p1*log(p1/q);
+			dist[1]+=pm2*p2*log(p2/q);
+			dist[2]+=pm3*p3*log(p3/q);
+			dist[3]+=pm4*p4*log(p4/q);
 		}
 	}
 	return dist;
 }
-double 	Comp::__empdistr(int RowX){
-	double obs=0;
-	for(int i=0;i<RowX;i++){
-		bool equal=true;
-		for(int colX;colX< _sizeColValX;colX++){
-			if((*_valX)(i,colX) != (*_valX)(RowX,colX)){
-				equal=false;
-			}
-		}
-		if(equal){
-			obs++;
-		}
-	}
-	return obs/_valX->rows();
-}
+
 vector<vector<double> > Comp::__getY(){
 	vector<double> fill(0);
 	vector<vector<double> > Y(pow(_Y->rows(),_sizeColValY),vector<double>(_sizeColValY));
