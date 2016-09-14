@@ -208,6 +208,34 @@ double SCGIS::	propm(vector<vector<double> > X,int rowX,vector<vector<double> > 
 	}
 	return z/n;
 }
+double SCGIS:: propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y, int rowY){
+	  double feat=0;
+	  double featnorm=0;
+	  double norm=0;
+	  double n=0;
+	  double exponent=0;
+	  for(int Featx=0;Featx< _sizeColValX;Featx++){
+		  for(int Featy=0;Featy< _sizeColValY;Featy++){
+			  feat+=(*_FM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[rowY][Featy]);
+	  	  }
+	    }
+	   exponent= exp(feat);
+	   for(int x=0;x<X.size();x++){
+	    for(int yi=0;yi<Y.size();yi++){
+		  for(int Featx=0;Featx< _sizeColValX;Featx++){
+			  for(int Featy=0;Featy< _sizeColValY;Featy++){
+				  featnorm+= (*_FM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[yi][Featy]);
+			  }
+		  }
+
+		  norm+=exp(featnorm);
+		  featnorm=0;
+	    }
+	    n+=norm;
+	    norm=0;
+	   }
+	  return exponent/n;
+}
 double**** SCGIS:: __getobs(){
     _observed = new double***[_sizeColValX];
     for(int i=0; i<_sizeColValX; i++){
@@ -242,7 +270,11 @@ double**** SCGIS:: __getobs(){
 void SCGIS:: __scgis(int maxit, double konv, bool test){
 	double l=1;
 	int i=0;
-while(i<maxit && fabs(l)>konv ){
+	  double utime=0;
+	  time_t befor;
+	  time_t after;
+while(utime<10 ){//&& fabs(l)>=konv
+	befor=time(NULL);
 	l=0;
 	for(int Feati=0;Feati<_sizeColValX;Feati++){
 		for(int Featj=0;Featj<_sizeColValY;Featj++){
@@ -256,7 +288,7 @@ while(i<maxit && fabs(l)>konv ){
 								if(fabs(_normaliser[Feati][Featj][x])>0.00000001 ){
 									_expected[Feati][Featj][delti][deltj]+=exp(_exponent[Feati][Featj][x][y])/_normaliser[Feati][Featj][x];
 								}
-								else{cout << "norm " << _normaliser[Feati][Featj][x] << endl;}
+						//		assert(_normaliser[Feati][Featj][delti][deltj]!=0);
 							}
 						}
 					}
@@ -287,5 +319,7 @@ while(i<maxit && fabs(l)>konv ){
 	 if(test){
 		 _conv.push_back(l);
 	 }
+	 after=time(NULL);
+	 utime+= difftime(after,befor);
 }
 }

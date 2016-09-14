@@ -194,6 +194,34 @@ double GIS::	propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y)
 	}
 	return z/n;
 }
+double GIS:: propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y, int rowY){
+	  double feat=0;
+	  double featnorm=0;
+	  double norm=0;
+	  double n=0;
+	  double exponent=0;
+	  for(int Featx=0;Featx< _sizeColValX;Featx++){
+		  for(int Featy=0;Featy< _sizeColValY;Featy++){
+			  feat+=(*_FM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[rowY][Featy]);
+	  	  }
+	    }
+	   exponent= exp(feat);
+	   for(int x=0;x<X.size();x++){
+	    for(int yi=0;yi<Y.size();yi++){
+		  for(int Featx=0;Featx< _sizeColValX;Featx++){
+			  for(int Featy=0;Featy< _sizeColValY;Featy++){
+				  featnorm+= (*_FM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[yi][Featy]);
+			  }
+		  }
+
+		  norm+=exp(featnorm);
+		  featnorm=0;
+	    }
+	    n+=norm;
+	    norm=0;
+	   }
+	  return exponent/n;
+}
 double GIS:: getconv(int i){
 	return _conv[i];
 }
@@ -298,7 +326,15 @@ void GIS:: __getexp(){
   }
 }
 void GIS:: __gis(int maxit, double konv, bool test){
-
+	/*
+	 * 	time_t after3;
+	time_t befor4;
+	time_t after4;
+	befor1=time(NULL);
+	_gisTest=new GIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,false);
+	after1=time(NULL);
+	_timediff.push_back(difftime(after1,befor1));
+	 */
 
 	  //constant c for delta
 	  double featconst = __getFeatconst();
@@ -317,7 +353,11 @@ void GIS:: __gis(int maxit, double konv, bool test){
 	    }
 	  int i=0;
 	  double l=1;
-	  while(i<maxit && fabs(l)>=konv ){//
+	  double utime=0;
+	  time_t befor;
+	  time_t after;
+	  while(utime<10 ){//&& fabs(l)>=konv
+		befor=time(NULL);
 	    l=0;
 	    __getexp();
 	    for(int Feati=0; Feati<_sizeColValX;Feati++){
@@ -343,5 +383,7 @@ void GIS:: __gis(int maxit, double konv, bool test){
 		 if(test){
 			 _conv.push_back(l);
 		 }
+		  after=time(NULL);
+		  utime+= difftime(after,befor);
 	  	}
 }

@@ -133,7 +133,11 @@ void GISgp::__gisgp(int maxit, double konv, double lambdadeltaval, double sigma,
 	  }
 	  int i=0;
 	  double l=1;
-	  while(i<maxit && fabs(l)>=konv ){
+	  double utime=0;
+	  time_t befor;
+	  time_t after;
+	  while(utime<10 ){//&& fabs(l)>=konv
+		befor=time(NULL);
 	    l=0;
 	    __getexp();
 	    for(int Feati=0; Feati<_sizeColValX;Feati++){
@@ -145,11 +149,11 @@ void GISgp::__gisgp(int maxit, double konv, double lambdadeltaval, double sigma,
 	            double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,lambdai,lambdaj);
 	            double z=1;
 	          //  cout << "observed 1 " << _observed[Feati][Featj][lambdai][lambdaj] << "  expected " << (oldl+lambdadelta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2)+_expected[Feati][Featj][lambdai][lambdaj]*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst) << endl;
-	               while(z>0.00001){
+	               while(fabs(z)>0.00001){
 	            	   z=(oldl+_delta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2) +_expected[Feati][Featj][lambdai][lambdaj]*exp(_delta[Feati][Featj][lambdai][lambdaj]*featconst)- _observed[Feati][Featj][lambdai][lambdaj] ;
 	            	   double n= + 1/(pow(sigma,2))+_expected[Feati][Featj][lambdai][lambdaj]*featconst*exp(_delta[Feati][Featj][lambdai][lambdaj]*featconst);
 	            	   _delta[Feati][Featj][lambdai][lambdaj]= _delta[Feati][Featj][lambdai][lambdaj]-(z/n);
-	            	//   cout <<lambdadelta[Feati][Featj][lambdai][lambdaj] << endl;
+	         //   	   cout <<_delta[Feati][Featj][lambdai][lambdaj] << endl;
 	         //   	   cout << (oldl+lambdadelta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2)- _observed[Feati][Featj][lambdai][lambdaj]+ _expected[Feati][Featj][lambdai][lambdaj]*exp(lambdadelta[Feati][Featj][lambdai][lambdaj]*featconst)<< endl;
 	               }
 	             //  cout << lambdadelta[Feati][Featj][lambdai][lambdaj] << endl;
@@ -169,6 +173,8 @@ void GISgp::__gisgp(int maxit, double konv, double lambdadeltaval, double sigma,
 		 if(test){
 			 _conv.push_back(l);
 		 }
+		  after=time(NULL);
+		  utime+= difftime(after,befor);
 	  	}
 }
 double GISgp::prop(int Feati,int Featj,double ValX,double ValY){
@@ -203,17 +209,19 @@ double GISgp::prop(int rowX,vector<vector<double> > Y, int rowY){
   }
   return exponent/norm;
 }
-double GISgp:: prop(vector<vector<double> > X,int rowX,vector<vector<double> > Y, int rowY){
+double GISgp:: propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y, int rowY){
 	  double feat=0;
 	  double featnorm=0;
 	  double norm=0;
+	  double n=0;
 	  double exponent=0;
 	  for(int Featx=0;Featx< _sizeColValX;Featx++){
 		  for(int Featy=0;Featy< _sizeColValY;Featy++){
 			  feat+=(*_FM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[rowY][Featy]);
 	  	  }
 	    }
-	    exponent= exp(feat);
+	   exponent= exp(feat);
+	   for(int x=0;x<X.size();x++){
 	    for(int yi=0;yi<Y.size();yi++){
 		  for(int Featx=0;Featx< _sizeColValX;Featx++){
 			  for(int Featy=0;Featy< _sizeColValY;Featy++){
@@ -223,8 +231,11 @@ double GISgp:: prop(vector<vector<double> > X,int rowX,vector<vector<double> > Y
 
 		  norm+=exp(featnorm);
 		  featnorm=0;
-	  }
-	  return exponent/norm;
+	    }
+	    n+=norm;
+	    norm=0;
+	   }
+	  return exponent/n;
 }
 double GISgp::	propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y){
 	double z=0;

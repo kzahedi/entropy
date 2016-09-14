@@ -53,7 +53,63 @@ SCGISgp::SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,
     }
     __scgis(maxit,konv,test,1,0.01);
 }
+SCGISgp:: ~SCGISgp(){
+	_FM->~InstanceMatrix();
 
+	for(int i=0; i<_sizeColValX;i++){
+		for(int j=0;j<_sizeColValY;j++){
+			for(int k=0;k<_sizeX;k++){
+				delete [] _observed[i][j][k];
+			}
+			delete [] _observed[i][j];
+		}
+		delete [] _observed[i];
+	}
+	delete [] _observed;
+
+	for(int i=0;i< _sizeColValX;i++){
+		for(int j=0;j<_sizeColValY;j++){
+			for(int k=0;k<_sizeX;k++){
+				delete [] _expected[i][j][k];
+			}
+			delete [] _expected[i][j];
+		}
+		delete [] _expected[i];
+	}
+	delete [] _expected;
+
+	for(int i=0;i<_sizeColValX;i++){
+		for(int j=0;j<_sizeColValY;j++){
+			for(int k=0;k<_sizeRowValX;k++){
+				delete [] _exponent[i][j][k];
+			}
+			delete [] _exponent[i][j];
+		}
+		delete [] _exponent[i];
+	}
+	delete [] _exponent;
+
+	for(int i=0;i<_sizeColValX;i++){
+		for(int j=0; j<_sizeColValY;j++){
+			delete [] _normaliser[i][j];
+		}
+		delete [] _normaliser[i];
+	}
+	delete [] _normaliser;
+
+	for(int i=0;i<_sizeColValX;i++){
+		for(int j=0; j<_sizeColValY;j++){
+			for(int k=0;k<_sizeX;k++){
+				delete [] _delta[i][j][k];
+			}
+			delete [] _delta[i][j];
+		}
+		delete [] _delta[i];
+	}
+	delete [] _delta;
+
+	_conv.clear();
+}
 double SCGISgp:: getconv(int i){
 	return _conv[i];
 }
@@ -149,7 +205,34 @@ double SCGISgp::	propm(vector<vector<double> > X,int rowX,vector<vector<double> 
 	}
 	return z/n;
 }
+double SCGISgp:: propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y, int rowY){
+	  double feat=0;
+	  double featnorm=0;
+	  double norm=0;
+	  double n=0;
+	  double exponent=0;
+	  for(int Featx=0;Featx< _sizeColValX;Featx++){
+		  for(int Featy=0;Featy< _sizeColValY;Featy++){
+			  feat+=(*_FM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[rowY][Featy]);
+	  	  }
+	    }
+	   exponent= exp(feat);
+	   for(int x=0;x<X.size();x++){
+	    for(int yi=0;yi<Y.size();yi++){
+		  for(int Featx=0;Featx< _sizeColValX;Featx++){
+			  for(int Featy=0;Featy< _sizeColValY;Featy++){
+				  featnorm+= (*_FM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[yi][Featy]);
+			  }
+		  }
 
+		  norm+=exp(featnorm);
+		  featnorm=0;
+	    }
+	    n+=norm;
+	    norm=0;
+	   }
+	  return exponent/n;
+}
 double**** SCGISgp:: __getobs(){
     _observed = new double***[_sizeColValX];
     for(int i=0; i<_sizeColValX; i++){
@@ -199,7 +282,11 @@ void SCGISgp:: __scgis(int maxit, double konv,bool test,double lambdadeltaval,do
 	  }
 	double l=1;
 	int i=0;
-while(i<maxit && fabs(l)>konv ){
+	  double utime=0;
+	  time_t befor;
+	  time_t after;
+  while(utime<10 ){//&& fabs(l)>=konv
+	befor=time(NULL);
 	l=0;
 	for(int Feati=0;Feati<_sizeColValX;Feati++){
 		for(int Featj=0;Featj<_sizeColValY;Featj++){
@@ -221,7 +308,7 @@ while(i<maxit && fabs(l)>konv ){
 		            double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,delti,deltj);
 		            double z=1;
 		            //_delta[Feati][Featj][delti][deltj]=lambdadeltaval;
-		            while(fabs(z)>0.001){
+		            while(fabs(z)>0.00001){
 						 z=(oldl+_delta[Feati][Featj][delti][deltj])/pow(sigma,2) +_expected[Feati][Featj][delti][deltj]*exp(_delta[Feati][Featj][delti][deltj])- _observed[Feati][Featj][delti][deltj] ;
 						double n= + 1/(pow(sigma,2))+_expected[Feati][Featj][delti][deltj]*exp(_delta[Feati][Featj][delti][deltj]);
 						_delta[Feati][Featj][delti][deltj]= _delta[Feati][Featj][delti][deltj]-(z/n);
@@ -250,5 +337,7 @@ while(i<maxit && fabs(l)>konv ){
 	 if(test){
 		 _conv.push_back(l);
 	 }
+	  after=time(NULL);
+	  utime+= difftime(after,befor);
 }
 }

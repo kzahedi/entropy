@@ -61,12 +61,52 @@ void Comp::__comptime(int maxit, double konv){
 void Comp:: comparison(){
 		cout << "Comparison: " << endl;
 		cout << endl;
-		cout << "time:  GIS: " << _timediff[0] <<"s GIS smoothed: " << _timediff[2]<< "s SCGIS: " << _timediff[1] <<   "s SCGIS smoothed: "  << _timediff[3] << "s" << endl;
+		cout << "time:  GIS: " << _timediff[0] << "s SCGIS: " << _timediff[1] << "s GIS smoothed: " << _timediff[2]<<  "s SCGIS smoothed: "  << _timediff[3] << "s" << endl;
 		cout << endl;
 		vector<double> kl = KL(_alphY);
-		cout << "KL-distance: GIS: " << kl[0] << " GIS smoothed: "<< kl[2] << " SCGIS: " << kl[1] << " SCGIS smoothed: " << kl[3] <<endl;
-
-
+		cout << "KL-distance: GIS: " << kl[0] <<  " SCGIS: " << kl[1] <<" GIS smoothed: "<< kl[2] << " SCGIS smoothed: " << kl[3] <<endl;
+		cout << "lambda: " << endl;
+		/*
+		cout << "GIS" << endl;
+		 cout << _gisTest->getFeatureArraylambda(0,0,0,0) <<endl;
+		 cout << _gisTest->getFeatureArraylambda(0,0,1,0) <<endl;
+		 cout << _gisTest->getFeatureArraylambda(0,0,0,1) <<endl;
+		 cout << _gisTest->getFeatureArraylambda(0,0,1,1) <<endl;
+		 cout << endl;
+		 cout << _gisTest->getFeatureArraylambda(1,0,0,0) <<endl;
+		 cout << _gisTest->getFeatureArraylambda(1,0,1,0) <<endl;
+		 cout << _gisTest->getFeatureArraylambda(1,0,0,1) <<endl;
+		 cout << _gisTest->getFeatureArraylambda(1,0,1,1) <<endl;
+		 cout << endl;
+		 cout << _gisTest->getFeatureArraylambda(0,1,0,0) <<endl;
+		 cout << _gisTest->getFeatureArraylambda(0,1,1,0) <<endl;
+		 cout << _gisTest->getFeatureArraylambda(0,1,0,1) <<endl;
+		 cout << _gisTest->getFeatureArraylambda(0,1,1,1) <<endl;
+		 cout << endl;
+		 cout << _gisTest->getFeatureArraylambda(1,1,0,0) <<endl;
+		 cout << _gisTest->getFeatureArraylambda(1,1,1,0) <<endl;
+		 cout << _gisTest->getFeatureArraylambda(1,1,0,1) <<endl;
+		 cout << _gisTest->getFeatureArraylambda(1,1,1,1) <<endl;
+		cout << "GIS smoothed " << endl;
+		 cout << _gissmooth->getFeatureArraylambda(0,0,0,0) <<endl;
+		 cout << _gissmooth->getFeatureArraylambda(0,0,1,0) <<endl;
+		 cout << _gissmooth->getFeatureArraylambda(0,0,0,1) <<endl;
+		 cout << _gissmooth->getFeatureArraylambda(0,0,1,1) <<endl;
+		 cout << endl;
+		 cout << _gissmooth->getFeatureArraylambda(1,0,0,0) <<endl;
+		 cout << _gissmooth->getFeatureArraylambda(1,0,1,0) <<endl;
+		 cout << _gissmooth->getFeatureArraylambda(1,0,0,1) <<endl;
+		 cout << _gissmooth->getFeatureArraylambda(1,0,1,1) <<endl;
+		 cout << endl;
+		 cout << _gissmooth->getFeatureArraylambda(0,1,0,0) <<endl;
+		 cout << _gissmooth->getFeatureArraylambda(0,1,1,0) <<endl;
+		 cout << _gissmooth->getFeatureArraylambda(0,1,0,1) <<endl;
+		 cout << _gissmooth->getFeatureArraylambda(0,1,1,1) <<endl;
+		 cout << endl;
+		 cout << _gissmooth->getFeatureArraylambda(1,1,0,0) <<endl;
+		 cout << _gissmooth->getFeatureArraylambda(1,1,1,0) <<endl;
+		 cout << _gissmooth->getFeatureArraylambda(1,1,0,1) <<endl;
+		 cout << _gissmooth->getFeatureArraylambda(1,1,1,1) <<endl;
 
 		cout << "alphY :" << endl;
 		for(int i=0;i<_alphY.size();i++){
@@ -83,6 +123,7 @@ void Comp:: comparison(){
 			cout << endl;
 		}
 		cout << _alphX.size() << endl;
+		*/
 }
 //Abstand
 vector<double> Comp:: KL(vector<vector<double> > y ){
@@ -102,11 +143,11 @@ vector<double> Comp:: KL(vector<vector<double> > y ){
 		pm3=_gissmooth->propm(_alphX,RowX,y);
 		pm4=_scgisgp->propm(_alphX,RowX,y);
 		for(int sizeY=0;sizeY<y.size();sizeY++){
-			p1=_gisTest->prop(_alphX,RowX,y,sizeY);
-			p2=_scgisTest->prop(_alphX,RowX,y,sizeY);
-			p3=_gissmooth->prop(_alphX,RowX,y,sizeY);
-			p4=_scgisgp->prop(_alphX,RowX,y,sizeY);
-			q= _exact->prop(_alphX,RowX,y,sizeY);
+			p1=_gisTest->propm(_alphX,RowX,y,sizeY);
+			p2=_scgisTest->propm(_alphX,RowX,y,sizeY);
+			p3=_gissmooth->propm(_alphX,RowX,y,sizeY);
+			p4=_scgisgp->propm(_alphX,RowX,y,sizeY);
+			q= _exact->propm(_alphX,RowX,y,sizeY);
 			if(fabs(p1)<0.00000001){ p1=0.000001;}
 			if(fabs(p2)<0.00000001){ p2=0.000001;}
 			if(fabs(p3)<0.00000001){ p3=0.000001;}

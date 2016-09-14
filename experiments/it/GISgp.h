@@ -24,6 +24,7 @@ public:
 	double 	prop(int rowX,vector<vector<double> > Y, int rowY);
 	double 	prop(int Feati,int Featj,double ValX,double ValY);
 	double 	prop(vector<vector<double> > X,int rowX,vector<vector<double> > Y, int rowY);
+	double  propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y, int rowY);
 	double 	propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y);
 	void 	setFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY,double valuelambda);
 	double	getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY);
