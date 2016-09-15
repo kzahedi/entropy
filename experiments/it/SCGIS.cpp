@@ -273,7 +273,7 @@ void SCGIS:: __scgis(int maxit, double konv, bool test){
 	  double utime=0;
 	  time_t befor;
 	  time_t after;
-while(utime<10 ){//&& fabs(l)>=konv
+while(utime<30 ){//&& fabs(l)>=konv
 	befor=time(NULL);
 	l=0;
 	for(int Feati=0;Feati<_sizeColValX;Feati++){
@@ -322,4 +322,5 @@ while(utime<10 ){//&& fabs(l)>=konv
 	 after=time(NULL);
 	 utime+= difftime(after,befor);
 }
+cout << " SCGIS " << i << endl;
 }

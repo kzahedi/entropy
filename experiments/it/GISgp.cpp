@@ -136,7 +136,7 @@ void GISgp::__gisgp(int maxit, double konv, double lambdadeltaval, double sigma,
 	  double utime=0;
 	  time_t befor;
 	  time_t after;
-	  while(utime<10 ){//&& fabs(l)>=konv
+	  while(utime<30 ){//&& fabs(l)>=konv
 		befor=time(NULL);
 	    l=0;
 	    __getexp();
@@ -176,6 +176,7 @@ void GISgp::__gisgp(int maxit, double konv, double lambdadeltaval, double sigma,
 		  after=time(NULL);
 		  utime+= difftime(after,befor);
 	  	}
+	  cout << "GISgp " << i << endl;
 }
 double GISgp::prop(int Feati,int Featj,double ValX,double ValY){
   double norm=0;

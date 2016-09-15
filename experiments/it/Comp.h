@@ -21,7 +21,7 @@ using namespace std;
 class Comp{
 
 public:
-	Comp(GIS &exact, DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int maxit, double konv);
+	Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv);
 	~Comp();
 	vector<double> KL(vector< vector<double> > y);
 	void comparison();
@@ -45,10 +45,14 @@ private:
 	vector<vector<double> > __getY();
 	vector<vector<double> > __getX();
 
-	void 	__comptimegiss(int maxit);
-	void 	__comptime(int maxit, double konv);
-	void    __fill(vector<double> fill, int i, vector<vector<double> > &Y);
-	void    __fillx(vector<double> fill, int i, vector<vector<double> > &Y);
+	void			__getValY(int ColY,int RowX);
+	void		 	__getValX(int ColX,int RowX);
+	void 			__setlambda(IContainer &indizes, DContainer &values);
+	void 			__setlambdarand(vector<double> lambdaval);
+	void 			__comptimegiss(int maxit);
+	void 			__comptime(int maxit, double konv);
+	void    		__fill(vector<double> fill, int i, vector<vector<double> > &Y);
+	void    		__fillx(vector<double> fill, int i, vector<vector<double> > &Y);
 };
 
 #endif

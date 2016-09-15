@@ -28,7 +28,7 @@ SparseMatrix *Feat = new SparseMatrix(NAN);
 (*Feat)(3,4,1)=5;
 (*Feat)(3,4,2)=4;
 	 srand(time(NULL));
-int n=100;
+int n=100000;
 DContainer *eX = new DContainer(n,2);
 for(int i=0;i< n;i++ ){
 	for(int j=0;j<2;j++){
@@ -41,73 +41,19 @@ DContainer *zX = new DContainer(2,1);
 DContainer *zY = new DContainer(2,1);
 	*zY << 0 << 1;
 
-GIS *Test = new GIS(2,*eX,*zX,*zY);
 
-	 Test->setFeatureArraylambda(0,0,0,0,1);
-	 Test->setFeatureArraylambda(0,0,1,0,4);
-	 Test->setFeatureArraylambda(0,0,0,1,5);
-	 Test->setFeatureArraylambda(0,0,1,1,0);
-
-	 Test->setFeatureArraylambda(1,0,0,0,0);
-	 Test->setFeatureArraylambda(1,0,1,0,2);
-	 Test->setFeatureArraylambda(1,0,0,1,1);
-	 Test->setFeatureArraylambda(1,0,1,1,3);
-
-	 Test->setFeatureArraylambda(0,1,0,0,3);
-	 Test->setFeatureArraylambda(0,1,1,0,2);
-	 Test->setFeatureArraylambda(0,1,0,1,0);
-	 Test->setFeatureArraylambda(0,1,1,1,3);
-
-	 Test->setFeatureArraylambda(1,1,0,0,2);
-	 Test->setFeatureArraylambda(1,1,1,0,1);
-	 Test->setFeatureArraylambda(1,1,0,1,0);
-	 Test->setFeatureArraylambda(1,1,1,1,3);
-
-	 double** prop;
-	 prop=new double*[n];
-	 for(int i=0;i<n;i++){
-		 prop[i]=new double[4];
-		 for(int j=0;j<4;j++){
-			 prop[i][j]=0;
-		 }
-	 }
-
-	vector<vector<double> > val(4,vector<double>(2));
-		 val[0][0]=0;
-		 val[0][1]=0;
-		 val[1][0]=1;
-		 val[1][1]=0;
-		 val[2][0]=0;
-		 val[2][1]=1;
-		 val[3][1]=1;
-		 val[3][1]=1;
-	for(int i=0;i<n;i++){
-		for(int propi=0;propi<4;propi++){
-				prop[i][propi]=Test->prop(i,val,propi);
-			}
-	}
-	 DContainer *esY=new DContainer(n,2);
-
-	 for(int i=0;i<n;i++){
-		 double z=(double)rand()/RAND_MAX;
-		 double s=0;
-		 int ind=0;
-		 for(int j=0;j<4 && s<z;j++){
-				s+=prop[i][j];
-				ind=j;
-		 }
-		 if(ind==0) (*esY) << 0 << 0;
-		 if(ind==1) (*esY) << 1 << 0;
-		 if(ind==2) (*esY) << 0 << 1;
-		 if(ind==3) (*esY) << 1 << 1;
-
-	 }
-		 Comp *test = new Comp(*Test,*eX,*esY,*zX,*zY,200,0.00000001);
+	 vector<double> lambda(3);
+	 lambda[0]=1;
+	 lambda[1]=5;
+	 lambda[2]=3;
+	 //int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv
+	// int ColX,int RowX,int ColValY, vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv
+		 Comp *test = new Comp(2,100,2,lambda,*zX,*zY,2000,0.001);
 	//GISsp *test2 = new GISsp(*eX,*esY,*zX,*zY,1,20,0.1,true);
 	//for(int i=0;i<20;i++){
 //		cout << test2->getconv(i) << endl;
 //	}
-
+		 cout << "hier " << endl;
 test->comparison();
 /*srand(time(NULL));
 int n=1000;

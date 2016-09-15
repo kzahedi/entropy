@@ -1,18 +1,18 @@
 #include "Comp.h"
 
 //vergleichswerte, gemessene X,Y und Eingabealphabete
-Comp::Comp(GIS &exact, DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,int maxit, double konv){
-	_exact= &exact;
-    _valX= &eX;
-    _valY= &eY;
+Comp::Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv){
     _X= &aX;
     _Y= &aY;
-    _sizeColValY=_valY->columns();
+    _sizeColValY=ColValY;
+    __getValX(ColX,RowX);
     _sizeColValX=_valX->columns();
-    __comptime(maxit,konv);
+    _exact= new GIS(ColValY,*_valX,*_X,*_Y);
+    __setlambdarand(lambda);
     _alphY=__getY();
     _alphX=__getX();
-
+    __getValY(ColValY,RowX);
+    __comptime(maxit,konv);
 }
 Comp::	~Comp(){
 	_timediff.clear();
@@ -66,7 +66,7 @@ void Comp:: comparison(){
 		vector<double> kl = KL(_alphY);
 		cout << "KL-distance: GIS: " << kl[0] <<  " SCGIS: " << kl[1] <<" GIS smoothed: "<< kl[2] << " SCGIS smoothed: " << kl[3] <<endl;
 		cout << "lambda: " << endl;
-		/*
+
 		cout << "GIS" << endl;
 		 cout << _gisTest->getFeatureArraylambda(0,0,0,0) <<endl;
 		 cout << _gisTest->getFeatureArraylambda(0,0,1,0) <<endl;
@@ -123,7 +123,7 @@ void Comp:: comparison(){
 			cout << endl;
 		}
 		cout << _alphX.size() << endl;
-		*/
+
 }
 //Abstand
 vector<double> Comp:: KL(vector<vector<double> > y ){
@@ -207,6 +207,66 @@ void  Comp:: __fillx(vector<double> fillx, int i, vector<vector<double> > &X){
 			fillx.push_back(_X->get(x,0));
 			__fillx(fillx,i+1,X);
 			fillx.pop_back();
+		}
+	}
+}
+//DContainer mit Indizes fuer das lambda und den Wert
+void Comp::	__setlambda(IContainer &indizes, DContainer &values ){
+	assert(indizes.columns() ==4);
+	assert(indizes.rows() == values.rows());
+	for(int i=0;i< indizes.rows();i++){
+		_exact->setFeatureArraylambda(indizes.get(i,0),indizes.get(i,1),indizes.get(i,2),indizes.get(i,3),values.get(i,4));
+	}
+}
+void Comp:: __setlambdarand(vector<double> lambda){
+	srand(time(NULL));
+	for(int Feati=0;Feati<_sizeColValX;Feati++){
+		for(int Featj=0; Featj<_sizeColValY;Featj++){
+			for(int delti=0;delti<_X->rows();delti++){
+				for(int deltj=0; deltj<_Y->rows();deltj++){
+					double r = rand() % lambda.size();
+					_exact->setFeatureArraylambda(Feati,Featj,delti,deltj,lambda[r]);
+				}
+			}
+		}
+	}
+}
+void Comp::__getValX(int ColX,int RowX){
+	_valX = new DContainer(RowX,ColX);
+	for(int i=0;i< RowX;i++ ){
+		for(int j=0;j<ColX;j++){
+			double z = rand() % _X->rows();
+			*_valX << (*_X)(z,0) ;
+		}
+	}
+}
+void	Comp::__getValY(int ColY,int RowX){
+	srand(time(NULL));
+	 double** prop;
+	 prop=new double*[RowX];
+	 for(int i=0;i<RowX;i++){
+		 prop[i]=new double[_alphY.size()];
+		 for(int j=0;j<_alphY.size();j++){
+			 prop[i][j]=0;
+		 }
+	 }
+	for(int i=0;i<RowX;i++){
+		for(int propi=0;propi<_alphY.size();propi++){
+			double l=_exact->prop(i,_alphY,propi);
+				prop[i][propi]=_exact->prop(i,_alphY,propi);
+			}
+	}
+	_valY = new DContainer(RowX,ColY);
+	for(int i=0;i<RowX;i++){
+		double z= (double) rand()/RAND_MAX;
+		double s=0;
+		int ind=0;
+		for(int j=0;j<_alphY.size() && s<z;j++){
+			s+= prop[i][j];
+			ind=j;
+		}
+		for(int k=0;k<_sizeColValY;k++){
+			(*_valY) << _alphY[ind][k];
 		}
 	}
 }

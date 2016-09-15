@@ -326,15 +326,6 @@ void GIS:: __getexp(){
   }
 }
 void GIS:: __gis(int maxit, double konv, bool test){
-	/*
-	 * 	time_t after3;
-	time_t befor4;
-	time_t after4;
-	befor1=time(NULL);
-	_gisTest=new GIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,false);
-	after1=time(NULL);
-	_timediff.push_back(difftime(after1,befor1));
-	 */
 
 	  //constant c for delta
 	  double featconst = __getFeatconst();
@@ -356,7 +347,7 @@ void GIS:: __gis(int maxit, double konv, bool test){
 	  double utime=0;
 	  time_t befor;
 	  time_t after;
-	  while(utime<10 ){//&& fabs(l)>=konv
+	  while(utime<30 ){//&& fabs(l)>=konv
 		befor=time(NULL);
 	    l=0;
 	    __getexp();
@@ -386,4 +377,5 @@ void GIS:: __gis(int maxit, double konv, bool test){
 		  after=time(NULL);
 		  utime+= difftime(after,befor);
 	  	}
+	  cout << "GIS " << i << endl;
 }
