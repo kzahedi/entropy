@@ -35,12 +35,12 @@ vector<double> lambda(3);
 	 lambda[2]=3;
 
 //Comp::Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv,bool time,int seconds){
-		 Comp *test = new Comp(4,1000,4,lambda,*zX,*zY,200,0.001,true,10);
+		 Comp *test = new Comp(2,1000,3,lambda,*zX,*zY,200,0.001,true,1);
 	//GISsp *test2 = new GISsp(*eX,*esY,*zX,*zY,1,20,0.1,true);
 	//for(int i=0;i<20;i++){
 //		cout << test2->getconv(i) << endl;
 //	}
-		 cout << "hier " << endl;
+
 test->comparison();
 /*srand(time(NULL));
 int n=1000;

@@ -10,8 +10,8 @@ Comp::Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX,
     _sizeColValX=_valX->columns();
     _exact= new GIS(ColValY,*_valX,*_X,*_Y);
     __setlambdarand(lambda);
-    _alphY=__getY();
-    _alphX=__getX();
+    _alphY=__getalph(false);
+    _alphX=__getalph(true);
     __getValY(ColValY,RowX);
     if(_timetest){
     	__comptime(maxit,konv,seconds);
@@ -98,9 +98,11 @@ void Comp:: comparison(){
 		cout << endl;
 		vector<double> kl = KL(_alphY);
 		cout << "KL-distance: GIS: " << kl[0] <<  " SCGIS: " << kl[1] <<" GIS smoothed: "<< kl[2] << " SCGIS smoothed: " << kl[3] <<endl;
+		cout << endl;
 		if(_timetest){
 		cout<< "Iterations: GIS: " << _gisTest->getIterations() << " SCGIS: " << _scgisTest->getIterations()<< " GIS smoothed: " << _gisgpTest->getIterations() << " SCGIS smoothed: " << _scgisgpTest->getIterations() <<   endl;
 		}
+
 		cout << "lambda: " << endl;
 		cout << "vergleichswerte" << endl;
 		 cout << _exact->getFeatureArraylambda(0,0,0,0) <<endl;
@@ -108,6 +110,7 @@ void Comp:: comparison(){
 		 cout << _exact->getFeatureArraylambda(0,0,0,1) <<endl;
 		 cout << _exact->getFeatureArraylambda(0,0,1,1) <<endl;
 		 cout << endl;
+		 /*
 		 cout << _exact->getFeatureArraylambda(1,0,0,0) <<endl;
 		 cout << _exact->getFeatureArraylambda(1,0,1,0) <<endl;
 		 cout << _exact->getFeatureArraylambda(1,0,0,1) <<endl;
@@ -122,13 +125,14 @@ void Comp:: comparison(){
 		 cout << _exact->getFeatureArraylambda(1,1,1,0) <<endl;
 		 cout << _exact->getFeatureArraylambda(1,1,0,1) <<endl;
 		 cout << _exact->getFeatureArraylambda(1,1,1,1) <<endl;
-
+*/
 		cout << "GIS" << endl;
 		 cout << _gisTest->getFeatureArraylambda(0,0,0,0) <<endl;
 		 cout << _gisTest->getFeatureArraylambda(0,0,1,0) <<endl;
 		 cout << _gisTest->getFeatureArraylambda(0,0,0,1) <<endl;
 		 cout << _gisTest->getFeatureArraylambda(0,0,1,1) <<endl;
 		 cout << endl;
+		 /*
 		 cout << _gisTest->getFeatureArraylambda(1,0,0,0) <<endl;
 		 cout << _gisTest->getFeatureArraylambda(1,0,1,0) <<endl;
 		 cout << _gisTest->getFeatureArraylambda(1,0,0,1) <<endl;
@@ -163,7 +167,7 @@ void Comp:: comparison(){
 		 cout << _gisgpTest->getFeatureArraylambda(1,1,1,0) <<endl;
 		 cout << _gisgpTest->getFeatureArraylambda(1,1,0,1) <<endl;
 		 cout << _gisgpTest->getFeatureArraylambda(1,1,1,1) <<endl;
-
+*/
 		cout << "alphY :" << endl;
 		for(int i=0;i<_alphY.size();i++){
 			for(int j=0;j<_alphY[i].size();j++){
@@ -216,53 +220,45 @@ vector<double> Comp:: KL(vector<vector<double> > y ){
 	}
 	return dist;
 }
+// true fuer x, false fuer y
+vector<vector<double> > Comp::__getalph(bool valX){
+	int rowsAlph;
+	int colval;
+	if(valX){
+		rowsAlph = _X->rows();
+		colval = _sizeColValX;
 
-vector<vector<double> > Comp::__getY(){
+	}
+	else{
+		rowsAlph = _Y->rows();
+		colval = _sizeColValY;
+	}
 	vector<double> fill(0);
-	vector<vector<double> > Y(pow(_Y->rows(),_sizeColValY),vector<double>(_sizeColValY));
-	__fill(fill,0,Y);
-	return Y;
+	vector<vector<double> > Z(pow(rowsAlph,colval),vector<double>(colval));
+	_index=0;
+	__fill(fill,0,Z,valX,rowsAlph,colval);
+	return Z;
 }
-vector<vector<double> > Comp::__getX(){
-	vector<double> fillx(0);
-	vector<vector<double> > X(pow(_X->rows(),_sizeColValX),vector<double>(_sizeColValX));
-	__fillx(fillx,0,X);
-	return X;
-}
-// nicht schoen, aber es funktioniert
-void  Comp::  __fill(vector<double> fill, int i, vector<vector<double> > &Y){
-	if(_sizeColValY==i){
-		static int j=0;
-		for(int l=0;l<_sizeColValY;l++){
-			Y[j][l]=fill[l];
+
+void  Comp::  __fill(vector<double> fill, int i, vector<vector<double> > &Z,bool valX,int rowsAlph,int colval){
+	if(colval==i){
+		for(int l=0;l<colval;l++){
+			Z[_index][l]=fill[l];
 		}
-		j++;
+		_index++;
 		fill.pop_back();
 		i--;
 	}
 	else{
-		for(int x=0;x<_Y->rows();x++){
-			fill.push_back(_Y->get(x,0));
-			__fill(fill,i+1,Y);
+		for(int x=0;x<rowsAlph;x++){
+				if(valX){
+					fill.push_back(_X->get(x,0));
+				}
+				else{
+					fill.push_back(_Y->get(x,0));
+				}
+				__fill(fill,i+1,Z,valX,rowsAlph,colval);
 			fill.pop_back();
-		}
-	}
-}
-void  Comp:: __fillx(vector<double> fillx, int i, vector<vector<double> > &X){
-	if(_sizeColValX==i){
-		static int j=0;
-		for(int l=0;l<_sizeColValX;l++){
-			X[j][l]=fillx[l];
-		}
-		j++;
-		fillx.pop_back();
-		i--;
-	}
-	else{
-		for(int x=0;x<_X->rows();x++){
-			fillx.push_back(_X->get(x,0));
-			__fillx(fillx,i+1,X);
-			fillx.pop_back();
 		}
 	}
 }

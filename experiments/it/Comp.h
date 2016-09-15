@@ -38,13 +38,13 @@ private:
 	DContainer 		*_valX;
 	int 			_sizeColValY;
 	int				_sizeColValX;
+	int 			_index;
 	vector<double>	_timediff;
 	vector<vector<double> > _alphY;
 	vector<vector<double> > _alphX;
 	bool			_timetest;
 
-	vector<vector<double> > __getY();
-	vector<vector<double> > __getX();
+	vector<vector<double> > __getalph(bool valX);
 
 	void			__getValY(int ColY,int RowX);
 	void		 	__getValX(int ColX,int RowX);
@@ -53,8 +53,7 @@ private:
 	void 			__comptimegiss(int maxit);
 	void 			__comptime(int maxit, double konv);
 	void 			__comptime(int maxit, double konv,int seconds);
-	void    		__fill(vector<double> fill, int i, vector<vector<double> > &Y);
-	void    		__fillx(vector<double> fill, int i, vector<vector<double> > &Y);
+	void    		__fill(vector<double> fill, int i, vector<vector<double> > &Z,bool valX,int rowsAlph,int colval);
 };
 
 #endif

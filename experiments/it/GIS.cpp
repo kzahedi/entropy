@@ -352,6 +352,7 @@ void GIS:: __gis(int maxit, double konv, bool test,int seconds){
 	  double utime=0;
 	  time_t befor;
 	  time_t after;
+	  _iterations=0;
 	  while(utime<seconds ){
 		befor=time(NULL);
 	    l=0;

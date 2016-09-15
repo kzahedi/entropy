@@ -287,6 +287,7 @@ void SCGISgp:: __scgis(int maxit, double konv,bool test,double lambdadeltaval,do
 	  }
 	double l=1;
 	  double utime=0;
+	  _iterations=0;
 	  time_t befor;
 	  time_t after;
   while(utime<seconds ){//&& fabs(l)>=konv

@@ -140,6 +140,7 @@ void GISgp::__gisgp(int maxit, double konv, double lambdadeltaval, double sigma,
 	  double utime=0;
 	  time_t befor;
 	  time_t after;
+	  _iterations=0;
 	  while(utime<seconds ){
 		befor=time(NULL);
 	    l=0;
