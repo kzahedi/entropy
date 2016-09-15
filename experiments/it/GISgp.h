@@ -19,7 +19,7 @@ using namespace std;
 class GISgp{
 
 public:
-	GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,double lambdadeltaval, double sigma,int maxit,double konv, bool test);
+	GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,double lambdadeltaval, double sigma,int maxit,double konv, bool test,bool time,int seconds);
 	~GISgp();
 	double 	prop(int rowX,vector<vector<double> > Y, int rowY);
 	double 	prop(int Feati,int Featj,double ValX,double ValY);
@@ -30,12 +30,14 @@ public:
 	double	getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY);
 	double 	getconv(int i);
 	int    	getsizeconv();
+	int		getIterations();
 
 private:
 	double**** 		__getobs();
 	double   		__getFeatconst();
 	void 			__getexp();
 	void 			__gisgp(int maxit, double konv, double lambdadelta, double sigma,bool test);
+	void 			__gisgp(int maxit, double konv, double lambdadelta, double sigma,bool test,int seconds);
 
 	double****		_expected;
 	double**** 		_observed;
@@ -49,6 +51,7 @@ private:
 	int 			_sizeColValY;
 	int 			_sizeRowValX;
 	int 			_sizeRowValY;
+	int 			_iterations;
 
 	FeatureMatrix 	*_FM;
 	DContainer 		*_Y;

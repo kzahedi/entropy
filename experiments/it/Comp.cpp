@@ -1,7 +1,8 @@
 #include "Comp.h"
 
 //vergleichswerte, gemessene X,Y und Eingabealphabete
-Comp::Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv){
+Comp::Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv,bool time,int seconds){
+	_timetest=time;
     _X= &aX;
     _Y= &aY;
     _sizeColValY=ColValY;
@@ -12,7 +13,12 @@ Comp::Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX,
     _alphY=__getY();
     _alphX=__getX();
     __getValY(ColValY,RowX);
-    __comptime(maxit,konv);
+    if(_timetest){
+    	__comptime(maxit,konv,seconds);
+    }
+    else{
+    	__comptime(maxit,konv);
+    }
 }
 Comp::	~Comp(){
 	_timediff.clear();
@@ -28,8 +34,36 @@ Comp::	~Comp(){
 	_exact->~GIS();
 	_gisTest->~GIS();
 	_scgisTest->~SCGIS();
+	_scgisgpTest->~SCGISgp();
+	_gisgpTest->~GISgp();
 }
 //GIS und SCGIS ausfuehren mit Zeitmessung
+void Comp::__comptime(int maxit, double konv,int seconds){
+	time_t befor1;
+	time_t befor2;
+	time_t after1;
+	time_t after2;
+	time_t befor3;
+	time_t after3;
+	time_t befor4;
+	time_t after4;
+	befor1=time(NULL);
+	_gisTest=new GIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,false,true,seconds);
+	after1=time(NULL);
+	_timediff.push_back(difftime(after1,befor1));
+	befor2=time(NULL);
+	_scgisTest=new SCGIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,false,true,seconds);
+	after2=time(NULL);
+	_timediff.push_back(difftime(after2,befor2));
+	befor3=time(NULL);
+	_gisgpTest=new GISgp(*_valX,*_valY,*_X,*_Y,1,1,0.01,maxit,konv,false,true,seconds);
+	after3=time(NULL);
+	_timediff.push_back(difftime(after3,befor3));
+	befor4=time(NULL);
+	_scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,1,1,0.01,maxit,konv,false,true,seconds);
+	after4=time(NULL);
+	_timediff.push_back(difftime(after4,befor4));
+}
 void Comp::__comptime(int maxit, double konv){
 	time_t befor1;
 	time_t befor2;
@@ -40,20 +74,19 @@ void Comp::__comptime(int maxit, double konv){
 	time_t befor4;
 	time_t after4;
 	befor1=time(NULL);
-	_gisTest=new GIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,false);
+	_gisTest=new GIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,false,false,0);
 	after1=time(NULL);
 	_timediff.push_back(difftime(after1,befor1));
 	befor2=time(NULL);
-	_scgisTest=new SCGIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,false);
+	_scgisTest=new SCGIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,false,false,0);
 	after2=time(NULL);
 	_timediff.push_back(difftime(after2,befor2));
 	befor3=time(NULL);
-	_gissmooth=new GISgp(*_valX,*_valY,*_X,*_Y,1,1,0.01,maxit,konv,false);
+	_gisgpTest=new GISgp(*_valX,*_valY,*_X,*_Y,1,1,0.01,maxit,konv,false,false,0);
 	after3=time(NULL);
 	_timediff.push_back(difftime(after3,befor3));
 	befor4=time(NULL);
-	//DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test
-	_scgisgp= new SCGISgp(*_valX,*_valY,*_X,*_Y,1,maxit,konv,false);
+	_scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,1,1,0.01,maxit,konv,false,false,0);
 	after4=time(NULL);
 	_timediff.push_back(difftime(after4,befor4));
 }
@@ -65,7 +98,30 @@ void Comp:: comparison(){
 		cout << endl;
 		vector<double> kl = KL(_alphY);
 		cout << "KL-distance: GIS: " << kl[0] <<  " SCGIS: " << kl[1] <<" GIS smoothed: "<< kl[2] << " SCGIS smoothed: " << kl[3] <<endl;
+		if(_timetest){
+		cout<< "Iterations: GIS: " << _gisTest->getIterations() << " SCGIS: " << _scgisTest->getIterations()<< " GIS smoothed: " << _gisgpTest->getIterations() << " SCGIS smoothed: " << _scgisgpTest->getIterations() <<   endl;
+		}
 		cout << "lambda: " << endl;
+		cout << "vergleichswerte" << endl;
+		 cout << _exact->getFeatureArraylambda(0,0,0,0) <<endl;
+		 cout << _exact->getFeatureArraylambda(0,0,1,0) <<endl;
+		 cout << _exact->getFeatureArraylambda(0,0,0,1) <<endl;
+		 cout << _exact->getFeatureArraylambda(0,0,1,1) <<endl;
+		 cout << endl;
+		 cout << _exact->getFeatureArraylambda(1,0,0,0) <<endl;
+		 cout << _exact->getFeatureArraylambda(1,0,1,0) <<endl;
+		 cout << _exact->getFeatureArraylambda(1,0,0,1) <<endl;
+		 cout << _exact->getFeatureArraylambda(1,0,1,1) <<endl;
+		 cout << endl;
+		 cout << _exact->getFeatureArraylambda(0,1,0,0) <<endl;
+		 cout << _exact->getFeatureArraylambda(0,1,1,0) <<endl;
+		 cout << _exact->getFeatureArraylambda(0,1,0,1) <<endl;
+		 cout << _exact->getFeatureArraylambda(0,1,1,1) <<endl;
+		 cout << endl;
+		 cout << _exact->getFeatureArraylambda(1,1,0,0) <<endl;
+		 cout << _exact->getFeatureArraylambda(1,1,1,0) <<endl;
+		 cout << _exact->getFeatureArraylambda(1,1,0,1) <<endl;
+		 cout << _exact->getFeatureArraylambda(1,1,1,1) <<endl;
 
 		cout << "GIS" << endl;
 		 cout << _gisTest->getFeatureArraylambda(0,0,0,0) <<endl;
@@ -88,25 +144,25 @@ void Comp:: comparison(){
 		 cout << _gisTest->getFeatureArraylambda(1,1,0,1) <<endl;
 		 cout << _gisTest->getFeatureArraylambda(1,1,1,1) <<endl;
 		cout << "GIS smoothed " << endl;
-		 cout << _gissmooth->getFeatureArraylambda(0,0,0,0) <<endl;
-		 cout << _gissmooth->getFeatureArraylambda(0,0,1,0) <<endl;
-		 cout << _gissmooth->getFeatureArraylambda(0,0,0,1) <<endl;
-		 cout << _gissmooth->getFeatureArraylambda(0,0,1,1) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(0,0,0,0) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(0,0,1,0) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(0,0,0,1) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(0,0,1,1) <<endl;
 		 cout << endl;
-		 cout << _gissmooth->getFeatureArraylambda(1,0,0,0) <<endl;
-		 cout << _gissmooth->getFeatureArraylambda(1,0,1,0) <<endl;
-		 cout << _gissmooth->getFeatureArraylambda(1,0,0,1) <<endl;
-		 cout << _gissmooth->getFeatureArraylambda(1,0,1,1) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(1,0,0,0) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(1,0,1,0) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(1,0,0,1) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(1,0,1,1) <<endl;
 		 cout << endl;
-		 cout << _gissmooth->getFeatureArraylambda(0,1,0,0) <<endl;
-		 cout << _gissmooth->getFeatureArraylambda(0,1,1,0) <<endl;
-		 cout << _gissmooth->getFeatureArraylambda(0,1,0,1) <<endl;
-		 cout << _gissmooth->getFeatureArraylambda(0,1,1,1) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(0,1,0,0) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(0,1,1,0) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(0,1,0,1) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(0,1,1,1) <<endl;
 		 cout << endl;
-		 cout << _gissmooth->getFeatureArraylambda(1,1,0,0) <<endl;
-		 cout << _gissmooth->getFeatureArraylambda(1,1,1,0) <<endl;
-		 cout << _gissmooth->getFeatureArraylambda(1,1,0,1) <<endl;
-		 cout << _gissmooth->getFeatureArraylambda(1,1,1,1) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(1,1,0,0) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(1,1,1,0) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(1,1,0,1) <<endl;
+		 cout << _gisgpTest->getFeatureArraylambda(1,1,1,1) <<endl;
 
 		cout << "alphY :" << endl;
 		for(int i=0;i<_alphY.size();i++){
@@ -140,13 +196,13 @@ vector<double> Comp:: KL(vector<vector<double> > y ){
 	for(int RowX=0;RowX<  _alphX.size() ;RowX++){
 		pm1=_gisTest->propm(_alphX,RowX,y);
 		pm2=_scgisTest->propm(_alphX,RowX,y);
-		pm3=_gissmooth->propm(_alphX,RowX,y);
-		pm4=_scgisgp->propm(_alphX,RowX,y);
+		pm3=_gisgpTest->propm(_alphX,RowX,y);
+		pm4=_scgisgpTest->propm(_alphX,RowX,y);
 		for(int sizeY=0;sizeY<y.size();sizeY++){
 			p1=_gisTest->propm(_alphX,RowX,y,sizeY);
 			p2=_scgisTest->propm(_alphX,RowX,y,sizeY);
-			p3=_gissmooth->propm(_alphX,RowX,y,sizeY);
-			p4=_scgisgp->propm(_alphX,RowX,y,sizeY);
+			p3=_gisgpTest->propm(_alphX,RowX,y,sizeY);
+			p4=_scgisgpTest->propm(_alphX,RowX,y,sizeY);
 			q= _exact->propm(_alphX,RowX,y,sizeY);
 			if(fabs(p1)<0.00000001){ p1=0.000001;}
 			if(fabs(p2)<0.00000001){ p2=0.000001;}

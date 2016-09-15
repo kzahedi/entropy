@@ -1,6 +1,6 @@
 #include "SCGIS.h"
 
-SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test){
+SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test,bool time,int seconds){
     _valX= &eX;
     _valY= &eY;
     _X= &aX;
@@ -58,7 +58,12 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,doub
     		_delta[i][j]=0;
     	}
     }
+    if(time){
+    __scgis(maxit,konv,test,seconds);
+    }
+    else{
     __scgis(maxit,konv,test);
+    }
 }
 double SCGIS:: getconv(int i){
 	return _conv[i];
@@ -267,13 +272,12 @@ double**** SCGIS:: __getobs(){
     }
     return _observed;
 }
-void SCGIS:: __scgis(int maxit, double konv, bool test){
+void SCGIS:: __scgis(int maxit, double konv, bool test,int seconds){
 	double l=1;
-	int i=0;
 	  double utime=0;
 	  time_t befor;
 	  time_t after;
-while(utime<30 ){//&& fabs(l)>=konv
+	while(utime<seconds ){
 	befor=time(NULL);
 	l=0;
 	for(int Feati=0;Feati<_sizeColValX;Feati++){
@@ -315,12 +319,65 @@ while(utime<30 ){//&& fabs(l)>=konv
 			}
 		}
 	}
-	i++;
+	_iterations++;
 	 if(test){
 		 _conv.push_back(l);
 	 }
 	 after=time(NULL);
 	 utime+= difftime(after,befor);
 }
-cout << " SCGIS " << i << endl;
+
+}
+void SCGIS:: __scgis(int maxit, double konv, bool test){
+	double l=1;
+	int i=0;
+while(i<maxit && fabs(l)>konv ){
+	l=0;
+	for(int Feati=0;Feati<_sizeColValX;Feati++){
+		for(int Featj=0;Featj<_sizeColValY;Featj++){
+			for(int delti=0;delti<_sizeX;delti++){
+				for(int deltj=0;deltj<_sizeY; deltj++){
+					_expected[Feati][Featj][delti][deltj]=0;
+					for(int y=0;y<_sizeY;y++){
+						for(int k=0; k<_FM->getInstanceMatrixX(Feati,Featj,delti,deltj).size();k++){
+							if(_FM->getInstanceMatrixY(Feati,Featj,delti,deltj)[k]==y){
+								int x=_FM->getInstanceMatrixX(Feati,Featj,delti,deltj)[k];
+								if(fabs(_normaliser[Feati][Featj][x])>0.00000001 ){
+									_expected[Feati][Featj][delti][deltj]+=exp(_exponent[Feati][Featj][x][y])/_normaliser[Feati][Featj][x];
+								}
+								//		assert(_normaliser[Feati][Featj][delti][deltj]!=0);
+							}
+						}
+					}
+					double newl;
+		            if(fabs(_expected[Feati][Featj][delti][deltj])<0.00000001){_expected[Feati][Featj][delti][deltj]=0.01;}
+					if(fabs(_observed[Feati][Featj][delti][deltj])>0.00000001){
+						_delta[delti][deltj]=log(_observed[Feati][Featj][delti][deltj]/_expected[Feati][Featj][delti][deltj]);
+						newl= _FM->getFeatureArraylambda(Feati,Featj,delti,deltj)+_delta[delti][deltj];
+					}
+					else{newl=0; }
+					l+=fabs( _observed[Feati][Featj][delti][deltj]-_expected[Feati][Featj][delti][deltj]);
+					_FM->setFeatureArraylambda(Feati,Featj,delti,deltj,newl);
+					for(int y=0;y<_sizeY;y++){
+						for(int k=0; k<_FM->getInstanceMatrixX(Feati,Featj,delti,deltj).size();k++){
+							if(_FM->getInstanceMatrixY(Feati,Featj,delti,deltj)[k]==y){
+								int x=_FM->getInstanceMatrixX(Feati,Featj,delti,deltj)[k];
+								_normaliser[Feati][Featj][x]-=exp(_exponent[Feati][Featj][x][y]);
+								_exponent[Feati][Featj][x][y]+=_delta[delti][deltj];
+								_normaliser[Feati][Featj][x]+=exp(_exponent[Feati][Featj][x][y]);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	i++;
+	 if(test){
+		 _conv.push_back(l);
+	 }
+}
+}
+int SCGIS:: getIterations(){
+	return _iterations;
 }

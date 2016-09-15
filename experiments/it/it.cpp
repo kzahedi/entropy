@@ -24,31 +24,18 @@
 
 int main(int argc, char **argv){
 
-SparseMatrix *Feat = new SparseMatrix(NAN);
-(*Feat)(3,4,1)=5;
-(*Feat)(3,4,2)=4;
-	 srand(time(NULL));
-int n=100000;
-DContainer *eX = new DContainer(n,2);
-for(int i=0;i< n;i++ ){
-	for(int j=0;j<2;j++){
-		*eX << rand() % 2;
-	}
-}
-
 DContainer *zX = new DContainer(2,1);
 	*zX << 0 << 1;
 DContainer *zY = new DContainer(2,1);
 	*zY << 0 << 1;
 
-
-	 vector<double> lambda(3);
+vector<double> lambda(3);
 	 lambda[0]=1;
 	 lambda[1]=5;
 	 lambda[2]=3;
-	 //int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv
-	// int ColX,int RowX,int ColValY, vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv
-		 Comp *test = new Comp(2,100,2,lambda,*zX,*zY,2000,0.001);
+
+//Comp::Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv,bool time,int seconds){
+		 Comp *test = new Comp(4,1000,4,lambda,*zX,*zY,200,0.001,true,10);
 	//GISsp *test2 = new GISsp(*eX,*esY,*zX,*zY,1,20,0.1,true);
 	//for(int i=0;i<20;i++){
 //		cout << test2->getconv(i) << endl;

@@ -10,7 +10,7 @@
 class GIS {
 public:
 	GIS(int ColValY,DContainer &eX,DContainer &aX, DContainer &aY);
-	GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test);
+	GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test,bool time,int seconds);
 	~GIS();
 	double 	prop(int rowX,vector<vector<double> > Y, int rowY);
 	double 	prop(int Feati,int Featj,double ValX,double ValY);
@@ -21,13 +21,14 @@ public:
 	double	getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY);
 	double 	getconv(int i);
 	int    	getsizeconv();
+	int		getIterations();
 
 private:
 	double**** 		__getobs();
 	double   		__getFeatconst();
 	void 			__getexp();
 	void		 	__gis(int maxit, double konv, bool test);
-	void 			__gissmooth(int maxit, double konv, double lambdadelta, double sigma,bool test);
+	void 			__gis(int maxit, double konv, bool test,int seconds);
 
 	double****		_expected;
 	double**** 		_observed;
@@ -40,6 +41,7 @@ private:
 	int 			_sizeColValY;
 	int 			_sizeRowValX;
 	int 			_sizeRowValY;
+	int				_iterations;
 
 	FeatureMatrix 	*_FM;
 	DContainer 		*_Y;

@@ -1,7 +1,7 @@
 #include "GIS.h"
 
 
-GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test) {
+GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time, int seconds) {
       _valX= &eX;
       _valY= &eY;
       _X= &aX;
@@ -43,7 +43,12 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
 	    }
 	  }
 	  _observed=__getobs();
-	  __gis(maxit, konv,true);
+	  if(time){
+		  __gis(maxit,konv,test,seconds);
+	  }
+	  else{
+	  __gis(maxit, konv,test);
+	  }
 }
 
 // ColValY - Anzahl der Y-Knoten
@@ -64,6 +69,7 @@ GIS::GIS(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY){
     _normaliser= NULL;
     _expected = NULL;
     _observed = NULL;
+    _iterations=0;
 
 }
 
@@ -325,7 +331,60 @@ void GIS:: __getexp(){
     }
   }
 }
+void GIS:: __gis(int maxit, double konv, bool test,int seconds){
+
+	  //constant c for delta
+	  double featconst = __getFeatconst();
+
+	    for(int i=0; i<_sizeColValX; i++){
+	      for(int j=0;j<_sizeColValY;j++){
+	        for(int k=0;k< _sizeY;k++){
+	          _exponent[i][j][k]=0;
+	        }
+	      }
+	    }
+	    for(int i=0; i< _sizeColValX; i++){
+	      for(int j=0; j<_sizeColValY;j++){
+	       _normaliser[i][j]=0;
+	      }
+	    }
+	  double l=1;
+	  double utime=0;
+	  time_t befor;
+	  time_t after;
+	  while(utime<seconds ){
+		befor=time(NULL);
+	    l=0;
+	    __getexp();
+	    for(int Feati=0; Feati<_sizeColValX;Feati++){
+	      for(int Featj=0; Featj< _sizeColValY;Featj++){
+	        for(int deltai=0; deltai< _sizeX; deltai++){
+	          for(int deltaj=0; deltaj< _sizeY; deltaj++){
+	            double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,deltai,deltaj);
+	            double newl=0;
+	            if(fabs(_expected[Feati][Featj][deltai][deltaj]) < 0.00000001){_expected[Feati][Featj][deltai][deltaj]=0.01;}
+	            if(fabs(_expected[Feati][Featj][deltai][deltaj]) > 0.00000001 && fabs(_observed[Feati][Featj][deltai][deltaj]) > 0.00000001 ){
+	                    newl= oldl + (1/featconst)*log(_observed[Feati][Featj][deltai][deltaj]/_expected[Feati][Featj][deltai][deltaj]);
+	            }
+				else{
+						newl=0;
+				}
+				(*_FM).setFeatureArraylambda(Feati,Featj,deltai,deltaj,newl);
+				l+=fabs((_observed[Feati][Featj][deltai][deltaj]-_expected[Feati][Featj][deltai][deltaj]));
+			   }
+			 }
+		   }
+		 }
+		 _iterations++;
+		 if(test){
+			 _conv.push_back(l);
+		 }
+		  after=time(NULL);
+		  utime+= difftime(after,befor);
+	  	}
+}
 void GIS:: __gis(int maxit, double konv, bool test){
+
 
 	  //constant c for delta
 	  double featconst = __getFeatconst();
@@ -344,28 +403,24 @@ void GIS:: __gis(int maxit, double konv, bool test){
 	    }
 	  int i=0;
 	  double l=1;
-	  double utime=0;
-	  time_t befor;
-	  time_t after;
-	  while(utime<30 ){//&& fabs(l)>=konv
-		befor=time(NULL);
+	  while(i<maxit && fabs(l)>=konv ){
 	    l=0;
 	    __getexp();
 	    for(int Feati=0; Feati<_sizeColValX;Feati++){
 	      for(int Featj=0; Featj< _sizeColValY;Featj++){
-	        for(int lambdai=0; lambdai< _sizeX; lambdai++){
-	          for(int lambdaj=0; lambdaj< _sizeY; lambdaj++){
-	            double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,lambdai,lambdaj);
+	        for(int deltai=0; deltai< _sizeX; deltai++){
+	          for(int deltaj=0; deltaj< _sizeY; deltaj++){
+	            double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,deltai,deltaj);
 	            double newl=0;
-	            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) < 0.00000001){_expected[Feati][Featj][lambdai][lambdaj]=0.01;}
-	            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) > 0.00000001 && fabs(_observed[Feati][Featj][lambdai][lambdaj]) > 0.00000001 ){
-	                    newl= oldl + (1/featconst)*log(_observed[Feati][Featj][lambdai][lambdaj]/_expected[Feati][Featj][lambdai][lambdaj]);
+	            if(fabs(_expected[Feati][Featj][deltai][deltaj]) < 0.00000001){_expected[Feati][Featj][deltai][deltaj]=0.01;}
+	            if(fabs(_expected[Feati][Featj][deltai][deltaj]) > 0.00000001 && fabs(_observed[Feati][Featj][deltai][deltaj]) > 0.00000001 ){
+	                    newl= oldl + (1/featconst)*log(_observed[Feati][Featj][deltai][deltaj]/_expected[Feati][Featj][deltai][deltaj]);
 	            }
 				else{
 						newl=0;
 				}
-				(*_FM).setFeatureArraylambda(Feati,Featj,lambdai,lambdaj,newl);
-				l+=fabs((_observed[Feati][Featj][lambdai][lambdaj]-_expected[Feati][Featj][lambdai][lambdaj]));
+				(*_FM).setFeatureArraylambda(Feati,Featj,deltai,deltaj,newl);
+				l+=fabs((_observed[Feati][Featj][deltai][deltaj]-_expected[Feati][Featj][deltai][deltaj]));
 			   }
 			 }
 		   }
@@ -374,8 +429,8 @@ void GIS:: __gis(int maxit, double konv, bool test){
 		 if(test){
 			 _conv.push_back(l);
 		 }
-		  after=time(NULL);
-		  utime+= difftime(after,befor);
 	  	}
-	  cout << "GIS " << i << endl;
+}
+int GIS:: getIterations(){
+	return _iterations;
 }

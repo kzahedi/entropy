@@ -21,7 +21,7 @@ using namespace std;
 class Comp{
 
 public:
-	Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv);
+	Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv,bool time, int seconds);
 	~Comp();
 	vector<double> KL(vector< vector<double> > y);
 	void comparison();
@@ -29,9 +29,9 @@ public:
 private:
 	GIS 	*_exact;
 	GIS 	*_gisTest;
-	GISgp	*_gissmooth;
+	GISgp	*_gisgpTest;
 	SCGIS 	*_scgisTest;
-	SCGISgp	*_scgisgp;
+	SCGISgp	*_scgisgpTest;
 	DContainer 		*_Y;
 	DContainer 		*_X;
 	DContainer 		*_valY;
@@ -41,6 +41,7 @@ private:
 	vector<double>	_timediff;
 	vector<vector<double> > _alphY;
 	vector<vector<double> > _alphX;
+	bool			_timetest;
 
 	vector<vector<double> > __getY();
 	vector<vector<double> > __getX();
@@ -51,6 +52,7 @@ private:
 	void 			__setlambdarand(vector<double> lambdaval);
 	void 			__comptimegiss(int maxit);
 	void 			__comptime(int maxit, double konv);
+	void 			__comptime(int maxit, double konv,int seconds);
 	void    		__fill(vector<double> fill, int i, vector<vector<double> > &Y);
 	void    		__fillx(vector<double> fill, int i, vector<vector<double> > &Y);
 };

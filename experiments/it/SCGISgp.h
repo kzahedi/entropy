@@ -16,7 +16,7 @@ using namespace std;
 
 class SCGISgp{
 public:
-	SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test);
+	SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,double lambdadeltaval, double sigma ,int maxit, double konv, bool test,bool time,int seconds);
 	~SCGISgp();
 	double 	prop(int Feati,int Featj,double ValX,double ValY);
 	double 	prop(int rowX,vector<vector<double> > Y, int rowY);
@@ -26,11 +26,14 @@ public:
 	double	getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY);
 	double 	getconv(int i);
 	int    	getsizeconv();
+	int		getIterations();
 
 private:
 	void			__scgis(int maxit, double konv,bool test, double lambdadeltaval,double sigma);
+	void			__scgis(int maxit, double konv,bool test, double lambdadeltaval,double sigma,int seconds);
 	double**** 		__getobs();
 
+	int				_iterations;
 	int 			_sizeX;
 	int 			_sizeY;
 	int 			_sizeColValX;
