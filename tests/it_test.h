@@ -3,6 +3,7 @@
 class itTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(itTest);
+  CPPUNIT_TEST(COMP);
   CPPUNIT_TEST(OneXOneY);
   CPPUNIT_TEST(SCOneXOneY);
   CPPUNIT_TEST(TwoXOneY);
@@ -14,7 +15,7 @@ class itTest : public CppUnit::TestFixture
 
 
   public:
-
+  	void COMP();
     void OneXOneY();
     void SCOneXOneY();
     void TwoXOneY();

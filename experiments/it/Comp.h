@@ -22,9 +22,17 @@ class Comp{
 
 public:
 	Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv,bool time, int seconds);
+	Comp(int ColX,int RowX,int ColValY,vector<double> lambda,DContainer &aX, DContainer &aY);
+	Comp(int ColX,int RowX,int ColValY,vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv, bool time,bool test,int seconds,int i);
 	~Comp();
-	vector<double> KL(vector< vector<double> > y);
-	void comparison();
+	vector<double> 	KL();
+	double 			KL(int i);
+	void 			comparison();
+	double 			prop(int Feati,int Featj,double ValX,double ValY,int i);
+	double		 	getconv(int ind,int i);
+	int 			getsizeconv(int i);
+	DContainer& 	getvalX();
+	DContainer& 	getvalY();
 
 private:
 	GIS 	*_exact;
@@ -50,8 +58,6 @@ private:
 	void		 	__getValX(int ColX,int RowX);
 	void 			__setlambda(IContainer &indizes, DContainer &values);
 	void 			__setlambdarand(vector<double> lambdaval);
-	void 			__comptimegiss(int maxit);
-	void 			__comptime(int maxit, double konv);
 	void 			__comptime(int maxit, double konv,int seconds);
 	void    		__fill(vector<double> fill, int i, vector<vector<double> > &Z,bool valX,int rowsAlph,int colval);
 };
