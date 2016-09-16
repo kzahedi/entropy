@@ -5,7 +5,7 @@
 
 experiments/RBOHand/.ipynb_checkpoints/*.ipynb
 
-experiments/RBOHand/rbo_mc.*
+experiments/RBOHand/rbo_mc
 
 experiments/RBOHand/test.jl
 
@@ -26,3 +26,5 @@ experiments/RBOHand/.ipynb_checkpoints/Untitled-checkpoint.ipynb
 experiments/RBOHand/rbo_mc
 
 experiments/RBOHand/AB.ipynb
+
+*.INFO
