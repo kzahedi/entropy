@@ -15,7 +15,6 @@ Comp::Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX,
     __getValY(ColValY,RowX);
     __comptime(maxit,konv,seconds);
     _case=4;
-
 }
 Comp::Comp(int ColX,int RowX,int ColValY,vector<double> lambda,DContainer &aX, DContainer &aY){
     _X= &aX;

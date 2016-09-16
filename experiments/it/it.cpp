@@ -30,17 +30,15 @@ DContainer *zY = new DContainer(2,1);
 	*zY << 0 << 1;
 
 vector<double> lambda(3);
-	 lambda[0]=1;
-	 lambda[1]=5;
-	 lambda[2]=3;
-
+	 lambda[0]=5;
+	 lambda[1]=0;
+	 lambda[2]=1;
 //Comp::Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv,bool time,int seconds){
-		 Comp *test = new Comp(2,1000000,2,lambda,*zX,*zY,1,0.001,false,1);
+		 Comp *test = new Comp(2,100000,2,lambda,*zX,*zY,1,0.001,true,30);
 	//GISsp *test2 = new GISsp(*eX,*esY,*zX,*zY,1,20,0.1,true);
 	//for(int i=0;i<20;i++){
 //		cout << test2->getconv(i) << endl;
 //	}
-
 test->comparison();
 /*srand(time(NULL));
 int n=1000;

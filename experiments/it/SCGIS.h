@@ -11,19 +11,15 @@
 #include <entropy++/Matrix.h>
 #include "Feature.h"
 #include "InstanceMatrix.h"
+#include "IT.h"
 
 using namespace std;
 
-class SCGIS{
+class SCGIS : public IT{
 
 public:
 	SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time,int seconds);
 	~SCGIS();
-	double 	prop(int Feati,int Featj,double ValX,double ValY);
-	double 	prop(int rowX,vector<vector<double> > Y, int rowY);
-	double 	propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y);
-	double 	propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y, int rowY);
-	double	getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY);
 	double 	getconv(int i);
 	int    	getsizeconv();
 	int		getIterations();
@@ -31,27 +27,13 @@ public:
 private:
 	void			__scgis(int maxit, double konv,bool test);
 	void			__scgis(int maxit, double konv,bool test,int seconds);
-	double**** 		__getobs();
 
 	int				_iterations;
-	int 			_sizeX;
-	int 			_sizeY;
-	int 			_sizeColValX;
-	int 			_sizeColValY;
-	int 			_sizeRowValX;
-	int 			_sizeRowValY;
-	double**** 		_observed;
 	double****		_expected;
 	double****		_exponent;
 	double***		_normaliser;
 	double**		_delta;
 	vector<double> 	_conv;
-
-	InstanceMatrix 	*_FM;
-	DContainer 		*_Y;
-	DContainer 		*_X;
-	DContainer 		*_valY;
-	DContainer 		*_valX;
 
 };
 #endif
