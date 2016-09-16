@@ -29,24 +29,11 @@ void itTest::OneXOneY()
 
 	 Comp *Test = new Comp(1,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,0);
 	 Comp *Testgp= new Comp(1,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,2);
-	 /*
-	 cout << "GIS "<< endl;
-	 cout <<zTest->prop(0,0,0,0) << endl;
-	 cout <<zTest->prop(0,0,1,0) << endl;
-	 cout <<zTest->prop(0,0,0,1) << endl;
-	 cout <<zTest->prop(0,0,1,1)<< endl;
-	 cout << endl;
-	 cout << endl;
-	 cout <<zTest->getFeatureArraylambda(0,0,0,0) << endl;
-	 cout <<zTest->getFeatureArraylambda(0,0,1,0) << endl;
-	 cout <<zTest->getFeatureArraylambda(0,0,0,1) << endl;
-	 cout <<zTest->getFeatureArraylambda(0,0,1,1) << endl;
-	 cout << endl;
-	*/
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,0,0)+Test->prop(0,0,0,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,1,0)+Test->prop(0,0,1,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,0,0)+Testgp->prop(0,0,0,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,1,0)+Testgp->prop(0,0,1,1),0.1);
+
+	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,(*zX)(0,0),(*zY)(0,0))+Test->prop(0,0,(*zX)(0,0),(*zY)(1,0)),0.1);
+	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,(*zX)(1,0),(*zY)(0,0))+Test->prop(0,0,(*zX)(1,0),(*zY)(1,0)),0.1);
+	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,(*zX)(0,0),(*zY)(0,0))+Testgp->prop(0,0,(*zX)(0,0),(*zY)(1,0)),0.1);
+	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,(*zX)(1,0),(*zY)(0,0))+Testgp->prop(0,0,(*zX)(1,0),(*zY)(1,0)),0.1);
 	 for(int i=0; i< Test->getsizeconv()-1; i++ ){
 		if((Test->getconv(i)>pow(10,-11))){
 			if(!(Test->getconv(i) >= Test->getconv(i+1))){
@@ -56,7 +43,7 @@ void itTest::OneXOneY()
 		}
 	 }
 	 CPPUNIT_ASSERT (Test->KL1()<1.5);
-	 CPPUNIT_ASSERT (Testgp->KL1()<1.5);
+	 CPPUNIT_ASSERT (Testgp->KL1()<2);
 }
 void itTest::SCOneXOneY()
 {cout << "SCOneXOneY" << endl;
@@ -73,23 +60,10 @@ void itTest::SCOneXOneY()
 		 Comp *Test = new Comp(1,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,1);
 		 Comp *Testgp = new Comp(1,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,3);
 
-		 /*
-		 cout << "SCGIS " << endl;
-		 cout <<zTest->prop(0,0,0,0)-Test->prop(0,0,0,0) << endl;
-		 cout <<zTest->prop(0,0,1,0)-Test->prop(0,0,1,0) << endl;
-		 cout <<zTest->prop(0,0,0,1)-Test->prop(0,0,0,1) << endl;
-		 cout <<zTest->prop(0,0,1,1)-Test->prop(0,0,1,1) << endl;
-		 cout << endl;
-		 cout << zTest->getFeatureArraylambda(0,0,0,0) <<endl;
-		 cout << zTest->getFeatureArraylambda(0,0,1,0) <<endl;
-		 cout << zTest->getFeatureArraylambda(0,0,0,1) <<endl;
-		 cout << zTest->getFeatureArraylambda(0,0,1,1) <<endl;
-		 cout << endl;
-		*/
-
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,0,0)+Test->prop(0,0,0,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,1,0)+Test->prop(0,0,1,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,0,0)+Testgp->prop(0,0,0,1),0.1);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,(*zX)(0,0),(*zY)(0,0))+Test->prop(0,0,(*zX)(0,0),(*zY)(1,0)),0.1);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,(*zX)(1,0),(*zY)(0,0))+Test->prop(0,0,(*zX)(1,0),(*zY)(1,0)),0.1);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,(*zX)(0,0),(*zY)(0,0))+Testgp->prop(0,0,(*zX)(0,0),(*zY)(1,0)),0.1);
+		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,(*zX)(1,0),(*zY)(0,0))+Testgp->prop(0,0,(*zX)(1,0),(*zY)(1,0)),0.1);
 
 		 for(int i=0; i< Test->getsizeconv()-1; i++ ){
 			if((Test->getconv(i)>pow(10,-11))){
@@ -100,7 +74,7 @@ void itTest::SCOneXOneY()
 			}
 		 }
 		 CPPUNIT_ASSERT (Test->KL1()<1.5);
-		 CPPUNIT_ASSERT (Testgp->KL1()<1.5);
+		 CPPUNIT_ASSERT (Testgp->KL1()<2);
 
 }
 void itTest::TwoXOneY()
@@ -117,26 +91,14 @@ void itTest::TwoXOneY()
 
 	 Comp *Test = new Comp(2,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,0);
 	 Comp *Testgp = new Comp(2,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,2);
-	 /*
-	 cout << " GIS "<< endl;
-	 cout <<zTest->prop(0,0,0,0)-Test->prop(0,0,0,0)  << endl;
-	 cout <<zTest->prop(0,0,1,0)-Test->prop(0,0,1,0) << endl;
-	 cout <<zTest->prop(0,0,0,1)-Test->prop(0,0,0,1) << endl;
-	 cout <<zTest->prop(0,0,1,1)-Test->prop(0,0,1,1) << endl;
-	 cout <<zTest->prop(1,0,0,0)-Test->prop(1,0,0,0) << endl;
-	 cout <<zTest->prop(1,0,1,0)-Test->prop(1,0,1,0) << endl;
-	 cout <<zTest->prop(1,0,0,1)-Test->prop(1,0,0,1) << endl;
-	 cout <<zTest->prop(1,0,1,1)-Test->prop(1,0,1,1) << endl;
-	 cout << endl;
-	*/
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,0,0)+Test->prop(0,0,0,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,1,0)+Test->prop(0,0,1,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(1,0,0,0)+Test->prop(1,0,0,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(1,0,1,0)+Test->prop(1,0,1,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,0,0)+Testgp->prop(0,0,0,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,1,0)+Testgp->prop(0,0,1,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(1,0,0,0)+Testgp->prop(1,0,0,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(1,0,1,0)+Testgp->prop(1,0,1,1),0.1);
+
+	 for(int i=0;i<2;i++){
+			 for(int k=0;k<2;k++){
+					CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(i,0,(*zX)(k,0),(*zY)(0,0))+Test->prop(i,0,(*zX)(k,0),(*zY)(1,0)),0.1);
+					CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(i,0,(*zX)(k,0),(*zY)(0,0))+Testgp->prop(i,0,(*zX)(k,0),(*zY)(1,0)),0.1);
+
+			 }
+	 }
 
 	 for(int i=0; i< Test->getsizeconv()-1; i++ ){
 		if((Test->getconv(i)>pow(10,-11))){
@@ -147,7 +109,7 @@ void itTest::TwoXOneY()
 		}
 	 }
 	 CPPUNIT_ASSERT (Test->KL1()<1.5);
-	 CPPUNIT_ASSERT (Testgp->KL1()<1.5);
+	 CPPUNIT_ASSERT (Testgp->KL1()<2);
 }
 void itTest::SCTwoXOneY()
 {	 cout << "SCTWoXOneY" << endl;
@@ -164,26 +126,13 @@ void itTest::SCTwoXOneY()
 	Comp *Test = new Comp(2,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,1);
 	Comp *Testgp = new Comp(2,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,3);
 
-	 /*
-	 cout << "SCGIS " <<  endl;
-	 cout <<zTest->prop(0,0,0,0)-Test->prop(0,0,0,0)  << endl;
-	 cout <<zTest->prop(0,0,1,0)-Test->prop(0,0,1,0) << endl;
-	 cout <<zTest->prop(0,0,0,1)-Test->prop(0,0,0,1) << endl;
-	 cout <<zTest->prop(0,0,1,1)-Test->prop(0,0,1,1) << endl;
-	 cout <<zTest->prop(1,0,0,0)-Test->prop(1,0,0,0) << endl;
-	 cout <<zTest->prop(1,0,1,0)-Test->prop(1,0,1,0) << endl;
-	 cout <<zTest->prop(1,0,0,1)-Test->prop(1,0,0,1) << endl;
-	 cout <<zTest->prop(1,0,1,1)-Test->prop(1,0,1,1) << endl;
-	 cout << endl;
-	*/
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,0,0)+Test->prop(0,0,0,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,1,0)+Test->prop(0,0,1,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(1,0,0,0)+Test->prop(1,0,0,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(1,0,1,0)+Test->prop(1,0,1,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,0,0)+Testgp->prop(0,0,0,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,1,0)+Testgp->prop(0,0,1,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(1,0,0,0)+Testgp->prop(1,0,0,1),0.1);
-	 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(1,0,1,0)+Testgp->prop(1,0,1,1),0.1);
+	 for(int i=0;i<2;i++){
+			 for(int k=0;k<2;k++){
+					CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(i,0,(*zX)(k,0),(*zY)(0,0))+Test->prop(i,0,(*zX)(k,0),(*zY)(1,0)),0.1);
+					CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(i,0,(*zX)(k,0),(*zY)(0,0))+Testgp->prop(i,0,(*zX)(k,0),(*zY)(1,0)),0.1);
+
+			 }
+	 }
 
 	 for(int i=0; i< Test->getsizeconv()-1; i++ ){
 		if((Test->getconv(i)>pow(10,-11))){
@@ -194,7 +143,7 @@ void itTest::SCTwoXOneY()
 		}
 	 }
 	 CPPUNIT_ASSERT (Test->KL1()<1.5);
-	 CPPUNIT_ASSERT (Testgp->KL1()<1.5);
+	 CPPUNIT_ASSERT (Testgp->KL1()<2);
 }
 void itTest::TwoXTwoY(){
 	 cout << "TwoXTwoY" << endl;
@@ -211,47 +160,14 @@ void itTest::TwoXTwoY(){
 	 Comp *Test = new Comp(2,100,2,lambda,*zX,*zY,500,0.0001,false,true,0,0);
 	 Comp *Testgp = new Comp(2,100,2,lambda,*zX,*zY,500,0.0001,false,true,0,2);
 
-
-		 /*
-			 cout << "GIS " << endl;
-			 cout <<zTest->prop(0,0,0,0)-Test->prop(0,0,0,0)  << endl;
-			 cout <<zTest->prop(0,0,1,0)-Test->prop(0,0,1,0) << endl;
-			 cout <<zTest->prop(0,0,0,1)-Test->prop(0,0,0,1) << endl;
-			 cout <<zTest->prop(0,0,1,1)-Test->prop(0,0,1,1) << endl;
-			 cout << endl;
-			 cout <<zTest->prop(1,0,0,0)-Test->prop(1,0,0,0) << endl;
-			 cout <<zTest->prop(1,0,1,0)-Test->prop(1,0,1,0) << endl;
-			 cout <<zTest->prop(1,0,0,1)-Test->prop(1,0,0,1) << endl;
-			 cout <<zTest->prop(1,0,1,1)-Test->prop(1,0,1,1) << endl;
-			 cout << endl;
-			 cout <<zTest->prop(0,1,0,0)-Test->prop(0,1,0,0) << endl;
-			 cout <<zTest->prop(0,1,1,0)-Test->prop(0,1,1,0) << endl;
-			 cout <<zTest->prop(0,1,0,1)-Test->prop(0,1,0,1) << endl;
-			 cout <<zTest->prop(0,1,1,1)-Test->prop(0,1,1,1) << endl;
-			 cout << endl;
-			 cout <<zTest->prop(1,1,0,0)-Test->prop(1,1,0,0) << endl;
-			 cout <<zTest->prop(1,1,1,0)-Test->prop(1,1,1,0) << endl;
-			 cout <<zTest->prop(1,1,0,1)-Test->prop(1,1,0,1) << endl;
-			 cout <<zTest->prop(1,1,1,1)-Test->prop(1,1,1,1) << endl;
-			 cout << endl;
-			*/
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,0,0)+Test->prop(0,0,0,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,1,0)+Test->prop(0,0,1,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(1,0,0,0)+Test->prop(1,0,0,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(1,0,1,0)+Test->prop(1,0,1,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,1,0,0)+Test->prop(0,1,0,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,1,1,0)+Test->prop(0,1,1,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(1,1,0,0)+Test->prop(1,1,0,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(1,1,1,0)+Test->prop(1,1,1,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,0,0)+Testgp->prop(0,0,0,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,1,0)+Testgp->prop(0,0,1,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(1,0,0,0)+Testgp->prop(1,0,0,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(1,0,1,0)+Testgp->prop(1,0,1,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,1,0,0)+Testgp->prop(0,1,0,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,1,1,0)+Testgp->prop(0,1,1,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(1,1,0,0)+Testgp->prop(1,1,0,1),0.1);
-			 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(1,1,1,0)+Testgp->prop(1,1,1,1),0.1);
-
+	 	 	 for(int i=0;i<2;i++){
+	 	 		 for(int j=0;j<2;j++){
+	 	 			 for(int k=0;k<2;k++){
+	 					CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(i,0,(*zX)(k,0),(*zY)(0,0))+Test->prop(i,0,(*zX)(k,0),(*zY)(1,0)),0.1);
+	 					CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(i,0,(*zX)(k,0),(*zY)(0,0))+Testgp->prop(i,0,(*zX)(k,0),(*zY)(1,0)),0.1);
+	 	 			 }
+	 	 		 }
+	 	 	 }
 
 			 for(int i=0; i< Test->getsizeconv()-1; i++ ){
 				if((Test->getconv(i)>pow(10,-11))){
@@ -279,45 +195,17 @@ void itTest::SCTwoXTwoY()
 
 	 Comp *Test = new Comp(2,100,2,lambda,*zX,*zY,500,0.0001,false,true,0,1);
 	 Comp *Testgp = new Comp(2,100,2,lambda,*zX,*zY,500,0.0001,false,true,0,3);
-	 /*
-		 cout << "SCGIS " << endl;
-		 cout <<zTest->prop(0,0,0,0)-Test->prop(0,0,0,0)  << endl;
-		 cout <<zTest->prop(0,0,1,0)-Test->prop(0,0,1,0) << endl;
-		 cout <<zTest->prop(0,0,0,1)-Test->prop(0,0,0,1) << endl;
-		 cout <<zTest->prop(0,0,1,1)-Test->prop(0,0,1,1) << endl;
-		 cout << endl;
-		 cout <<zTest->prop(1,0,0,0)-Test->prop(1,0,0,0) << endl;
-		 cout <<zTest->prop(1,0,1,0)-Test->prop(1,0,1,0) << endl;
-		 cout <<zTest->prop(1,0,0,1)-Test->prop(1,0,0,1) << endl;
-		 cout <<zTest->prop(1,0,1,1)-Test->prop(1,0,1,1) << endl;
-		 cout << endl;
-		 cout <<zTest->prop(0,1,0,0)-Test->prop(0,1,0,0) << endl;
-		 cout <<zTest->prop(0,1,1,0)-Test->prop(0,1,1,0) << endl;
-		 cout <<zTest->prop(0,1,0,1)-Test->prop(0,1,0,1) << endl;
-		 cout <<zTest->prop(0,1,1,1)-Test->prop(0,1,1,1) << endl;
-		 cout << endl;
-		 cout <<zTest->prop(1,1,0,0)-Test->prop(1,1,0,0) << endl;
-		 cout <<zTest->prop(1,1,1,0)-Test->prop(1,1,1,0) << endl;
-		 cout <<zTest->prop(1,1,0,1)-Test->prop(1,1,0,1) << endl;
-		 cout <<zTest->prop(1,1,1,1)-Test->prop(1,1,1,1) << endl;
-		 cout << endl;
-		 */
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,0,0)+Test->prop(0,0,0,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,1,0)+Test->prop(0,0,1,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(1,0,0,0)+Test->prop(1,0,0,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(1,0,1,0)+Test->prop(1,0,1,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,1,0,0)+Test->prop(0,1,0,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,1,1,0)+Test->prop(0,1,1,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(1,1,0,0)+Test->prop(1,1,0,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(1,1,1,0)+Test->prop(1,1,1,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,0,0)+Testgp->prop(0,0,0,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,1,0)+Testgp->prop(0,0,1,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(1,0,0,0)+Testgp->prop(1,0,0,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(1,0,1,0)+Testgp->prop(1,0,1,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,1,0,0)+Testgp->prop(0,1,0,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,1,1,0)+Testgp->prop(0,1,1,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(1,1,0,0)+Testgp->prop(1,1,0,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(1,1,1,0)+Testgp->prop(1,1,1,1),0.1);
+
+
+	 for(int i=0;i<2;i++){
+		 for(int j=0;j<2;j++){
+			 for(int k=0;k<2;k++){
+					CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(i,0,(*zX)(k,0),(*zY)(0,0))+Test->prop(i,0,(*zX)(k,0),(*zY)(1,0)),0.1);
+					CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(i,0,(*zX)(k,0),(*zY)(0,0))+Testgp->prop(i,0,(*zX)(k,0),(*zY)(1,0)),0.1);
+
+			 }
+		 }
+	 }
 
 		 for(int i=0; i< Test->getsizeconv()-1; i++ ){
 			if((Test->getconv(i)> pow(10,-11))){
@@ -345,25 +233,10 @@ void itTest::NotBinary(){
 	 Comp *Test = new Comp(1,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,0);
 	 Comp *Testgp = new Comp(1,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,2);
 
-		 //cout << endl;
-		 //cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0) << endl;
-		 //cout <<zTest->gis(0,0,0,1)-Test->gis(0,0,0,1) << endl;
-		 //cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) << endl;
-		 //cout <<zTest->gis(0,0,1,1)-Test->gis(0,0,1,1) << endl;
-		 //cout <<zTest->gis(0,0,2,0)-Test->gis(0,0,0,0) << endl;
-		 //cout <<zTest->gis(0,0,2,1)-Test->gis(0,0,0,1) << endl;
-		 //cout <<zTest->gis(0,0,3,0)-Test->gis(0,0,1,0) << endl;
-		 //cout <<zTest->gis(0,0,3,1)-Test->gis(0,0,1,1) << endl;
-		 //cout << endl;
-
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,0,0)+Test->prop(0,0,0,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,1,0)+Test->prop(0,0,1,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,2,0)+Test->prop(0,0,2,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,3,0)+Test->prop(0,0,3,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,0,0)+Testgp->prop(0,0,0,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,1,0)+Testgp->prop(0,0,1,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,2,0)+Testgp->prop(0,0,2,1),0.1);
-		 CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,3,0)+Testgp->prop(0,0,3,1),0.1);
+	 for(int i=0;i<4;i++){
+			CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Test->prop(0,0,(*zX)(i,0),(*zY)(0,0))+Test->prop(0,0,(*zX)(i,0),(*zY)(1,0)),0.1);
+			CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(0,0,(*zX)(i,0),(*zY)(0,0))+Testgp->prop(0,0,(*zX)(i,0),(*zY)(1,0)),0.1);
+	 }
 
 
 		 for(int i=0; i< Test->getsizeconv()-1; i++ ){
@@ -384,33 +257,11 @@ void itTest::FourXFourY(){
 	 lambda[1] =1 ;
 	 lambda[2] = 5;
 
-	 Comp *Test = new Comp(4,100,4,lambda,*zX,*zY,500,0.0001,false,true,0,0);
-	 Comp *Testsc = new Comp(4,100,4,lambda,*zX,*zY,500,0.0001,false,true,0,1);
-	 Comp *Testgp = new Comp(4,100,4,lambda,*zX,*zY,500,0.0001,false,true,0,2);
-	 Comp *Testscgp = new Comp(4,100,4,lambda,*zX,*zY,500,0.0001,false,true,0,3);
-	 /*
-		 cout << "SCGIS " << endl;
-		 cout <<zTest->prop(0,0,0,0)-Test->prop(0,0,0,0)  << endl;
-		 cout <<zTest->prop(0,0,1,0)-Test->prop(0,0,1,0) << endl;
-		 cout <<zTest->prop(0,0,0,1)-Test->prop(0,0,0,1) << endl;
-		 cout <<zTest->prop(0,0,1,1)-Test->prop(0,0,1,1) << endl;
-		 cout << endl;
-		 cout <<zTest->prop(1,0,0,0)-Test->prop(1,0,0,0) << endl;
-		 cout <<zTest->prop(1,0,1,0)-Test->prop(1,0,1,0) << endl;
-		 cout <<zTest->prop(1,0,0,1)-Test->prop(1,0,0,1) << endl;
-		 cout <<zTest->prop(1,0,1,1)-Test->prop(1,0,1,1) << endl;
-		 cout << endl;
-		 cout <<zTest->prop(0,1,0,0)-Test->prop(0,1,0,0) << endl;
-		 cout <<zTest->prop(0,1,1,0)-Test->prop(0,1,1,0) << endl;
-		 cout <<zTest->prop(0,1,0,1)-Test->prop(0,1,0,1) << endl;
-		 cout <<zTest->prop(0,1,1,1)-Test->prop(0,1,1,1) << endl;
-		 cout << endl;
-		 cout <<zTest->prop(1,1,0,0)-Test->prop(1,1,0,0) << endl;
-		 cout <<zTest->prop(1,1,1,0)-Test->prop(1,1,1,0) << endl;
-		 cout <<zTest->prop(1,1,0,1)-Test->prop(1,1,0,1) << endl;
-		 cout <<zTest->prop(1,1,1,1)-Test->prop(1,1,1,1) << endl;
-		 cout << endl;
-		 */
+	 Comp *Test = new Comp(4,100,4,lambda,*zX,*zY,200,0.0001,false,true,0,0);
+	 Comp *Testsc = new Comp(4,100,4,lambda,*zX,*zY,200,0.0001,false,true,0,1);
+	 Comp *Testgp = new Comp(4,100,4,lambda,*zX,*zY,200,0.0001,false,true,0,2);
+	 Comp *Testscgp = new Comp(4,100,4,lambda,*zX,*zY,200,0.0001,false,true,0,3);
+
 	 for(int i=0;i<4;i++){
 		 for(int j=0;j<4;j++){
 			 for(int k=0;k<2;k++){

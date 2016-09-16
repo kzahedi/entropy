@@ -159,29 +159,6 @@ double SCGISgp::prop(int rowX,vector<vector<double> > Y, int rowY){
   }
   return exponent/norm;
 }
-double SCGISgp:: prop(vector<vector<double> > X,int rowX,vector<vector<double> > Y, int rowY){
-	  double feat=0;
-	  double featnorm=0;
-	  double norm=0;
-	  double exponent=0;
-	  for(int Featx=0;Featx< _sizeColValX;Featx++){
-		  for(int Featy=0;Featy< _sizeColValY;Featy++){
-			  feat+=(*_FM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[rowY][Featy]);
-	  	  }
-	    }
-	    exponent= exp(feat);
-	    for(int yi=0;yi<Y.size();yi++){
-		  for(int Featx=0;Featx< _sizeColValX;Featx++){
-			  for(int Featy=0;Featy< _sizeColValY;Featy++){
-				  featnorm+= (*_FM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[yi][Featy]);
-			  }
-		  }
-
-		  norm+=exp(featnorm);
-		  featnorm=0;
-	  }
-	  return exponent/norm;
-}
 double SCGISgp::	propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y){
 	double z=0;
 	double feat=0;
