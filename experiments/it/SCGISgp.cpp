@@ -127,6 +127,7 @@ double SCGISgp::getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int il
   return lambda;
 }
 double SCGISgp::prop(int Feati,int Featj,double ValX,double ValY){
+  assert(Feati<_sizeColValX && Featj<_sizeColValY);
   double norm=0;
   double exponent=0;
   exponent= exp((*_FM).getFeatureArrayvalue(Feati,Featj,ValX,ValY) );

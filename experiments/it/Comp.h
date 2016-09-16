@@ -26,11 +26,11 @@ public:
 	Comp(int ColX,int RowX,int ColValY,vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv, bool time,bool test,int seconds,int i);
 	~Comp();
 	vector<double> 	KL();
-	double 			KL(int i);
+	double 			KL1();
 	void 			comparison();
-	double 			prop(int Feati,int Featj,double ValX,double ValY,int i);
-	double		 	getconv(int ind,int i);
-	int 			getsizeconv(int i);
+	double 			prop(int Feati,int Featj,double ValX,double ValY);
+	double		 	getconv(int ind);
+	int 			getsizeconv();
 	DContainer& 	getvalX();
 	DContainer& 	getvalY();
 
@@ -44,6 +44,7 @@ private:
 	DContainer 		*_X;
 	DContainer 		*_valY;
 	DContainer 		*_valX;
+	int				_case;
 	int 			_sizeColValY;
 	int				_sizeColValX;
 	int 			_index;

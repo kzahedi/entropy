@@ -14,6 +14,7 @@ Comp::Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX,
     _alphX=__getalph(true);
     __getValY(ColValY,RowX);
     __comptime(maxit,konv,seconds);
+    _case=4;
 
 }
 Comp::Comp(int ColX,int RowX,int ColValY,vector<double> lambda,DContainer &aX, DContainer &aY){
@@ -27,9 +28,11 @@ Comp::Comp(int ColX,int RowX,int ColValY,vector<double> lambda,DContainer &aX, D
     _alphY=__getalph(false);
     _alphX=__getalph(true);
     __getValY(ColValY,RowX);
+    _case=5;
 }
 Comp::Comp(int ColX,int RowX,int ColValY,vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv, bool time,bool test,int seconds,int i){
 	assert(fabs(i)>=0 && fabs(i)<4);
+	_case=i;
 	_timetest=time;
     _X= &aX;
     _Y= &aY;
@@ -114,7 +117,6 @@ void Comp:: comparison(){
 		if(_timetest){
 		cout<< "Iterations: GIS: " << _gisTest->getIterations() << " SCGIS: " << _scgisTest->getIterations()<< " GIS smoothed: " << _gisgpTest->getIterations() << " SCGIS smoothed: " << _scgisgpTest->getIterations() <<   endl;
 		}
-		cout << KL(0) << " " << KL(1) << " " << KL(2) << " "<< KL(3 ) << endl;
 		cout << "lambda: " << endl;
 		cout << "vergleichswerte" << endl;
 		 cout << _exact->getFeatureArraylambda(0,0,0,0) <<endl;
@@ -232,14 +234,14 @@ vector<double> Comp:: KL(){
 	}
 	return dist;
 }
-double Comp::KL(int i){
+double Comp::KL1(){
 	double dist=0;
 	double p1=0;
 	double q=0;
 	double pm1=0;
-	assert(fabs(i)>=0 && fabs(i)<4);
+	assert(fabs(_case)>=0 && fabs(_case)<4);
 	for(int RowX=0;RowX<_alphX.size();RowX++){
-		switch(i){
+		switch(_case){
 		case 0:
 			pm1=_gisTest->propm(_alphX,RowX,_alphY);
 			break;
@@ -256,7 +258,7 @@ double Comp::KL(int i){
 			cout << "default " << endl;
 		}
 		for(int sizeY=0;sizeY<_alphY.size();sizeY++){
-			switch(i){
+			switch(_case){
 			case 0:
 				p1=_gisTest->propm(_alphX,RowX,_alphY,sizeY);
 				break;
@@ -388,9 +390,9 @@ DContainer& Comp:: getvalX(){
 DContainer& Comp:: getvalY(){
 	return *_valY;
 }
-double Comp::	prop(int Feati,int Featj,double ValX,double ValY,int i){
-	assert(fabs(i)>=0 && fabs(i)<4);
-	switch(i){
+double Comp::	prop(int Feati,int Featj,double ValX,double ValY){
+	assert(fabs(_case)>=0 && fabs(_case)<4);
+	switch(_case){
 	case 0:
 		return _gisTest->prop(Feati,Featj,ValX,ValY);
 		break;
@@ -401,15 +403,15 @@ double Comp::	prop(int Feati,int Featj,double ValX,double ValY,int i){
 		return _gisgpTest->prop(Feati,Featj,ValX,ValY);
 		break;
 	case 3:
-		return _scgisTest->prop(Feati,Featj,ValX,ValY);
+		return _scgisgpTest->prop(Feati,Featj,ValX,ValY);
 		break;
 	default:
 		cout << "default " << endl;
 	}
 }
-double Comp:: getconv(int ind,int i){
-	assert(fabs(i)>=0 && fabs(i)<4);
-	switch(i){
+double Comp:: getconv(int ind){
+	assert(fabs(_case)>=0 && fabs(_case)<4);
+	switch(_case){
 	case 0:
 		return _gisTest->getconv(ind);
 		break;
@@ -426,9 +428,9 @@ double Comp:: getconv(int ind,int i){
 		cout << "default " << endl;
 	}
 }
-int Comp:: getsizeconv(int i){
-	assert(fabs(i)>=0 && fabs(i)<4);
-	switch(i){
+int Comp:: getsizeconv(){
+	assert(fabs(_case)>=0 && fabs(_case)<4);
+	switch(_case){
 	case 0:
 		return _gisTest->getsizeconv();
 		break;

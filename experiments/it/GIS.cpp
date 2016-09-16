@@ -117,6 +117,7 @@ GIS::~GIS(){
 	_conv.clear();
 }
 double GIS::prop(int Feati,int Featj,double ValX,double ValY){
+  assert(Feati<_sizeColValX && Featj<_sizeColValY);
   double norm=0;
   double exponent=0;
   exponent= exp((*_FM).getFeatureArrayvalue(Feati,Featj,ValX,ValY) );
@@ -125,6 +126,7 @@ double GIS::prop(int Feati,int Featj,double ValX,double ValY){
   }
   return exponent/norm;
 }
+
 double GIS::prop(int rowX,vector<vector<double> > Y, int rowY){
   double feat=0;
   double featnorm=0;
