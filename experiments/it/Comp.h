@@ -21,6 +21,7 @@ using namespace std;
 class Comp{
 
 public:
+	Comp(int ColX,int RowX,int ColValY,DContainer &aX, DContainer &aY,int maxit, double konv,bool time, int seconds,bool test);
 	Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv,bool time, int seconds);
 	Comp(int ColX,int RowX,int ColValY,vector<double> lambda,DContainer &aX, DContainer &aY);
 	Comp(int ColX,int RowX,int ColValY,vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv, bool time,bool test,int seconds,int i);
@@ -64,3 +65,5 @@ private:
 };
 
 #endif
+
+

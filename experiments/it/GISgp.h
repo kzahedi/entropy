@@ -16,28 +16,46 @@
 
 using namespace std;
 
-class GISgp : public IT{
+class GISgp{
 
 public:
 	GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,double lambdadeltaval, double sigma,int maxit,double konv, bool test,bool time,int seconds);
 	~GISgp();
+	double 	prop(int rowX,vector<vector<double> > Y, int rowY);
+	double 	prop(int Feati,int Featj,double ValX,double ValY);
+	double  propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y, int rowY);
+	double 	propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y);
 	void 	setFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY,double valuelambda);
+	double	getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY);
 	double 	getconv(int i);
 	int    	getsizeconv();
 	int		getIterations();
 
 private:
+	double**** 		__getobs();
 	double   		__getFeatconst();
 	void 			__getexp();
 	void 			__gisgp(int maxit, double konv, double lambdadelta, double sigma,bool test);
 	void 			__gisgp(int maxit, double konv, double lambdadelta, double sigma,bool test,int seconds);
 
 	double****		_expected;
+	double**** 		_observed;
 	double****		_delta;
 	double*** 		_exponent;
 	double** 		_normaliser;
 	vector<double> 	_conv;
+	int 			_sizeX;
+	int 			_sizeY;
+	int 			_sizeColValX;
+	int 			_sizeColValY;
+	int 			_sizeRowValX;
+	int 			_sizeRowValY;
 	int 			_iterations;
 
+	FeatureMatrix 	*_FM;
+	DContainer 		*_Y;
+	DContainer 		*_X;
+	DContainer 		*_valY;
+	DContainer 		*_valX;
 };
 #endif

@@ -30,16 +30,144 @@ DContainer *zY = new DContainer(2,1);
 	*zY << 0 << 1;
 
 vector<double> lambda(3);
-	 lambda[0]=5;
-	 lambda[1]=0;
-	 lambda[2]=1;
+	 lambda[0]=1;
+	 lambda[1]=5;
+	 lambda[2]=3;
+
 //Comp::Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv,bool time,int seconds){
-		 Comp *test = new Comp(2,100000,2,lambda,*zX,*zY,1,0.001,true,30);
+		 Comp *test = new Comp(2,100000,2,*zX,*zY,1,0.001,true,100,true);
 	//GISsp *test2 = new GISsp(*eX,*esY,*zX,*zY,1,20,0.1,true);
 	//for(int i=0;i<20;i++){
 //		cout << test2->getconv(i) << endl;
 //	}
+
 test->comparison();
+/*srand(time(NULL));
+int n=1000;
+DContainer *eX = new DContainer(n,1);
+for(int i=0;i< n;i++ ){
+	 for(int j=0;j<1;j++){
+		 *eX << rand() % 2;
+	 }
+}
+DContainer *zX = new DContainer(2,1);
+*zX << 0 << 1;
+ DContainer *zY = new DContainer(2,1);
+*zY << 0 << 1;
+
+GIS *Test = new GIS(1,*eX,*zX,*zY);
+Test->setFeatureArraylambda(0,0,1,0,4);
+Test->setFeatureArraylambda(0,0,1,1,0);
+Test->setFeatureArraylambda(0,0,0,0,3);
+Test->setFeatureArraylambda(0,0,0,1,2);
+
+double** prop;
+prop=new double*[n];
+for(int i=0;i<n;i++){
+	 prop[i]=new double[2];
+	 for(int j=0;j<2;j++){
+		 prop[i][j]=0;
+	 }
+}
+
+for(int i=0;i<n;i++){
+	for(int propi=0;propi<2;propi++){
+			prop[i][propi]=Test->gis(0,0,(*eX)(i,0),propi);
+		 }
+	 }
+DContainer *esY=new DContainer(n,1);
+
+for(int i=0;i<n;i++){
+	 double z=(double)rand()/RAND_MAX;
+	 double s=0;
+	 int ind=0;
+	 for(int j=0;j<2 && s<z;j++){
+			s+=prop[i][j];
+			ind=j;
+		 }
+	 (*esY) << ind;
+	 }
+GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,5000,0.01,true);
+SCGIS *bTest = new SCGIS(*eX,*esY,*zX,*zY,5000,0.01,1,true);
+//cout << "exakt:"  << endl;
+//cout <<Test->gis(0,0,0,0) << " " << Test->getFeatureArraylambda(0,0,0,0) << endl;
+//cout <<Test->gis(0,0,1,0) <<  " " << Test->getFeatureArraylambda(0,0,1,0) <<endl;
+//cout <<Test->gis(0,0,0,1) << " " << Test->getFeatureArraylambda(0,0,0,1) << endl;
+//cout <<Test->gis(0,0,1,1) <<  " " << Test->getFeatureArraylambda(0,0,1,1) <<endl;
+cout << "gis: " << endl;
+cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0) <<  " " << zTest->getFeatureArraylambda(0,0,0,0) <<endl;
+cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) <<  " " << zTest->getFeatureArraylambda(0,0,1,0) <<endl;
+cout <<zTest->gis(0,0,0,1)-Test->gis(0,0,0,1)  <<  " " << zTest->getFeatureArraylambda(0,0,0,1) <<endl;
+cout <<zTest->gis(0,0,1,1)-Test->gis(0,0,1,1) <<  " " << zTest->getFeatureArraylambda(0,0,1,1) <<endl;
+cout << "scgis " << endl;
+cout <<bTest->scgis(0,0,0,0)-Test->gis(0,0,0,0) <<  " " << bTest->getFeatureArraylambda(0,0,0,0) <<endl;
+cout <<bTest->scgis(0,0,1,0)-Test->gis(0,0,1,0) <<  " " << bTest->getFeatureArraylambda(0,0,1,0) <<endl;
+cout <<bTest->scgis(0,0,0,1)-Test->gis(0,0,0,1)  <<  " " << bTest->getFeatureArraylambda(0,0,0,1) <<endl;
+cout <<bTest->scgis(0,0,1,1)-Test->gis(0,0,1,1) <<  " " << bTest->getFeatureArraylambda(0,0,1,1) <<endl;
+
+/*srand(time(NULL));
+int n=1000;
+DContainer *eX = new DContainer(n,1);
+for(int i=0;i< n;i++ ){
+	 for(int j=0;j<1;j++){
+		 *eX << rand() % 2;
+	 }
+}
+DContainer *zX = new DContainer(2,1);
+*zX << 0 << 1;
+ DContainer *zY = new DContainer(2,1);
+*zY << 0 << 1;
+
+GIS *Test = new GIS(1,*eX,*zX,*zY);
+Test->setFeatureArraylambda(0,0,1,0,4);
+Test->setFeatureArraylambda(0,0,1,1,0);
+Test->setFeatureArraylambda(0,0,0,0,3);
+Test->setFeatureArraylambda(0,0,0,1,2);
+
+double** prop;
+prop=new double*[n];
+for(int i=0;i<n;i++){
+	 prop[i]=new double[2];
+	 for(int j=0;j<2;j++){
+		 prop[i][j]=0;
+	 }
+}
+
+for(int i=0;i<n;i++){
+	for(int propi=0;propi<2;propi++){
+			prop[i][propi]=Test->gis(0,0,(*eX)(i,0),propi);
+		 }
+	 }
+DContainer *esY=new DContainer(n,1);
+
+for(int i=0;i<n;i++){
+	 double z=(double)rand()/RAND_MAX;
+	 double s=0;
+	 int ind=0;
+	 for(int j=0;j<2 && s<z;j++){
+			s+=prop[i][j];
+			ind=j;
+		 }
+	 (*esY) << ind;
+	 }
+GIS *zTest = new GIS(*eX,*esY,*zX,*zY,1,5000,0.01,true);
+SCGIS *bTest = new SCGIS(*eX,*esY,*zX,*zY,5000,0.01,1,true);
+//cout << "exakt:"  << endl;
+//cout <<Test->gis(0,0,0,0) << " " << Test->getFeatureArraylambda(0,0,0,0) << endl;
+//cout <<Test->gis(0,0,1,0) <<  " " << Test->getFeatureArraylambda(0,0,1,0) <<endl;
+//cout <<Test->gis(0,0,0,1) << " " << Test->getFeatureArraylambda(0,0,0,1) << endl;
+//cout <<Test->gis(0,0,1,1) <<  " " << Test->getFeatureArraylambda(0,0,1,1) <<endl;
+cout << "gis: " << endl;
+cout <<zTest->gis(0,0,0,0)-Test->gis(0,0,0,0) <<  " " << zTest->getFeatureArraylambda(0,0,0,0) <<endl;
+cout <<zTest->gis(0,0,1,0)-Test->gis(0,0,1,0) <<  " " << zTest->getFeatureArraylambda(0,0,1,0) <<endl;
+cout <<zTest->gis(0,0,0,1)-Test->gis(0,0,0,1)  <<  " " << zTest->getFeatureArraylambda(0,0,0,1) <<endl;
+cout <<zTest->gis(0,0,1,1)-Test->gis(0,0,1,1) <<  " " << zTest->getFeatureArraylambda(0,0,1,1) <<endl;
+cout << "scgis " << endl;
+cout <<bTest->scgis(0,0,0,0)-Test->gis(0,0,0,0) <<  " " << bTest->getFeatureArraylambda(0,0,0,0) <<endl;
+cout <<bTest->scgis(0,0,1,0)-Test->gis(0,0,1,0) <<  " " << bTest->getFeatureArraylambda(0,0,1,0) <<endl;
+cout <<bTest->scgis(0,0,0,1)-Test->gis(0,0,0,1)  <<  " " << bTest->getFeatureArraylambda(0,0,0,1) <<endl;
+cout <<bTest->scgis(0,0,1,1)-Test->gis(0,0,1,1) <<  " " << bTest->getFeatureArraylambda(0,0,1,1) <<endl;
+
 /*srand(time(NULL));
 int n=1000;
 DContainer *eX = new DContainer(n,1);
