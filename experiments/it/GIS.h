@@ -11,10 +11,9 @@
 class GIS : public IT
 {
   public:
-    GIS(int ColValY,DContainer &eX,DContainer &aX, DContainer &aY);
     GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test,bool time,int seconds);
     ~GIS();
-    void   setFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY,double valuelambda);
+    // void   setFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY,double valuelambda);
     double getconv(int i);
     int    getsizeconv();
     int    getIterations();

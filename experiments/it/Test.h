@@ -37,7 +37,7 @@ class Test
     DContainer&    getvalY();
 
   private:
-    GIS                   *_exact;
+    IT                    *_exact;
     GIS                   *_gisTest;
     GISgp                 *_gisgpTest;
     SCGIS                 *_scgisTest;

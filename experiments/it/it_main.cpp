@@ -34,6 +34,6 @@ DContainer *zY = new DContainer(2,1);
      lambda[1]=5;
      lambda[2]=3;
 //int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv,bool time,int seconds)
-     Test *test = new Test(8,8,100,lambda,*zX,*zY,1,0.001,true,10);
+     Test *test = new Test(2,2,100,lambda,*zX,*zY,1,0.001,true,10);
 test->comparison();
 }

@@ -291,3 +291,11 @@ double**** IT::__getobs()
   }
   return _observed;
 }
+
+void IT::setFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY,double valuelambda){
+  assert(Feati<_sizeColValX && Featj<_sizeColValY);
+  assert(_gis == true);
+  _FM->setFeatureArraylambda(Feati,Featj,ilambdaX,ilambdaY,valuelambda);
+}
+
+

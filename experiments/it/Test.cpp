@@ -9,7 +9,7 @@ Test::Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX
   _sizeColValY = colValY;
   __getValX(colX,rowX);
   _sizeColValX = _valX->columns();
-  _exact       = new GIS(colValY,*_valX,*_X,*_Y);
+  _exact       = new IT(colValY,*_valX,*_X,*_Y);
   __setLambdaRand(lambda);
   _alphY       = __getalph(false);
   _alphX       = __getalph(true);
@@ -25,7 +25,7 @@ Test::Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambd
   _sizeColValY=colValY;
   __getValX(colX,rowX);
   _sizeColValX=_valX->columns();
-  _exact= new GIS(colValY,*_valX,*_X,*_Y);
+  _exact= new IT(colValY,*_valX,*_X,*_Y);
   __setlambda(indizes,lambda);
   _alphY=__getalph(false);
   _alphX=__getalph(true);
@@ -42,7 +42,7 @@ Test::Test(int colX,int colValY,int rowX,DContainer &aX, DContainer &aY,int maxi
   _sizeColValY=colValY;
   __getValX(colX,rowX);
   _sizeColValX=_valX->columns();
-  _exact= new GIS(colValY,*_valX,*_X,*_Y);
+  _exact= new IT(colValY,*_valX,*_X,*_Y);
   _exact->setFeatureArraylambda(0,0,0,0,1);
   _exact->setFeatureArraylambda(0,0,1,0,4);
   _exact->setFeatureArraylambda(0,0,0,1,5);
@@ -74,7 +74,7 @@ Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, D
   _sizeColValY=colValY;
   __getValX(colX,rowX);
   _sizeColValX=_valX->columns();
-  _exact= new GIS(colValY,*_valX,*_X,*_Y);
+  _exact= new IT(colValY,*_valX,*_X,*_Y);
   __setLambdaRand(lambda);
   _alphY=__getalph(false);
   _alphX=__getalph(true);
@@ -90,7 +90,7 @@ Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, D
   _sizeColValY=colValY;
   __getValX(colX,rowX);
   _sizeColValX=_valX->columns();
-  _exact= new GIS(colValY,*_valX,*_X,*_Y);
+  _exact= new IT(colValY,*_valX,*_X,*_Y);
   __setLambdaRand(lambda);
   _alphY=__getalph(false);
   _alphX=__getalph(true);
@@ -125,11 +125,11 @@ Test::~Test()
   }
   _alphY.clear();
   //expizit aufrufen?
-  _exact->~GIS();
-  _gisTest->~GIS();
-  _scgisTest->~SCGIS();
-  _scgisgpTest->~SCGISgp();
-  _gisgpTest->~GISgp();
+  delete _exact;
+  delete _gisTest;
+  delete _scgisTest;
+  delete _scgisgpTest;
+  delete _gisgpTest;
 }
 //GIS und SCGIS ausfuehren mit Zeitmessung
 void Test::__comptime(int maxit, double konv,int seconds){

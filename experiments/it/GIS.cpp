@@ -3,12 +3,9 @@
 GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time, int seconds)
 :IT(eX, eY, aX, aY, lambdavalue,true)
 {
-
-  _exponent=new double[_sizeRowValY];
-
+  _exponent   = new double[_sizeRowValY];
   _normaliser = 0.0;
-
-  _expected = new double***[_sizeColValX];
+  _expected   = new double***[_sizeColValX];
   for(int i=0; i<_sizeColValX; i++)
   {
     _expected[i]=new double**[_sizeColValY];
@@ -25,23 +22,15 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
       }
     }
   }
+
   if(time)
   {
-    __gis(maxit,konv,test,seconds);
+    __gis(maxit, konv, test, seconds);
   }
   else
   {
-    __gis(maxit, konv,test);
+    __gis(maxit, konv, test);
   }
-}
-
-// ColValY - Anzahl der Y-Knoten
-GIS::GIS(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY)
-:IT( ColValY, eX,aX, aY){
-    _exponent = NULL;
-    _normaliser= 0.0;
-    _expected = NULL;
-    _iterations=0;
 }
 
 GIS::~GIS(){
@@ -79,10 +68,6 @@ double GIS:: getconv(int i){
 }
 int GIS:: getsizeconv(){
   return _conv.size();
-}
-void GIS::setFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY,double valuelambda){
-  assert(Feati<_sizeColValX && Featj<_sizeColValY);
-  _FM->setFeatureArraylambda(Feati,Featj,ilambdaX,ilambdaY,valuelambda);
 }
 
 
