@@ -25,3 +25,4 @@ class itTest : public CppUnit::TestFixture
     void FourXFourY();
 
 };
+

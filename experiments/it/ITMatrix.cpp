@@ -34,7 +34,6 @@ ITMatrix::	~ITMatrix(){
 		}
 		delete _FA;
 }
-
 double 	ITMatrix::	getFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY){
 		assert(i<_sizeColValX && j<_sizeColValY);
 		double lambda=_FA[i][j].getlambda(ilambdaX,ilambdaY);

@@ -35,7 +35,7 @@ IT::IT(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY){
     _sizeRowValX= (*_valX).rows();
     _valY= new DContainer(_sizeRowValX,ColValY);
     _sizeRowValY= 0;
-    _FM=new FeatureMatrix(*_valX,*_valY,*_X,*_Y,0);
+    _FM=new FeatureMatrix(*_valX,*_valY,*_X,*_Y,1);
     _IM=NULL;
     _observed=NULL;
 }
@@ -185,4 +185,5 @@ double**** IT:: __getobs(){
     }
     return _observed;
 }
+
 

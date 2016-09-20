@@ -46,7 +46,7 @@ void itTest::OneXOneY()
 	 CPPUNIT_ASSERT (Testgp->KL1()<2);
 }
 void itTest::SCOneXOneY()
-{cout << "SCOneXOneY" << endl;
+{ cout << "SCOneXOneY" << endl;
 	srand(time(NULL));
 		 DContainer *zX = new DContainer(2,1);
 		 *zX << 0 << 1;
@@ -75,7 +75,6 @@ void itTest::SCOneXOneY()
 		 }
 		 CPPUNIT_ASSERT (Test->KL1()<1.5);
 		 CPPUNIT_ASSERT (Testgp->KL1()<2);
-
 }
 void itTest::TwoXOneY()
 {	cout << "TWoXOneY" << endl;
@@ -112,7 +111,7 @@ void itTest::TwoXOneY()
 	 CPPUNIT_ASSERT (Testgp->KL1()<2);
 }
 void itTest::SCTwoXOneY()
-{	 cout << "SCTWoXOneY" << endl;
+{ 	 cout << "SCTWoXOneY" << endl;
 	srand(time(NULL));
 	DContainer *zX = new DContainer(2,1);
 		*zX << 0 << 1;
@@ -142,10 +141,12 @@ void itTest::SCTwoXOneY()
 		CPPUNIT_ASSERT 	(Test->getconv(i) >= Test->getconv(i+1) );
 		}
 	 }
-	 CPPUNIT_ASSERT (Test->KL1()<1.5);
+	 CPPUNIT_ASSERT (Test->KL1()<2);
 	 CPPUNIT_ASSERT (Testgp->KL1()<2);
+
 }
 void itTest::TwoXTwoY(){
+
 	 cout << "TwoXTwoY" << endl;
 	 srand(time(NULL));
 	 DContainer *zX = new DContainer(2,1);
@@ -177,8 +178,9 @@ void itTest::TwoXTwoY(){
 				CPPUNIT_ASSERT 	(Test->getconv(i) >= Test->getconv(i+1) );
 				}
 			 }
-			 CPPUNIT_ASSERT (Test->KL1()<1.5);
+			 CPPUNIT_ASSERT (Test->KL1()<2);
 			 CPPUNIT_ASSERT (Testgp->KL1()<2);
+
 }
 void itTest::SCTwoXTwoY()
 {
@@ -215,10 +217,12 @@ void itTest::SCTwoXTwoY()
 			CPPUNIT_ASSERT 	(Test->getconv(i) >= Test->getconv(i+1) );
 			}
 		 }
-		 CPPUNIT_ASSERT (Test->KL1()<1.5);
+		 CPPUNIT_ASSERT (Test->KL1()<2);
 		 CPPUNIT_ASSERT (Testgp->KL1()<2);
+
 }
 void itTest::NotBinary(){
+
 	cout << "NotBinary" << endl;
 	srand(time(NULL));
 	 DContainer *zX = new DContainer(4,1);
@@ -244,8 +248,10 @@ void itTest::NotBinary(){
 		 }
 		 CPPUNIT_ASSERT (Test->KL1()<1.5);
 		 CPPUNIT_ASSERT (Testgp->KL1()<1.5);
+
 	}
 void itTest::FourXFourY(){
+
 	cout << "FourXFourY" << endl;
 	 srand(time(NULL));
 	 DContainer *zX = new DContainer(2,1);

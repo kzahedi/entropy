@@ -21,9 +21,10 @@ using namespace std;
 class Comp{
 
 public:
-	Comp(int ColX,int RowX,int ColValY,DContainer &aX, DContainer &aY,int maxit, double konv,bool time, int seconds,bool test);
 	Comp(int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv,bool time, int seconds);
 	Comp(int ColX,int RowX,int ColValY,vector<double> lambda,DContainer &aX, DContainer &aY);
+	Comp(int ColX,int RowX,int ColValY, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY,int maxit, double konv,bool time,int seconds);
+	Comp(int ColX,int RowX,int ColValY,DContainer &aX, DContainer &aY,int maxit, double konv,bool time,int seconds,bool comp);
 	Comp(int ColX,int RowX,int ColValY,vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv, bool time,bool test,int seconds,int i);
 	~Comp();
 	vector<double> 	KL();
@@ -49,10 +50,10 @@ private:
 	int 			_sizeColValY;
 	int				_sizeColValX;
 	int 			_index;
-	vector<double>	_timediff;
+	vector<double>			_timediff;
 	vector<vector<double> > _alphY;
 	vector<vector<double> > _alphX;
-	bool			_timetest;
+	bool					_timetest;
 
 	vector<vector<double> > __getalph(bool valX);
 
@@ -65,5 +66,4 @@ private:
 };
 
 #endif
-
 

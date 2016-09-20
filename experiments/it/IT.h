@@ -35,6 +35,7 @@ public:
 
 protected:
 	double**** 		__getobs();
+
 	int 			_sizeX;
 	int 			_sizeY;
 	int 			_sizeColValX;

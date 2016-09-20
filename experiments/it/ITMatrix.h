@@ -31,6 +31,7 @@ protected:
 	int _sizeRowValY;
 	int _sizeX;
 	int _sizeY;
+
 	DContainer *_valX;
 	DContainer *_valY;
 	DContainer *_X;
