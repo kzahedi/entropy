@@ -27,7 +27,7 @@ class GIS : public IT
 
     double****     _expected;
     double*        _exponent;
-    double**       _normaliser;
+    double         _normaliser;
     vector<double> _conv;
     int            _iterations;
 };

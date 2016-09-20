@@ -6,11 +6,7 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
 
   _exponent=new double[_sizeRowValY];
 
-  _normaliser= new double*[_sizeColValX];
-  for(int i=0; i< _sizeColValX; i++)
-  {
-    _normaliser[i]=new double[_sizeColValY];
-  }
+  _normaliser = 0.0;
 
   _expected = new double***[_sizeColValX];
   for(int i=0; i<_sizeColValX; i++)
@@ -43,7 +39,7 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
 GIS::GIS(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY)
 :IT( ColValY, eX,aX, aY){
     _exponent = NULL;
-    _normaliser= NULL;
+    _normaliser= 0.0;
     _expected = NULL;
     _iterations=0;
 }
@@ -72,12 +68,6 @@ GIS::~GIS(){
       delete[] _expected[i];
      }
      delete[] _expected;
-  }
-  if(_normaliser != NULL){
-    for(int m=0;m<_sizeColValX;m++){
-      delete [] _normaliser[m];
-    }
-    delete [] _normaliser;
   }
   if(_exponent != NULL){
     delete [] _exponent;
@@ -137,11 +127,11 @@ void GIS:: __getexp(){
     {
       for(int xi=0; xi< _sizeRowValX; xi++)
       {
-        _normaliser[Feati][Featj]=0;
+        _normaliser = 0.0;
         for(int yj=0; yj< _sizeY; yj++)
         {
           _exponent[yj]=_FM->getFeatureArrayvalue(Feati,Featj,(*_valX)(xi,Feati), (*_Y)(yj,0));
-          _normaliser[Feati][Featj]+=exp(_exponent[yj]);
+          _normaliser += exp(_exponent[yj]);
         }
         for(int yj=0; yj< _sizeY; yj++)
         {
@@ -159,7 +149,7 @@ void GIS:: __getexp(){
               _expected[Feati]
                        [Featj]
                        [(*_FM).getMatrixIndexdX(xi,yj)[k]]
-                       [(*_FM).getMatrixIndexdY(xi,yj)[k]] += exp(_exponent[yj])/_normaliser[Feati][Featj];
+                       [(*_FM).getMatrixIndexdY(xi,yj)[k]] += exp(_exponent[yj])/_normaliser;
               }
             }
           }
@@ -176,11 +166,7 @@ void GIS:: __gis(int maxit, double konv, bool test,int seconds){
     for(int k=0;k< _sizeY;k++){
       _exponent[k]=0;
     }
-      for(int i=0; i< _sizeColValX; i++){
-        for(int j=0; j<_sizeColValY;j++){
-         _normaliser[i][j]=0;
-        }
-      }
+    _normaliser=0;
     double l=1;
     double utime=0;
     time_t befor;
@@ -233,11 +219,7 @@ void GIS:: __gis(int maxit, double konv, bool test){
     for(int k=0;k< _sizeY;k++){
       _exponent[k]=0;
     }
-    for(int i=0; i< _sizeColValX; i++){
-        for(int j=0; j<_sizeColValY;j++){
-         _normaliser[i][j]=0;
-        }
-      }
+    _normaliser=0;
     int i=0;
     double l=1;
     while(i<maxit && fabs(l)>=konv ){
