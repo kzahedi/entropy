@@ -19,7 +19,6 @@ public:
 	Feature();
 	Feature(DContainer &aX, DContainer &aY, double valuelambda);
 	Feature(DContainer &aX, DContainer &aY,  Matrix lambda);
-	Feature(bool binaer,double valuelambda);
 	~Feature();
 	friend std::ostream& operator<<(std::ostream& str,Feature& feature){
 		str<< "Feature:" <<endl;
@@ -29,18 +28,16 @@ public:
 			}
 			str<< endl;
 		}
-
 	   return str;
 	};
-
 	double getlambda(int i, int j);
 	void setlambda(int i, int j, double newvalue );
 	int delta(double ax, double ay, double x, double y);
 	double value(double x,double y);
 	Feature& operator=(const Feature& c);
 
-
 private:
+
 	int _sizeX;
 	int _sizeY;
 	DContainer *_X;

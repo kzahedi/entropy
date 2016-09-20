@@ -33,7 +33,7 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
 		  __gis(maxit,konv,test,seconds);
 	  }
 	  else{
-	  __gis(maxit, konv,test);
+		  __gis(maxit, konv,test);
 	  }
 }
 
@@ -212,7 +212,6 @@ void GIS:: __gis(int maxit, double konv, bool test,int seconds){
 	  }
 }
 void GIS:: __gis(int maxit, double konv, bool test){
-
 
 	  //constant c for delta
 	  double featconst = __getFeatconst();

@@ -209,7 +209,7 @@ void Comp:: comparison(){
 		 cout << _gisTest->getFeatureArraylambda(1,1,1,0) <<endl;
 		 cout << _gisTest->getFeatureArraylambda(1,1,0,1) <<endl;
 		 cout << _gisTest->getFeatureArraylambda(1,1,1,1) <<endl;
-		cout << "GIS smoothed " << endl;
+		 cout << "GIS smoothed " << endl;
 		 cout << _gisgpTest->getFeatureArraylambda(0,0,0,0) <<endl;
 		 cout << _gisgpTest->getFeatureArraylambda(0,0,1,0) <<endl;
 		 cout << _gisgpTest->getFeatureArraylambda(0,0,0,1) <<endl;

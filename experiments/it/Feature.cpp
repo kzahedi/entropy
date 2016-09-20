@@ -23,21 +23,6 @@ Feature::Feature(DContainer &aX, DContainer &aY, double valuelambda){
 		}
 	}
 }
-//Eingabealphabete nur 1, -1
-Feature::Feature(bool binaer,double valuelambda){
-	_X= new DContainer(2,1);
-	   *_X << 1 << -1;
-	_Y= new DContainer(2,1);
-	   *_Y << 1 << -1;
-	_sizeY= _Y->rows();
-	_sizeX= _X->rows();
-	_lambda = new Matrix(_sizeX,_sizeY);
-	for(int i=0; i< _sizeX; i++){
-	   for(int j=0; j< _sizeY; j++){
-	      (*_lambda)(i,j)=valuelambda;
-	   }
-	}
-}
 Feature::Feature(DContainer &aX, DContainer &aY, Matrix lambda){
 	_lambda=&lambda;
 	_X= &aX;

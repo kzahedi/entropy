@@ -24,7 +24,7 @@ void itTest::OneXOneY()
 	 *zY << 0 << 1;
 	 vector<double> lambda(3);
 	 lambda[0] = 0;
-	 lambda[1] =1 ;
+	 lambda[1] = 1;
 	 lambda[2] = 5;
 
 	 Comp *Test = new Comp(1,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,0);
@@ -54,7 +54,7 @@ void itTest::SCOneXOneY()
 		 *zY << 0 << 1;
 		 vector<double> lambda(3);
 		 lambda[0] = 0;
-		 lambda[1] =1 ;
+		 lambda[1] = 1;
 		 lambda[2] = 5;
 
 		 Comp *Test = new Comp(1,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,1);
@@ -85,7 +85,7 @@ void itTest::TwoXOneY()
 	 *zY << 0 << 1;
 	 vector<double> lambda(3);
 	 lambda[0] = 0;
-	 lambda[1] =1 ;
+	 lambda[1] = 1;
 	 lambda[2] = 5;
 
 	 Comp *Test = new Comp(2,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,0);
@@ -119,7 +119,7 @@ void itTest::SCTwoXOneY()
 		*zY << 0 << 1;
 	vector<double> lambda(3);
 		lambda[0] = 0;
-		lambda[1] =1 ;
+		lambda[1] = 1;
 		lambda[2] = 5;
 
 	Comp *Test = new Comp(2,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,1);
@@ -155,7 +155,7 @@ void itTest::TwoXTwoY(){
 	 *zY << 0 << 1;
 	 vector<double> lambda(3);
 	 lambda[0] = 0;
-	 lambda[1] =1 ;
+	 lambda[1] = 1;
 	 lambda[2] = 5;
 
 	 Comp *Test = new Comp(2,100,2,lambda,*zX,*zY,500,0.0001,false,true,0,0);
@@ -192,7 +192,7 @@ void itTest::SCTwoXTwoY()
 	 *zY << 0 << 1;
 	 vector<double> lambda(3);
 	 lambda[0] = 0;
-	 lambda[1] =1 ;
+	 lambda[1] = 1;
 	 lambda[2] = 5;
 
 	 Comp *Test = new Comp(2,100,2,lambda,*zX,*zY,500,0.0001,false,true,0,1);
@@ -231,7 +231,7 @@ void itTest::NotBinary(){
 	 *zY << 0 << 1;
 	 vector<double> lambda(3);
 	 lambda[0] = 0;
-	 lambda[1] =1 ;
+	 lambda[1] = 1;
 	 lambda[2] = 5;
 
 	 Comp *Test = new Comp(1,100,1,lambda,*zX,*zY,500,0.0001,false,true,0,0);
@@ -260,7 +260,7 @@ void itTest::FourXFourY(){
 	 *zY << 0 << 1 << 2;
 	 vector<double> lambda(3);
 	 lambda[0] = 0;
-	 lambda[1] =1 ;
+	 lambda[1] = 1;
 	 lambda[2] = 5;
 
 	 Comp *Test = new Comp(4,100,4,lambda,*zX,*zY,200,0.0001,false,true,0,0);
@@ -275,12 +275,11 @@ void itTest::FourXFourY(){
 					CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testsc->prop(i,j,k,0)+Testsc->prop(i,j,k,1)+Testsc->prop(i,j,k,2),0.1);
 					CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testgp->prop(i,j,k,0)+Testgp->prop(i,j,k,1)+Testgp->prop(i,j,k,2),0.1);
 					CPPUNIT_ASSERT_DOUBLES_EQUAL 	(  1,Testscgp->prop(i,j,k,0)+Testscgp->prop(i,j,k,1)+Testscgp->prop(i,j,k,2),0.1);
-
 			 }
 		 }
 	 }
-		 CPPUNIT_ASSERT (Test->KL1()<2);
-		 CPPUNIT_ASSERT (Testsc->KL1()<2);
-		 CPPUNIT_ASSERT (Testgp->KL1()<2);
-		 CPPUNIT_ASSERT (Testscgp->KL1()<2);
+	CPPUNIT_ASSERT (Test->KL1()<2);
+	CPPUNIT_ASSERT (Testsc->KL1()<2);
+	CPPUNIT_ASSERT (Testgp->KL1()<2);
+	CPPUNIT_ASSERT (Testscgp->KL1()<2);
 }
