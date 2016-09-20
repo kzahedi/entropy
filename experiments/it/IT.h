@@ -27,9 +27,9 @@ class IT{
     IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,bool GIS);
     IT(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY);
     double  prop(int Feati,int Featj,double ValX,double ValY);
-    double  prop(int rowX,vector<vector<double> > Y, int rowY);
-    double  propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y);
-    double  propm(vector<vector<double> > X,int rowX,vector<vector<double> > Y, int rowY);
+    double  prop(int rowX,vector<vector<double> >& Y, int rowY);
+    double  propm(vector<vector<double> > X,int rowX,vector<vector<double> >& Y);
+    double  propm(vector<vector<double> > X,int rowX,vector<vector<double> >& Y, int rowY);
     double  getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY);
 
   protected:

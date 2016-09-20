@@ -74,7 +74,8 @@ double IT::prop(int Feati, int Featj, double ValX, double ValY)
 }
 
 // p(y | x)
-double IT::prop(int rowX, vector<vector<double> > Y, int rowY)
+// double IT::prop(int rowX, vector<vector<double> > Y, int rowY)
+double IT::prop(int rowX, vector<vector<double> >& Y, int rowY)
 {
   double feat     = 0;
   double featnorm = 0;
@@ -119,7 +120,7 @@ double IT::prop(int rowX, vector<vector<double> > Y, int rowY)
 }
 
 // P(x)
-double IT::propm(vector<vector<double> > X, int rowX, vector<vector<double> > Y){
+double IT::propm(vector<vector<double> > X, int rowX, vector<vector<double> >& Y){
   double z=0;
   double feat=0;
   for(int y=0;y<Y.size();y++)
@@ -172,7 +173,7 @@ double IT::propm(vector<vector<double> > X, int rowX, vector<vector<double> > Y)
 
 // TODO ueberpruefen was diese funktion berechnet, evt. rausnehmen
 // P(y,x) in Bezug auf die Matrix
-double IT:: propm(vector<vector<double> > X, int rowX, vector<vector<double> > Y, int rowY)
+double IT:: propm(vector<vector<double> > X, int rowX, vector<vector<double> >& Y, int rowY)
 {
   double feat     = 0;
   double featnorm = 0;

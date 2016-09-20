@@ -1,40 +1,42 @@
 #include "GIS.h"
 
-
 GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time, int seconds)
-:IT(eX, eY, aX, aY, lambdavalue,true) {
-    _exponent = new double**[_sizeColValX];
-    for(int i=0; i<_sizeColValX; i++){
-      _exponent[i]=new double*[_sizeColValY];
-      for(int j=0;j<_sizeColValY;j++){
-        _exponent[i][j]=new double[_sizeRowValY];
+:IT(eX, eY, aX, aY, lambdavalue,true)
+{
+
+  _exponent=new double[_sizeRowValY];
+
+  _normaliser= new double*[_sizeColValX];
+  for(int i=0; i< _sizeColValX; i++)
+  {
+    _normaliser[i]=new double[_sizeColValY];
+  }
+
+  _expected = new double***[_sizeColValX];
+  for(int i=0; i<_sizeColValX; i++)
+  {
+    _expected[i]=new double**[_sizeColValY];
+    for( int j=0;j< _sizeColValY;j++)
+    {
+      _expected[i][j]=new double*[_sizeX];
+      for(int k=0; k< _sizeX; k++)
+      {
+        _expected[i][j][k]= new double[_sizeY];
+        for(int l=0; l< _sizeY;l++)
+        {
+          _expected[i][j][k][l]=0;
         }
       }
-
-    _normaliser= new double*[_sizeColValX];
-    for(int i=0; i< _sizeColValX; i++){
-      _normaliser[i]=new double[_sizeColValY];
     }
-
-    _expected = new double***[_sizeColValX];
-    for(int i=0; i<_sizeColValX; i++){
-      _expected[i]=new double**[_sizeColValY];
-      for( int j=0;j< _sizeColValY;j++){
-        _expected[i][j]=new double*[_sizeX];
-        for(int k=0; k< _sizeX; k++){
-          _expected[i][j][k]= new double[_sizeY];
-          for(int l=0; l< _sizeY;l++){
-            _expected[i][j][k][l]=0;
-          }
-        }
-      }
-    }
-    if(time){
-      __gis(maxit,konv,test,seconds);
-    }
-    else{
-      __gis(maxit, konv,test);
-    }
+  }
+  if(time)
+  {
+    __gis(maxit,konv,test,seconds);
+  }
+  else
+  {
+    __gis(maxit, konv,test);
+  }
 }
 
 // ColValY - Anzahl der Y-Knoten
@@ -78,12 +80,6 @@ GIS::~GIS(){
     delete [] _normaliser;
   }
   if(_exponent != NULL){
-    for(int i=0;i<_sizeColValX;i++){
-      for(int j=0;j<_sizeColValY;j++){
-        delete [] _exponent[i][j];
-      }
-      delete [] _exponent[i];
-    }
     delete [] _exponent;
   }
   _conv.clear();
@@ -135,20 +131,35 @@ void GIS:: __getexp(){
       }
     }
   }
-  for(int Feati=0; Feati< _sizeColValX; Feati++){
-    for(int Featj=0; Featj< _sizeColValY; Featj++){
-
-      for(int xi=0; xi< _sizeRowValX; xi++){
+  for(int Feati=0; Feati< _sizeColValX; Feati++)
+  {
+    for(int Featj=0; Featj< _sizeColValY; Featj++)
+    {
+      for(int xi=0; xi< _sizeRowValX; xi++)
+      {
         _normaliser[Feati][Featj]=0;
-        for(int yj=0; yj< _sizeY; yj++){
-          _exponent[Feati][Featj][yj]=_FM->getFeatureArrayvalue(Feati,Featj,(*_valX)(xi,Feati), (*_Y)(yj,0));
-          _normaliser[Feati][Featj]+=exp(_exponent[Feati][Featj][yj]);
+        for(int yj=0; yj< _sizeY; yj++)
+        {
+          _exponent[yj]=_FM->getFeatureArrayvalue(Feati,Featj,(*_valX)(xi,Feati), (*_Y)(yj,0));
+          _normaliser[Feati][Featj]+=exp(_exponent[yj]);
         }
-        for(int yj=0; yj< _sizeY; yj++){
-          for(int k=0; k< (*_FM).getMatrixIndexX(xi,yj).size();k++){
-            if((*_FM).getMatrixIndexX(xi,yj)[k]==Feati && (*_FM).getMatrixIndexY(xi,yj)[k]==Featj){
-              if((*_FM).getFeatureArraydelta(Feati,Featj,(*_FM).getMatrixIndexdX(xi,yj)[k],(*_FM).getMatrixIndexdY(xi,yj)[k],(*_valX)(xi,Feati),(*_Y)(yj,0))==1){
-              _expected[Feati][Featj][(*_FM).getMatrixIndexdX(xi,yj)[k]][(*_FM).getMatrixIndexdY(xi,yj)[k]]+=exp(_exponent[Feati][Featj][yj])/_normaliser[Feati][Featj];
+        for(int yj=0; yj< _sizeY; yj++)
+        {
+          for(int k=0; k< (*_FM).getMatrixIndexX(xi,yj).size();k++)
+          {
+            if((*_FM).getMatrixIndexX(xi,yj)[k]==Feati && (*_FM).getMatrixIndexY(xi,yj)[k]==Featj)
+            {
+              if((*_FM).getFeatureArraydelta(Feati,
+                                             Featj,
+                                             (*_FM).getMatrixIndexdX(xi,yj)[k],
+                                             (*_FM).getMatrixIndexdY(xi,yj)[k],
+                                             (*_valX)(xi,Feati),
+                                             (*_Y)(yj,0)) == 1)
+              {
+              _expected[Feati]
+                       [Featj]
+                       [(*_FM).getMatrixIndexdX(xi,yj)[k]]
+                       [(*_FM).getMatrixIndexdY(xi,yj)[k]] += exp(_exponent[yj])/_normaliser[Feati][Featj];
               }
             }
           }
@@ -162,13 +173,9 @@ void GIS:: __gis(int maxit, double konv, bool test,int seconds){
     //constant c for delta
     double featconst = __getFeatconst();
 
-      for(int i=0; i<_sizeColValX; i++){
-        for(int j=0;j<_sizeColValY;j++){
-          for(int k=0;k< _sizeY;k++){
-            _exponent[i][j][k]=0;
-          }
-        }
-      }
+    for(int k=0;k< _sizeY;k++){
+      _exponent[k]=0;
+    }
       for(int i=0; i< _sizeColValX; i++){
         for(int j=0; j<_sizeColValY;j++){
          _normaliser[i][j]=0;
@@ -223,14 +230,10 @@ void GIS:: __gis(int maxit, double konv, bool test){
     //constant c for delta
     double featconst = __getFeatconst();
 
-      for(int i=0; i<_sizeColValX; i++){
-        for(int j=0;j<_sizeColValY;j++){
-          for(int k=0;k< _sizeY;k++){
-            _exponent[i][j][k]=0;
-          }
-        }
-      }
-      for(int i=0; i< _sizeColValX; i++){
+    for(int k=0;k< _sizeY;k++){
+      _exponent[k]=0;
+    }
+    for(int i=0; i< _sizeColValX; i++){
         for(int j=0; j<_sizeColValY;j++){
          _normaliser[i][j]=0;
         }

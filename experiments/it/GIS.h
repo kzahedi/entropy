@@ -20,13 +20,13 @@ class GIS : public IT
     int    getIterations();
 
   private:
-    double      __getFeatconst();
-    void      __getexp();
-    void      __gis(int maxit, double konv, bool test);
-    void      __gis(int maxit, double konv, bool test,int seconds);
+    double __getFeatconst();
+    void   __getexp();
+    void   __gis(int maxit, double konv, bool test);
+    void   __gis(int maxit, double konv, bool test,int seconds);
 
     double****     _expected;
-    double***      _exponent;
+    double*        _exponent;
     double**       _normaliser;
     vector<double> _conv;
     int            _iterations;
