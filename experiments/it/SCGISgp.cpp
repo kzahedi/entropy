@@ -16,7 +16,6 @@ SCGISgp::SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,
     		}
     	}
     }
-
     _normaliser=new double**[_sizeColValX];
     for(int i=0; i< _sizeColValX;i++){
     	_normaliser[i]=new double*[_sizeColValY];
