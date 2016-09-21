@@ -1,7 +1,7 @@
 #include "Test.h"
 
 //vergleichswerte, gemessene X,Y und Eingabealphabete
-Test::Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, ItParameter param)
+Test::Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, IsParameter param)
 {
   _timetest    = param.time;
   _X           = &aX;
@@ -18,7 +18,7 @@ Test::Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX
   _case        = 4;
 }
 
-Test::Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY, ItParameter param)
+Test::Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY, IsParameter param)
 {
   _timetest    = param.time;
   _X           = &aX;
@@ -36,7 +36,7 @@ Test::Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambd
 }
 
 // test if same initial conditions lead to same convergence behaviour
-Test::Test(int colX,int colValY,int rowX,DContainer &aX, DContainer &aY, ItParameter param)
+Test::Test(int colX,int colValY,int rowX,DContainer &aX, DContainer &aY, IsParameter param)
 {
   _timetest    = param.time;
   _X           = &aX;
@@ -85,7 +85,7 @@ Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, D
   _case=5;
 }
 
-Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, ItParameter param, int i) // int maxit, double konv, bool time,bool test,int seconds,int i){
+Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, IsParameter param, int i) // int maxit, double konv, bool time,bool test,int seconds,int i){
 {
   assert(abs(i)>=0 && abs(i)<4);
   _case        = i;
@@ -137,7 +137,7 @@ Test::~Test()
   delete _gisgpTest;
 }
 //GIS und SCGIS ausfuehren mit Zeitmessung
-void Test::__comptime(ItParameter param)
+void Test::__comptime(IsParameter param)
 {
   time_t befor1;
   time_t befor2;

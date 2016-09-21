@@ -1,7 +1,7 @@
 #include "IT.h"
 
 // IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue, bool gis)
-IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ItParameter param, bool gis)
+IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param, bool gis)
 {
   assert(eX.rows() == eY.rows());
   _param       = param;

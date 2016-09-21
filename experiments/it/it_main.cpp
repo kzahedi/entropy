@@ -33,7 +33,7 @@ int main(int argc, char **argv)
   lambda[1] = 1;
   lambda[2] = 5;
 
-  ItParameter param;
+  IsParameter param;
   param.lambdavalue    = 1.0;
   param.lambdadeltaval = 1.0;
   param.sigma          = 0.01;

@@ -1,6 +1,6 @@
 #include "SCGISgp.h"
 
-SCGISgp::SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ItParameter param)
+SCGISgp::SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param)
   :IT(eX, eY, aX, aY, param, false)
 
 {

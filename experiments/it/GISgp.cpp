@@ -2,7 +2,7 @@
 
 //training data, alphabete , startwert fuer lambda, startwert fuer delta, wert fuer sigma, test auf time, sekunden fuer den test
 // GISgp::GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,double lambdadeltaval, double sigma,int maxit,double konv, bool test,bool time,int seconds)
-GISgp::GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ItParameter param)
+GISgp::GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param)
   :IT(eX, eY, aX, aY, param, true)
 {
   _param = param;

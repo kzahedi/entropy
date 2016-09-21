@@ -20,11 +20,11 @@ using namespace std;
 class Test
 {
   public:
-    Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, ItParameter param);
+    Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, IsParameter param);
     Test(int colX,int colValY,int rowX, vector<double> lambda,DContainer &aX, DContainer &aY);
-    Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY, ItParameter param);
-    Test(int colX,int colValY,int rowX,DContainer &aX, DContainer &aY, ItParameter param);
-    Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, ItParameter param, int i);
+    Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY, IsParameter param);
+    Test(int colX,int colValY,int rowX,DContainer &aX, DContainer &aY, IsParameter param);
+    Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, IsParameter param, int i);
     ~Test();
     vector<double> KL();
     double         KL1();
@@ -60,7 +60,7 @@ class Test
     void __getValX(int colX,int rowX);
     void __setlambda(IContainer &indizes, DContainer &values);
     void __setLambdaRand(vector<double> lambdaval);
-    void __comptime(ItParameter param);
+    void __comptime(IsParameter param);
     void __fill(vector<double> fill, int i, vector<vector<double> > &Z,bool valX,int rowsAlph,int colval);
 };
 

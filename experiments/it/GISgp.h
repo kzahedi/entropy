@@ -20,7 +20,7 @@ class GISgp : public IT{
 
   public:
     // GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,double lambdadeltaval, double sigma,int maxit,double konv, bool test,bool time,int seconds);
-    GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ItParameter param);
+    GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param);
     ~GISgp();
     double  getconv(int i);
     int     getsizeconv();

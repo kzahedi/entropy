@@ -3,7 +3,7 @@
 #define EPSILON 0.00000001
 
 // SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test,bool time,int seconds)
-SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ItParameter param)
+SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param)
 :IT(eX, eY, aX, aY, param, false)
 {
   _param = param;

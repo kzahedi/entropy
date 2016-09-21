@@ -19,7 +19,7 @@
 #include "FeatureMatrix.h"
 #include "InstanceMatrix.h"
 
-#include "ItParameter.h"
+#include "IsParameter.h"
 
 using namespace std;
 
@@ -27,7 +27,7 @@ class IT{
 
   public:
     // IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,bool GIS);
-    IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ItParameter param, bool gis);
+    IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param, bool gis);
     IT(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY);
     double  prop(int Feati,int Featj,double ValX,double ValY);
     double  prop(int rowX,vector<vector<double> >& Y, int rowY);
@@ -53,7 +53,7 @@ class IT{
     DContainer*     _valX;
     FeatureMatrix*  _FM;
     InstanceMatrix* _IM;
-    ItParameter     _param;
+    IsParameter     _param;
 };
 
 #endif

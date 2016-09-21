@@ -19,7 +19,7 @@ class SCGIS : public IT{
 
 public:
   // SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time,int seconds);
-  SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ItParameter param);
+  SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param);
   ~SCGIS();
   double  getconv(int i);
   int     getsizeconv();
@@ -35,7 +35,7 @@ private:
   double***   _normaliser;
   double**    _delta;
   vector<double>  _conv;
-  ItParameter     _param;
+  IsParameter     _param;
 
 };
 #endif

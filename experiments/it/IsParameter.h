@@ -1,5 +1,5 @@
-#ifndef __IT_PARAMETER_H__
-#define __IT_PARAMETER_H__
+#ifndef __IS_PARAMETER_H__
+#define __IS_PARAMETER_H__
 
 class IsParameter
 {
@@ -31,4 +31,4 @@ class IsParameter
 };
 
 
-#endif // __IT_PARAMETER_H__
+#endif // __IS_PARAMETER_H__

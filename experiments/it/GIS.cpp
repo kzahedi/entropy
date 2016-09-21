@@ -4,7 +4,7 @@
 
 // GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time, int seconds)
 // :IT(eX, eY, aX, aY, lambdavalue, true)
-GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ItParameter param)
+GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param)
 :IT(eX, eY, aX, aY, param, true)
 {
   _param      = param;

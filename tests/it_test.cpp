@@ -28,7 +28,7 @@ void itTest::OneXOneY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  ItParameter param;
+  IsParameter param;
   param.lambdavalue    = 1.0;
   param.lambdadeltaval = 1.0;
   param.sigma          = 0.01;
@@ -80,7 +80,7 @@ void itTest::SCOneXOneY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  ItParameter param;
+  IsParameter param;
   param.lambdavalue    = 1.0;
   param.lambdadeltaval = 1.0;
   param.sigma          = 0.01;
@@ -123,7 +123,7 @@ void itTest::TwoXOneY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  ItParameter param;
+  IsParameter param;
   param.lambdavalue    = 1.0;
   param.lambdadeltaval = 1.0;
   param.sigma          = 0.01;
@@ -173,7 +173,7 @@ void itTest::SCTwoXOneY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  ItParameter param;
+  IsParameter param;
   param.lambdavalue    = 1.0;
   param.lambdadeltaval = 1.0;
   param.sigma          = 0.01;
@@ -223,7 +223,7 @@ void itTest::TwoXTwoY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  ItParameter param;
+  IsParameter param;
   param.lambdavalue    = 1.0;
   param.lambdadeltaval = 1.0;
   param.sigma          = 0.01;
@@ -275,7 +275,7 @@ void itTest::SCTwoXTwoY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  ItParameter param;
+  IsParameter param;
   param.lambdavalue    = 1.0;
   param.lambdadeltaval = 1.0;
   param.sigma          = 0.01;
@@ -329,7 +329,7 @@ void itTest::NotBinary()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  ItParameter param;
+  IsParameter param;
   param.lambdavalue    = 1.0;
   param.lambdadeltaval = 1.0;
   param.sigma          = 0.01;
@@ -369,7 +369,7 @@ void itTest::FourXFourY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  ItParameter param;
+  IsParameter param;
   param.lambdavalue    = 1.0;
   param.lambdadeltaval = 1.0;
   param.sigma          = 0.01;
