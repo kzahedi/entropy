@@ -18,22 +18,23 @@ using namespace std;
 class SCGIS : public IT{
 
 public:
-	SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time,int seconds);
-	~SCGIS();
-	double 	getconv(int i);
-	int    	getsizeconv();
-	int		getIterations();
+  SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time,int seconds);
+  ~SCGIS();
+  double  getconv(int i);
+  int     getsizeconv();
+  int   getIterations();
 
 private:
-	void			__scgis(int maxit, double konv,bool test);
-	void			__scgis(int maxit, double konv,bool test,int seconds);
+  void      __scgis(int maxit, double konv,bool test);
+  void      __scgis(int maxit, double konv,bool test,int seconds);
+  double    __calculateIteration(bool test);
 
-	int				_iterations;
-	double****		_expected;
-	double****		_exponent;
-	double***		_normaliser;
-	double**		_delta;
-	vector<double> 	_conv;
+  int       _iterations;
+  double****    _expected;
+  double****    _exponent;
+  double***   _normaliser;
+  double**    _delta;
+  vector<double>  _conv;
 
 };
 #endif
