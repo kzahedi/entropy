@@ -1,5 +1,7 @@
 #include "SCGIS.h"
 
+#define EPSILON 0.00000001
+
 SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test,bool time,int seconds)
   :IT(eX, eY, aX, aY, lambdavalue,false)
 {
@@ -28,19 +30,7 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,doub
       }
     }
   }
-  _expected=new double***[_sizeColValX];
-  for(int i=0;i<_sizeColValX;i++){
-    _expected[i]=new double**[_sizeColValY];
-    for(int j=0;j<_sizeColValY;j++){
-      _expected[i][j]=new double*[_sizeX];
-      for(int k=0;k<_sizeX;k++){
-        _expected[i][j][k]=new double[_sizeY];
-        for(int l=0;l<_sizeY;l++){
-          _expected[i][j][k][l]=0;
-        }
-      }
-    }
-  }
+
   _delta= new double*[_sizeX];
   for(int i=0;i<_sizeX;i++){
     _delta[i]=new double[_sizeY];
@@ -77,16 +67,6 @@ SCGIS::~SCGIS(){
   }
   delete [] _observed;
 
-  for(int i=0;i< _sizeColValX;i++){
-    for(int j=0;j<_sizeColValY;j++){
-      for(int k=0;k<_sizeX;k++){
-        delete [] _expected[i][j][k];
-      }
-      delete [] _expected[i][j];
-    }
-    delete [] _expected[i];
-  }
-  delete [] _expected;
 
   for(int i=0;i<_sizeColValX;i++){
     for(int j=0;j<_sizeColValY;j++){
@@ -145,34 +125,52 @@ void SCGIS:: __scgis(int maxit, double konv, bool test)
 double SCGIS::__calculateIteration(bool test)
 {
   double l=0;
-  for(int Feati=0;Feati<_sizeColValX;Feati++){
-    for(int Featj=0;Featj<_sizeColValY;Featj++){
-      for(int delti=0;delti<_sizeX;delti++){
-        for(int deltj=0;deltj<_sizeY; deltj++){
-          _expected[Feati][Featj][delti][deltj]=0;
-          for(int y=0;y<_sizeY;y++){
-            for(int k=0; k<_IM->getInstanceMatrixX(Feati,Featj,delti,deltj).size();k++){
-              if(_IM->getInstanceMatrixY(Feati,Featj,delti,deltj)[k]==y){
-                int x=_IM->getInstanceMatrixX(Feati,Featj,delti,deltj)[k];
-                if(fabs(_normaliser[Feati][Featj][x])>0.00000001 ){
-                  _expected[Feati][Featj][delti][deltj]+=exp(_exponent[Feati][Featj][x][y])/_normaliser[Feati][Featj][x];
+  for(int Feati=0;Feati<_sizeColValX;Feati++)
+  {
+    for(int Featj=0;Featj<_sizeColValY;Featj++)
+    {
+      for(int delti=0;delti<_sizeX;delti++)
+      {
+        for(int deltj=0;deltj<_sizeY; deltj++)
+        {
+          double expected = 0.0;
+          for(int y=0; y < _sizeY; y++)
+          {
+            for(int k=0; k<_IM->getInstanceMatrixX(Feati,Featj,delti,deltj).size();k++)
+            {
+              if(_IM->getInstanceMatrixY(Feati,Featj,delti,deltj)[k] == y)
+              {
+                int x = _IM->getInstanceMatrixX(Feati,Featj,delti,deltj)[k];
+                if(fabs(_normaliser[Feati][Featj][x]) > EPSILON )
+                {
+                  // f_i(\bar{x}_j, y) is given by the 2 for and 1 if above
+                  expected+=exp(_exponent[Feati][Featj][x][y])/_normaliser[Feati][Featj][x];
                 }
-                //    assert(fabs(_normaliser[Feati][Featj][delti][deltj])>0.00000001);
               }
             }
           }
-          double newl;
-          if(fabs(_expected[Feati][Featj][delti][deltj])<0.00000001){_expected[Feati][Featj][delti][deltj]=0.01;}
-          if(fabs(_observed[Feati][Featj][delti][deltj])>0.00000001){
-            _delta[delti][deltj]=log(_observed[Feati][Featj][delti][deltj]/_expected[Feati][Featj][delti][deltj]);
-            newl= _IM->getFeatureArraylambda(Feati,Featj,delti,deltj)+_delta[delti][deltj];
+          double newl = 0.0;
+          if(fabs(expected)<EPSILON)
+          {
+            expected=0.01;
           }
-          else{newl=0; }
-          l+=fabs( _observed[Feati][Featj][delti][deltj]-_expected[Feati][Featj][delti][deltj]);
+          if(fabs(_observed[Feati][Featj][delti][deltj])>EPSILON)
+          {
+            _delta[delti][deltj] = log(_observed[Feati][Featj][delti][deltj]/expected);
+            newl = _IM->getFeatureArraylambda(Feati,Featj,delti,deltj) + _delta[delti][deltj];
+          }
+          else
+          {
+            newl = 0.0;
+          }
+          l+=fabs(_observed[Feati][Featj][delti][deltj]-expected);
           _IM->setFeatureArraylambda(Feati,Featj,delti,deltj,newl);
-          for(int y=0;y<_sizeY;y++){
-            for(int k=0; k<_IM->getInstanceMatrixX(Feati,Featj,delti,deltj).size();k++){
-              if(_IM->getInstanceMatrixY(Feati,Featj,delti,deltj)[k]==y){
+          for(int y=0;y<_sizeY;y++)
+          {
+            for(int k=0; k<_IM->getInstanceMatrixX(Feati,Featj,delti,deltj).size();k++)
+            {
+              if(_IM->getInstanceMatrixY(Feati,Featj,delti,deltj)[k]==y)
+              {
                 int x=_IM->getInstanceMatrixX(Feati,Featj,delti,deltj)[k];
                 _normaliser[Feati][Featj][x]-=exp(_exponent[Feati][Featj][x][y]);
                 _exponent[Feati][Featj][x][y]+=_delta[delti][deltj];

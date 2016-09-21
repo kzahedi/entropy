@@ -30,7 +30,6 @@ private:
   double    __calculateIteration(bool test);
 
   int       _iterations;
-  double****    _expected;
   double****    _exponent;
   double***   _normaliser;
   double**    _delta;
