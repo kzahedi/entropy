@@ -22,18 +22,18 @@
 
 
 
-int main(int argc, char **argv){
-
-DContainer *zX = new DContainer(2,1);
+int main(int argc, char **argv)
+{
+  DContainer *zX = new DContainer(2,1); // alphabet
   *zX << 0 << 1;
-DContainer *zY = new DContainer(2,1);
+  DContainer *zY = new DContainer(2,1); // alphabet
   *zY << 0 << 1;
-
   vector<double> lambda(3);
-     lambda[0]=1;
-     lambda[1]=5;
-     lambda[2]=3;
-//int ColX,int RowX,int ColValY,  vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv,bool time,int seconds)
-     Test *test = new Test(3,3,100000,lambda,*zX,*zY,1,0.001,true,60);
-test->comparison();
+  lambda[0] = 0;
+  lambda[1] = 1;
+  lambda[2] = 5;
+
+  Test *test   = new Test(1, 1, 100, lambda, *zX, *zY, 500, 0.0001, false, true, 0, 0); // for test cases
+
+  // test->comparison();
 }

@@ -19,7 +19,8 @@ class GIS : public IT
 
   private:
     double __getFeatconst();
-    void   __getexp();
+    // get expected frequency of the features, given the current lambdas
+    void   __getExpected();
     void   __gis(int maxit, double konv, bool test);
     void   __gis(int maxit, double konv, bool test,int seconds);
 
