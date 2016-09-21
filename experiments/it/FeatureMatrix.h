@@ -14,18 +14,19 @@ using namespace std;
 
 class FeatureMatrix :public ITMatrix
 {
-public:
-	FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue);
-	FeatureMatrix();
-	~FeatureMatrix();
-	vector<int> getMatrixIndexX(int i, int j);
-	vector<int> getMatrixIndexY(int i, int j);
-	vector<int> getMatrixIndexdX(int i,int j);
-	vector<int> getMatrixIndexdY(int i,int j);
+  public:
+    FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue);
+    FeatureMatrix();
+    ~FeatureMatrix();
 
-private:
-	void _getMatrix(double valuelambda);
-	vector<vector<int> > **_mat;
+    vector<int> getMatrixIndexX(int i, int j);
+    vector<int> getMatrixIndexY(int i, int j);
+    vector<int> getMatrixIndexdX(int i,int j);
+    vector<int> getMatrixIndexdY(int i,int j);
+
+  private:
+    void __getMatrix(double valuelambda);
+    vector<vector<int> > **_mat;
 };
 
 #endif

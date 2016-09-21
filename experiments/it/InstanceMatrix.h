@@ -17,15 +17,17 @@ using namespace std;
 class InstanceMatrix : public ITMatrix{
 
 public:
-	//InstanceMatrix();
-	InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, double valuelambda);
-	~InstanceMatrix();
-	vector<int> getInstanceMatrixX(int Feati,int Featj,int delti,int deltj);
-	vector<int> getInstanceMatrixY(int Feati,int Featj,int delti,int deltj);
+  //InstanceMatrix();
+  InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, double valuelambda);
+  ~InstanceMatrix();
+  // TODO copying vectors can be expensive
+  vector<int> getInstanceMatrixX(int Feati,int Featj,int delti,int deltj);
+  vector<int> getInstanceMatrixY(int Feati,int Featj,int delti,int deltj);
 
 private:
-	void _getMatrix(double valuelambda);
-	vector<vector<int> > ****_mat;
+  void _getMatrix(double valuelambda);
+  // TODO check for a better way to store
+  vector<vector<int> > ****_mat;
 
 };
 #endif
