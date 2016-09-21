@@ -8,11 +8,13 @@
 #include "FeatureMatrix.h"
 #include "IT.h"
 
+#include "ItParameter.h"
+
 
 class GIS : public IT
 {
   public:
-    GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test,bool time,int seconds);
+    GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ItParameter param);
     ~GIS();
     double getconv(int i);
     int    getsizeconv();

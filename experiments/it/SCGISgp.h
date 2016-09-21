@@ -16,23 +16,24 @@
 using namespace std;
 
 class SCGISgp : public IT{
-public:
-	SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,double lambdadeltaval, double sigma ,int maxit, double konv, bool test,bool time,int seconds);
-	~SCGISgp();
-	double 	getconv(int i);
-	int    	getsizeconv();
-	int		getIterations();
+  public:
+    // SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,double lambdadeltaval, double sigma ,int maxit, double konv, bool test,bool time,int seconds);
+    SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ItParameter param);
+      ~SCGISgp();
+    double getconv(int i);
+    int    getsizeconv();
+    int    getIterations();
 
-private:
-	void			__scgis(int maxit, double konv,bool test, double lambdadeltaval,double sigma);
-	void			__scgis(int maxit, double konv,bool test, double lambdadeltaval,double sigma,int seconds);
+  private:
+    void __scgis(int maxit, double konv,bool test, double lambdadeltaval,double sigma);
+    void __scgis(int maxit, double konv,bool test, double lambdadeltaval,double sigma,int seconds);
 
-	int				_iterations;
-	double****		_expected;
-	double****		_exponent;
-	double***		_normaliser;
-	double****		_delta;
-	vector<double> 	_conv;
+    int            _iterations;
+    double****     _expected;
+    double****     _exponent;
+    double***      _normaliser;
+    double****     _delta;
+    vector<double> _conv;
 };
 
 

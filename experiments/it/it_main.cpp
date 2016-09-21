@@ -33,7 +33,18 @@ int main(int argc, char **argv)
   lambda[1] = 1;
   lambda[2] = 5;
 
-  Test *test   = new Test(3, 3, 10000, lambda, *zX, *zY, 500, 0.0001, false, true, 0, 0); // for test cases
+  ItParameter param;
+  param.lambdavalue    = 1.0;
+  param.lambdadeltaval = 1.0;
+  param.sigma          = 0.01;
+
+  param.maxit          = 500;
+  param.konv           = 0.001;
+  param.time           = false;
+  param.test           = true;
+  param.seconds        = 1;
+
+  Test *test = new Test(2, 2, 100, lambda, *zX, *zY, param); // for test cases
   // Test *test = new Test(5, 5, 100000, lambda, *zX, *zY, 500, 0.0001, true, 2);
   test->comparison();
 }

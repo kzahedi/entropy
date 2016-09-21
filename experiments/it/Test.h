@@ -20,12 +20,11 @@ using namespace std;
 class Test
 {
   public:
-    Test(int colX,int colValY,int rowX, vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv,bool time, int seconds);
+    Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, ItParameter param);
     Test(int colX,int colValY,int rowX, vector<double> lambda,DContainer &aX, DContainer &aY);
-    // indices and lambda have the same length, indices = feature, lambda = corresponding lambda value
-    Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambda, DContainer &aX, DContainer &aY,int maxit, double konv,bool time,int seconds);
-    Test(int colX,int colValY,int rowX, DContainer &aX, DContainer &aY,int maxit, double konv,bool time,int seconds,bool comp);
-    Test(int colX,int colValY,int rowX, vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv, bool time,bool test,int seconds,int i);
+    Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY, ItParameter param);
+    Test(int colX,int colValY,int rowX,DContainer &aX, DContainer &aY, ItParameter param);
+    Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, ItParameter param, int i);
     ~Test();
     vector<double> KL();
     double         KL1();
@@ -37,33 +36,34 @@ class Test
     DContainer&    getvalY();
 
   private:
-    IT                    *_exact;
-    GIS                   *_gisTest;
-    GISgp                 *_gisgpTest;
-    SCGIS                 *_scgisTest;
-    SCGISgp               *_scgisgpTest;
-    DContainer            *_Y;
-    DContainer            *_X;
-    DContainer            *_valY;
-    DContainer            *_valX;
-    int                   _case;
-    int                   _sizeColValY;
-    int                   _sizeColValX;
-    int                   _index;
-    vector<double>        _timediff;
+    IT*                     _exact;
+    GIS*                    _gisTest;
+    GISgp*                  _gisgpTest;
+    SCGIS*                  _scgisTest;
+    SCGISgp*                _scgisgpTest;
+    DContainer*             _Y;
+    DContainer*             _X;
+    DContainer*             _valY;
+    DContainer*             _valX;
+    int                     _case;
+    int                     _sizeColValY;
+    int                     _sizeColValX;
+    int                     _index;
+    vector<double>          _timediff;
     vector<vector<double> > _alphY;
     vector<vector<double> > _alphX;
-    bool                  _timetest;
+    bool                    _timetest;
 
     vector<vector<double> > __getalph(bool valX);
 
-    void      __getValY(int colY,int rowX);
-    void      __getValX(int colX,int rowX);
-    void      __setlambda(IContainer &indizes, DContainer &values);
-    void      __setLambdaRand(vector<double> lambdaval);
-    void      __comptime(int maxit, double konv,int seconds);
-    void        __fill(vector<double> fill, int i, vector<vector<double> > &Z,bool valX,int rowsAlph,int colval);
+    void __getValY(int colY,int rowX);
+    void __getValX(int colX,int rowX);
+    void __setlambda(IContainer &indizes, DContainer &values);
+    void __setLambdaRand(vector<double> lambdaval);
+    void __comptime(ItParameter param);
+    void __fill(vector<double> fill, int i, vector<vector<double> > &Z,bool valX,int rowsAlph,int colval);
 };
 
+    // void      __comptime(int maxit, double konv,int seconds);
 #endif
 

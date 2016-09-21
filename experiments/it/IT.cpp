@@ -1,9 +1,11 @@
 #include "IT.h"
 
-IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue, bool GIS)
+// IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue, bool gis)
+IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ItParameter param, bool gis)
 {
   assert(eX.rows() == eY.rows());
-  _gis         = GIS;
+  _param       = param;
+  _gis         = gis;
   _valX        = &eX;
   _valY        = &eY;
   _X           = &aX;
@@ -17,11 +19,11 @@ IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lam
 
   if(_gis) // gis and csgis require different feature matrices
   {
-    _FM = new FeatureMatrix(*_valX,*_valY,*_X,*_Y,lambdavalue);
+    _FM = new FeatureMatrix(*_valX,*_valY,*_X,*_Y, param.lambdavalue);
   }
   else
   {
-    _IM = new InstanceMatrix(*_valX,*_valY,*_X,*_Y,lambdavalue);
+    _IM = new InstanceMatrix(*_valX,*_valY,*_X,*_Y, param.lambdavalue);
   }
   _observed=__getobs();
 }

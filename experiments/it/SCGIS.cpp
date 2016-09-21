@@ -2,10 +2,11 @@
 
 #define EPSILON 0.00000001
 
-SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test,bool time,int seconds)
-  :IT(eX, eY, aX, aY, lambdavalue,false)
+// SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test,bool time,int seconds)
+SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ItParameter param)
+:IT(eX, eY, aX, aY, param, false)
 {
-
+  _param = param;
   _exponent= new double***[_sizeColValX];
   for(int i=0;i<_sizeColValX; i++){
     _exponent[i]=new double**[_sizeColValY];
@@ -39,13 +40,13 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,doub
     }
   }
 
-  if(time)
+  if(param.time)
   {
-    __scgis(maxit,konv,test,seconds);
+    __scgis(param.maxit,param.konv,param.test,param.seconds);
   }
   else
   {
-    __scgis(maxit,konv,test);
+    __scgis(param.maxit,param.konv,param.test);
   }
 }
 

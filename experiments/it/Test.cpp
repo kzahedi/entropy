@@ -1,9 +1,9 @@
 #include "Test.h"
 
 //vergleichswerte, gemessene X,Y und Eingabealphabete
-Test::Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,int maxit, double konv, bool time,int seconds)
+Test::Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, ItParameter param)
 {
-  _timetest    = time;
+  _timetest    = param.time;
   _X           = &aX;
   _Y           = &aY;
   _sizeColValY = colValY;
@@ -14,34 +14,36 @@ Test::Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX
   _alphY       = __getalph(false);
   _alphX       = __getalph(true);
   __getValY(colValY,rowX);
-  __comptime(maxit,konv,seconds);
+  __comptime(param);
   _case        = 4;
 }
 
-Test::Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY,int maxit, double konv,bool time,int seconds){
-  _timetest=time;
-  _X= &aX;
-  _Y= &aY;
-  _sizeColValY=colValY;
+Test::Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY, ItParameter param)
+{
+  _timetest    = param.time;
+  _X           = &aX;
+  _Y           = &aY;
+  _sizeColValY = colValY;
   __getValX(colX,rowX);
-  _sizeColValX=_valX->columns();
-  _exact= new IT(colValY,*_valX,*_X,*_Y);
+  _sizeColValX = _valX->columns();
+  _exact       = new IT(colValY,*_valX,*_X,*_Y);
   __setlambda(indizes,lambda);
-  _alphY=__getalph(false);
-  _alphX=__getalph(true);
+  _alphY       = __getalph(false);
+  _alphX       = __getalph(true);
   __getValY(colValY,rowX);
-  __comptime(maxit,konv,seconds);
-  _case=4;
+  __comptime(param);
+  _case        = 4;
 }
 
 // test if same initial conditions lead to same convergence behaviour
-Test::Test(int colX,int colValY,int rowX,DContainer &aX, DContainer &aY,int maxit, double konv,bool time,int seconds,bool comp){
-  _timetest=time;
-  _X= &aX;
-  _Y= &aY;
-  _sizeColValY=colValY;
+Test::Test(int colX,int colValY,int rowX,DContainer &aX, DContainer &aY, ItParameter param)
+{
+  _timetest    = param.time;
+  _X           = &aX;
+  _Y           = &aY;
+  _sizeColValY = colValY;
   __getValX(colX,rowX);
-  _sizeColValX=_valX->columns();
+  _sizeColValX = _valX->columns();
   _exact= new IT(colValY,*_valX,*_X,*_Y);
   _exact->setFeatureArraylambda(0,0,0,0,1);
   _exact->setFeatureArraylambda(0,0,1,0,4);
@@ -65,9 +67,10 @@ Test::Test(int colX,int colValY,int rowX,DContainer &aX, DContainer &aY,int maxi
   _alphY=__getalph(false);
   _alphX=__getalph(true);
   __getValY(colValY,rowX);
-  __comptime(maxit,konv,seconds);
+  __comptime(param);
   _case=4;
 }
+
 Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, DContainer &aY){
   _X= &aX;
   _Y= &aY;
@@ -81,32 +84,34 @@ Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, D
   __getValY(colValY,rowX);
   _case=5;
 }
-Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, DContainer &aY,int maxit, double konv, bool time,bool test,int seconds,int i){
+
+Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, ItParameter param, int i) // int maxit, double konv, bool time,bool test,int seconds,int i){
+{
   assert(abs(i)>=0 && abs(i)<4);
-  _case=i;
-  _timetest=time;
-  _X= &aX;
-  _Y= &aY;
-  _sizeColValY=colValY;
+  _case        = i;
+  _timetest    = param.time;
+  _X           = &aX;
+  _Y           = &aY;
+  _sizeColValY = colValY;
   __getValX(colX,rowX);
-  _sizeColValX=_valX->columns();
-  _exact= new IT(colValY,*_valX,*_X,*_Y);
+  _sizeColValX = _valX->columns();
+  _exact       = new IT(colValY,*_valX,*_X,*_Y);
   __setLambdaRand(lambda);
-  _alphY=__getalph(false);
-  _alphX=__getalph(true);
+  _alphY       = __getalph(false);
+  _alphX       = __getalph(true);
   __getValY(colValY,rowX);
   switch(i){
     case 0:
-      _gisTest=new GIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,test,_timetest,seconds);
+      _gisTest=new GIS(*_valX, *_valY, *_X, *_Y, param); //1,maxit,konv,test,_timetest,seconds);
       break;
     case 1:
-      _scgisTest=new SCGIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,test,_timetest,seconds);
+      _scgisTest=new SCGIS(*_valX,*_valY,*_X,*_Y, param); // 1,maxit,konv,test,_timetest,seconds);
       break;
     case 2:
-      _gisgpTest=new GISgp(*_valX,*_valY,*_X,*_Y,1,1,0.01,maxit,konv,test,_timetest,seconds);
+      _gisgpTest=new GISgp(*_valX,*_valY,*_X,*_Y, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
       break;
     case 3:
-      _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,1,1,0.01,maxit,konv,test,_timetest,seconds);
+      _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
       break;
     default:
       cout << "default " << endl;
@@ -132,7 +137,8 @@ Test::~Test()
   delete _gisgpTest;
 }
 //GIS und SCGIS ausfuehren mit Zeitmessung
-void Test::__comptime(int maxit, double konv,int seconds){
+void Test::__comptime(ItParameter param)
+{
   time_t befor1;
   time_t befor2;
   time_t after1;
@@ -142,19 +148,19 @@ void Test::__comptime(int maxit, double konv,int seconds){
   time_t befor4;
   time_t after4;
   befor1=time(NULL);
-  _gisTest=new GIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,false,_timetest,seconds);
+  _gisTest=new GIS(*_valX,*_valY,*_X,*_Y, param); // 1,maxit,konv,false,_timetest,seconds);
   after1=time(NULL);
   _timediff.push_back(difftime(after1,befor1));
   befor2=time(NULL);
-  _scgisTest=new SCGIS(*_valX,*_valY,*_X,*_Y,1,maxit,konv,false,_timetest,seconds);
+  _scgisTest=new SCGIS(*_valX,*_valY,*_X,*_Y, param); // 1,maxit,konv,false,_timetest,seconds);
   after2=time(NULL);
   _timediff.push_back(difftime(after2,befor2));
   befor3=time(NULL);
-  _gisgpTest=new GISgp(*_valX,*_valY,*_X,*_Y,1,1,0.01,maxit,konv,false,_timetest,seconds);
+  _gisgpTest=new GISgp(*_valX,*_valY,*_X,*_Y, param); // 1,1,0.01,maxit,konv,false,_timetest,seconds);
   after3=time(NULL);
   _timediff.push_back(difftime(after3,befor3));
   befor4=time(NULL);
-  _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,1,1,0.01,maxit,konv,false,_timetest,seconds);
+  _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y, param); // 1,1,0.01,maxit,konv,false,_timetest,seconds);
   after4=time(NULL);
   _timediff.push_back(difftime(after4,befor4));
 }

@@ -2,9 +2,12 @@
 
 #define EPSILON 0.00000001
 
-GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time, int seconds)
-:IT(eX, eY, aX, aY, lambdavalue, true)
+// GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time, int seconds)
+// :IT(eX, eY, aX, aY, lambdavalue, true)
+GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ItParameter param)
+:IT(eX, eY, aX, aY, param, true)
 {
+  _param      = param;
   _exponent   = new double[_sizeY];
   _normaliser = 0.0;
   _expected   = new double***[_sizeColValX];
@@ -27,13 +30,13 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double l
 
   // cout << "Data X:" << endl << eX << endl << "Data Y: " << endl << eY << endl;
 
-  if(time)
+  if(param.time)
   {
-    __gis(maxit, konv, test, seconds);
+    __gis(param.maxit, param.konv, param.test, param.seconds);
   }
   else
   {
-    __gis(maxit, konv, test);
+    __gis(param.maxit, param.konv, param.test);
   }
 }
 
