@@ -200,7 +200,8 @@ void GIS::__gis(int maxit, double konv, bool test)
   //constant c for delta
   double featconst = __getFeatconst();
 
-  for(int k=0;k < _sizeY;k++){
+  for(int k=0; k < _sizeY; k++)
+  {
     _exponent[k]=0.0; // lambda_i * f_i
   }
   _normaliser = 0.0;
@@ -227,8 +228,8 @@ void GIS::__gis(int maxit, double konv, bool test)
             }
             if(fabs(_observed[Feati][Featj][deltai][deltaj]) > EPSILON)
             {
-              // TODO 10.0 as learning rate parameter
-              newl = oldl + (1.0/(featconst * 10.0)) *
+              // TODO 0.1 as learning rate parameter
+              newl = oldl + 0.1 * (1.0/featconst) *
                 log(_observed[Feati][Featj][deltai][deltaj]/_expected[Feati][Featj][deltai][deltaj]);
             }
             else
@@ -247,6 +248,7 @@ void GIS::__gis(int maxit, double konv, bool test)
     }
   }
 } 
+
 int GIS:: getIterations()
 {
   return _iterations;
