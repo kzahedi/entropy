@@ -171,58 +171,6 @@ double IT::propm(vector<vector<double> > X, int rowX, vector<vector<double> >& Y
   return z/n;
 }
 
-// TODO ueberpruefen was diese funktion berechnet, evt. rausnehmen
-// P(y,x) in Bezug auf die Matrix
-double IT:: propm(vector<vector<double> > X, int rowX, vector<vector<double> >& Y, int rowY)
-{
-  double feat     = 0;
-  double featnorm = 0;
-  double norm     = 0;
-  double n        = 0;
-  double exponent = 0;
-  for(int Featx=0;Featx< _sizeColValX;Featx++)
-  {
-    for(int Featy=0;Featy< _sizeColValY;Featy++)
-    {
-      if(_gis)
-      {
-        feat+=(*_FM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[rowY][Featy]);
-      }
-      else
-      {
-        feat+=(*_IM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[rowY][Featy]);
-      }
-    }
-  }
-  exponent= exp(feat);
-  for(int x=0;x<X.size();x++)
-  {
-    for(int yi=0;yi<Y.size();yi++)
-    {
-      for(int Featx=0;Featx< _sizeColValX;Featx++)
-      {
-        for(int Featy=0;Featy< _sizeColValY;Featy++)
-        {
-          if(_gis)
-          {
-            featnorm+= (*_FM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[yi][Featy]);
-          }
-          else
-          {
-            featnorm+= (*_IM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[yi][Featy]);
-          }
-        }
-      }
-
-      norm+=exp(featnorm);
-      featnorm=0;
-    }
-    n+=norm;
-    norm=0;
-  }
-  return exponent/n;
-}
-
 double IT::getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY)
 {
   assert(Feati<_sizeColValX && Featj<_sizeColValY);
@@ -262,9 +210,9 @@ double**** IT::__getobs()
   //vector observed
   for(int i=0;i<_sizeRowValX;i++ )
   {
-    for(int Feati=0; Feati< _sizeColValX;Feati++)
+    for(int feati=0; feati< _sizeColValX;feati++)
     {
-      for(int Featj=0;Featj< _sizeColValY; Featj++)
+      for(int featj=0;featj< _sizeColValY; featj++)
       {
         for(int delti = 0; delti < _sizeX; delti++)
         {
@@ -272,16 +220,16 @@ double**** IT::__getobs()
           {
             if(_gis)
             {
-              if(_FM->getFeatureArraydelta(Feati,Featj,delti,deltj,(*_valX)(i,Feati),(*_valY)(i,Featj))==1)
+              if(_FM->getFeatureArraydelta(feati,featj,delti,deltj,(*_valX)(i,feati),(*_valY)(i,featj))==1)
               {
-                _observed[Feati][Featj][delti][deltj]++;
+                _observed[feati][featj][delti][deltj]++;
               }
             }
             else
             {
-              if(_IM->getFeatureArraydelta(Feati,Featj,delti,deltj,(*_valX)(i,Feati),(*_valY)(i,Featj))==1)
+              if(_IM->getFeatureArraydelta(feati,featj,delti,deltj,(*_valX)(i,feati),(*_valY)(i,featj))==1)
               {
-                _observed[Feati][Featj][delti][deltj]++;
+                _observed[feati][featj][delti][deltj]++;
               }
             }
           }
@@ -292,10 +240,10 @@ double**** IT::__getobs()
   return _observed;
 }
 
-void IT::setFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY,double valuelambda){
-  assert(Feati<_sizeColValX && Featj<_sizeColValY);
+void IT::setFeatureArraylambda(int feati, int featj, int ilambdaX, int ilambdaY,double valuelambda){
+  assert(feati<_sizeColValX && featj<_sizeColValY);
   assert(_gis == true);
-  _FM->setFeatureArraylambda(Feati,Featj,ilambdaX,ilambdaY,valuelambda);
+  _FM->setFeatureArraylambda(feati,featj,ilambdaX,ilambdaY,valuelambda);
 }
 
 

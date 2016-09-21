@@ -199,8 +199,8 @@ void Test:: comparison(){
   cout << _gisTest->getFeatureArraylambda(0,0,0,1) <<endl;
   cout << _gisTest->getFeatureArraylambda(0,0,1,1) <<endl;
   cout << endl;
-  /*
-     cout << _gisTest->getFeatureArraylambda(1,0,0,0) <<endl;
+
+    cout << _gisTest->getFeatureArraylambda(1,0,0,0) <<endl;
      cout << _gisTest->getFeatureArraylambda(1,0,1,0) <<endl;
      cout << _gisTest->getFeatureArraylambda(1,0,0,1) <<endl;
      cout << _gisTest->getFeatureArraylambda(1,0,1,1) <<endl;
@@ -234,7 +234,7 @@ void Test:: comparison(){
   cout << _gisgpTest->getFeatureArraylambda(1,1,1,0) <<endl;
   cout << _gisgpTest->getFeatureArraylambda(1,1,0,1) <<endl;
   cout << _gisgpTest->getFeatureArraylambda(1,1,1,1) <<endl;
-  */
+
     cout << "alphY :" << endl;
   for(int i=0;i<_alphY.size();i++){
     for(int j=0;j<_alphY[i].size();j++){
@@ -272,12 +272,6 @@ vector<double> Test:: KL(){
     pm4=_scgisgpTest->propm(_alphX,rowX,_alphY);
     for(int sizeY=0;sizeY<_alphY.size();sizeY++)
     {
-      // p1=_gisTest->propm(_alphX,rowX,_alphY,sizeY);
-      // p2=_scgisTest->propm(_alphX,rowX,_alphY,sizeY);
-      // p3=_gisgpTest->propm(_alphX,rowX,_alphY,sizeY);
-      // p4=_scgisgpTest->propm(_alphX,rowX,_alphY,sizeY);
-      // q= _exact->propm(_alphX,rowX,_alphY,sizeY);
-      // TODO check
       p1=_gisTest->prop(rowX,_alphY,sizeY);
       p2=_scgisTest->prop(rowX,_alphY,sizeY);
       p3=_gisgpTest->prop(rowX,_alphY,sizeY);
@@ -321,21 +315,21 @@ double Test::KL1(){
     for(int sizeY=0;sizeY<_alphY.size();sizeY++){
       switch(_case){
         case 0:
-          p1=_gisTest->propm(_alphX,rowX,_alphY,sizeY);
+          p1=_gisTest->prop(rowX,_alphY,sizeY);
           break;
         case 1:
-          p1=_scgisTest->propm(_alphX,rowX,_alphY,sizeY);
+          p1=_scgisTest->prop(rowX,_alphY,sizeY);
           break;
         case 2:
-          p1=_gisgpTest->propm(_alphX,rowX,_alphY,sizeY);
+          p1=_gisgpTest->prop(rowX,_alphY,sizeY);
           break;
         case 3:
-          p1=_scgisgpTest->propm(_alphX,rowX,_alphY,sizeY);
+          p1=_scgisgpTest->prop(rowX,_alphY,sizeY);
           break;
         default:
           cout << "default " << endl;
       }
-      q= _exact->propm(_alphX,rowX,_alphY,sizeY);
+      q= _exact->prop(rowX,_alphY,sizeY);
       if(fabs(p1)<0.00000001){ p1=0.000001;}
       if(fabs( q)<0.00000001){ q =0.000001;}
       dist+=pm1*p1*log(p1/q);

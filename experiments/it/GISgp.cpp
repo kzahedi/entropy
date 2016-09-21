@@ -3,18 +3,7 @@
 //training data, alphabete , startwert fuer lambda, startwert fuer delta, wert fuer sigma, test auf time, sekunden fuer den test
 GISgp::GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,double lambdadeltaval, double sigma,int maxit,double konv, bool test,bool time,int seconds)
 :IT(eX, eY, aX, aY, lambdavalue,true){
-	  _exponent = new double**[_sizeColValX];
-	  for(int i=0; i<_sizeColValX; i++){
-	    _exponent[i]=new double*[_sizeColValY];
-	    for(int j=0;j<_sizeColValY;j++){
-	      _exponent[i][j]=new double[_sizeRowValY];
-	      }
-	    }
-
-	  _normaliser= new double*[_sizeColValX];
-	  for(int i=0; i< _sizeColValX; i++){
-	    _normaliser[i]=new double[_sizeColValY];
-	  }
+	  _exponent = new double[_sizeY];
 
 	  _expected = new double***[_sizeColValX];
 	  for(int i=0; i<_sizeColValX; i++){
@@ -73,21 +62,9 @@ GISgp::~GISgp(){
 		}
 		delete[] _delta;
 	}
-	if(_normaliser != NULL){
-		for(int m=0;m<_sizeColValX;m++){
-			delete [] _normaliser[m];
-		}
-		delete [] _normaliser;
-	}
-	if(_exponent != NULL){
-		for(int i=0;i<_sizeColValX;i++){
-			for(int j=0;j<_sizeColValY;j++){
-				delete [] _exponent[i][j];
-			}
-			delete [] _exponent[i];
-		}
-		delete [] _exponent;
-	}
+
+	delete [] _exponent;
+
 	_conv.clear();
 }
 void GISgp::__gisgp(int maxit, double konv, double lambdadeltaval, double sigma, bool test,int seconds){
@@ -95,18 +72,11 @@ void GISgp::__gisgp(int maxit, double konv, double lambdadeltaval, double sigma,
 	  //constant c for delta
 	  double featconst = __getFeatconst();
 
-	    for(int i=0; i<_sizeColValX; i++){
-	      for(int j=0;j<_sizeColValY;j++){
-	        for(int k=0;k< _sizeY;k++){
-	          _exponent[i][j][k]=0;
-	        }
-	      }
-	    }
-	    for(int i=0; i< _sizeColValX; i++){
-	      for(int j=0; j<_sizeColValY;j++){
-	       _normaliser[i][j]=0;
-	      }
-	    }
+	  for(int k=0;k< _sizeY;k++){
+	      _exponent[k]=0;
+	  }
+	   _normaliser=0;
+
 	   // delta fuer die Newtonit.
 	  _delta= new double***[_sizeColValX];
 	  for(int i=0;i<_sizeColValX;i++){
@@ -165,13 +135,8 @@ void GISgp::__gisgp(int maxit, double konv, double lambdadeltaval, double sigma,
 	    for(int i=0; i<_sizeColValX; i++){
 	      for(int j=0;j<_sizeColValY;j++){
 	        for(int k=0;k< _sizeY;k++){
-	          _exponent[i][j][k]=0;
+	          _exponent[k]=0;
 	        }
-	      }
-	    }
-	    for(int i=0; i< _sizeColValX; i++){
-	      for(int j=0; j<_sizeColValY;j++){
-	       _normaliser[i][j]=0;
 	      }
 	    }
 	   // delta fuer die Newtonit.
@@ -225,11 +190,6 @@ double GISgp:: getconv(int i){
 int GISgp:: getsizeconv(){
 	return _conv.size();
 }
-void GISgp::setFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY,double valuelambda){
-  assert(Feati<_sizeColValX && Featj<_sizeColValY);
-  _FM->setFeatureArraylambda(Feati,Featj,ilambdaX,ilambdaY,valuelambda);
-}
-
 double GISgp::__getFeatconst(){
 	double Featconst=1;
 
@@ -269,16 +229,16 @@ void GISgp:: __getexp(){
     for(int Featj=0; Featj< _sizeColValY; Featj++){
 
       for(int xi=0; xi< _sizeRowValX; xi++){
-        _normaliser[Feati][Featj]=0;
+        _normaliser=0;
         for(int yj=0; yj< _sizeY; yj++){
-          _exponent[Feati][Featj][yj]=_FM->getFeatureArrayvalue(Feati,Featj,(*_valX)(xi,Feati), (*_Y)(yj,0));
-          _normaliser[Feati][Featj]+=exp(_exponent[Feati][Featj][yj]);
+          _exponent[yj]=_FM->getFeatureArrayvalue(Feati,Featj,(*_valX)(xi,Feati), (*_Y)(yj,0));
+          _normaliser+=exp(_exponent[yj]);
         }
         for(int yj=0; yj< _sizeY; yj++){
           for(int k=0; k< (*_FM).getMatrixIndexX(xi,yj).size();k++){
             if((*_FM).getMatrixIndexX(xi,yj)[k]==Feati && (*_FM).getMatrixIndexY(xi,yj)[k]==Featj){
               if((*_FM).getFeatureArraydelta(Feati,Featj,(*_FM).getMatrixIndexdX(xi,yj)[k],(*_FM).getMatrixIndexdY(xi,yj)[k],(*_valX)(xi,Feati),(*_Y)(yj,0))==1){
-            	_expected[Feati][Featj][(*_FM).getMatrixIndexdX(xi,yj)[k]][(*_FM).getMatrixIndexdY(xi,yj)[k]]+=exp(_exponent[Feati][Featj][yj])/_normaliser[Feati][Featj];
+            	_expected[Feati][Featj][(*_FM).getMatrixIndexdX(xi,yj)[k]][(*_FM).getMatrixIndexdY(xi,yj)[k]]+=exp(_exponent[yj])/_normaliser;
               }
             }
           }

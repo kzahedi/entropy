@@ -21,7 +21,6 @@ class GISgp : public IT{
 public:
 	GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,double lambdadeltaval, double sigma,int maxit,double konv, bool test,bool time,int seconds);
 	~GISgp();
-	void 	setFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY,double valuelambda);
 	double 	getconv(int i);
 	int    	getsizeconv();
 	int		getIterations();
@@ -34,8 +33,8 @@ private:
 
 	double****		_expected;
 	double****		_delta;
-	double*** 		_exponent;
-	double** 		_normaliser;
+	double* 		_exponent;
+	double			_normaliser;
 	vector<double> 	_conv;
 	int 			_iterations;
 

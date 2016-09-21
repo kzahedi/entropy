@@ -35,9 +35,9 @@ Feature::Feature(DContainer &aX, DContainer &aY, Matrix lambda){
 	assert(_lambda->cols()==(_sizeY));
 }
 Feature:: ~Feature(){
-	_lambda->~Matrix();
-	_X=NULL;
-	_Y=NULL;
+	delete _lambda;
+	delete _X;
+	delete _Y;
 }
 
 double Feature::getlambda(int i, int j) {

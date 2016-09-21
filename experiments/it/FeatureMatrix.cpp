@@ -8,9 +8,7 @@ FeatureMatrix::FeatureMatrix():ITMatrix(){
 }
 FeatureMatrix:: ~FeatureMatrix(){
 		for(int i=0; i<_sizeColValX;i++){
-			for(int j=0; j<_sizeColValY;j++){
-				_FA[i][j].~Feature();
-			}
+				delete[] _FA[i];
 		}
 		delete _FA;
 

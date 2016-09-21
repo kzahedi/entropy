@@ -3,7 +3,7 @@
 GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time, int seconds)
 :IT(eX, eY, aX, aY, lambdavalue,true)
 {
-  _exponent   = new double[_sizeRowValY];
+  _exponent   = new double[_sizeY];
   _normaliser = 0.0;
   _expected   = new double***[_sizeColValX];
   for(int i=0; i<_sizeColValX; i++)
