@@ -33,7 +33,7 @@ int main(int argc, char **argv)
   lambda[1] = 1;
   lambda[2] = 5;
 
-  Test *test   = new Test(1, 1, 100, lambda, *zX, *zY, 500, 0.0001, false, true, 0, 0); // for test cases
-
-  // test->comparison();
+  // Test *test   = new Test(1, 1, 100, lambda, *zX, *zY, 500, 0.0001, false, true, 0, 0); // for test cases
+  Test *test = new Test(1, 1, 100, lambda, *zX, *zY, 500, 0.0001, true, 2);
+  test->comparison();
 }

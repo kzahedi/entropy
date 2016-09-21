@@ -24,6 +24,7 @@ class GIS : public IT
     void   __getExpected();
     void   __gis(int maxit, double konv, bool test);
     void   __gis(int maxit, double konv, bool test,int seconds);
+    double __calculateIteration(double featconst, bool test);
 
     double****     _expected;
     double*        _exponent;

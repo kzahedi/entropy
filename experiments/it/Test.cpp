@@ -159,7 +159,8 @@ void Test::__comptime(int maxit, double konv,int seconds){
   _timediff.push_back(difftime(after4,befor4));
 }
 //Ausgabe
-void Test:: comparison(){
+void Test:: comparison()
+{
   cout << "Comparison: " << endl;
   cout << endl;
   cout << "time:  GIS: " << _timediff[0] << "s SCGIS: " << _timediff[1] << "s GIS smoothed: " << _timediff[2]<<  "s SCGIS smoothed: "  << _timediff[3] << "s" << endl;
@@ -170,86 +171,86 @@ void Test:: comparison(){
   if(_timetest){
     cout<< "Iterations: GIS: " << _gisTest->getIterations() << " SCGIS: " << _scgisTest->getIterations()<< " GIS smoothed: " << _gisgpTest->getIterations() << " SCGIS smoothed: " << _scgisgpTest->getIterations() <<   endl;
   }
-  cout << "lambda: " << endl;
-  cout << "vergleichswerte" << endl;
-  cout << _exact->getFeatureArraylambda(0,0,0,0) <<endl;
-  cout << _exact->getFeatureArraylambda(0,0,1,0) <<endl;
-  cout << _exact->getFeatureArraylambda(0,0,0,1) <<endl;
-  cout << _exact->getFeatureArraylambda(0,0,1,1) <<endl;
-  cout << endl;
+  // cout << "lambda: " << endl;
+  // cout << "vergleichswerte" << endl;
+  // cout << _exact->getFeatureArraylambda(0,0,0,0) <<endl;
+  // cout << _exact->getFeatureArraylambda(0,0,1,0) <<endl;
+  // cout << _exact->getFeatureArraylambda(0,0,0,1) <<endl;
+  // cout << _exact->getFeatureArraylambda(0,0,1,1) <<endl;
+  // cout << endl;
 
-  cout << _exact->getFeatureArraylambda(1,0,0,0) <<endl;
-  cout << _exact->getFeatureArraylambda(1,0,1,0) <<endl;
-  cout << _exact->getFeatureArraylambda(1,0,0,1) <<endl;
-  cout << _exact->getFeatureArraylambda(1,0,1,1) <<endl;
-  cout << endl;
-  cout << _exact->getFeatureArraylambda(0,1,0,0) <<endl;
-  cout << _exact->getFeatureArraylambda(0,1,1,0) <<endl;
-  cout << _exact->getFeatureArraylambda(0,1,0,1) <<endl;
-  cout << _exact->getFeatureArraylambda(0,1,1,1) <<endl;
-  cout << endl;
-  cout << _exact->getFeatureArraylambda(1,1,0,0) <<endl;
-  cout << _exact->getFeatureArraylambda(1,1,1,0) <<endl;
-  cout << _exact->getFeatureArraylambda(1,1,0,1) <<endl;
-  cout << _exact->getFeatureArraylambda(1,1,1,1) <<endl;
+  // cout << _exact->getFeatureArraylambda(1,0,0,0) <<endl;
+  // cout << _exact->getFeatureArraylambda(1,0,1,0) <<endl;
+  // cout << _exact->getFeatureArraylambda(1,0,0,1) <<endl;
+  // cout << _exact->getFeatureArraylambda(1,0,1,1) <<endl;
+  // cout << endl;
+  // cout << _exact->getFeatureArraylambda(0,1,0,0) <<endl;
+  // cout << _exact->getFeatureArraylambda(0,1,1,0) <<endl;
+  // cout << _exact->getFeatureArraylambda(0,1,0,1) <<endl;
+  // cout << _exact->getFeatureArraylambda(0,1,1,1) <<endl;
+  // cout << endl;
+  // cout << _exact->getFeatureArraylambda(1,1,0,0) <<endl;
+  // cout << _exact->getFeatureArraylambda(1,1,1,0) <<endl;
+  // cout << _exact->getFeatureArraylambda(1,1,0,1) <<endl;
+  // cout << _exact->getFeatureArraylambda(1,1,1,1) <<endl;
 
-  cout << "GIS" << endl;
-  cout << _gisTest->getFeatureArraylambda(0,0,0,0) <<endl;
-  cout << _gisTest->getFeatureArraylambda(0,0,1,0) <<endl;
-  cout << _gisTest->getFeatureArraylambda(0,0,0,1) <<endl;
-  cout << _gisTest->getFeatureArraylambda(0,0,1,1) <<endl;
-  cout << endl;
+  // cout << "GIS" << endl;
+  // cout << _gisTest->getFeatureArraylambda(0,0,0,0) <<endl;
+  // cout << _gisTest->getFeatureArraylambda(0,0,1,0) <<endl;
+  // cout << _gisTest->getFeatureArraylambda(0,0,0,1) <<endl;
+  // cout << _gisTest->getFeatureArraylambda(0,0,1,1) <<endl;
+  // cout << endl;
 
-    cout << _gisTest->getFeatureArraylambda(1,0,0,0) <<endl;
-     cout << _gisTest->getFeatureArraylambda(1,0,1,0) <<endl;
-     cout << _gisTest->getFeatureArraylambda(1,0,0,1) <<endl;
-     cout << _gisTest->getFeatureArraylambda(1,0,1,1) <<endl;
-     cout << endl;
-     cout << _gisTest->getFeatureArraylambda(0,1,0,0) <<endl;
-     cout << _gisTest->getFeatureArraylambda(0,1,1,0) <<endl;
-     cout << _gisTest->getFeatureArraylambda(0,1,0,1) <<endl;
-     cout << _gisTest->getFeatureArraylambda(0,1,1,1) <<endl;
-     cout << endl;
-     cout << _gisTest->getFeatureArraylambda(1,1,0,0) <<endl;
-     cout << _gisTest->getFeatureArraylambda(1,1,1,0) <<endl;
-     cout << _gisTest->getFeatureArraylambda(1,1,0,1) <<endl;
-     cout << _gisTest->getFeatureArraylambda(1,1,1,1) <<endl;
-     cout << "GIS smoothed " << endl;
-     cout << _gisgpTest->getFeatureArraylambda(0,0,0,0) <<endl;
-     cout << _gisgpTest->getFeatureArraylambda(0,0,1,0) <<endl;
-     cout << _gisgpTest->getFeatureArraylambda(0,0,0,1) <<endl;
-     cout << _gisgpTest->getFeatureArraylambda(0,0,1,1) <<endl;
-     cout << endl;
-     cout << _gisgpTest->getFeatureArraylambda(1,0,0,0) <<endl;
-     cout << _gisgpTest->getFeatureArraylambda(1,0,1,0) <<endl;
-     cout << _gisgpTest->getFeatureArraylambda(1,0,0,1) <<endl;
-     cout << _gisgpTest->getFeatureArraylambda(1,0,1,1) <<endl;
-     cout << endl;
-     cout << _gisgpTest->getFeatureArraylambda(0,1,0,0) <<endl;
-     cout << _gisgpTest->getFeatureArraylambda(0,1,1,0) <<endl;
-     cout << _gisgpTest->getFeatureArraylambda(0,1,0,1) <<endl;
-     cout << _gisgpTest->getFeatureArraylambda(0,1,1,1) <<endl;
-     cout << endl;
-  cout << _gisgpTest->getFeatureArraylambda(1,1,0,0) <<endl;
-  cout << _gisgpTest->getFeatureArraylambda(1,1,1,0) <<endl;
-  cout << _gisgpTest->getFeatureArraylambda(1,1,0,1) <<endl;
-  cout << _gisgpTest->getFeatureArraylambda(1,1,1,1) <<endl;
+  // cout << _gisTest->getFeatureArraylambda(1,0,0,0) <<endl;
+  // cout << _gisTest->getFeatureArraylambda(1,0,1,0) <<endl;
+  // cout << _gisTest->getFeatureArraylambda(1,0,0,1) <<endl;
+  // cout << _gisTest->getFeatureArraylambda(1,0,1,1) <<endl;
+  // cout << endl;
+  // cout << _gisTest->getFeatureArraylambda(0,1,0,0) <<endl;
+  // cout << _gisTest->getFeatureArraylambda(0,1,1,0) <<endl;
+  // cout << _gisTest->getFeatureArraylambda(0,1,0,1) <<endl;
+  // cout << _gisTest->getFeatureArraylambda(0,1,1,1) <<endl;
+  // cout << endl;
+  // cout << _gisTest->getFeatureArraylambda(1,1,0,0) <<endl;
+  // cout << _gisTest->getFeatureArraylambda(1,1,1,0) <<endl;
+  // cout << _gisTest->getFeatureArraylambda(1,1,0,1) <<endl;
+  // cout << _gisTest->getFeatureArraylambda(1,1,1,1) <<endl;
+  // cout << "GIS smoothed " << endl;
+  // cout << _gisgpTest->getFeatureArraylambda(0,0,0,0) <<endl;
+  // cout << _gisgpTest->getFeatureArraylambda(0,0,1,0) <<endl;
+  // cout << _gisgpTest->getFeatureArraylambda(0,0,0,1) <<endl;
+  // cout << _gisgpTest->getFeatureArraylambda(0,0,1,1) <<endl;
+  // cout << endl;
+  // cout << _gisgpTest->getFeatureArraylambda(1,0,0,0) <<endl;
+  // cout << _gisgpTest->getFeatureArraylambda(1,0,1,0) <<endl;
+  // cout << _gisgpTest->getFeatureArraylambda(1,0,0,1) <<endl;
+  // cout << _gisgpTest->getFeatureArraylambda(1,0,1,1) <<endl;
+  // cout << endl;
+  // cout << _gisgpTest->getFeatureArraylambda(0,1,0,0) <<endl;
+  // cout << _gisgpTest->getFeatureArraylambda(0,1,1,0) <<endl;
+  // cout << _gisgpTest->getFeatureArraylambda(0,1,0,1) <<endl;
+  // cout << _gisgpTest->getFeatureArraylambda(0,1,1,1) <<endl;
+  // cout << endl;
+  // cout << _gisgpTest->getFeatureArraylambda(1,1,0,0) <<endl;
+  // cout << _gisgpTest->getFeatureArraylambda(1,1,1,0) <<endl;
+  // cout << _gisgpTest->getFeatureArraylambda(1,1,0,1) <<endl;
+  // cout << _gisgpTest->getFeatureArraylambda(1,1,1,1) <<endl;
 
-    cout << "alphY :" << endl;
-  for(int i=0;i<_alphY.size();i++){
-    for(int j=0;j<_alphY[i].size();j++){
-      cout << _alphY[i][j] << " " ;
-    }
-    cout << endl;
-  }
-  cout << "alphX :" << endl;
-  for(int i=0;i<_alphX.size();i++){
-    for(int j=0;j<_alphX[i].size();j++){
-      cout << _alphX[i][j] << " " ;
-    }
-    cout << endl;
-  }
-  cout << _alphX.size() << endl;
+  // cout << "alphY :" << endl;
+  // for(int i=0;i<_alphY.size();i++){
+    // for(int j=0;j<_alphY[i].size();j++){
+      // cout << _alphY[i][j] << " " ;
+    // }
+    // cout << endl;
+  // }
+  // cout << "alphX :" << endl;
+  // for(int i=0;i<_alphX.size();i++){
+    // for(int j=0;j<_alphX[i].size();j++){
+      // cout << _alphX[i][j] << " " ;
+    // }
+    // cout << endl;
+  // }
+  // cout << _alphX.size() << endl;
 
 }
 //Abstand
