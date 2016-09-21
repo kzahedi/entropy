@@ -38,10 +38,13 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,doub
       _delta[i][j]=0;
     }
   }
-  if(time){
+
+  if(time)
+  {
     __scgis(maxit,konv,test,seconds);
   }
-  else{
+  else
+  {
     __scgis(maxit,konv,test);
   }
 }
