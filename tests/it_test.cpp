@@ -28,8 +28,18 @@ void itTest::OneXOneY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  Test *test   = new Test(1, 1, 100, lambda, *zX, *zY, 500, 0.0001, false, true, 0, 0); // for test cases
-  Test *testgp = new Test(1, 1, 100, lambda, *zX, *zY, 500, 0.0001, false, true, 0, 2);
+  ItParameter param;
+  param.lambdavalue    = 1.0;
+  param.lambdadeltaval = 1.0;
+  param.sigma          = 0.01;
+  param.maxit          = 500;
+  param.konv           = 0.0001;
+  param.time           = false;
+  param.test           = true;
+  param.seconds        = 0;
+
+  Test *test   = new Test(1, 1, 100, lambda, *zX, *zY, param, 0); // for test cases
+  Test *testgp = new Test(1, 1, 100, lambda, *zX, *zY, param, 2);
 
   // p(y_0 = 0 | x_0 = 0) + p(y_0 = 1 | x_0 = 0) = 1.0
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1, test->prop(0,   0, (*zX)(0, 0), (*zY)(0, 0))+test->prop(0,   0, (*zX)(0, 0), (*zY)(1, 0)), 0.1);
@@ -70,8 +80,18 @@ void itTest::SCOneXOneY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  Test *test   = new Test(1,1,100,lambda,*zX,*zY,500,0.0001,false,true,0,1);
-  Test *testgp = new Test(1,1,100,lambda,*zX,*zY,500,0.0001,false,true,0,3);
+  ItParameter param;
+  param.lambdavalue    = 1.0;
+  param.lambdadeltaval = 1.0;
+  param.sigma          = 0.01;
+  param.maxit          = 500;
+  param.konv           = 0.0001;
+  param.time           = false;
+  param.test           = true;
+  param.seconds        = 0;
+
+  Test *test   = new Test(1,1,100,lambda,*zX,*zY,param,1);
+  Test *testgp = new Test(1,1,100,lambda,*zX,*zY,param,3);
 
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1, test->prop(0,   0, (*zX)(0, 0), (*zY)(0, 0))+test->prop(0,   0, (*zX)(0, 0), (*zY)(1, 0)), 0.1);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1, test->prop(0,   0, (*zX)(1, 0), (*zY)(0, 0))+test->prop(0,   0, (*zX)(1, 0), (*zY)(1, 0)), 0.1);
@@ -103,8 +123,18 @@ void itTest::TwoXOneY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  Test *test = new Test(2,1,100,lambda,*zX,*zY,500,0.0001,false,true,0,0);
-  Test *testgp = new Test(2,1,100,lambda,*zX,*zY,500,0.0001,false,true,0,2);
+  ItParameter param;
+  param.lambdavalue    = 1.0;
+  param.lambdadeltaval = 1.0;
+  param.sigma          = 0.01;
+  param.maxit          = 500;
+  param.konv           = 0.0001;
+  param.time           = false;
+  param.test           = true;
+  param.seconds        = 0;
+
+  Test *test   = new Test(2,1,100,lambda,*zX,*zY,param,0);
+  Test *testgp = new Test(2,1,100,lambda,*zX,*zY,param,2);
 
   for(int i=0;i<2;i++)
   {
@@ -143,8 +173,18 @@ void itTest::SCTwoXOneY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  Test *test   = new Test(2,1,100,lambda,*zX,*zY,500,0.0001,false,true,0,1);
-  Test *testgp = new Test(2,1,100,lambda,*zX,*zY,500,0.0001,false,true,0,3);
+  ItParameter param;
+  param.lambdavalue    = 1.0;
+  param.lambdadeltaval = 1.0;
+  param.sigma          = 0.01;
+  param.maxit          = 500;
+  param.konv           = 0.0001;
+  param.time           = false;
+  param.test           = true;
+  param.seconds        = 0;
+
+  Test *test   = new Test(2,1,100,lambda,*zX,*zY,param,1);
+  Test *testgp = new Test(2,1,100,lambda,*zX,*zY,param,3);
 
   for(int i=0;i<2;i++)
   {
@@ -183,8 +223,18 @@ void itTest::TwoXTwoY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  Test *test   = new Test(2,2,100,lambda,*zX,*zY,500,0.0001,false,true,0,0);
-  Test *testgp = new Test(2,2,100,lambda,*zX,*zY,500,0.0001,false,true,0,2);
+  ItParameter param;
+  param.lambdavalue    = 1.0;
+  param.lambdadeltaval = 1.0;
+  param.sigma          = 0.01;
+  param.maxit          = 500;
+  param.konv           = 0.0001;
+  param.time           = false;
+  param.test           = true;
+  param.seconds        = 0;
+
+  Test *test   = new Test(2,2,100,lambda,*zX,*zY,param,0);
+  Test *testgp = new Test(2,2,100,lambda,*zX,*zY,param,2);
 
   for(int i=0;i<2;i++){
     for(int j=0;j<2;j++){
@@ -225,8 +275,18 @@ void itTest::SCTwoXTwoY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  Test *test   = new Test(2,2,100,lambda,*zX,*zY,500,0.0001,false,true,0,1);
-  Test *testgp = new Test(2,2,100,lambda,*zX,*zY,500,0.0001,false,true,0,3);
+  ItParameter param;
+  param.lambdavalue    = 1.0;
+  param.lambdadeltaval = 1.0;
+  param.sigma          = 0.01;
+  param.maxit          = 500;
+  param.konv           = 0.0001;
+  param.time           = false;
+  param.test           = true;
+  param.seconds        = 0;
+
+  Test *test   = new Test(2,2,100,lambda,*zX,*zY,param,1);
+  Test *testgp = new Test(2,2,100,lambda,*zX,*zY,param,3);
 
 
   for(int i=0;i<2;i++)
@@ -269,8 +329,18 @@ void itTest::NotBinary()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  Test *test = new Test(1,1,100,lambda,*zX,*zY,500,0.0001,false,true,0,0);
-  Test *testgp = new Test(1,1,100,lambda,*zX,*zY,500,0.0001,false,true,0,2);
+  ItParameter param;
+  param.lambdavalue    = 1.0;
+  param.lambdadeltaval = 1.0;
+  param.sigma          = 0.01;
+  param.maxit          = 500;
+  param.konv           = 0.0001;
+  param.time           = false;
+  param.test           = true;
+  param.seconds        = 0;
+
+  Test *test   = new Test(1,1,100,lambda,*zX,*zY,param,0);
+  Test *testgp = new Test(1,1,100,lambda,*zX,*zY,param,2);
 
   for(int i=0;i<4;i++){
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1,test->prop(0,0,(*zX)(i,0),(*zY)(0,0))+test->prop(0,0,(*zX)(i,0),(*zY)(1,0)),0.1);
@@ -299,10 +369,21 @@ void itTest::FourXFourY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  Test *test = new Test(4,4,100,lambda,*zX,*zY,200,0.0001,false,true,0,0);
-  Test *testsc = new Test(4,4,100,lambda,*zX,*zY,200,0.0001,false,true,0,1);
-  Test *testgp = new Test(4,4,100,lambda,*zX,*zY,200,0.0001,false,true,0,2);
-  Test *testscgp = new Test(4,4,100,lambda,*zX,*zY,200,0.0001,false,true,0,3);
+  ItParameter param;
+  param.lambdavalue    = 1.0;
+  param.lambdadeltaval = 1.0;
+  param.sigma          = 0.01;
+  param.maxit          = 200;
+  param.konv           = 0.0001;
+  param.time           = false;
+  param.test           = true;
+  param.seconds        = 0;
+
+
+  Test *test     = new Test(4,4,100,lambda,*zX,*zY,param,0);
+  Test *testsc   = new Test(4,4,100,lambda,*zX,*zY,param,1);
+  Test *testgp   = new Test(4,4,100,lambda,*zX,*zY,param,2);
+  Test *testscgp = new Test(4,4,100,lambda,*zX,*zY,param,3);
 
   for(int i=0;i<4;i++){
     for(int j=0;j<4;j++){

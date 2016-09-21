@@ -37,7 +37,6 @@ int main(int argc, char **argv)
   param.lambdavalue    = 1.0;
   param.lambdadeltaval = 1.0;
   param.sigma          = 0.01;
-
   param.maxit          = 500;
   param.konv           = 0.001;
   param.time           = false;
