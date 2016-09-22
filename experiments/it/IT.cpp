@@ -175,7 +175,6 @@ double IT::propm(vector<vector<double> > X, int rowX, vector<vector<double> >& Y
 
 double IT::getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY)
 {
-  cout << Feati << " " << _sizeColValX << " | " << Featj << " " << _sizeColValY << endl;
   assert(Feati<_sizeColValX && Featj<_sizeColValY);
   double lambda = 0.0;
   if(_gis)
