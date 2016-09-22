@@ -15,15 +15,20 @@ class ITMatrix
 {
 public:
   ITMatrix();
-  ITMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue);
+  ITMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systX, vector<vector<int> > systY, double lambdavalue);
   virtual ~ITMatrix();
-  double  getFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY);
-  double  getFeatureArrayvalue(int i, int j,double ValX, double ValY);
-  void    setFeatureArraylambda(int i, int j,int ilambdaX, int ilambdaY,double valuelambda);
-  int     getFeatureArraydelta(int i, int j,int idelta, int jdelta, double ValX, double ValY);
+  double  getFeatureArraylambda(int i,int ilambdaX, int ilambdaY);
+  double  getFeatureArrayvalue(int i,int rowX, int rowY);
+  double  getFeatureArrayvalueAlphY(int feat,int rowX,int indexY);
+  double  getFeatureArrayvalueAlphYAlphX(int feat,int indexX,int indexY);
+  int 	  getFeatureArraydelta(int i,int indexX, int indexY, int rowValX, int rowValY);
+  int     getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowValX, int indexValY);
+  int     getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int indexValX, int indexValY);
+  void    setFeatureArraylambda(int i, int ilambdaX, int ilambdaY,double valuelambda);
+  vector<double> index(int index,bool x,int sizeCol);
 
 protected:
-  Feature** FeatureArray(double valuelambda);
+  void    FeatureArray(double valuelambda);
 
   int         _sizeColValX;
   int         _sizeColValY;
@@ -31,12 +36,13 @@ protected:
   int         _sizeRowValY;
   int         _sizeX;
   int         _sizeY;
-
+  vector<vector<int> > _systX;
+  vector<vector<int> > _systY;
   DContainer* _valX;
   DContainer* _valY;
   DContainer* _X;
   DContainer* _Y;
-  Feature**   _FA;
+  Feature*    _FA;
 };
 
 #endif

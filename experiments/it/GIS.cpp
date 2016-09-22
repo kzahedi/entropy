@@ -4,29 +4,26 @@
 
 // GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time, int seconds)
 // :IT(eX, eY, aX, aY, lambdavalue, true)
-GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param)
-:IT(eX, eY, aX, aY, param, true)
+GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
+:IT(eX, eY, aX, aY,systX, systY, param, true)
 {
   _param      = param;
   _exponent   = new double[_sizeY];
   _normaliser = 0.0;
-  _expected   = new double***[_sizeColValX];
+  _expected   = new double**[_systX.size()];
   for(int i=0; i<_sizeColValX; i++)
   {
-    _expected[i]=new double**[_sizeColValY];
-    for( int j=0;j< _sizeColValY;j++)
-    {
-      _expected[i][j]=new double*[_sizeX];
+      _expected[i]=new double*[_sizeX];
       for(int k=0; k< _sizeX; k++)
       {
-        _expected[i][j][k]= new double[_sizeY];
+        _expected[i][k]= new double[_sizeY];
         for(int l=0; l< _sizeY;l++)
         {
-          _expected[i][j][k][l]=0;
+          _expected[i][k][l]=0;
         }
       }
-    }
-  }
+   }
+
 
   // cout << "Data X:" << endl << eX << endl << "Data Y: " << endl << eY << endl;
 
@@ -44,27 +41,20 @@ GIS::~GIS()
 {
   if(_observed!=NULL)
   {
-    for(int i=0;i<_sizeColValX;i++)
+    for(int i=0;i<_systX.size();i++)
     {
-      for(int j=0;j<_sizeColValY;j++)
+      for(int j=0;j<_sizeX;j++)
       {
-        for(int k=0;k<_sizeX;k++)
-        {
-           delete [] _observed[i][j][k];
+        delete [] _observed[i][j];
       }
-      delete [] _observed[i][j];
-     }
      delete [] _observed[i];
   }
   delete [] _observed;
   }
   if(_expected != NULL){
-     for(int i=0;i<_sizeColValX;i++){
-        for(int j=0;j<_sizeColValY;j++){
+     for(int i=0;i<_systX.size();i++){
          for(int k=0;k<_sizeX;k++){
-          delete [] _expected[i][j][k];
-       }
-       delete [] _expected[i][j];
+          delete [] _expected[i][k];
       }
       delete[] _expected[i];
      }
@@ -90,7 +80,7 @@ double GIS::__getFeatconst()
   {
     for(int j=0; j< _sizeY;j++) // y-alphabet
     {
-      int v = (*_FM).getMatrixIndexX(i,j).size(); // the number of matching deltas
+      int v = (*_FM).getMatrixIndexFeat(i,j).size(); // the number of matching deltas
       if(v > r) r = v;
     }
   }
@@ -99,49 +89,38 @@ double GIS::__getFeatconst()
 
 void GIS::__getExpected()
 {
-  for(int i=0; i<_sizeColValX; i++)
+  for(int i=0; i<_systX.size(); i++)
   {
-    for( int j=0;j< _sizeColValY;j++)
+    for(int k=0; k< _sizeX; k++)
     {
-      for(int k=0; k< _sizeX; k++)
+      for(int l=0; l< _sizeY;l++)
       {
-        for(int l=0; l< _sizeY;l++)
-        {
-          _expected[i][j][k][l]=0;
-        }
+        _expected[i][k][l]=0;
       }
     }
+
   }
-  for(int Feati=0; Feati< _sizeColValX; Feati++)
+  for(int Feati=0; Feati< _systX.size(); Feati++)
   {
-    for(int Featj=0; Featj< _sizeColValY; Featj++)
+    for(int xi=0; xi< _sizeRowValX; xi++)
     {
-      for(int xi=0; xi< _sizeRowValX; xi++)
+      _normaliser = 0.0;
+      for(int yj=0; yj< pow(_Y->rows(),_sizeColValY); yj++)
       {
-        _normaliser = 0.0;
-        for(int yj=0; yj< _sizeY; yj++)
-        {
-          _exponent[yj]=_FM->getFeatureArrayvalue(Feati,Featj,(*_valX)(xi,Feati), (*_Y)(yj,0));
+        _exponent[yj]=_FM->getFeatureArrayvalueAlphY(Feati,xi,yj);
           _normaliser += exp(_exponent[yj]);
-        }
-        for(int yj=0; yj< _sizeY; yj++)
+      }
+      for(int yj=0; yj< pow(_Y->rows(),_sizeColValY); yj++)
+      {
+        for(int k=0; k< (*_FM).getMatrixIndexFeat(xi,yj).size();k++)
         {
-          for(int k=0; k< (*_FM).getMatrixIndexX(xi,yj).size();k++)
+          if((*_FM).getMatrixIndexFeat(xi,yj)[k]==Feati)
           {
-            if((*_FM).getMatrixIndexX(xi,yj)[k]==Feati && (*_FM).getMatrixIndexY(xi,yj)[k]==Featj)
+            if((*_FM).getFeatureArraydeltaAlphY(Feati, (*_FM).getMatrixIndexdX(xi,yj)[k], (*_FM).getMatrixIndexdY(xi,yj)[k], xi, yj) == 1)
             {
-              if((*_FM).getFeatureArraydelta(Feati,
-                                             Featj,
-                                             (*_FM).getMatrixIndexdX(xi,yj)[k],
-                                             (*_FM).getMatrixIndexdY(xi,yj)[k],
-                                             (*_valX)(xi,Feati),
-                                             (*_Y)(yj,0)) == 1)
-              {
               _expected[Feati]
-                       [Featj]
-                       [(*_FM).getMatrixIndexdX(xi,yj)[k]]
+				       [(*_FM).getMatrixIndexdX(xi,yj)[k]]
                        [(*_FM).getMatrixIndexdY(xi,yj)[k]] += exp(_exponent[yj])/_normaliser;
-              }
             }
           }
         }
@@ -194,34 +173,30 @@ double GIS::__calculateIteration(double featconst, bool test)
 {
   double l = 0;
   __getExpected();
-  for(int Feati=0; Feati < _sizeColValX; Feati++)
+  for(int Feati=0; Feati < _systX.size(); Feati++)
   {
-    for(int Featj=0; Featj < _sizeColValY; Featj++)
+    // jedes delta hat ein x_i und ein y_j
+    for(int deltai=0; deltai < _sizeX; deltai++)
     {
-      // jedes delta hat ein x_i und ein y_j
-      for(int deltai=0; deltai < _sizeX; deltai++)
+      for(int deltaj=0; deltaj < _sizeY; deltaj++)
       {
-        for(int deltaj=0; deltaj < _sizeY; deltaj++)
+        double oldl = (*_FM).getFeatureArraylambda(Feati, deltai, deltaj);
+        double newl = 0.0;
+        if(fabs(_expected[Feati][deltai][deltaj]) < EPSILON)
         {
-          double oldl = (*_FM).getFeatureArraylambda(Feati, Featj, deltai, deltaj);
-          double newl = 0.0;
-          if(fabs(_expected[Feati][Featj][deltai][deltaj]) < EPSILON)
-          {
-            _expected[Feati][Featj][deltai][deltaj] = 0.01; // TODO check if other values might be better
-          }
-          if(fabs(_observed[Feati][Featj][deltai][deltaj]) > EPSILON)
-          {
-            // TODO 0.1 as learning rate parameter
-            newl = oldl + 0.1 * (1.0/featconst) *
-              log(_observed[Feati][Featj][deltai][deltaj]/_expected[Feati][Featj][deltai][deltaj]);
-          }
-          else
-          {
-            newl = 0.0;
-          }
-          (*_FM).setFeatureArraylambda(Feati,Featj,deltai,deltaj,newl);
-          l+=fabs((_observed[Feati][Featj][deltai][deltaj]-_expected[Feati][Featj][deltai][deltaj]));
+          _expected[Feati][deltai][deltaj] = 0.01; // TODO check if other values might be better
         }
+        if(fabs(_observed[Feati][deltai][deltaj]) > EPSILON)
+        {
+          // TODO 0.1 as learning rate parameter
+          newl = oldl + 0.1 * (1.0/featconst) *log(_observed[Feati][deltai][deltaj]/_expected[Feati][deltai][deltaj]);
+        }
+        else
+        {
+          newl = 0.0;
+        }
+        (*_FM).setFeatureArraylambda(Feati,deltai,deltaj,newl);
+        l+=fabs((_observed[Feati][deltai][deltaj]-_expected[Feati][deltai][deltaj]));
       }
     }
   }

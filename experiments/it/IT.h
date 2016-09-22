@@ -27,16 +27,16 @@ class IT{
 
   public:
     // IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,bool GIS);
-    IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param, bool gis);
-    IT(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY);
-    double  prop(int Feati,int Featj,double ValX,double ValY);
-    double  prop(int rowX,vector<vector<double> >& Y, int rowY);
-    double  propm(vector<vector<double> > X,int rowX,vector<vector<double> >& Y);
-    double  getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY);
-    void    setFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY,double valuelambda);
+    IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX,vector<vector<int> > systY, IsParameter param, bool gis);
+    IT(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY);
+ //   double  prop(int Feati,int Featj,double ValX,double ValY);
+    double  prop(int rowX, int rowY);
+    double  propm(int rowX);
+    double  getFeatureArraylambda(int feat, int indexLambdaX, int indexLambdaY);
+    void    setFeatureArraylambda(int feat, int indexLambdaX, int indexLambdaY, double valuelambda);
 
   protected:
-    double****      __getobs();
+    double***      __getobs();
 
     int             _sizeX;
     int             _sizeY;
@@ -44,8 +44,10 @@ class IT{
     int             _sizeColValY;
     int             _sizeRowValX;
     int             _sizeRowValY;
-    double****      _observed;
+    double***       _observed;
     bool            _gis;
+    vector<vector<int> > _systX;
+    vector<vector<int> > _systY;
 
     DContainer*     _Y;
     DContainer*     _X;

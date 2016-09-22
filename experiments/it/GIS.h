@@ -14,7 +14,7 @@
 class GIS : public IT
 {
   public:
-    GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param);
+    GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
     ~GIS();
     double getconv(int i);
     int    getsizeconv();
@@ -28,7 +28,7 @@ class GIS : public IT
     void   __gis(int maxit, double konv, bool test,int seconds);
     double __calculateIteration(double featconst, bool test);
 
-    double****     _expected;
+    double***      _expected;
     double*        _exponent;
     double         _normaliser;
     vector<double> _conv;

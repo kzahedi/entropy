@@ -1,108 +1,108 @@
 #include "Test.h"
 
 //vergleichswerte, gemessene X,Y und Eingabealphabete
-Test::Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, IsParameter param)
+Test::Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
 {
   _timetest    = param.time;
   _X           = &aX;
   _Y           = &aY;
+  _systX       = systX;
+  _systY       = systY;
   _sizeColValY = colValY;
   __getValX(colX,rowX);
   _sizeColValX = _valX->columns();
-  _exact       = new IT(colValY,*_valX,*_X,*_Y);
+  _exact       = new IT(colValY,*_valX,*_X,*_Y,systX,systY);
   __setLambdaRand(lambda);
-  _alphY       = __getalph(false);
-  _alphX       = __getalph(true);
   __getValY(colValY,rowX);
   __comptime(param);
   _case        = 4;
 }
 
-Test::Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY, IsParameter param)
+Test::Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
 {
   _timetest    = param.time;
   _X           = &aX;
   _Y           = &aY;
+  _systX       = systX;
+  _systY       = systY;
   _sizeColValY = colValY;
   __getValX(colX,rowX);
   _sizeColValX = _valX->columns();
-  _exact       = new IT(colValY,*_valX,*_X,*_Y);
+  _exact       = new IT(colValY,*_valX,*_X,*_Y,systX,systY);
   __setlambda(indizes,lambda);
-  _alphY       = __getalph(false);
-  _alphX       = __getalph(true);
   __getValY(colValY,rowX);
   __comptime(param);
   _case        = 4;
 }
 
 // test if same initial conditions lead to same convergence behaviour
-Test::Test(int colX,int colValY,int rowX,DContainer &aX, DContainer &aY, IsParameter param)
+Test::Test(int colX,int colValY,int rowX,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
 {
   _timetest    = param.time;
   _X           = &aX;
   _Y           = &aY;
+  _systX       = systX;
+  _systY       = systY;
   _sizeColValY = colValY;
   __getValX(colX,rowX);
   _sizeColValX = _valX->columns();
-  _exact= new IT(colValY,*_valX,*_X,*_Y);
-  _exact->setFeatureArraylambda(0,0,0,0,1);
-  _exact->setFeatureArraylambda(0,0,1,0,4);
-  _exact->setFeatureArraylambda(0,0,0,1,5);
-  _exact->setFeatureArraylambda(0,0,1,1,0);
+  _exact= new IT(colValY,*_valX,*_X,*_Y,systX,systY);
+  _exact->setFeatureArraylambda(0,0,0,1);
+  _exact->setFeatureArraylambda(0,1,0,4);
+  _exact->setFeatureArraylambda(0,0,1,5);
+  _exact->setFeatureArraylambda(0,1,1,0);
 
-  _exact->setFeatureArraylambda(1,0,0,0,0);
-  _exact->setFeatureArraylambda(1,0,1,0,2);
-  _exact->setFeatureArraylambda(1,0,0,1,1);
-  _exact->setFeatureArraylambda(1,0,1,1,3);
+  _exact->setFeatureArraylambda(1,0,0,0);
+  _exact->setFeatureArraylambda(1,1,0,2);
+  _exact->setFeatureArraylambda(1,0,1,1);
+  _exact->setFeatureArraylambda(1,1,1,3);
 
-  _exact->setFeatureArraylambda(0,1,0,0,3);
-  _exact->setFeatureArraylambda(0,1,1,0,2);
-  _exact->setFeatureArraylambda(0,1,0,1,0);
-  _exact->setFeatureArraylambda(0,1,1,1,3);
+  _exact->setFeatureArraylambda(2,0,0,3);
+  _exact->setFeatureArraylambda(2,1,0,2);
+  _exact->setFeatureArraylambda(2,0,1,0);
+  _exact->setFeatureArraylambda(2,1,1,3);
 
-  _exact->setFeatureArraylambda(1,1,0,0,2);
-  _exact->setFeatureArraylambda(1,1,1,0,1);
-  _exact->setFeatureArraylambda(1,1,0,1,0);
-  _exact->setFeatureArraylambda(1,1,1,1,3);
-  _alphY=__getalph(false);
-  _alphX=__getalph(true);
+  _exact->setFeatureArraylambda(3,0,0,2);
+  _exact->setFeatureArraylambda(3,1,0,1);
+  _exact->setFeatureArraylambda(3,0,1,0);
+  _exact->setFeatureArraylambda(3,1,1,3);
   __getValY(colValY,rowX);
   __comptime(param);
   _case=4;
 }
 
-Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, DContainer &aY){
+Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY){
   _X= &aX;
   _Y= &aY;
+  _systX       = systX;
+  _systY       = systY;
   _sizeColValY=colValY;
   __getValX(colX,rowX);
   _sizeColValX=_valX->columns();
-  _exact= new IT(colValY,*_valX,*_X,*_Y);
+  _exact= new IT(colValY,*_valX,*_X,*_Y,systX,systY);
   __setLambdaRand(lambda);
-  _alphY=__getalph(false);
-  _alphX=__getalph(true);
   __getValY(colValY,rowX);
   _case=5;
 }
 
-Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, IsParameter param, int i) // int maxit, double konv, bool time,bool test,int seconds,int i){
+Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, int i) // int maxit, double konv, bool time,bool test,int seconds,int i){
 {
   assert(abs(i)>=0 && abs(i)<4);
   _case        = i;
   _timetest    = param.time;
   _X           = &aX;
   _Y           = &aY;
+  _systX       = systX;
+  _systY       = systY;
   _sizeColValY = colValY;
   __getValX(colX,rowX);
   _sizeColValX = _valX->columns();
-  _exact       = new IT(colValY,*_valX,*_X,*_Y);
+  _exact       = new IT(colValY,*_valX,*_X,*_Y,systX,systY);
   __setLambdaRand(lambda);
-  _alphY       = __getalph(false);
-  _alphX       = __getalph(true);
   __getValY(colValY,rowX);
   switch(i){
     case 0:
-      _gisTest=new GIS(*_valX, *_valY, *_X, *_Y, param); //1,maxit,konv,test,_timetest,seconds);
+      _gisTest=new GIS(*_valX, *_valY, *_X, *_Y,systX,systY, param); //1,maxit,konv,test,_timetest,seconds);
       break;
     case 1:
       _scgisTest=new SCGIS(*_valX,*_valY,*_X,*_Y, param); // 1,maxit,konv,test,_timetest,seconds);
@@ -119,6 +119,7 @@ Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &a
 }
 Test::~Test()
 {
+	/*
   _timediff.clear();
   for(int i=0;i<_alphX.size();i++){
     _alphX[i].clear();
@@ -134,7 +135,7 @@ Test::~Test()
   delete _gisTest;
   delete _scgisTest;
   delete _scgisgpTest;
-  delete _gisgpTest;
+  delete _gisgpTest; */
 }
 //GIS und SCGIS ausfuehren mit Zeitmessung
 void Test::__comptime(IsParameter param)
@@ -148,7 +149,7 @@ void Test::__comptime(IsParameter param)
   time_t befor4;
   time_t after4;
   befor1=time(NULL);
-  _gisTest=new GIS(*_valX,*_valY,*_X,*_Y, param); // 1,maxit,konv,false,_timetest,seconds);
+  _gisTest=new GIS(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,maxit,konv,false,_timetest,seconds);
   after1=time(NULL);
   _timediff.push_back(difftime(after1,befor1));
   befor2=time(NULL);
@@ -179,48 +180,49 @@ void Test:: comparison()
   }
    cout << "lambda: " << endl;
    cout << "vergleichswerte" << endl;
-   cout << _exact->getFeatureArraylambda(0,0,0,0) <<endl;
-   cout << _exact->getFeatureArraylambda(0,0,1,0) <<endl;
-   cout << _exact->getFeatureArraylambda(0,0,0,1) <<endl;
-   cout << _exact->getFeatureArraylambda(0,0,1,1) <<endl;
+   cout << _exact->getFeatureArraylambda(0,0,0) <<endl;
+   cout << _exact->getFeatureArraylambda(0,1,0) <<endl;
+   cout << _exact->getFeatureArraylambda(0,0,1) <<endl;
+   cout << _exact->getFeatureArraylambda(0,1,1) <<endl;
    cout << endl;
 
-   cout << _exact->getFeatureArraylambda(1,0,0,0) <<endl;
-   cout << _exact->getFeatureArraylambda(1,0,1,0) <<endl;
-   cout << _exact->getFeatureArraylambda(1,0,0,1) <<endl;
-   cout << _exact->getFeatureArraylambda(1,0,1,1) <<endl;
+   cout << _exact->getFeatureArraylambda(1,0,0) <<endl;
+   cout << _exact->getFeatureArraylambda(1,1,0) <<endl;
+   cout << _exact->getFeatureArraylambda(1,0,1) <<endl;
+   cout << _exact->getFeatureArraylambda(1,1,1) <<endl;
    cout << endl;
-   cout << _exact->getFeatureArraylambda(0,1,0,0) <<endl;
-   cout << _exact->getFeatureArraylambda(0,1,1,0) <<endl;
-   cout << _exact->getFeatureArraylambda(0,1,0,1) <<endl;
-   cout << _exact->getFeatureArraylambda(0,1,1,1) <<endl;
+   cout << _exact->getFeatureArraylambda(2,0,0) <<endl;
+   cout << _exact->getFeatureArraylambda(2,1,0) <<endl;
+   cout << _exact->getFeatureArraylambda(2,0,1) <<endl;
+   cout << _exact->getFeatureArraylambda(2,1,1) <<endl;
    cout << endl;
-   cout << _exact->getFeatureArraylambda(1,1,0,0) <<endl;
-   cout << _exact->getFeatureArraylambda(1,1,1,0) <<endl;
-   cout << _exact->getFeatureArraylambda(1,1,0,1) <<endl;
-   cout << _exact->getFeatureArraylambda(1,1,1,1) <<endl;
+   cout << _exact->getFeatureArraylambda(3,0,0) <<endl;
+   cout << _exact->getFeatureArraylambda(3,1,0) <<endl;
+   cout << _exact->getFeatureArraylambda(3,0,1) <<endl;
+   cout << _exact->getFeatureArraylambda(3,1,1) <<endl;
 
    cout << "GIS" << endl;
-   cout << _gisTest->getFeatureArraylambda(0,0,0,0) <<endl;
-   cout << _gisTest->getFeatureArraylambda(0,0,1,0) <<endl;
-   cout << _gisTest->getFeatureArraylambda(0,0,0,1) <<endl;
-   cout << _gisTest->getFeatureArraylambda(0,0,1,1) <<endl;
+   cout << _gisTest->getFeatureArraylambda(0,0,0) <<endl;
+   cout << _gisTest->getFeatureArraylambda(0,1,0) <<endl;
+   cout << _gisTest->getFeatureArraylambda(0,0,1) <<endl;
+   cout << _gisTest->getFeatureArraylambda(0,1,1) <<endl;
    cout << endl;
 
-   cout << _gisTest->getFeatureArraylambda(1,0,0,0) <<endl;
-   cout << _gisTest->getFeatureArraylambda(1,0,1,0) <<endl;
-   cout << _gisTest->getFeatureArraylambda(1,0,0,1) <<endl;
-   cout << _gisTest->getFeatureArraylambda(1,0,1,1) <<endl;
+   cout << _gisTest->getFeatureArraylambda(1,0,0) <<endl;
+   cout << _gisTest->getFeatureArraylambda(1,1,0) <<endl;
+   cout << _gisTest->getFeatureArraylambda(1,0,1) <<endl;
+   cout << _gisTest->getFeatureArraylambda(1,1,1) <<endl;
    cout << endl;
-   cout << _gisTest->getFeatureArraylambda(0,1,0,0) <<endl;
-   cout << _gisTest->getFeatureArraylambda(0,1,1,0) <<endl;
-   cout << _gisTest->getFeatureArraylambda(0,1,0,1) <<endl;
-   cout << _gisTest->getFeatureArraylambda(0,1,1,1) <<endl;
+   cout << _gisTest->getFeatureArraylambda(2,0,0) <<endl;
+   cout << _gisTest->getFeatureArraylambda(2,1,0) <<endl;
+   cout << _gisTest->getFeatureArraylambda(2,0,1) <<endl;
+   cout << _gisTest->getFeatureArraylambda(2,1,1) <<endl;
    cout << endl;
-   cout << _gisTest->getFeatureArraylambda(1,1,0,0) <<endl;
-   cout << _gisTest->getFeatureArraylambda(1,1,1,0) <<endl;
-   cout << _gisTest->getFeatureArraylambda(1,1,0,1) <<endl;
-   cout << _gisTest->getFeatureArraylambda(1,1,1,1) <<endl;
+   cout << _gisTest->getFeatureArraylambda(3,0,0) <<endl;
+   cout << _gisTest->getFeatureArraylambda(3,1,0) <<endl;
+   cout << _gisTest->getFeatureArraylambda(3,0,1) <<endl;
+   cout << _gisTest->getFeatureArraylambda(3,1,1) <<endl;
+   /*
    cout << "GIS smoothed " << endl;
    cout << _gisgpTest->getFeatureArraylambda(0,0,0,0) <<endl;
    cout << _gisgpTest->getFeatureArraylambda(0,0,1,0) <<endl;
@@ -257,7 +259,7 @@ void Test:: comparison()
     // cout << endl;
   // }
   // cout << _alphX.size() << endl;
-
+ */
 }
 //Abstand
 vector<double> Test:: KL(){

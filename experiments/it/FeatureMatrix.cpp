@@ -1,9 +1,14 @@
 #include "FeatureMatrix.h"
-
-FeatureMatrix::FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, double lambdavalue)
-  :ITMatrix(eX,eY,aX,aY,lambdavalue)
+//DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systX, vector<vector<int> > systY, double lambdavalue
+FeatureMatrix::FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systX, vector<vector<int> > systY,double lambdavalue)
+  :ITMatrix(eX,eY,aX,aY,systX, systY,lambdavalue)
 {
+	 cout << "hier 0002 " << endl;
+  _sizeAlphY = pow(_Y->rows(),_sizeColValY);
+  cout << "hier 0002 " << endl;
   __getMatrix(lambdavalue);
+  cout << "hier 62 " << endl;
+
 }
 
 FeatureMatrix::FeatureMatrix():ITMatrix()
@@ -13,10 +18,6 @@ FeatureMatrix::FeatureMatrix():ITMatrix()
 
 FeatureMatrix:: ~FeatureMatrix()
 {
-  for(int i=0; i<_sizeColValX;i++)
-  {
-    delete[] _FA[i];
-  }
   delete _FA;
 
   for(int i=0;i<_sizeRowValX;i++)
@@ -28,77 +29,69 @@ FeatureMatrix:: ~FeatureMatrix()
   }
   delete _mat;
 }
-
-vector<int> FeatureMatrix::getMatrixIndexX(int i, int j)
+vector<int> FeatureMatrix::getMatrixIndexFeat(int i,int j)
 {
-  assert(i<_sizeRowValX && j< _sizeRowValY );
+  assert(i<_systX.size());
   vector<int> indX = _mat[i][j][0]; // TODO copying a vector can be expensive
   return indX;
-}
-
-vector<int> FeatureMatrix::getMatrixIndexY(int i, int j)
-{
-  assert(i<_sizeRowValX && j< _sizeY );
-  vector<int> indY = _mat[i][j][1]; // TODO copying a vector can be expensive
-  return indY;
 }
 
 vector<int> FeatureMatrix:: getMatrixIndexdX(int i,int j)
 {
   assert(i<_sizeRowValX && j< _sizeY );
-  vector<int> dindX = _mat[i][j][2]; // TODO copying a vector can be expensive
+  vector<int> dindX = _mat[i][j][1]; // TODO copying a vector can be expensive
   return dindX;
 }
 
 vector<int> FeatureMatrix:: getMatrixIndexdY(int i,int j)
 {
   assert(i<_sizeRowValX && j< _sizeY );
-  vector<int> dindY = _mat[i][j][3]; // TODO copying a vector can be expensive
+  vector<int> dindY = _mat[i][j][2]; // TODO copying a vector can be expensive
   return dindY;
 }
 
 void FeatureMatrix::__getMatrix(double valuelambda)
 {
-  vector<vector<int> > V(4,vector<int>(0));
+	 cout << "hier 0002 " << endl;
+  vector<vector<int> > V(3,vector<int>(0));
+  vector<double > x;
+  vector<double > y;
   _mat = new vector<vector<int> >*[_sizeRowValX];
   for(int i=0;i<_sizeRowValX;i++)
   {
-    _mat[i]= new vector<vector<int> >[_sizeY];
+    _mat[i]= new vector<vector<int> >[_sizeAlphY];
     for(int j=0;j<_sizeY;j++)
     {
       _mat[i][j]= V;
     }
   }
+  cout << _sizeAlphY << "                       hier " << endl;
+  cout << "hier 1 " << endl;
   for(int i=0;i<_sizeRowValX;i++)
   {
-    for(int j=0;j<_sizeY;j++)
+    for(int j=0;j<_sizeAlphY;j++)
     {
-      for(int varFeati=0;varFeati<_sizeColValX;varFeati++)
+      for(int feat=0;feat<_systX.size();feat++)
       {
-        for(int varFeatj=0;varFeatj<_sizeColValY;varFeatj++)
+        for(int deltai=0; deltai<pow(_X->rows(),_systX[feat].size()); deltai++ )
         {
-          if(_FA[varFeati][varFeatj].value((*_valX)(i,varFeati),(*_Y)(j,0))!=0)
-          {
-            for(int deltai=0; deltai<_sizeX; deltai++ )
+          for(int deltaj=0; deltaj<pow(_Y->rows(),_systY[feat].size()); deltaj++)
             {
-              for(int deltaj=0; deltaj<_sizeY; deltaj++)
-              {
-                if(_FA[varFeati][varFeatj].delta((*_X).get(deltai,0),
-                                                 (*_Y).get(deltaj,0),
-                                                 (*_valX).get(i, varFeati),
-                                                 (*_Y).get(j,0)) != -1)
-                {
-                  _mat[i][j][0].push_back(varFeati);
-                  _mat[i][j][1].push_back(varFeatj);
-                  _mat[i][j][2].push_back(deltai);
-                  _mat[i][j][3].push_back(deltaj);
-                }
+              if(getFeatureArraydeltaAlphY(feat,deltai,deltaj,i,j) !=-1)
+              { cout << "if " << i << j << feat << deltai << deltaj <<  endl;
+                _mat[i][j][0].push_back(feat);
+                _mat[i][j][1].push_back(deltai);
+                _mat[i][j][2].push_back(deltaj);
+              }
+              else{
+            	  cout << "else " << i << j << feat << deltai << deltaj << endl;
               }
             }
-          }
-        }
+         }
       }
     }
+    cout << "hier fast " << endl;
   }
+  cout << "hier ende " << endl;
 }
 

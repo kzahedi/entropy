@@ -20,11 +20,11 @@ using namespace std;
 class Test
 {
   public:
-    Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, IsParameter param);
-    Test(int colX,int colValY,int rowX, vector<double> lambda,DContainer &aX, DContainer &aY);
-    Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY, IsParameter param);
-    Test(int colX,int colValY,int rowX,DContainer &aX, DContainer &aY, IsParameter param);
-    Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY, IsParameter param, int i);
+    Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
+    Test(int colX,int colValY,int rowX, vector<double> lambda,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY);
+    Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
+    Test(int colX,int colValY,int rowX,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
+    Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, int i);
     ~Test();
     vector<double> KL();
     double         KL1();
@@ -50,8 +50,8 @@ class Test
     int                     _sizeColValX;
     int                     _index;
     vector<double>          _timediff;
-    vector<vector<double> > _alphY;
-    vector<vector<double> > _alphX;
+    vector<vector<int> >    _systX;
+    vector<vector<int> >    _systY;
     bool                    _timetest;
 
     vector<vector<double> > __getalph(bool valX);

@@ -1,7 +1,7 @@
 #include "IT.h"
 
 // IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue, bool gis)
-IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param, bool gis)
+IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, bool gis)
 {
   assert(eX.rows() == eY.rows());
   _param       = param;
@@ -16,20 +16,23 @@ IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParamet
   _sizeColValX = _valX->columns();
   _sizeRowValX = _valX->rows();
   _sizeRowValY = _valY->rows();
+  _systX       = systX;
+  _systY       = systY;
 
   if(_gis) // gis and csgis require different feature matrices
   {
-    _FM = new FeatureMatrix(*_valX,*_valY,*_X,*_Y, param.lambdavalue);
+    _FM = new FeatureMatrix(*_valX,*_valY,*_X,*_Y, systX, systY, param.lambdavalue);
   }
   else
   {
-    _IM = new InstanceMatrix(*_valX,*_valY,*_X,*_Y, param.lambdavalue);
+   // _IM = new InstanceMatrix(*_valX,*_valY,*_X,*_Y, param.lambdavalue);
   }
   _observed=__getobs();
 }
-
-IT::IT(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY)
+//umstellen
+IT::IT(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY)
 {
+	 cout << "hier 00023 " << endl;
   _gis         = true;
   _X           = &aX;
   _Y           = &aY;
@@ -41,11 +44,14 @@ IT::IT(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY)
   _sizeRowValX = (*_valX).rows();
   _valY        = new DContainer(_sizeRowValX,ColValY);
   _sizeRowValY = 0;
-  _FM          = new FeatureMatrix(*_valX,*_valY,*_X,*_Y,1);
+  cout << "hier 0002 " << endl;
+  _FM          = new FeatureMatrix(*_valX,*_valY,*_X,*_Y,systX,systY,1);
+  cout << "hier 0002 " << endl;
   _IM          = NULL;
   _observed    = NULL;
+  cout << "hier 00024 " << endl;
 }
-
+/*
 // returns p(y_j = valY | x_i = valX)
 double IT::prop(int Feati, int Featj, double ValX, double ValY)
 {
@@ -73,99 +79,89 @@ double IT::prop(int Feati, int Featj, double ValX, double ValY)
     }
   }
   return exponent/norm;
-}
+} */
 
 // p(y | x)
 // double IT::prop(int rowX, vector<vector<double> > Y, int rowY)
-double IT::prop(int rowX, vector<vector<double> >& Y, int rowY)
+double IT::prop(int rowX, int rowY)
 {
-  double feat     = 0;
+  double featexp   = 0;
   double featnorm = 0;
   double norm     = 0;
   double exponent = 0;
-  for(int Featx=0; Featx< _sizeColValX; Featx++)
+  for(int feat=0; feat< _systX.size(); feat++)
   {
-    for(int Featy=0; Featy< _sizeColValY; Featy++)
-    {
       if(_gis)
       {
-        feat += (*_FM).getFeatureArrayvalue(Featx,Featy,(*_valX)(rowX,Featx), Y[rowY][Featy]);
+        featexp += (*_FM).getFeatureArrayvalueAlphY(feat,rowX, rowY);
       }
       else
       {
-        feat += (*_IM).getFeatureArrayvalue(Featx,Featy,(*_valX)(rowX,Featx), Y[rowY][Featy]); // Y = _alphY
+     //   featexp += (*_IM).getFeatureArrayvalueAlphY(feat,rowX, rowY);
       }
-    }
   }
-  exponent = exp(feat);
-  for(int yi=0;yi<Y.size();yi++)
+  exponent = exp(featexp);
+  for(int yi=0;yi<pow(_Y->rows(),_sizeColValY);yi++)
   {
-    for(int Featx=0;Featx< _sizeColValX;Featx++)
+    for(int feat=0; feat< _systX.size(); feat++)
     {
-      for(int Featy=0;Featy< _sizeColValY;Featy++)
-      {
         if(_gis)
         {
-          featnorm += (*_FM).getFeatureArrayvalue(Featx,Featy,(*_valX)(rowX,Featx),Y[yi][Featy]);
+          featnorm += (*_FM).getFeatureArrayvalue(feat,rowX,yi);
         }
         else
         {
-          featnorm += (*_IM).getFeatureArrayvalue(Featx,Featy,(*_valX)(rowX,Featx),Y[yi][Featy]);
+    //      featnorm += (*_IM).getFeatureArrayvalue(feat,rowX,yi);
         }
-      }
     }
+
 
     norm     += exp(featnorm);
     featnorm  = 0;
   }
   return exponent/norm;
 }
-
 // P(x)
-double IT::propm(vector<vector<double> > X, int rowX, vector<vector<double> >& Y){
+double IT::propm(int rowX){
   double z=0;
-  double feat=0;
-  for(int y=0;y<Y.size();y++)
+  double exponent=0;
+  for(int y=0;y<pow(_Y->rows(),_sizeColValY);y++)
   {
-    for(int Featx=0;Featx< _sizeColValX;Featx++)
+    for(int feat=0;feat<  _systX.size();feat++)
     {
-      for(int Featy=0;Featy< _sizeColValY;Featy++)
-      {
         if(_gis)
         {
-          feat+=(*_FM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[y][Featy]);
+          exponent+=(*_FM).getFeatureArrayvalueAlphYAlphX(feat,rowX,y);
         }
         else
         {
-          feat+=(*_IM).getFeatureArrayvalue(Featx,Featy,X[rowX][Featx],Y[y][Featy]);
+     //     exponent+=(*_IM).getFeatureArrayvalueAlphYAlphX(feat,rowX,y);
         }
-      }
+
     }
-    z+=exp(feat);
-    feat=0;
+    z+=exp(exponent);
+    exponent=0;
   }
   double n;
   double nexp=0;
-  for(int x=0;x<X.size();x++)
+  for(int x=0;x<pow(_X->rows(),_sizeColValX);x++)
   {
-    for(int y=0;y<Y.size();y++)
+    for(int y=0;y<pow(_Y->rows(),_sizeColValY);y++)
     {
-      for(int Featx=0;Featx< _sizeColValX;Featx++)
-      {
-        for(int Featy=0;Featy< _sizeColValY;Featy++)
+        for(int feat=0;feat< _systX.size();feat++)
         {
           if(_gis)
           {
-            feat+=(*_FM).getFeatureArrayvalue(Featx,Featy,X[x][Featx],Y[y][Featy]);
+            exponent+=(*_FM).getFeatureArrayvalueAlphYAlphX(feat,x,y);
           }
           else
           {
-            feat+=(*_IM).getFeatureArrayvalue(Featx,Featy,X[x][Featx],Y[y][Featy]);
+     //       exponent+=(*_IM).getFeatureArrayvalue(feat,x,y);
           }
-        }
+
       }
-      nexp +=exp(feat);
-      feat=0;
+      nexp +=exp(exponent);
+      exponent=0;
     }
     n+=nexp;
     nexp=0;
@@ -173,79 +169,74 @@ double IT::propm(vector<vector<double> > X, int rowX, vector<vector<double> >& Y
   return z/n;
 }
 
-double IT::getFeatureArraylambda(int Feati, int Featj, int ilambdaX, int ilambdaY)
+double IT::getFeatureArraylambda(int Feati, int ilambdaX, int ilambdaY)
 {
-  assert(Feati<_sizeColValX && Featj<_sizeColValY);
+  assert(Feati<_systX.size());
   double lambda = 0.0;
   if(_gis)
   {
-    lambda = _FM->getFeatureArraylambda(Feati,Featj, ilambdaX, ilambdaY);
+    lambda = _FM->getFeatureArraylambda(Feati, ilambdaX, ilambdaY);
   }
   else
   {
-    lambda = _IM->getFeatureArraylambda(Feati,Featj, ilambdaX, ilambdaY);
+ //   lambda = _IM->getFeatureArraylambda(Feati, ilambdaX, ilambdaY);
   }
   return lambda;
 }
 
 // get observed
-double**** IT::__getobs()
+double*** IT::__getobs()
 {
-  _observed = new double***[_sizeColValX];
-  for(int i=0; i<_sizeColValX; i++)
+  _observed = new double**[_systX.size()];
+  for(int i=0; i<_systX.size(); i++)
   {
-    _observed[i]=new double**[_sizeColValY];
-    for( int j=0;j< _sizeColValY;j++)
-    {
-      _observed[i][j]=new double*[_sizeX];
+      _observed[i]=new double*[_sizeX];
       for(int k=0; k< _sizeX; k++)
       {
-        _observed[i][j][k]= new double[_sizeY];
+        _observed[i][k]= new double[_sizeY];
         for(int l=0; l< _sizeY;l++)
         {
-          _observed[i][j][k][l] = 0.0;
+          _observed[i][k][l] = 0.0;
         }
       }
-    }
-  }
-
+   }
+  vector<double> x;
+  vector<double> y;
   //vector observed
   for(int i=0;i<_sizeRowValX;i++ )
   {
-    for(int feati=0; feati< _sizeColValX;feati++)
+    for(int feat=0; feat< _systX.size();feat++)
     {
-      for(int featj=0;featj< _sizeColValY; featj++)
-      {
-        for(int delti = 0; delti < _sizeX; delti++)
+        for(int delti = 0; delti < pow(_X->rows(),_systX[feat].size()); delti++)
         {
-          for(int deltj=0; deltj<_sizeY; deltj++)
+          for(int deltj=0; deltj<pow(_Y->rows(),_systY[feat].size()); deltj++)
           {
             if(_gis)
             {
-              if(_FM->getFeatureArraydelta(feati,featj,delti,deltj,(*_valX)(i,feati),(*_valY)(i,featj))==1)
+              if(_FM->getFeatureArraydelta(feat,delti,deltj,i,i)==1)
               {
-                _observed[feati][featj][delti][deltj]++;
+                _observed[feat][delti][deltj]++;
               }
             }
-            else
-            {
-              if(_IM->getFeatureArraydelta(feati,featj,delti,deltj,(*_valX)(i,feati),(*_valY)(i,featj))==1)
-              {
-                _observed[feati][featj][delti][deltj]++;
-              }
-            }
+        //    else
+        //    {
+         //     if(_IM->getFeatureArraydelta(feat,delti,deltj,i,i)==1)
+        //      {
+          //      _observed[feat][delti][deltj]++;
+       //       }
+       //     }
           }
         }
       }
-    }
+
   }
   return _observed;
 }
 
-void IT::setFeatureArraylambda(int feati, int featj, int ilambdaX, int ilambdaY,double valuelambda){
-  assert(feati<_sizeColValX && featj<_sizeColValY);
+void IT::setFeatureArraylambda(int feati, int ilambdaX, int ilambdaY,double valuelambda){
+  assert(feati<_systX.size());
   assert(_gis == true);
-  _FM->setFeatureArraylambda(feati,featj,ilambdaX,ilambdaY,valuelambda);
+  _FM->setFeatureArraylambda(feati,ilambdaX,ilambdaY,valuelambda);
 }
 
 
