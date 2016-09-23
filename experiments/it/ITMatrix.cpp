@@ -70,9 +70,13 @@ double ITMatrix::getFeatureArrayvalueAlphY(int feat,int rowX,int indexY){
 	 for(int i=0; i<  pow(_X->rows(),_systX[feat].size());i++){
 		 for(int j=0;j <pow(_Y->rows(),_systY[feat].size());j++){
 			 val+= getFeatureArraydeltaAlphY(feat,i,j,rowX,indexY)*_FA[feat].getlambda(i,j);
+		     if(indexY == 0 && feat == 0 && rowX == 0){
+		//    	 cout << " lambda " << _FA[feat].getlambda(i,j)<< "  " <<  getFeatureArraydeltaAlphY(feat,i,j,rowX,indexY) << " " << i << " " << j<< endl;
+		     }
 		 }
 	 }
 	 return val;
+	 cout << " neu " << endl;
 }
 double ITMatrix::getFeatureArrayvalueAlphYAlphX(int feat,int indexX,int indexY){
 	 assert(feat<_systX.size());
@@ -119,8 +123,8 @@ int   ITMatrix::getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowVa
 {
   assert(i<_systX.size());
   //assert(idelta < _sizeX && jdelta < _sizeY);
-  vector<double> x = index(indexX,true,_systX.size());
-  vector<double> y = index(indexY,false,_systY.size());
+  vector<double> x = index(indexX,true,_systX[i].size());
+  vector<double> y = index(indexY,false,_systY[i].size());
   vector<double> valy = index(indexValY,false, _sizeColValY);
   bool equ = true;
   for(int j=0; j<_systX[i].size();j++)
@@ -128,6 +132,7 @@ int   ITMatrix::getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowVa
 	  if((*_valX)(rowValX,_systX[i][j]) != x[j]){
 		  equ = false;
 	  }
+	//  cout << (*_valX)(rowValX,_systX[i][j]) << " " << _systX[i][j] << " " << i << " " <<  j << " " << x[j] << "row " << rowValX << " " << indexValY << " " << equ <<  endl;
   }
   for(int j=0;j<_systY[i].size();j++){
 	  if( valy[_systY[i][j]]!= y[j]){
@@ -146,8 +151,8 @@ int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int in
 {
   assert(i<_systX.size());
   //assert(idelta < _sizeX && jdelta < _sizeY);
-  vector<double> x = index(indexX,true, _systX.size());
-  vector<double> y = index(indexY,false,_systY.size());
+  vector<double> x = index(indexX,true, _systX[i].size());
+  vector<double> y = index(indexY,false,_systY[i].size());
   vector<double> valy = index(indexValY,false, _sizeColValY);
   vector<double> valx = index(indexValX,true,_sizeColValX);
   bool equ = true;

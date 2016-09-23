@@ -106,7 +106,13 @@ void GIS::__getExpected()
       for(int yj=0; yj< pow(_Y->rows(),_sizeColValY); yj++)
       {
         _exponent[yj]=_FM->getFeatureArrayvalueAlphY(Feati,xi,yj);
+        if(yj == 0 && Feati == 0 && xi == 0){
+        //	cout << "FatureArrayValue: " <<_FM->getFeatureArrayvalueAlphY(Feati,xi,yj) << endl;
+        }
           _normaliser += exp(_exponent[yj]);
+          if(Feati==0 && xi==0 && yj ==0){
+        	//  cout << _exponent[yj] << " " << _normaliser << endl;
+          }
       }
       for(int yj=0; yj< pow(_Y->rows(),_sizeColValY); yj++)
       {
@@ -186,7 +192,7 @@ double GIS::__calculateIteration(double featconst, bool test)
         if(fabs(_observed[Feati][deltai][deltaj]) > EPSILON)
         {
           // TODO 0.1 as learning rate parameter
-          newl = oldl + 0.1* (1.0/featconst) *log(_observed[Feati][deltai][deltaj]/_expected[Feati][deltai][deltaj]);
+          newl = oldl + 0.4*(1.0/featconst) *log(_observed[Feati][deltai][deltaj]/_expected[Feati][deltai][deltaj]);
         }
         else
         {
@@ -195,6 +201,10 @@ double GIS::__calculateIteration(double featconst, bool test)
         }
         (*_FM).setFeatureArraylambda(Feati,deltai,deltaj,newl);
         l+=fabs((_observed[Feati][deltai][deltaj]-_expected[Feati][deltai][deltaj]));
+        if( Feati == 1 && deltai == 1 && deltaj == 0 ){
+        cout << _observed[Feati][deltai][deltaj] << "  " << _expected[Feati][deltai][deltaj] << " " << newl <<" " <<oldl << " " << _observed[Feati][deltai][deltaj]/_expected[Feati][deltai][deltaj]<< endl;
+        cout << _normaliser<< " " << _exponent[0] << endl;
+        }
       }
     }
   }
@@ -202,6 +212,7 @@ double GIS::__calculateIteration(double featconst, bool test)
   if(test){
     _conv.push_back(l);
   }
+  cout << l << endl;
   return l;
 }
 

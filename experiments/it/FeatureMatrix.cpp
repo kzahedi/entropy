@@ -19,9 +19,11 @@ FeatureMatrix:: ~FeatureMatrix()
 
   for(int i=0;i<_sizeRowValX;i++)
   {
-    for(int j=0;j<_sizeY;j++)
+    for(int j=0;j<_sizeAlphY;j++)
     {
-      _mat[i][j].clear();
+      for(int k=0;k<3 ;k++){
+    	  _mat[i][j][k].clear();
+      }
     }
   }
   delete _mat;
@@ -71,15 +73,15 @@ void FeatureMatrix::__getMatrix(double valuelambda)
         for(int deltai=0; deltai<pow(_X->rows(),_systX[feat].size()); deltai++ )
         {
           for(int deltaj=0; deltaj<pow(_Y->rows(),_systY[feat].size()); deltaj++)
+          {
+            if(getFeatureArraydeltaAlphY(feat,deltai,deltaj,i,j) !=-1)
             {
-              if(getFeatureArraydeltaAlphY(feat,deltai,deltaj,i,j) !=-1)
-              {
-                _mat[i][j][0].push_back(feat);
-                _mat[i][j][1].push_back(deltai);
-                _mat[i][j][2].push_back(deltaj);
-              }
+              _mat[i][j][0].push_back(feat);
+              _mat[i][j][1].push_back(deltai);
+              _mat[i][j][2].push_back(deltaj);
             }
-         }
+          }
+        }
       }
     }
   }

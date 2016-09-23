@@ -61,23 +61,25 @@ int main(int argc, char **argv)
   param.konv           = 0.001;
   param.time           = true;
   param.test           = false;
-  param.seconds        = 30;
+  param.seconds        = 20;
 
 //  Test *test = new Test(2, 2, 100000, *zX, *zY, param); // for test cases
   // Test *test = new Test(5, 5, 100000, lambda, *zX, *zY, 500, 0.0001, true, 2);
 //  test->comparison();
-  SparseMatrix *Feat = new SparseMatrix(NAN);
+ SparseMatrix *Feat = new SparseMatrix(NAN);
   (*Feat)(3,4,1)=5;
   (*Feat)(3,4,2)=4;
   	 srand(time(NULL));
-  int n=150;
+  int n=100000;
   DContainer *eX = new DContainer(n,2);
   for(int i=0;i< n;i++ ){
   	for(int j=0;j<2;j++){
   		*eX << rand() % 2;
  	}
   }
-  //cout << (*eX) << endl;
+ // DContainer *eX = new DContainer(10,2);
+ // (*eX) << 0 << 0 << 0 << 0 << 0 <<1 << 1 << 1 << 1 << 1  << 1 << 1 << 1 << 1 << 1 ;
+  cout << (*eX) << endl;
 
   	//V(3,vector<int>(0))
  vector<vector<int > > alphX(4,vector<int>(0));
@@ -144,10 +146,11 @@ int main(int argc, char **argv)
   		 if(ind==3) (*esY) << 1 << 1;
 
   	 }
-
+  	 cout << (*esY) << endl;
   	// cout << (*esY) << endl;
 
   	 //DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param
+
   	 GIS *_gisTest = new GIS(*eX,*esY,*zX,*zY,alphX,alphY,param);
      cout << "lambda: " << endl;
      cout << "vergleichswerte" << endl;
