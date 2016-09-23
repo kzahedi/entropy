@@ -25,7 +25,7 @@ public:
   int     getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowValX, int indexValY);
   int     getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int indexValX, int indexValY);
   void    setFeatureArraylambda(int i, int ilambdaX, int ilambdaY,double valuelambda);
-  vector<double> index(int index,bool x,int sizeCol);
+  vector<double> index(int index,bool x, int sizeCol);
 
 protected:
   void    FeatureArray(double valuelambda);

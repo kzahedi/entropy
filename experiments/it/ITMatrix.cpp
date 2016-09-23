@@ -2,12 +2,10 @@
 
 ITMatrix::ITMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systX, vector<vector<int> > systY, double lambdavalue)
 {
-	 cout << "hier 02 " << endl;
   _valX        = &eX;
   _valY        = &eY;
   _X           = &aX;
   _Y           = &aY;
-  cout << "hier 002 " << endl;
   assert(systX.size()==systY.size());
   _systX       = systX;
   _systY       = systY;
@@ -17,9 +15,7 @@ ITMatrix::ITMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &a
   _sizeRowValY = _valY->rows();
   _sizeX       = _X->rows();
   _sizeY       = _Y->rows();
-  cout << "hier 2 " << endl;
   FeatureArray(lambdavalue);
-  cout << "hier 3" << endl;
 }
 
 ITMatrix::ITMatrix()
@@ -61,8 +57,8 @@ double ITMatrix::getFeatureArrayvalue(int feat,int rowX,int rowY)
 {
  assert(feat<_systX.size());
  double val;
- for(int i=0; i<  pow(_X->rows(),_systX.size());i++){
-	 for(int j=0;j <pow(_Y->rows(),_systY.size());j++){
+ for(int i=0; i<  pow(_X->rows(),_systX[feat].size());i++){
+	 for(int j=0;j <pow(_Y->rows(),_systY[feat].size());j++){
 		 val+= getFeatureArraydelta(feat,i,j,rowX,rowY)*_FA[feat].getlambda(i,j);
 	 }
  }
@@ -71,8 +67,8 @@ double ITMatrix::getFeatureArrayvalue(int feat,int rowX,int rowY)
 double ITMatrix::getFeatureArrayvalueAlphY(int feat,int rowX,int indexY){
 	 assert(feat<_systX.size());
 	 double val;
-	 for(int i=0; i<  pow(_X->rows(),_systX.size());i++){
-		 for(int j=0;j <pow(_Y->rows(),_systY.size());j++){
+	 for(int i=0; i<  pow(_X->rows(),_systX[feat].size());i++){
+		 for(int j=0;j <pow(_Y->rows(),_systY[feat].size());j++){
 			 val+= getFeatureArraydeltaAlphY(feat,i,j,rowX,indexY)*_FA[feat].getlambda(i,j);
 		 }
 	 }
@@ -81,8 +77,8 @@ double ITMatrix::getFeatureArrayvalueAlphY(int feat,int rowX,int indexY){
 double ITMatrix::getFeatureArrayvalueAlphYAlphX(int feat,int indexX,int indexY){
 	 assert(feat<_systX.size());
 	 double val;
-	 for(int i=0; i<  pow(_X->rows(),_systX.size());i++){
-		 for(int j=0;j <pow(_Y->rows(),_systY.size());j++){
+	 for(int i=0; i<  pow(_X->rows(),_systX[feat].size());i++){
+		 for(int j=0;j <pow(_Y->rows(),_systY[feat].size());j++){
 			 val+= getFeatureArraydeltaAlphYAlphX(feat,i,j,indexX,indexY);
 		 }
 	 }
@@ -96,18 +92,18 @@ void  ITMatrix::setFeatureArraylambda(int i, int ilambdaX, int ilambdaY,double v
 int   ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowValX, int rowValY)
 {
   assert(i<_systX.size());
-  //assert(idelta < _sizeX && jdelta < _sizeY);
   vector<double> x = index(indexX,true,_systX[i].size());
   vector<double> y = index(indexY,false,_systY[i].size());
   bool equ = true;
-  for(int j=0; j<x.size();j++)
+  for(int j=0; j<_systX[i].size();j++)
   {
-	  if((*_valX)(rowValX,_systX[i][j]) != x[i]){
+	  if((*_valX)(rowValX,_systX[i][j]) != x[j]){
 		  equ = false;
 	  }
+	//  cout << (*_valX)(rowValX,_systX[i][j]) << " " << _systX[i][j] << " " << i << " " <<  j << " " << x[_systX[i][j]] << "row " << rowValX << " " << rowValY << " " << equ <<  endl;
   }
-  for(int j=0;j<y.size();j++){
-	  if((*_valY)(rowValY,_systY[i][j]) != y[i]){
+  for(int j=0;j<_systY[i].size();j++){
+	  if((*_valY)(rowValY,_systY[i][j]) != y[j]){
 		  equ = false;
 	  }
   }
@@ -117,23 +113,24 @@ int   ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowValX, i
   else{
 	  return -1;
   }
+
 }
 int   ITMatrix::getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowValX, int indexValY)
 {
   assert(i<_systX.size());
   //assert(idelta < _sizeX && jdelta < _sizeY);
-  vector<double> x = index(indexX,true,_systX[i].size());
-  vector<double> y = index(indexY,false,_systY[i].size());
-  vector<double> valy = index(indexValY,false,_sizeColValY);
+  vector<double> x = index(indexX,true,_systX.size());
+  vector<double> y = index(indexY,false,_systY.size());
+  vector<double> valy = index(indexValY,false, _sizeColValY);
   bool equ = true;
-  for(int j=0; j<x.size();j++)
+  for(int j=0; j<_systX[i].size();j++)
   {
-	  if((*_valX)(rowValX,_systX[i][j]) != x[i]){
+	  if((*_valX)(rowValX,_systX[i][j]) != x[j]){
 		  equ = false;
 	  }
   }
-  for(int j=0;j<y.size();j++){
-	  if( valy[_systY[i][j]]!= y[i]){
+  for(int j=0;j<_systY[i].size();j++){
+	  if( valy[_systY[i][j]]!= y[j]){
 		  equ = false;
 	  }
   }
@@ -149,19 +146,19 @@ int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int in
 {
   assert(i<_systX.size());
   //assert(idelta < _sizeX && jdelta < _sizeY);
-  vector<double> x = index(indexX,true,_systX[i].size());
-  vector<double> y = index(indexY,false,_systY[i].size());
-  vector<double> valy = index(indexValY,false,_sizeColValY);
+  vector<double> x = index(indexX,true, _systX.size());
+  vector<double> y = index(indexY,false,_systY.size());
+  vector<double> valy = index(indexValY,false, _sizeColValY);
   vector<double> valx = index(indexValX,true,_sizeColValX);
   bool equ = true;
-  for(int j=0; j<x.size();j++)
+  for(int j=0; j<_systX[i].size();j++)
   {
-	  if(valx[_systX[i][j]] != x[i]){
+	  if(valx[_systX[i][j]] != x[j]){
 		  equ = false;
 	  }
   }
-  for(int j=0;j<y.size();j++){
-	  if( valy[_systY[i][j]]!= y[i]){
+  for(int j=0;j<_systY[i].size();j++){
+	  if( valy[_systY[i][j]]!= y[j]){
 		  equ = false;
 	  }
   }
@@ -179,11 +176,9 @@ vector<double> ITMatrix::index(int index,bool x,int sizeCol)
   vector<double> zeile;
   double z;
   if(x){
-	  sizeCol =_sizeColValX;
 	  sizeAlph=_sizeX;
   }
   else{
-	  sizeCol =_sizeColValY;
 	  sizeAlph=_sizeY;
   }
   for(int i = sizeCol; i>0 ; i--)

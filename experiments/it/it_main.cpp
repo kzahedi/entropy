@@ -24,8 +24,8 @@
 
 int main(int argc, char **argv)
 {
-  DContainer *zX = new DContainer(3,1); // alphabet
-  *zX << 0 << 1 << 2;
+  DContainer *zX = new DContainer(2,1); // alphabet
+  *zX << 0 << 1;
   DContainer *zY = new DContainer(2,1); // alphabet
   *zY << 0 << 1;
   vector<double> lambda(3);
@@ -70,29 +70,30 @@ int main(int argc, char **argv)
   (*Feat)(3,4,1)=5;
   (*Feat)(3,4,2)=4;
   	 srand(time(NULL));
-  int n=10000;
+  int n=150;
   DContainer *eX = new DContainer(n,2);
   for(int i=0;i< n;i++ ){
   	for(int j=0;j<2;j++){
   		*eX << rand() % 2;
-  	}
+ 	}
   }
- cout << " hier  0001 " << endl;
+  //cout << (*eX) << endl;
+
   	//V(3,vector<int>(0))
  vector<vector<int > > alphX(4,vector<int>(0));
  alphX[0].push_back(0);
  alphX[1].push_back(0);
  alphX[2].push_back(1);
  alphX[3].push_back(1);
- cout << "hier 0002 " << endl;
+
  vector<vector<int > > alphY(4,vector<int>(0));
  alphY[0].push_back(0);
  alphY[1].push_back(1);
  alphY[2].push_back(0);
  alphY[3].push_back(1);
- cout << "hier 0002 " << endl;
+
   IT *Test = new IT(2,*eX,*zX,*zY,alphX,alphY);
-  cout << "hier 0002 " << endl;
+
   	 Test->setFeatureArraylambda(0,0,0,1);
   	 Test->setFeatureArraylambda(0,1,0,4);
   	 Test->setFeatureArraylambda(0,0,1,5);
@@ -112,8 +113,7 @@ int main(int argc, char **argv)
   	 Test->setFeatureArraylambda(3,1,0,1);
   	 Test->setFeatureArraylambda(3,0,1,0);
   	 Test->setFeatureArraylambda(3,1,1,3);
-  	 cout << "hier 0002 " << endl;
-  	 cout << "hier   1" << endl;
+
   	 double** prop;
   	 prop=new double*[n];
   	 for(int i=0;i<n;i++){
@@ -144,7 +144,9 @@ int main(int argc, char **argv)
   		 if(ind==3) (*esY) << 1 << 1;
 
   	 }
-  	 cout << "hier " << endl;
+
+  	// cout << (*esY) << endl;
+
   	 //DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param
   	 GIS *_gisTest = new GIS(*eX,*esY,*zX,*zY,alphX,alphY,param);
      cout << "lambda: " << endl;

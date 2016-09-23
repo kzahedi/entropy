@@ -11,7 +11,7 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<v
   _exponent   = new double[_sizeY];
   _normaliser = 0.0;
   _expected   = new double**[_systX.size()];
-  for(int i=0; i<_sizeColValX; i++)
+  for(int i=0; i<_systX.size(); i++)
   {
       _expected[i]=new double*[_sizeX];
       for(int k=0; k< _sizeX; k++)
@@ -26,7 +26,6 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<v
 
 
   // cout << "Data X:" << endl << eX << endl << "Data Y: " << endl << eY << endl;
-
   if(param.time)
   {
     __gis(param.maxit, param.konv, param.test, param.seconds);
@@ -76,9 +75,9 @@ int GIS:: getsizeconv(){
 double GIS::__getFeatconst()
 {
   double r = 0.0;
-  for(int i=0; i< _sizeRowValX;i++) // i-th data row 
+  for(int i=0; i< _sizeRowValX;i++) // i-th data row
   {
-    for(int j=0; j< _sizeY;j++) // y-alphabet
+    for(int j=0; j< pow(_Y->rows(),_sizeColValY);j++) // y-alphabet
     {
       int v = (*_FM).getMatrixIndexFeat(i,j).size(); // the number of matching deltas
       if(v > r) r = v;
@@ -98,7 +97,6 @@ void GIS::__getExpected()
         _expected[i][k][l]=0;
       }
     }
-
   }
   for(int Feati=0; Feati< _systX.size(); Feati++)
   {
@@ -129,7 +127,6 @@ void GIS::__getExpected()
   }
 }
 void GIS:: __gis(int maxit, double konv, bool test,int seconds){
-
     //constant c for delta
     double featconst = __getFeatconst();
 
@@ -189,10 +186,11 @@ double GIS::__calculateIteration(double featconst, bool test)
         if(fabs(_observed[Feati][deltai][deltaj]) > EPSILON)
         {
           // TODO 0.1 as learning rate parameter
-          newl = oldl + 0.1 * (1.0/featconst) *log(_observed[Feati][deltai][deltaj]/_expected[Feati][deltai][deltaj]);
+          newl = oldl + 0.1* (1.0/featconst) *log(_observed[Feati][deltai][deltaj]/_expected[Feati][deltai][deltaj]);
         }
         else
         {
+      //  	cout << Feati << " " << deltai << " " << deltaj << endl;
           newl = 0.0;
         }
         (*_FM).setFeatureArraylambda(Feati,deltai,deltaj,newl);

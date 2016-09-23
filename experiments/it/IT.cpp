@@ -32,7 +32,8 @@ IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vec
 //umstellen
 IT::IT(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY)
 {
-	 cout << "hier 00023 " << endl;
+  _systX       = systX;
+  _systY       = systY;
   _gis         = true;
   _X           = &aX;
   _Y           = &aY;
@@ -44,12 +45,9 @@ IT::IT(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY,vector<vector
   _sizeRowValX = (*_valX).rows();
   _valY        = new DContainer(_sizeRowValX,ColValY);
   _sizeRowValY = 0;
-  cout << "hier 0002 " << endl;
   _FM          = new FeatureMatrix(*_valX,*_valY,*_X,*_Y,systX,systY,1);
-  cout << "hier 0002 " << endl;
   _IM          = NULL;
   _observed    = NULL;
-  cout << "hier 00024 " << endl;
 }
 /*
 // returns p(y_j = valY | x_i = valX)
@@ -107,7 +105,7 @@ double IT::prop(int rowX, int rowY)
     {
         if(_gis)
         {
-          featnorm += (*_FM).getFeatureArrayvalue(feat,rowX,yi);
+          featnorm += (*_FM).getFeatureArrayvalueAlphY(feat,rowX,yi);
         }
         else
         {
@@ -211,22 +209,29 @@ double*** IT::__getobs()
         {
           for(int deltj=0; deltj<pow(_Y->rows(),_systY[feat].size()); deltj++)
           {
+       //       cout << feat << " "<< delti << " " << deltj << " obs " << _observed[feat][delti][deltj] << " delta  " <<_FM->getFeatureArraydelta(feat,delti,deltj,i,i) << endl;
             if(_gis)
             {
               if(_FM->getFeatureArraydelta(feat,delti,deltj,i,i)==1)
               {
                 _observed[feat][delti][deltj]++;
               }
+              else{
+
+              }
             }
-        //    else
+         //   else
         //    {
          //     if(_IM->getFeatureArraydelta(feat,delti,deltj,i,i)==1)
         //      {
           //      _observed[feat][delti][deltj]++;
        //       }
        //     }
+
           }
+
         }
+
       }
 
   }

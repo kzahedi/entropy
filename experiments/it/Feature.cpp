@@ -72,6 +72,8 @@ Feature& Feature::operator=(const Feature& c)
 {
   this-> _sizeX = c._sizeX;
   this-> _sizeY = c._sizeY;
+  this-> _sizeDeltaX = c._sizeDeltaX;
+  this-> _sizeDeltaY = c._sizeDeltaY;
   this-> _X     = new DContainer(_sizeX,1);
   this-> _Y     = new DContainer(_sizeY,1);
 
