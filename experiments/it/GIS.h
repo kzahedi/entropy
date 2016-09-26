@@ -31,8 +31,8 @@ class GIS : public IT
     double***      _expected;
     double*        _exponent;
     double         _normaliser;
-    vector<double> _conv;
     int            _iterations;
+    vector<double> _conv;
 };
 
 
