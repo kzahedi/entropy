@@ -3,35 +3,28 @@
 #define EPSILON 0.00000001
 
 // SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test,bool time,int seconds)
-SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param)
-:IT(eX, eY, aX, aY, param, false)
+SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
+:IT(eX, eY, aX, aY, systX, systY, param, false)
 {
   _param = param;
-  _exponent= new double***[_sizeColValX];
-  for(int i=0;i<_sizeColValX; i++){
-    _exponent[i]=new double**[_sizeColValY];
-    for(int j=0;j<_sizeColValY;j++){
-      _exponent[i][j]=new double*[_sizeRowValX];
+  _exponent= new double**[_systX.size()];
+  for(int i=0;i<_systX.size(); i++){
+      _exponent[i]=new double*[_sizeRowValX];
       for(int xi=0;xi<_sizeRowValX;xi++){
-        _exponent[i][j][xi]=new double[_sizeY];
+        _exponent[i][xi]=new double[(int) pow(_Y->rows() ,_systY.size() )];
         for(int y=0;y<_sizeY;y++){
-          _exponent[i][j][xi][y]=0;
+          _exponent[i][xi][y]=0;
         }
       }
-    }
-  }
 
-  _normaliser=new double**[_sizeColValX];
-  for(int i=0; i< _sizeColValX;i++){
-    _normaliser[i]=new double*[_sizeColValY];
-    for(int j=0;j<_sizeColValY;j++){
-      _normaliser[i][j]=new double[_sizeRowValX];
+  }
+  _normaliser=new double*[_systX.size()];
+  for(int i=0; i< _systX.size();i++){
+      _normaliser[i]=new double[_sizeRowValX];
       for(int k=0;k<_sizeRowValX;k++){
-        _normaliser[i][j][k]=_sizeY;
+        _normaliser[i][k]=_sizeY;
       }
-    }
   }
-
   _delta= new double*[_sizeX];
   for(int i=0;i<_sizeX;i++){
     _delta[i]=new double[_sizeY];
@@ -39,7 +32,6 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsP
       _delta[i][j]=0;
     }
   }
-
   if(param.time)
   {
     __scgis(param.maxit,param.konv,param.test,param.seconds);
@@ -59,34 +51,24 @@ int SCGIS:: getsizeconv(){
 }
 
 SCGIS::~SCGIS(){
-
-  for(int i=0; i<_sizeColValX;i++){
-    for(int j=0;j<_sizeColValY;j++){
-      for(int k=0;k<_sizeX;k++){
-        delete [] _observed[i][j][k];
+  for(int i=0; i<_systX.size();i++){
+      for(int k=0;k<(int) pow(_X->rows(),_sizeColValX);k++){
+        delete [] _observed[i][k];
       }
-      delete [] _observed[i][j];
-    }
     delete [] _observed[i];
   }
   delete [] _observed;
 
 
-  for(int i=0;i<_sizeColValX;i++){
-    for(int j=0;j<_sizeColValY;j++){
-      for(int k=0;k<_sizeRowValX;k++){
-        delete [] _exponent[i][j][k];
-      }
-      delete [] _exponent[i][j];
-    }
-    delete [] _exponent[i];
+  for(int i=0;i<_systX.size();i++){
+	  for(int j=0;j<_sizeRowValX;j++){
+	      delete [] _exponent[i][j];
+	  }
+	  delete [] _exponent[i];
   }
   delete [] _exponent;
 
-  for(int i=0;i<_sizeColValX;i++){
-    for(int j=0; j<_sizeColValY;j++){
-      delete [] _normaliser[i][j];
-    }
+  for(int i=0;i<_systX.size();i++){
     delete [] _normaliser[i];
   }
   delete [] _normaliser;
@@ -107,6 +89,7 @@ void SCGIS:: __scgis(int maxit, double konv, bool test,int seconds){
   time_t befor;
   time_t after;
   _iterations = 0;
+
   while(utime<seconds ){
     befor=time(NULL);
     __calculateIteration(test);
@@ -129,26 +112,24 @@ void SCGIS:: __scgis(int maxit, double konv, bool test)
 double SCGIS::__calculateIteration(bool test)
 {
   double l=0;
-  for(int Feati=0;Feati<_sizeColValX;Feati++)
-  {
-    for(int Featj=0;Featj<_sizeColValY;Featj++)
-    {
-      for(int delti=0;delti<_sizeX;delti++)
+  for(int feat=0;feat<_systX.size();feat++)
+
+      for(int delti=0;delti<pow(_X->rows(),_systX[feat].size());delti++)
       {
-        for(int deltj=0;deltj<_sizeY; deltj++)
+        for(int deltj=0;deltj<pow(_Y->rows(),_systY[feat].size()); deltj++)
         {
-          double expected = 0.0;
-          for(int y=0; y < _sizeY; y++)
+          double expected= 0.0;
+          for(int y=0; y < pow(_Y->rows(),_systY.size()); y++)
           {
-            for(int k=0; k<_IM->getInstanceMatrixX(Feati,Featj,delti,deltj).size();k++)
+            for(int k=0; k<_IM->getInstanceMatrixX(feat).size();k++)
             {
-              if(_IM->getInstanceMatrixY(Feati,Featj,delti,deltj)[k] == y)
+              if((_IM->getInstanceMatrixY(feat)[k] == y) && (_IM->getInstanceMatrixDeltaY(feat)[k] == deltj) && (_IM->getInstanceMatrixDeltaX(feat)[k] == delti))
               {
-                int x = _IM->getInstanceMatrixX(Feati,Featj,delti,deltj)[k];
-                if(fabs(_normaliser[Feati][Featj][x]) > EPSILON )
+                int x = _IM->getInstanceMatrixX(feat)[k];
+                if(fabs(_normaliser[feat][x]) > EPSILON )
                 {
                   // f_i(\bar{x}_j, y) is given by the 2 for and 1 if above
-                  expected+=exp(_exponent[Feati][Featj][x][y])/_normaliser[Feati][Featj][x];
+                  expected+=exp(_exponent[feat][x][y])/_normaliser[feat][x];
                 }
               }
             }
@@ -158,34 +139,32 @@ double SCGIS::__calculateIteration(bool test)
           {
             expected=0.01;
           }
-          if(fabs(_observed[Feati][Featj][delti][deltj])>EPSILON)
+          if(fabs(_observed[feat][delti][deltj])>EPSILON)
           {
-            _delta[delti][deltj] = log(_observed[Feati][Featj][delti][deltj]/expected);
-            newl = _IM->getFeatureArraylambda(Feati,Featj,delti,deltj) + _delta[delti][deltj];
+            _delta[delti][deltj] = log(_observed[feat][delti][deltj]/expected);
+            newl = _IM->getFeatureArraylambda(feat,delti,deltj) + _delta[delti][deltj];
           }
           else
           {
             newl = 0.0;
           }
-          l+=fabs(_observed[Feati][Featj][delti][deltj]-expected);
-          _IM->setFeatureArraylambda(Feati,Featj,delti,deltj,newl);
+          l+=fabs(_observed[feat][delti][deltj]-expected);
+          _IM->setFeatureArraylambda(feat,delti,deltj,newl);
           for(int y=0;y<_sizeY;y++)
           {
-            for(int k=0; k<_IM->getInstanceMatrixX(Feati,Featj,delti,deltj).size();k++)
+            for(int k=0; k<_IM->getInstanceMatrixX(feat).size();k++)
             {
-              if(_IM->getInstanceMatrixY(Feati,Featj,delti,deltj)[k]==y)
+              if((_IM->getInstanceMatrixY(feat)[k] == y) && (_IM->getInstanceMatrixDeltaY(feat)[k] == deltj) && (_IM->getInstanceMatrixDeltaX(feat)[k] == delti))
               {
-                int x=_IM->getInstanceMatrixX(Feati,Featj,delti,deltj)[k];
-                _normaliser[Feati][Featj][x]-=exp(_exponent[Feati][Featj][x][y]);
-                _exponent[Feati][Featj][x][y]+=_delta[delti][deltj];
-                _normaliser[Feati][Featj][x]+=exp(_exponent[Feati][Featj][x][y]);
+                int x=_IM->getInstanceMatrixX(feat)[k];
+                _normaliser[feat][x]-=exp(_exponent[feat][x][y]);
+                _exponent[feat][x][y]+=_delta[delti][deltj];
+                _normaliser[feat][x]+=exp(_exponent[feat][x][y]);
               }
             }
           }
         }
       }
-    }
-  }
   _iterations++;
   if(test){
     _conv.push_back(l);

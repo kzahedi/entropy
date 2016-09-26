@@ -19,11 +19,11 @@ class SCGIS : public IT{
 
 public:
   // SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time,int seconds);
-  SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param);
+  SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
   ~SCGIS();
   double  getconv(int i);
   int     getsizeconv();
-  int   getIterations();
+  int     getIterations();
 
 private:
   void      __scgis(int maxit, double konv,bool test);
@@ -31,8 +31,8 @@ private:
   double    __calculateIteration(bool test);
 
   int       _iterations;
-  double****    _exponent;
-  double***   _normaliser;
+  double***    _exponent;
+  double**   _normaliser;
   double**    _delta;
   vector<double>  _conv;
   IsParameter     _param;

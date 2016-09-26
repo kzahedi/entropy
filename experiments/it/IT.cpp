@@ -25,7 +25,7 @@ IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vec
   }
   else
   {
-   // _IM = new InstanceMatrix(*_valX,*_valY,*_X,*_Y, param.lambdavalue);
+    _IM = new InstanceMatrix(*_valX,*_valY,*_X,*_Y, systX, systY, param.lambdavalue);
   }
   _observed=__getobs();
 }
@@ -95,7 +95,7 @@ double IT::prop(int rowX, int rowY)
       }
       else
       {
-     //   featexp += (*_IM).getFeatureArrayvalueAlphY(feat,rowX, rowY);
+        featexp += (*_IM).getFeatureArrayvalueAlphY(feat,rowX, rowY);
       }
   }
   exponent = exp(featexp);
@@ -109,7 +109,7 @@ double IT::prop(int rowX, int rowY)
         }
         else
         {
-    //      featnorm += (*_IM).getFeatureArrayvalue(feat,rowX,yi);
+          featnorm += (*_IM).getFeatureArrayvalue(feat,rowX,yi);
         }
     }
 
@@ -133,7 +133,7 @@ double IT::propm(int rowX){
         }
         else
         {
-     //     exponent+=(*_IM).getFeatureArrayvalueAlphYAlphX(feat,rowX,y);
+          exponent+=(*_IM).getFeatureArrayvalueAlphYAlphX(feat,rowX,y);
         }
 
     }
@@ -154,7 +154,7 @@ double IT::propm(int rowX){
           }
           else
           {
-     //       exponent+=(*_IM).getFeatureArrayvalue(feat,x,y);
+            exponent+=(*_IM).getFeatureArrayvalue(feat,x,y);
           }
 
       }
@@ -177,7 +177,7 @@ double IT::getFeatureArraylambda(int Feati, int ilambdaX, int ilambdaY)
   }
   else
   {
- //   lambda = _IM->getFeatureArraylambda(Feati, ilambdaX, ilambdaY);
+    lambda = _IM->getFeatureArraylambda(Feati, ilambdaX, ilambdaY);
   }
   return lambda;
 }
@@ -188,10 +188,10 @@ double*** IT::__getobs()
   _observed = new double**[_systX.size()];
   for(int i=0; i<_systX.size(); i++)
   {
-      _observed[i]=new double*[_sizeX];
+      _observed[i]=new double*[(int) pow(_X->rows(),_sizeColValX)];
       for(int k=0; k< _sizeX; k++)
       {
-        _observed[i][k]= new double[_sizeY];
+        _observed[i][k]= new double[(int) pow(_Y->rows(),_sizeColValY)];
         for(int l=0; l< _sizeY;l++)
         {
           _observed[i][k][l] = 0.0;
@@ -205,7 +205,7 @@ double*** IT::__getobs()
   {
     for(int feat=0; feat< _systX.size();feat++)
     {
-        for(int delti = 0; delti < pow(_X->rows(),_systX[feat].size()); delti++)
+        for(int delti = 0; delti<pow(_X->rows(),_systX[feat].size()); delti++)   //Achtung  hier ueber die tatsaechliche anzahl der feature
         {
           for(int deltj=0; deltj<pow(_Y->rows(),_systY[feat].size()); deltj++)
           {
@@ -221,13 +221,13 @@ double*** IT::__getobs()
               }
 
             }
-         //   else
-        //    {
-         //     if(_IM->getFeatureArraydelta(feat,delti,deltj,i,i)==1)
-        //      {
-          //      _observed[feat][delti][deltj]++;
-       //       }
-       //     }
+            else
+            {
+              if(_IM->getFeatureArraydelta(feat,delti,deltj,i,i)==1)
+              {
+                _observed[feat][delti][deltj]++;
+              }
+            }
 
           }
 

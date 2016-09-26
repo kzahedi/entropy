@@ -7,17 +7,18 @@
 GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
 :IT(eX, eY, aX, aY,systX, systY, param, true)
 {
+	cout << " konstruktor gis" << endl;
   _param      = param;
   _exponent   = new double[_sizeY];
   _normaliser = 0.0;
   _expected   = new double**[_systX.size()];
   for(int i=0; i<_systX.size(); i++)
   {
-      _expected[i]=new double*[_sizeX];
-      for(int k=0; k< _sizeX; k++)
+      _expected[i]=new double*[(int) pow(_X->rows(),_sizeColValX)];
+      for(int k=0; k<pow(_X->rows(),_sizeColValX); k++)
       {
-        _expected[i][k]= new double[_sizeY];
-        for(int l=0; l< _sizeY;l++)
+        _expected[i][k]= new double[(int) pow(_Y->rows(),_sizeColValY)];
+        for(int l=0; l< pow(_Y->rows(),_sizeColValY);l++)
         {
           _expected[i][k][l]=0;
         }
@@ -42,7 +43,7 @@ GIS::~GIS()
   {
     for(int i=0;i<_systX.size();i++)
     {
-      for(int j=0;j<_sizeX;j++)
+      for(int j=0;j<(int) pow(_X->rows(),_sizeColValX);j++)
       {
         delete [] _observed[i][j];
       }
@@ -52,7 +53,7 @@ GIS::~GIS()
   }
   if(_expected != NULL){
      for(int i=0;i<_systX.size();i++){
-         for(int k=0;k<_sizeX;k++){
+         for(int k=0;k<(int) pow(_X->rows(),_sizeColValX);k++){
           delete [] _expected[i][k];
       }
       delete[] _expected[i];
@@ -88,44 +89,49 @@ double GIS::__getFeatconst()
 
 void GIS::__getExpected()
 {
+
   for(int i=0; i<_systX.size(); i++)
   {
-    for(int k=0; k< _sizeX; k++)
+    for(int k=0; k< pow(_X->rows(),_sizeColValX); k++)
     {
-      for(int l=0; l< _sizeY;l++)
+      for(int l=0; l< pow(_Y->rows(),_sizeColValY);l++)
       {
         _expected[i][k][l]=0;
+
       }
     }
   }
-  for(int Feati=0; Feati< _systX.size(); Feati++)
+  for(int feat=0; feat< _systX.size(); feat++)
   {
     for(int xi=0; xi< _sizeRowValX; xi++)
     {
       _normaliser = 0.0;
       for(int yj=0; yj< pow(_Y->rows(),_sizeColValY); yj++)
       {
-        _exponent[yj]=_FM->getFeatureArrayvalueAlphY(Feati,xi,yj);
-        if(yj == 0 && Feati == 0 && xi == 0){
-        //	cout << "FatureArrayValue: " <<_FM->getFeatureArrayvalueAlphY(Feati,xi,yj) << endl;
-        }
-          _normaliser += exp(_exponent[yj]);
-          if(Feati==0 && xi==0 && yj ==0){
-        	//  cout << _exponent[yj] << " " << _normaliser << endl;
-          }
+        _exponent[yj]=_FM->getFeatureArrayvalueAlphY(feat,xi,yj);
+        _normaliser += exp(_exponent[yj]);
+
       }
       for(int yj=0; yj< pow(_Y->rows(),_sizeColValY); yj++)
       {
         for(int k=0; k< (*_FM).getMatrixIndexFeat(xi,yj).size();k++)
         {
-          if((*_FM).getMatrixIndexFeat(xi,yj)[k]==Feati)
+          if((*_FM).getMatrixIndexFeat(xi,yj)[k]==feat)
           {
-            if((*_FM).getFeatureArraydeltaAlphY(Feati, (*_FM).getMatrixIndexdX(xi,yj)[k], (*_FM).getMatrixIndexdY(xi,yj)[k], xi, yj) == 1)
+          int l=(*_FM).getMatrixIndexdX(xi,yj)[k];
+          int m=(*_FM).getMatrixIndexdY(xi,yj)[k];
+          int k=(*_FM).getFeatureArraydeltaAlphY(feat, l ,m , xi, yj);
+    //      cout << feat << " " << l << " " << m << " " << k << endl;
+            if(k== 1)
             {
-              _expected[Feati]
+              _expected[feat]
 				       [(*_FM).getMatrixIndexdX(xi,yj)[k]]
                        [(*_FM).getMatrixIndexdY(xi,yj)[k]] += exp(_exponent[yj])/_normaliser;
             }
+            if( feat == 0 && (*_FM).getMatrixIndexdX(xi,yj)[k] == 0 && (*_FM).getMatrixIndexdY(xi,yj)[k] == 0 ){
+                   cout << " obs " << _observed[feat][0][0] << "  " << _expected[feat][0][0] << " " << endl;
+                   cout << _normaliser<< " " << _exponent[0]  << endl;
+                   }
           }
         }
       }
@@ -151,7 +157,9 @@ void GIS:: __gis(int maxit, double konv, bool test,int seconds){
       __calculateIteration(featconst, test);
       after=time(NULL);
       utime+= difftime(after,befor);
+      cout << utime << endl;
     }
+    cout << "  schluss " << endl;
 }
 
 void GIS::__gis(int maxit, double konv, bool test)
@@ -176,34 +184,34 @@ double GIS::__calculateIteration(double featconst, bool test)
 {
   double l = 0;
   __getExpected();
-  for(int Feati=0; Feati < _systX.size(); Feati++)
+  for(int feat=0; feat < _systX.size(); feat++)
   {
     // jedes delta hat ein x_i und ein y_j
-    for(int deltai=0; deltai < _sizeX; deltai++)
+    for(int deltai=0; deltai < pow(_X->rows(),_systX[feat].size()); deltai++)
     {
-      for(int deltaj=0; deltaj < _sizeY; deltaj++)
+      for(int deltaj=0; deltaj < pow(_Y->rows(),_systY[feat].size()); deltaj++)
       {
-        double oldl = (*_FM).getFeatureArraylambda(Feati, deltai, deltaj);
+        double oldl = (*_FM).getFeatureArraylambda(feat, deltai, deltaj);
         double newl = 0.0;
-        if(fabs(_expected[Feati][deltai][deltaj]) < EPSILON)
+        if(fabs(_expected[feat][deltai][deltaj]) < EPSILON)
         {
-          _expected[Feati][deltai][deltaj] = 0.01; // TODO check if other values might be better
+          _expected[feat][deltai][deltaj] = 0.01; // TODO check if other values might be better
         }
-        if(fabs(_observed[Feati][deltai][deltaj]) > EPSILON)
+        if(fabs(_observed[feat][deltai][deltaj]) > EPSILON)
         {
           // TODO 0.1 as learning rate parameter
-          newl = oldl + 0.4*(1.0/featconst) *log(_observed[Feati][deltai][deltaj]/_expected[Feati][deltai][deltaj]);
+          newl = oldl + 0.4*(1.0/featconst) *log(_observed[feat][deltai][deltaj]/_expected[feat][deltai][deltaj]);
         }
         else
         {
       //  	cout << Feati << " " << deltai << " " << deltaj << endl;
           newl = 0.0;
         }
-        (*_FM).setFeatureArraylambda(Feati,deltai,deltaj,newl);
-        l+=fabs((_observed[Feati][deltai][deltaj]-_expected[Feati][deltai][deltaj]));
-        if( Feati == 1 && deltai == 1 && deltaj == 0 ){
-        cout << _observed[Feati][deltai][deltaj] << "  " << _expected[Feati][deltai][deltaj] << " " << newl <<" " <<oldl << " " << _observed[Feati][deltai][deltaj]/_expected[Feati][deltai][deltaj]<< endl;
-        cout << _normaliser<< " " << _exponent[0] << endl;
+        (*_FM).setFeatureArraylambda(feat,deltai,deltaj,newl);
+        l+=fabs((_observed[feat][deltai][deltaj]-_expected[feat][deltai][deltaj]));
+        if( feat == 0 && deltai == 0 && deltaj == 0 ){
+        cout << _observed[feat][deltai][deltaj] << "  " << _expected[feat][deltai][deltaj] << " " << newl <<" " <<oldl << " " << _observed[feat][deltai][deltaj]/_expected[feat][deltai][deltaj]<< endl;
+        cout << _normaliser<< " " << _exponent[0]  << endl;
         }
       }
     }

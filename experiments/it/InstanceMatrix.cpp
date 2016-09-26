@@ -1,91 +1,72 @@
 #include "InstanceMatrix.h"
 
-InstanceMatrix:: InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, double valuelambda)
-  :ITMatrix(eX,eY,aX,aY,valuelambda)
+InstanceMatrix:: InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, double valuelambda)
+  :ITMatrix(eX,eY,aX,aY,systX, systY,valuelambda)
 {
   _getMatrix(valuelambda);
 }
 
 InstanceMatrix:: ~InstanceMatrix()
 {
-  for(int i=0; i<_sizeColValX;i++)
-  {
-    delete _FA[i];
-  }
   delete _FA;
 
-  for(int i=0;i<_sizeColValX;i++)
+  for(int i=0;i<_systX.size();i++)
   {
-    for(int j=0;j<_sizeColValY;j++)
-    {
-      for(int k=0;k<_sizeX;k++)
-      {
-        for(int l=0;l<_sizeY;l++)
-        {
-          _mat[i][j][k][l].clear();
-        }
-      }
-    }
+     _mat[i].clear();
   }
   delete _mat;
 }
 
-vector<int> InstanceMatrix::getInstanceMatrixX(int Feati,int Featj,int delti,int deltj)
+vector<int> InstanceMatrix::getInstanceMatrixDeltaX(int feat){
+  assert(feat<_systX.size());
+  return _mat[feat][0];
+}
+vector<int> InstanceMatrix::getInstanceMatrixDeltaY(int feat){
+  assert(feat<_systX.size());
+  return _mat[feat][1];
+}
+vector<int> InstanceMatrix::getInstanceMatrixY(int feat)
 {
-  assert(Feati<_sizeColValX && Featj<_sizeColValY);
-  assert(delti<_sizeX && deltj< _sizeY);
-  return _mat[Feati][Featj][delti][deltj][0];
-
+  assert(feat<_systX.size());
+  return _mat[feat][2];
 }
 
-vector<int> InstanceMatrix::getInstanceMatrixY(int Feati,int Featj,int delti,int deltj)
+vector<int> InstanceMatrix::getInstanceMatrixX(int feat)
 {
-  assert(Feati<_sizeColValX && Featj<_sizeColValY);
-  assert(delti<_sizeX && deltj< _sizeY);
-  return _mat[Feati][Featj][delti][deltj][1];
+  assert(feat<_systX.size());
+  return _mat[feat][3];
 }
+// Anyahl der deltas varriert
 
 void InstanceMatrix::_getMatrix(double valuelambda)
 {
-  vector<vector<int> > V(2,vector<int>(0));
-  _mat = new vector<vector<int> >***[_sizeColValX];
-  for(int i=0;i<_sizeColValX;i++)
+  vector<vector<int> > V(4,vector<int>(0));
+  _mat = new vector<vector<int> >[_systX.size()];
+  for(int i=0;i<_systX.size();i++)
   {
-    _mat[i]= new vector<vector<int> >**[_sizeColValY];
-    for(int j=0;j<_sizeColValY;j++)
-    {
-      _mat[i][j]= new vector<vector<int> >*[_sizeX];
-      for(int k=0;k<_sizeX;k++)
-      {
-        _mat[i][j][k]= new vector<vector<int> >[_sizeY];
-        for(int l=0;l<_sizeY;l++)
-        {
-          _mat[i][j][k][l]=V;
-        }
-      }
-    }
+        _mat[i]=V;
   }
-  for(int Feati=0;Feati<_sizeColValX;Feati++)
+  for(int feat=0;feat<_systX.size();feat++)
   {
-    for(int Featj=0;Featj<_sizeColValY;Featj++)
+    for(int delti=0; delti<pow(_X->rows(),_systX[feat].size());delti++)
     {
-      for(int delti=0; delti<_sizeX;delti++)
+      for(int deltj=0; deltj < pow(_Y->rows(),_systY[feat].size()); deltj++)
       {
-        for(int deltj=0; deltj < _sizeY; deltj++)
+        for(int xi=0; xi< _sizeRowValX; xi++)
         {
-          for(int xi=0; xi< _sizeRowValX; xi++)
-          {
-            for(int y=0; y<_sizeY; y++)
+          for(int y=0; y<pow(_Y->rows(),_systY.size()); y++)
             {
-              if(_FA[Feati][Featj].delta(_X->get(delti,0),_Y->get(deltj,0),_valX->get(xi,Feati),_Y->get(y,0))==1)
+              if(getFeatureArraydeltaAlphY(feat, delti, deltj, xi, y)==1)
               {
-                _mat[Feati][Featj][delti][deltj][0].push_back(xi);
-                _mat[Feati][Featj][delti][deltj][1].push_back(y);
+                _mat[feat][0].push_back(delti);
+                _mat[feat][1].push_back(deltj);
+                _mat[feat][2].push_back(xi);
+                _mat[feat][3].push_back(y);
               }
             }
           }
         }
       }
-    }
+
   }
 }
