@@ -163,6 +163,7 @@ double SCGIS::__calculateIteration(bool test)
 	  if(test){
 	    _conv.push_back(l);
 	  }
+	  cout << " " << l;
 	  return l;
 }
 int SCGIS:: getIterations()

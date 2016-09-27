@@ -51,35 +51,35 @@ IT::IT(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY,vector<vector
   _IM          = NULL;
   _observed    = NULL;
 }
-/*
+
 // returns p(y_j = valY | x_i = valX)
-double IT::prop(int Feati, int Featj, double ValX, double ValY)
+double IT::prop(int feat, int indexX, int indexY)
 {
-  assert(Feati<_sizeColValX && Featj<_sizeColValY);
+  assert(feat< _systX.size());
   double norm     = 0;
   double exponent = 0;
   if(_gis)
   {
-    exponent = exp((*_FM).getFeatureArrayvalue(Feati,Featj,ValX,ValY));
+    exponent = exp((*_FM).getFeatureArrayvalueAlphYAlphX(feat,indexX,indexY));
   }
   else
   {
-    exponent = exp((*_IM).getFeatureArrayvalue(Feati,Featj,ValX,ValY));
+    exponent = exp((*_IM).getFeatureArrayvalueAlphYAlphX(feat,indexX,indexY));
   }
 
-  for(int yi = 0; yi < _sizeY; yi++)
+  for(int yi = 0; yi < pow(_Y->rows(),_sizeColValY); yi++)
   {
     if(_gis)
     {
-      norm += exp((*_FM).getFeatureArrayvalue(Feati,Featj,ValX,(*_Y)(yi,0)));
+      norm += exp((*_FM).getFeatureArrayvalueAlphYAlphX(feat,indexX,yi));
     }
     else
     {
-      norm += exp((*_IM).getFeatureArrayvalue(Feati,Featj,ValX,(*_Y)(yi,0)));
+      norm += exp((*_IM).getFeatureArrayvalueAlphYAlphX(feat,indexX,yi));
     }
   }
   return exponent/norm;
-} */
+}
 
 // p(y | x)
 // double IT::prop(int rowX, vector<vector<double> > Y, int rowY)

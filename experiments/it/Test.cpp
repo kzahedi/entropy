@@ -273,21 +273,6 @@ void Test:: comparison()
    cout << _gisgpTest->getFeatureArraylambda(1,1,0,1) <<endl;
    cout << _gisgpTest->getFeatureArraylambda(1,1,1,1) <<endl;
 
-  // cout << "alphY :" << endl;
-  // for(int i=0;i<_alphY.size();i++){
-    // for(int j=0;j<_alphY[i].size();j++){
-      // cout << _alphY[i][j] << " " ;
-    // }
-    // cout << endl;
-  // }
-  // cout << "alphX :" << endl;
-  // for(int i=0;i<_alphX.size();i++){
-    // for(int j=0;j<_alphX[i].size();j++){
-      // cout << _alphX[i][j] << " " ;
-    // }
-    // cout << endl;
-  // }
-  // cout << _alphX.size() << endl;
  */
 }
 //Abstand
@@ -455,24 +440,24 @@ DContainer& Test:: getvalY()
 {
   return *_valY;
 }
-/*
-double Test::prop(int feati,int featj,double valX,double valY)
+
+double Test::prop(int feat, int indexX, int indexY)
 {
   assert(abs(_case)>=0 && abs(_case)<4);
   switch(_case)
   {
     case 0:
-      return _gisTest->prop(feati,featj,valX,valY);
+      return _gisTest->prop(feat, indexX, indexY);
       break;
     case 1:
-      return _scgisTest->prop(feati,featj,valX,valY);
+      return _scgisTest->prop(feat, indexX, indexY);
       break;
-    case 2:
+/*    case 2:
       return _gisgpTest->prop(feati,featj,valX,valY);
       break;
     case 3:
       return _scgisgpTest->prop(feati,featj,valX,valY);
-      break;
+      break; */
     default:
       cout << "default " << endl;
   }
@@ -489,12 +474,12 @@ double Test:: getconv(int ind)
     case 1:
       return _scgisTest->getconv(ind);
       break;
-    case 2:
+ /*   case 2:
       return _gisgpTest->getconv(ind);
       break;
     case 3:
       return _scgisTest->getconv(ind);
-      break;
+      break; */
     default:
       cout << "default " << endl;
   }
@@ -512,15 +497,15 @@ int Test::getsizeconv()
     case 1:
       return _scgisTest->getsizeconv();
       break;
-    case 2:
+  /*  case 2:
       return _gisgpTest->getsizeconv();
       break;
     case 3:
       return _scgisTest->getsizeconv();
-      break;
+      break; */
     default:
       cout << "default " << endl;
   }
   return -1;
 }
-*/
+

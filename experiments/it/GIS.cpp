@@ -200,9 +200,6 @@ double GIS::__calculateIteration(double featconst, bool test)
         }
         (*_FM).setFeatureArraylambda(feat,deltai,deltaj,newl);
         l+=fabs((_observed[feat][deltai][deltaj]-_expected[feat][deltai][deltaj]));
-
-       cout << " observed " <<_observed[feat][deltai][deltaj] << "  " << _expected[feat][deltai][deltaj] << " " << newl <<" " <<oldl << " " << _observed[feat][deltai][deltaj]/_expected[feat][deltai][deltaj]<< endl;
-
       }
     }
   }
@@ -219,5 +216,12 @@ double GIS::__calculateIteration(double featconst, bool test)
 int GIS:: getIterations()
 {
   return _iterations;
+}
+double GIS:: getconv(int i){
+  return _conv[i];
+}
+
+int GIS:: getsizeconv(){
+  return _conv.size();
 }
 
