@@ -121,24 +121,23 @@ for file_index = 1:length(files)
     a1 = files(file_index).a(1:end-1,:);
     s1 = files(file_index).s(1:end-1,:);
     
-    fprintf('Calculating MC_W\n');
-    tic
     files(file_index).mcw  = MC_W(w2, w1, a1);
-    fprintf('result %f\n', files(file_index).mcw);
+    fprintf('MC_W %f\n', files(file_index).mcw);
     mcwd = MC_W_dynamic(w2, w1, a1);
     files(file_index).mcd  = mcwd;
     fprintf('check %f\n', files(file_index).mcw - mean(mcwd));
-    toc
     
-    fprintf('Calculating MC_MI\n');
-    tic
+    files(file_index).mccw = MC_CW(w2, w1, a1);
+    fprintf('MC_CW %f\n', files(file_index).mccw);
+    mccwd = MC_CW_dynamic(w2, w1, s1, a1);
+    files(file_index).mccwd = mccwd;
+    fprintf('check %f\n', files(file_index).mccw - mean(mccwd));
+
     files(file_index).mcmi = MC_MI(w2, w1, s1, a1);
-    fprintf('result %f\n', files(file_index).mcmi);
+    fprintf('MC_MI %f\n', files(file_index).mcmi);
     mcmid = MC_MI_dynamic(w2, w1, s1, a1);
     files(file_index).mcd  = [files(file_index).mcd mcmid];
-    fprintf('check %f\n', files(file_index).mcmi - mean(mcmid));
-    toc
-    
+    fprintf('check %f\n', files(file_index).mcmi - mean(mcmid));    
 end
 
 %% write the data to csv files
@@ -157,6 +156,7 @@ for file_index = 1:length(files)
     fprintf(fileID, 'Filename %s\n', name);
     fprintf(fileID, '  MC_W:  %f\n', files(file_index).mcw);
     fprintf(fileID, '  MC_MI: %f\n', files(file_index).mcmi);
+    fprintf(fileID, '  MC_MI: %f\n', files(file_index).mccw);
 end
 fclose(fileID);
 fprintf('done.\n')
