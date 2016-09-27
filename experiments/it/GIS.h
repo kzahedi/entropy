@@ -29,8 +29,8 @@ class GIS : public IT
     double __calculateIteration(double featconst, bool test);
 
     double***      _expected;
-    double*        _exponent;
-    double         _normaliser;
+    double**       _exponent;
+    double*        _normaliser;
     int            _iterations;
     vector<double> _conv;
 };
