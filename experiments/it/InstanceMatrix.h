@@ -22,15 +22,13 @@ public:
   ~InstanceMatrix();
   // TODO copying vectors can be expensive
 
-  vector<int> getInstanceMatrixDeltaX(int feat);
-  vector<int> getInstanceMatrixDeltaY(int feat);
-  vector<int> getInstanceMatrixX(int feat);
-  vector<int> getInstanceMatrixY(int feat);
+  vector<int> getInstanceMatrixX(int feat, int deltai, int deltaj);
+  vector<int> getInstanceMatrixY(int feat, int deltai, int deltaj);
 
 private:
   void _getMatrix(double valuelambda);
   // TODO check for a better way to store
-  vector<vector<int> > *_mat;
+  vector<vector<int> > ***_mat;
 
 };
 #endif
