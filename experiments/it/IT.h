@@ -34,6 +34,7 @@ class IT{
     double  propm(int rowX);
     double  getFeatureArraylambda(int feat, int indexLambdaX, int indexLambdaY);
     void    setFeatureArraylambda(int feat, int indexLambdaX, int indexLambdaY, double valuelambda);
+    vector<double> index(int index,bool x, int sizeCol);
 
   protected:
     double***      __getobs();

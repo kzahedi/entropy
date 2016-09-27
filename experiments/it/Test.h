@@ -54,14 +54,11 @@ class Test
     vector<vector<int> >    _systY;
     bool                    _timetest;
 
-    vector<vector<double> > __getalph(bool valX);
-
     void __getValY(int colY,int rowX);
     void __getValX(int colX,int rowX);
     void __setlambda(IContainer &indizes, DContainer &values);
     void __setLambdaRand(vector<double> lambdaval);
     void __comptime(IsParameter param);
-    void __fill(vector<double> fill, int i, vector<vector<double> > &Z,bool valX,int rowsAlph,int colval);
 };
 
     // void      __comptime(int maxit, double konv,int seconds);

@@ -125,7 +125,6 @@ double SCGIS::__calculateIteration(bool test)
 	              }
 	            }
 	          }
-	       //   cout << _observed[feat][delti][deltj] << " " << expected << endl;
 	          double newl = 0.0;
 	          if(fabs(expected)<EPSILON)
 	          {
@@ -155,7 +154,6 @@ double SCGIS::__calculateIteration(bool test)
 	                _normaliser[feat][x]+=exp(_exponent[feat][x][y]);
 	              }
 	            }
-	            cout << _observed[feat][delti][deltj] << " " << expected << " " << newl <<" " << _delta << endl;
 	          }
 	        }
 	      }
@@ -167,3 +165,8 @@ double SCGIS::__calculateIteration(bool test)
 	  }
 	  return l;
 }
+int SCGIS:: getIterations()
+{
+  return _iterations;
+}
+

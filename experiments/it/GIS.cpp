@@ -151,7 +151,6 @@ void GIS:: __gis(int maxit, double konv, bool test,int seconds){
       utime+= difftime(after,befor);
   //    cout << utime << endl;
     }
-    cout << "  schluss " << endl;
 }
 
 void GIS::__gis(int maxit, double konv, bool test)

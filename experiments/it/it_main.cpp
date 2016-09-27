@@ -52,7 +52,19 @@ int main(int argc, char **argv)
   vector<double> yj(2);
   yj[0]=0;
   yj[1]=0;
+	//V(3,vector<int>(0))
+vector<vector<int > > alphX(3,vector<int>(0));
+alphX[0].push_back(0);
+alphX[0].push_back(1);
+alphX[1].push_back(0);
+alphX[2].push_back(1);
+//alphX[3].push_back(1);
 
+vector<vector<int > > alphY(3,vector<int>(0));
+alphY[0].push_back(0);
+alphY[1].push_back(1);
+alphY[2].push_back(0);
+// alphY[3].push_back(1);
   IsParameter param;
   param.lambdavalue    = 1.0;
   param.lambdadeltaval = 1.0;
@@ -63,11 +75,13 @@ int main(int argc, char **argv)
   param.test           = false;
   param.seconds        = 10;
 
-//  Test *test = new Test(2, 2, 100000, *zX, *zY, param); // for test cases
-  // Test *test = new Test(5, 5, 100000, lambda, *zX, *zY, 500, 0.0001, true, 2);
+   // for test cases
+ //  Test *test = new Test(5, 5, 100000, lambda, *zX, *zY, 500, 0.0001, true, 2);
+   Test *test = new Test(2,2,10000,lambda,*zX,*zY,alphX,alphY,param);
+   test->comparison();
 //  test->comparison();
   	 srand(time(NULL));
-  int n=1000;
+  int n=10000;
   DContainer *eX = new DContainer(n,2);
   for(int i=0;i< n;i++ ){
   	for(int j=0;j<2;j++){
@@ -76,21 +90,9 @@ int main(int argc, char **argv)
   }
  // DContainer *eX = new DContainer(10,2);
  // (*eX) << 0 << 0 << 0 << 0 << 0 <<1 << 1 << 1 << 1 << 1  << 1 << 1 << 1 << 1 << 1 ;
-  cout << (*eX) << endl;
+ // cout << (*eX) << endl;
 
-  	//V(3,vector<int>(0))
- vector<vector<int > > alphX(3,vector<int>(0));
- alphX[0].push_back(0);
- alphX[0].push_back(1);
- alphX[1].push_back(0);
- alphX[2].push_back(1);
- //alphX[3].push_back(1);
 
- vector<vector<int > > alphY(3,vector<int>(0));
- alphY[0].push_back(0);
- alphY[1].push_back(1);
- alphY[2].push_back(0);
-// alphY[3].push_back(1);
 
   IT *Test = new IT(2,*eX,*zX,*zY,alphX,alphY);
 
@@ -113,7 +115,7 @@ int main(int argc, char **argv)
   	 Test->setFeatureArraylambda(2,0,1,0);
   	 Test->setFeatureArraylambda(2,1,1,0);
 
-  //	 Test->setFeatureArraylambda(3,0,0,2);
+  //	 Test->setFeatureArraylambda(3,0,0,2);#include "Test.h"
  // 	 Test->setFeatureArraylambda(3,1,0,1);
   //	 Test->setFeatureArraylambda(3,0,1,0);
  // 	 Test->setFeatureArraylambda(3,1,1,3);
@@ -148,7 +150,7 @@ int main(int argc, char **argv)
   		 if(ind==3) (*esY) << 1 << 1;
 
   	 }
-  	 cout << (*esY) << endl;
+  //	 cout << (*esY) << endl;
   	 //DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, double valuelambda
   /*	 InstanceMatrix *mat = new InstanceMatrix(*eX,*esY,*zX,*zY,alphX,alphY,1);
   	 for(int i=0; i< alphX.size();i++){
@@ -163,6 +165,8 @@ int main(int argc, char **argv)
   	 }  */
   	// cout << (*esY) << endl;
   	 //DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param
+  	//int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param
+/*
  	 SCGIS *_scgisTest = new SCGIS(*eX,*esY,*zX,*zY,alphX,alphY,param);
   	 cout << "vor GIS " << endl;
   	 GIS *_gisTest = new GIS(*eX,*esY,*zX,*zY,alphX,alphY,param);
@@ -238,6 +242,6 @@ int main(int argc, char **argv)
      cout << _scgisTest->getFeatureArraylambda(2,1,0) <<endl;
      cout << _scgisTest->getFeatureArraylambda(2,0,1) <<endl;
      cout << _scgisTest->getFeatureArraylambda(2,1,1) <<endl;
-     cout << endl;
+     cout << endl;  */
 
 }

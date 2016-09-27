@@ -10,18 +10,16 @@ IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vec
   _valY        = &eY;
   _X           = &aX;
   _Y           = &aY;
-  cout << " hier 1" << endl;
   _sizeSystX   = systX.size();
   _sizeX       = _X->rows();
   _sizeY       = _Y->rows();
   _sizeColValY = _valY->columns();
   _sizeColValX = _valX->columns();
   _sizeRowValX = _valX->rows();
-  cout << " hier 2" << endl;
   _sizeRowValY = _valY->rows();
   _systX       = systX;
   _systY       = systY;
-  cout << " hier 3" << endl;
+
   if(_gis) // gis and csgis require different feature matrices
   {
     _FM = new FeatureMatrix(*_valX,*_valY,*_X,*_Y, systX, systY, param.lambdavalue);
@@ -30,7 +28,6 @@ IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vec
   {
     _IM = new InstanceMatrix(*_valX,*_valY,*_X,*_Y, systX, systY, param.lambdavalue);
   }
-  cout << " vor obs " << endl;
   _observed=__getobs();
 }
 //umstellen
@@ -114,7 +111,7 @@ double IT::prop(int rowX, int rowY)
         }
         else
         {
-          featnorm += (*_IM).getFeatureArrayvalue(feat,rowX,yi);
+          featnorm += (*_IM).getFeatureArrayvalueAlphY(feat,rowX,yi);
         }
     }
 
@@ -246,4 +243,31 @@ void IT::setFeatureArraylambda(int feati, int ilambdaX, int ilambdaY,double valu
   _FM->setFeatureArraylambda(feati,ilambdaX,ilambdaY,valuelambda);
 }
 
-
+// Berechnung der Alphabetreihe aus dem Index
+vector<double> IT::index(int index,bool x,int sizeCol)
+{
+  int sizeAlph;
+  vector<double> zeile;
+  double z;
+  if(x){
+	  assert(index<pow(_X->rows(),sizeCol));
+	  sizeAlph=_sizeX;
+  }
+  else{
+	  assert(index<pow(_Y->rows(),sizeCol));
+	  sizeAlph=_sizeY;
+  }
+  for(int i = sizeCol; i>0 ; i--)
+  {
+	  z = index % (int) (pow(sizeAlph,i));
+	  z = z/ (pow(sizeAlph,i-1));
+	  int j= (int) z;
+	  if(x){
+		  zeile.push_back((*_X)(j,0));
+	  }
+	  else{
+		  zeile.push_back((*_Y)(j,0));
+	  }
+  }
+  return zeile;
+}
