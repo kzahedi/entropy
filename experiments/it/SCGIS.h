@@ -30,10 +30,11 @@ private:
   void      __scgis(int maxit, double konv,bool test,int seconds);
   double    __calculateIteration(bool test);
 
-  int       _iterations;
-  double***    _exponent;
+  double     _delta;
+  int        _iterations;
+  double***  _exponent;
   double**   _normaliser;
-  double**    _delta;
+
   vector<double>  _conv;
   IsParameter     _param;
 

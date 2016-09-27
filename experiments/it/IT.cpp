@@ -10,15 +10,18 @@ IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vec
   _valY        = &eY;
   _X           = &aX;
   _Y           = &aY;
+  cout << " hier 1" << endl;
+  _sizeSystX   = systX.size();
   _sizeX       = _X->rows();
   _sizeY       = _Y->rows();
   _sizeColValY = _valY->columns();
   _sizeColValX = _valX->columns();
   _sizeRowValX = _valX->rows();
+  cout << " hier 2" << endl;
   _sizeRowValY = _valY->rows();
   _systX       = systX;
   _systY       = systY;
-
+  cout << " hier 3" << endl;
   if(_gis) // gis and csgis require different feature matrices
   {
     _FM = new FeatureMatrix(*_valX,*_valY,*_X,*_Y, systX, systY, param.lambdavalue);
@@ -27,6 +30,7 @@ IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vec
   {
     _IM = new InstanceMatrix(*_valX,*_valY,*_X,*_Y, systX, systY, param.lambdavalue);
   }
+  cout << " vor obs " << endl;
   _observed=__getobs();
 }
 //umstellen
@@ -37,6 +41,7 @@ IT::IT(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY,vector<vector
   _gis         = true;
   _X           = &aX;
   _Y           = &aY;
+  _sizeSystX   = systX.size();
   _sizeX       = _X->rows();
   _sizeY       = _Y->rows();
   _valX        = &eX;
@@ -185,14 +190,14 @@ double IT::getFeatureArraylambda(int Feati, int ilambdaX, int ilambdaY)
 // get observed
 double*** IT::__getobs()
 {
-  _observed = new double**[_systX.size()];
+  _observed = new double**[_sizeSystX];
   for(int i=0; i<_systX.size(); i++)
   {
       _observed[i]=new double*[(int) pow(_X->rows(),_sizeColValX)];
-      for(int k=0; k< _sizeX; k++)
+      for(int k=0; k< pow(_X->rows(),_sizeColValX); k++)
       {
         _observed[i][k]= new double[(int) pow(_Y->rows(),_sizeColValY)];
-        for(int l=0; l< _sizeY;l++)
+        for(int l=0; l< pow(_Y->rows(),_sizeColValY);l++)
         {
           _observed[i][k][l] = 0.0;
         }
@@ -203,7 +208,7 @@ double*** IT::__getobs()
   //vector observed
   for(int i=0;i<_sizeRowValX;i++ )
   {
-    for(int feat=0; feat< _systX.size();feat++)
+    for(int feat=0; feat< _sizeSystX;feat++)
     {
         for(int delti = 0; delti<pow(_X->rows(),_systX[feat].size()); delti++)   //Achtung  hier ueber die tatsaechliche anzahl der feature
         {
@@ -216,10 +221,6 @@ double*** IT::__getobs()
               {
                 _observed[feat][delti][deltj]++;
               }
-              else{
-
-              }
-
             }
             else
             {

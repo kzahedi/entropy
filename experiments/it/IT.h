@@ -44,6 +44,7 @@ class IT{
     int             _sizeColValY;
     int             _sizeRowValX;
     int             _sizeRowValY;
+    int             _sizeSystX;
     double***       _observed;
     bool            _gis;
     vector<vector<int> > _systX;

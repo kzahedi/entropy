@@ -25,17 +25,18 @@ vector<int> InstanceMatrix::getInstanceMatrixDeltaY(int feat){
   assert(feat<_systX.size());
   return _mat[feat][1];
 }
-vector<int> InstanceMatrix::getInstanceMatrixY(int feat)
+vector<int> InstanceMatrix::getInstanceMatrixX(int feat)
 {
   assert(feat<_systX.size());
   return _mat[feat][2];
 }
-
-vector<int> InstanceMatrix::getInstanceMatrixX(int feat)
+vector<int> InstanceMatrix::getInstanceMatrixY(int feat)
 {
   assert(feat<_systX.size());
   return _mat[feat][3];
 }
+
+
 // Anyahl der deltas varriert
 
 void InstanceMatrix::_getMatrix(double valuelambda)
@@ -46,6 +47,7 @@ void InstanceMatrix::_getMatrix(double valuelambda)
   {
         _mat[i]=V;
   }
+
   for(int feat=0;feat<_systX.size();feat++)
   {
     for(int delti=0; delti<pow(_X->rows(),_systX[feat].size());delti++)
@@ -54,7 +56,7 @@ void InstanceMatrix::_getMatrix(double valuelambda)
       {
         for(int xi=0; xi< _sizeRowValX; xi++)
         {
-          for(int y=0; y<pow(_Y->rows(),_systY.size()); y++)
+          for(int y=0; y< pow(_Y->rows(),_sizeColValY); y++)
             {
               if(getFeatureArraydeltaAlphY(feat, delti, deltj, xi, y)==1)
               {

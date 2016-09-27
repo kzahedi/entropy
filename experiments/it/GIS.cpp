@@ -7,16 +7,9 @@
 GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
 :IT(eX, eY, aX, aY,systX, systY, param, true)
 {
-	cout << " konstruktor gis" << endl;
   _param      = param;
-  _exponent   = new double*[_systX.size()];
-
-  for(int i=0;i<_systX.size();i++){
-	  _exponent[i]= new double[(int) pow(_Y->rows(),_sizeColValY)];
-  }
-  _normaliser = new double[_systX.size()];
-  _expected   = new double**[_systX.size()];
-  for(int i=0; i<_systX.size(); i++)
+  _expected   = new double**[_sizeSystX]; cout << " hier  " << endl;
+  for(int i=0; i<_sizeSystX; i++)
   {
       _expected[i]=new double*[(int) pow(_X->rows(),_sizeColValX)];
       for(int k=0; k<pow(_X->rows(),_sizeColValX); k++)
@@ -28,7 +21,11 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<v
         }
       }
    }
-
+  _normaliser = new double[_sizeSystX];
+  _exponent= new double*[_sizeSystX];
+  for(int i=0;i<_sizeSystX;i++){
+	  _exponent[i]= new double[(int) pow(_Y->rows(),_sizeColValY)];
+  }
   // cout << "Data X:" << endl << eX << endl << "Data Y: " << endl << eY << endl;
   if(param.time)
   {
@@ -44,7 +41,7 @@ GIS::~GIS()
 {
   if(_observed!=NULL)
   {
-    for(int i=0;i<_systX.size();i++)
+    for(int i=0;i<_sizeSystX;i++)
     {
       for(int j=0;j<(int) pow(_X->rows(),_sizeColValX);j++)
       {
@@ -55,7 +52,7 @@ GIS::~GIS()
   delete [] _observed;
   }
   if(_expected != NULL){
-     for(int i=0;i<_systX.size();i++){
+     for(int i=0;i<_sizeSystX;i++){
          for(int k=0;k<(int) pow(_X->rows(),_sizeColValX);k++){
           delete [] _expected[i][k];
       }
@@ -64,7 +61,7 @@ GIS::~GIS()
      delete[] _expected;
   }
   if(_exponent != NULL){
-	  for(int i=0; i<_systX.size();i++){
+	  for(int i=0; i<_sizeSystX;i++){
 		  delete [] _exponent[i];
 	  }
     delete [] _exponent;
@@ -96,7 +93,7 @@ double GIS::__getFeatconst()
 
 void GIS::__getExpected()
 {
-	  for(int i=0; i<_systX.size(); i++)
+	  for(int i=0; i<_sizeSystX; i++)
 	  {
 	    for(int k=0; k< (int) pow(_X->rows(),_sizeColValX); k++)
 	    {
@@ -108,7 +105,7 @@ void GIS::__getExpected()
 	  }
 	  for(int xi=0; xi< _sizeRowValX; xi++)
 	  {
-	    for(int i=0;i<_systX.size();i++){
+	    for(int i=0;i<_sizeSystX;i++){
 	      _normaliser[i]=0.0;
 	    }
 	    for(int yj=0; yj< pow(_Y->rows(),_sizeColValY); yj++)
@@ -135,13 +132,12 @@ void GIS:: __gis(int maxit, double konv, bool test,int seconds){
     //constant c for delta
     double featconst = __getFeatconst();
 
-    for(int k=0;k< _systX.size();k++){
-      _exponent[k] = new double[(int) pow(_Y->rows(),_sizeColValY)]; // lambda_i * f_i
+    for(int k=0;k< _sizeSystX;k++){
       for(int i=0;i< pow(_Y->rows(),_sizeColValY);i++){
     	  _exponent[k][i]=0.0;
       }
     }
-    _normaliser  = new double[_systX.size()];
+    _normaliser  = new double[_sizeSystX];
     _iterations  = 0;
     double l     = 1;
     double utime = 0;
@@ -169,7 +165,6 @@ void GIS::__gis(int maxit, double konv, bool test)
   	  _exponent[k][i]=0.0;
     }
   }
-  _normaliser  = new double[_systX.size()];
   double l    = 1;
   _iterations = 0;
   while(_iterations < maxit && fabs(l) >= konv)
@@ -182,7 +177,7 @@ double GIS::__calculateIteration(double featconst, bool test)
 {
   double l = 0;
   __getExpected();
-  for(int feat=0; feat < _systX.size(); feat++)
+  for(int feat=0; feat < _sizeSystX; feat++)
   {
     // jedes delta hat ein x_i und ein y_j
     for(int deltai=0; deltai < pow(_X->rows(),_systX[feat].size()); deltai++)
@@ -216,7 +211,7 @@ double GIS::__calculateIteration(double featconst, bool test)
   cout << _iterations << endl;
   cout << l << endl;
   if(test){
-   // _conv.push_back(l);
+    _conv.push_back(l);
   }
   return l;
 

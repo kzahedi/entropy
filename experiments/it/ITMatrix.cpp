@@ -91,7 +91,10 @@ void  ITMatrix::setFeatureArraylambda(int i, int ilambdaX, int ilambdaY,double v
 }
 int   ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowValX, int rowValY)
 {
-  assert(i<_systX.size());
+	  assert(i<_systX.size());
+	  assert(indexX < pow(_X->rows(),_systX[i].size()) && indexY<pow(_Y->rows(),_systY[i].size()));
+	  assert(rowValX < _sizeRowValX);
+	  assert(rowValY < _sizeRowValY);
   vector<double> x = index(indexX,true,_systX[i].size());
   vector<double> y = index(indexY,false,_systY[i].size());
   bool equ = true;
@@ -118,7 +121,9 @@ int   ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowValX, i
 int   ITMatrix::getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowValX, int indexValY)
 {
   assert(i<_systX.size());
-  //assert(idelta < _sizeX && jdelta < _sizeY);
+  assert(indexX < pow(_X->rows(),_systX[i].size()) && indexY<pow(_Y->rows(),_systY[i].size()));
+  assert(rowValX < _sizeRowValX);
+  assert(indexValY < pow(_Y->rows(),_sizeColValY));
   vector<double> x = index(indexX,true,_systX[i].size());
   vector<double> y = index(indexY,false,_systY[i].size());
   vector<double> valy = index(indexValY,false, _sizeColValY);
@@ -144,7 +149,10 @@ int   ITMatrix::getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowVa
 // Feature i, indizes der zu vergleichenden Werte
 int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int indexValX, int indexValY)
 {
-  assert(i<_systX.size());
+	  assert(i<_systX.size());
+	  assert(indexX < pow(_X->rows(),_systX[i].size()) && indexY<pow(_Y->rows(),_systY[i].size()));
+	  assert(indexValX < pow(_X->rows(),_sizeColValX));
+	  assert(indexValY < pow(_Y->rows(),_sizeColValY));
   //assert(idelta < _sizeX && jdelta < _sizeY);
   vector<double> x = index(indexX,true, _systX[i].size());
   vector<double> y = index(indexY,false,_systY[i].size());
@@ -176,9 +184,11 @@ vector<double> ITMatrix::index(int index,bool x,int sizeCol)
   vector<double> zeile;
   double z;
   if(x){
+	  assert(index<pow(_X->rows(),sizeCol));
 	  sizeAlph=_sizeX;
   }
   else{
+	  assert(index<pow(_Y->rows(),sizeCol));
 	  sizeAlph=_sizeY;
   }
   for(int i = sizeCol; i>0 ; i--)

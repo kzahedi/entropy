@@ -104,7 +104,7 @@ Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &a
     case 0:
       _gisTest=new GIS(*_valX, *_valY, *_X, *_Y,systX,systY, param); //1,maxit,konv,test,_timetest,seconds);
       break;
-    case 1:
+/*    case 1:
       _scgisTest=new SCGIS(*_valX,*_valY,*_X,*_Y, param); // 1,maxit,konv,test,_timetest,seconds);
       break;
     case 2:
@@ -114,7 +114,7 @@ Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &a
       _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
       break;
     default:
-      cout << "default " << endl;
+      cout << "default " << endl;  */
   }
 }
 Test::~Test()
@@ -151,7 +151,7 @@ void Test::__comptime(IsParameter param)
   befor1=time(NULL);
   _gisTest=new GIS(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,maxit,konv,false,_timetest,seconds);
   after1=time(NULL);
-  _timediff.push_back(difftime(after1,befor1));
+/*  _timediff.push_back(difftime(after1,befor1));
   befor2=time(NULL);
   _scgisTest=new SCGIS(*_valX,*_valY,*_X,*_Y, param); // 1,maxit,konv,false,_timetest,seconds);
   after2=time(NULL);
@@ -163,20 +163,20 @@ void Test::__comptime(IsParameter param)
   befor4=time(NULL);
   _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y, param); // 1,1,0.01,maxit,konv,false,_timetest,seconds);
   after4=time(NULL);
-  _timediff.push_back(difftime(after4,befor4));
+  _timediff.push_back(difftime(after4,befor4)); */
 }
 //Ausgabe
 void Test:: comparison()
 {
   cout << "Comparison: " << endl;
   cout << endl;
-  cout << "time:  GIS: " << _timediff[0] << "s SCGIS: " << _timediff[1] << "s GIS smoothed: " << _timediff[2]<<  "s SCGIS smoothed: "  << _timediff[3] << "s" << endl;
+  cout << "time:  GIS: " << _timediff[0]  /*<< "s SCGIS: " << _timediff[1] << "s GIS smoothed: " << _timediff[2]<<  "s SCGIS smoothed: "  << _timediff[3] << "s" */<< endl;
   cout << endl;
   vector<double> kl = KL();
-  cout << "KL-distance: GIS: " << kl[0] <<  " SCGIS: " << kl[1] <<" GIS smoothed: "<< kl[2] << " SCGIS smoothed: " << kl[3] <<endl;
+  cout << "KL-distance: GIS: " << kl[0] /*<<  " SCGIS: " << kl[1] <<" GIS smoothed: "<< kl[2] << " SCGIS smoothed: " << kl[3] */<<endl;
   cout << endl;
   if(_timetest){
-    cout<< "Iterations: GIS: " << _gisTest->getIterations() << " SCGIS: " << _scgisTest->getIterations()<< " GIS smoothed: " << _gisgpTest->getIterations() << " SCGIS smoothed: " << _scgisgpTest->getIterations() <<   endl;
+    cout<< "Iterations: GIS: " << _gisTest->getIterations() /*<< " SCGIS: " << _scgisTest->getIterations()<< " GIS smoothed: " << _gisgpTest->getIterations() << " SCGIS smoothed: " << _scgisgpTest->getIterations() */<<   endl;
   }
    cout << "lambda: " << endl;
    cout << "vergleichswerte" << endl;
@@ -265,41 +265,41 @@ void Test:: comparison()
 vector<double> Test:: KL(){
   vector<double> dist(4);
   double p1=0;
-  double p2=0;
-  double p3=0;
-  double p4=0;
+//  double p2=0;
+ // double p3=0;
+//  double p4=0;
   double q=0;
   double pm1=0;
-  double pm2=0;
-  double pm3=0;
-  double pm4=0;
+ // double pm2=0;
+//  double pm3=0;
+ // double pm4=0;
   for(int rowX=0;rowX<  _alphX.size() ;rowX++)
   {
-    pm1=_gisTest->propm(_alphX,rowX,_alphY);
-    pm2=_scgisTest->propm(_alphX,rowX,_alphY);
-    pm3=_gisgpTest->propm(_alphX,rowX,_alphY);
-    pm4=_scgisgpTest->propm(_alphX,rowX,_alphY);
+    pm1=_gisTest->propm(rowX,);
+   // pm2=_scgisTest->propm(_alphX,rowX,_alphY);
+   // pm3=_gisgpTest->propm(_alphX,rowX,_alphY);
+  //  pm4=_scgisgpTest->propm(_alphX,rowX,_alphY);
     for(int sizeY=0;sizeY<_alphY.size();sizeY++)
     {
-      p1=_gisTest->prop(rowX,_alphY,sizeY);
-      p2=_scgisTest->prop(rowX,_alphY,sizeY);
-      p3=_gisgpTest->prop(rowX,_alphY,sizeY);
-      p4=_scgisgpTest->prop(rowX,_alphY,sizeY);
-      q= _exact->prop(rowX,_alphY,sizeY);
+      p1=_gisTest->prop(rowX,sizeY);
+  //    p2=_scgisTest->prop(rowX,_alphY,sizeY);
+  //    p3=_gisgpTest->prop(rowX,_alphY,sizeY);
+ //     p4=_scgisgpTest->prop(rowX,_alphY,sizeY);
+      q= _exact->prop(rowX,sizeY);
       if(fabs(p1)<0.00000001){ p1=0.000001;}
-      if(fabs(p2)<0.00000001){ p2=0.000001;}
-      if(fabs(p3)<0.00000001){ p3=0.000001;}
+    //  if(fabs(p2)<0.00000001){ p2=0.000001;}
+  //    if(fabs(p3)<0.00000001){ p3=0.000001;}
       if(fabs( q)<0.00000001){ q =0.000001;}
       dist[0]+=pm1*p1*log(p1/q);
-      dist[1]+=pm2*p2*log(p2/q);
-      dist[2]+=pm3*p3*log(p3/q);
-      dist[3]+=pm4*p4*log(p4/q);
+ //     dist[1]+=pm2*p2*log(p2/q);
+  //    dist[2]+=pm3*p3*log(p3/q);
+  //    dist[3]+=pm4*p4*log(p4/q);
     }
   }
   return dist;
 }
 double Test::KL1(){
-  double dist=0;
+  double dist=0; /*
   double p1=0;
   double q=0;
   double pm1=0;
@@ -343,7 +343,7 @@ double Test::KL1(){
       if(fabs( q)<0.00000001){ q =0.000001;}
       dist+=pm1*p1*log(p1/q);
     }
-  }
+  }*/
   return dist;
 }
 // true fuer x, false fuer y

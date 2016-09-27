@@ -5,7 +5,6 @@ FeatureMatrix::FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DCo
 {
   _sizeAlphY = pow(_Y->rows(),_sizeColValY);
   __getMatrix(lambdavalue);
-
 }
 
 FeatureMatrix::FeatureMatrix():ITMatrix()
