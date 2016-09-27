@@ -27,9 +27,9 @@ double __empericalMIs(ULContainer* X, ULContainer* Y)
   maxX = maxX + 1;
   maxY = maxY + 1;
 
-  SparseMatrix pxy;
-  SparseMatrix px;
-  SparseMatrix py;
+  entropy::SparseMatrix pxy;
+  entropy::SparseMatrix px;
+  entropy::SparseMatrix py;
 
   for(int i = 0; i < X->rows(); i++)
   {
@@ -59,7 +59,7 @@ double __empericalMIs(ULContainer* X, ULContainer* Y)
   double r = 0.0;
   for(int i = 0; i < pxy.size(); i++)
   {
-    MatrixIndex mi = pxy.getmi(i);
+    entropy::MatrixIndex mi = pxy.getmi(i);
     int x = mi.first;
     int y = mi.second;
     if(px(x) > 0.0 && py(y) > 0.0 && pxy(x,y) > 0.0)

@@ -111,7 +111,7 @@ double __empericalMI(ULContainer* X, ULContainer* Y)
   return r;
 }
 
-double MI(ULContainer* X, ULContainer* Y, int mode)
+double entropy::MI(ULContainer* X, ULContainer* Y, int mode)
 {
   switch(mode)
   {

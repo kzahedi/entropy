@@ -17,6 +17,7 @@ set(SRC sparse/CMI.cpp
   state/MC_W.cpp
   state/MI.cpp
 
+  sparse/ConditionalEntropy.cpp
   sparse/H.cpp
   sparse/MC_CW.cpp
   sparse/MC_MI.cpp
@@ -24,6 +25,7 @@ set(SRC sparse/CMI.cpp
   sparse/MI.cpp
   sparse/PI.cpp
 
+  sparse/state/ConditionalEntropy.cpp
   sparse/state/CMI.cpp
   sparse/state/MC_CW.cpp
   sparse/state/MC_MI.cpp
@@ -32,7 +34,6 @@ set(SRC sparse/CMI.cpp
 
   SparseMatrix.cpp
   # Container.cpp
-  Entropy.cpp
   Matrix.cpp
 
   Csv.cpp

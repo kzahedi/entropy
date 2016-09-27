@@ -23,7 +23,7 @@ double __empericalHs(ULContainer* X)
 
   maxX = maxX + 1;
 
-  SparseMatrix px;
+  entropy::SparseMatrix px;
 
   for(int i = 0; i < X->rows(); i++)
   {
@@ -40,7 +40,7 @@ double __empericalHs(ULContainer* X)
   double r = 0.0;
   for(int i = 0; i < px.size(); i++)
   {
-    MatrixIndex mi = px.getmi(i);
+    entropy::MatrixIndex  mi = px.getmi(i);
     int x = mi.first;
     // cout << "px(" << x << ") = " << px(x) << endl;
     if(px(x) > 0.0) r += px(x) * log2(px(x));

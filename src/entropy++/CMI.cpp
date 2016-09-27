@@ -214,7 +214,7 @@ double __empericalCMI(ULContainer* X, ULContainer* Y, ULContainer* Z)
   return r;
 }
 
-double CMI(ULContainer* X, ULContainer* Y, ULContainer *Z, int mode)
+double entropy::CMI(ULContainer* X, ULContainer* Y, ULContainer *Z, int mode)
 {
   switch(mode)
   {

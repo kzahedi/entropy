@@ -4,6 +4,9 @@
 #include <entropy++/Container.h>
 #include <entropy++/defs.h>
 
-double MI(ULContainer* X, ULContainer* Y, int mode = EMPERICAL);
+namespace entropy
+{
+  double MI(ULContainer* X, ULContainer* Y, int mode = EMPERICAL);
+}
 
 #endif // __MI_H__

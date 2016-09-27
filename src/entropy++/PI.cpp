@@ -110,7 +110,7 @@ double __empericalPI(ULContainer* X)
   return r;
 }
 
-double PI(ULContainer* X, int mode)
+double entropy::PI(ULContainer* X, int mode)
 {
   switch(mode)
   {

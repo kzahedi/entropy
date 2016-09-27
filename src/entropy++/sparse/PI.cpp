@@ -22,9 +22,9 @@ double __empericalPIs(ULContainer* X)
 
   maxX = maxX + 1;
 
-  SparseMatrix pxxp;
-  SparseMatrix px;
-  SparseMatrix pxp;
+  entropy::SparseMatrix pxxp;
+  entropy::SparseMatrix px;
+  entropy::SparseMatrix pxp;
 
   for(int i = 0; i < X->rows()-1; i++)
   {
@@ -54,7 +54,7 @@ double __empericalPIs(ULContainer* X)
   double r = 0.0;
   for(int i = 0; i < pxxp.size(); i++)
   {
-    MatrixIndex mi = pxxp.getmi(i);
+    entropy::MatrixIndex mi = pxxp.getmi(i);
     int x  = mi.first;
     int xp = mi.second;
     if(px(x) > 0.0 && pxp(xp) > 0.0 && pxxp(x,xp) > 0.0)

@@ -51,7 +51,7 @@ double __empericalH(ULContainer* X)
   return r;
 }
 
-double entropy::H(ULContainer* X, int mode)
+double H(ULContainer* X, int mode)
 {
   switch(mode)
   {

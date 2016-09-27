@@ -110,7 +110,7 @@ int main(int argc, char** argv)
   VLOG(1) << "  W states: " << w_states;
   VLOG(1) << "  A states: " << a_states;
 
-  Csv* csv = new Csv();
+  entropy::Csv* csv = new entropy::Csv();
 
 
 

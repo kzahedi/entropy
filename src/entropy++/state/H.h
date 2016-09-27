@@ -4,9 +4,12 @@
 #include <entropy++/Container.h>
 #include <entropy++/defs.h>
 
-namespace entropy 
+namespace entropy
 {
-  double H(ULContainer* X, int mode = EMPERICAL);
+  namespace state
+  {
+    double H(ULContainer* X, int mode = EMPERICAL);
+  }
 }
 
 #endif // __H_H__
