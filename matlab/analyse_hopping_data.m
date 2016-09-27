@@ -141,9 +141,17 @@ for file_index = 1:length(files)
 end
 
 %% write the data to csv files
-csvwrite(sprintf('data/mc_data_dyn_dcmot_%d.csv', bins), files(1).mcd);
-csvwrite(sprintf('data/mc_data_dyn_lin_%d.csv',   bins), files(2).mcd);
-csvwrite(sprintf('data/mc_data_dyn_fib_%d.csv',   bins), files(3).mcd);
+csvwrite(sprintf('data/mc_w_data_dyn_dcmot_%d.csv', bins), files(1).mcd);
+csvwrite(sprintf('data/mc_w_data_dyn_lin_%d.csv',   bins), files(2).mcd);
+csvwrite(sprintf('data/mc_w_data_dyn_fib_%d.csv',   bins), files(3).mcd);
+
+% csvwrite(sprintf('data/mc_mi_data_dyn_dcmot_%d.csv', bins), files(1).mcmid);
+% csvwrite(sprintf('data/mc_mi_data_dyn_lin_%d.csv',   bins), files(2).mcmid);
+% csvwrite(sprintf('data/mc_mi_data_dyn_fib_%d.csv',   bins), files(3).mcmid);
+
+% csvwrite(sprintf('data/mc_cw_data_dyn_dcmot_%d.csv', bins), files(1).mccwd);
+% csvwrite(sprintf('data/mc_cw_data_dyn_lin_%d.csv',   bins), files(2).mccwd);
+% csvwrite(sprintf('data/mc_cw_data_dyn_fib_%d.csv',   bins), files(3).mccwd);
 
 filename = sprintf('data/results_w%d_a%d_s%d.txt', w_bins, a_bins, s_bins);
 fprintf('Writing results to %s\n', filename);
@@ -160,7 +168,6 @@ for file_index = 1:length(files)
 end
 fclose(fileID);
 fprintf('done.\n')
-
 
 
 %% Writing hopping data
