@@ -18,21 +18,21 @@ using namespace std;
 class SCGISgp : public IT{
   public:
     // SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,double lambdadeltaval, double sigma ,int maxit, double konv, bool test,bool time,int seconds);
-    SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param);
+    SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
       ~SCGISgp();
     double getconv(int i);
     int    getsizeconv();
     int    getIterations();
 
   private:
-    void __scgis(int maxit, double konv,bool test, double lambdadeltaval,double sigma);
-    void __scgis(int maxit, double konv,bool test, double lambdadeltaval,double sigma,int seconds);
+    double __calculateIteration(bool test, double sigma);
+    void   __scgis(int maxit, double konv,bool test,double sigma);
+    void   __scgis(int maxit, double konv,bool test,double sigma,int seconds);
 
     int            _iterations;
-    double****     _expected;
-    double****     _exponent;
-    double***      _normaliser;
-    double****     _delta;
+    double***      _exponent;
+    double**       _normaliser;
+    double***      _delta;
     vector<double> _conv;
 };
 

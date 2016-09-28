@@ -104,7 +104,6 @@ double GISgp::__calculateIteration(double featconst,double sigma, bool test)
 	      {
 	        for(int deltaj=0; deltaj<  pow(_Y->rows(),_systY[feat].size()); deltaj++)
 	        {
-	        	cout << " schleife " << endl;
 	          double newl;
 	          double oldl= (*_FM).getFeatureArraylambda(feat,deltai,deltaj);
 	          double z=1;
@@ -124,6 +123,7 @@ double GISgp::__calculateIteration(double featconst,double sigma, bool test)
 	    if(test){
 	      _conv.push_back(l);
 	    }
+	  //  cout << l << endl;
        return l;
 }
 void GISgp::__gisgp(int maxit, double konv, double sigma, bool test,int seconds)
@@ -166,11 +166,10 @@ void GISgp::__gisgp(int maxit, double konv, double sigma, bool test)
 	  }
   }
 
-  int i=0;
   double l=1;
-  while(i<maxit && fabs(l)>=konv )
+  while(_iterations<maxit && fabs(l)>=konv )
   {
-	  __calculateIteration(featconst,sigma,true);
+	  l=__calculateIteration(featconst,sigma,true);
   }
 }
 
@@ -200,7 +199,6 @@ double GISgp::__getFeatconst()
 
 void GISgp::__getexp()
 {
-	cout << " anfang get exp " << endl;
 	  for(int i=0; i<_sizeSystX; i++)
 	  {
 	    for(int k=0; k< (int) pow(_X->rows(),_systX[i].size()); k++)
@@ -236,7 +234,6 @@ void GISgp::__getexp()
 	      }
 	    }
 	   }
-	  cout << " ende get expected " << endl;
 }
 
 int GISgp:: getIterations()

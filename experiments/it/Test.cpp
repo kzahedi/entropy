@@ -82,7 +82,7 @@ Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, D
   _exact= new IT(colValY,*_valX,*_X,*_Y,systX,systY);
   __setLambdaRand(lambda);
   __getValY(colValY,rowX);
-  _case=5;
+  _case=4;
 }
 
 Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, int i) // int maxit, double konv, bool time,bool test,int seconds,int i){
@@ -95,16 +95,11 @@ Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &a
   _systX       = systX;
   _systY       = systY;
   _sizeColValY = colValY;
-  cout << " vor get val" << endl;
   __getValX(colX,rowX);
-  cout << " nach get val " << endl;
   _sizeColValX = _valX->columns();
   _exact       = new IT(colValY,*_valX,*_X,*_Y,systX,systY);
-  cout << " vor set lambda " << endl;
   __setLambdaRand(lambda);
-  cout << " nach set lambda " << endl;
   __getValY(colValY,rowX);
-  cout << " vor cases " << endl;
   switch(i){
     case 0:
       _gisTest=new GIS(*_valX, *_valY, *_X, *_Y,systX,systY, param); //1,maxit,konv,test,_timetest,seconds);
@@ -115,32 +110,31 @@ Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &a
     case 2:
       _gisgpTest=new GISgp(*_valX,*_valY,*_X,*_Y,systX,systY, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
       break;
-/*    case 3:
-      _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
-      break;                        */
+    case 3:
+      _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,systX,systY, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
+      break;
     default:
       cout << "default " << endl;
   }
 }
 Test::~Test()
 {
-	/*
   _timediff.clear();
-  for(int i=0;i<_alphX.size();i++){
-    _alphX[i].clear();
-  }
-  _alphX.clear();
-
-  for(int i=0;i<_alphY.size();i++){
-    _alphY[i].clear();
-  }
-  _alphY.clear();
-  //expizit aufrufen?
   delete _exact;
   delete _gisTest;
   delete _scgisTest;
   delete _scgisgpTest;
-  delete _gisgpTest; */
+  delete _gisgpTest;
+  for(int i=0; i< _systX.size();i++)
+  {
+    _systX[i].clear();
+  }
+  _systX.clear();
+  for(int j=0; j<_systY.size();j++)
+  {
+	_systY[j].clear();
+  }
+  _systY.clear();
 }
 //GIS und SCGIS ausfuehren mit Zeitmessung
 void Test::__comptime(IsParameter param)
@@ -165,23 +159,23 @@ void Test::__comptime(IsParameter param)
   _gisgpTest=new GISgp(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,1,0.01,maxit,konv,false,_timetest,seconds);
   after3=time(NULL);
   _timediff.push_back(difftime(after3,befor3));
-/*  befor4=time(NULL);
-  _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y, param); // 1,1,0.01,maxit,konv,false,_timetest,seconds);
+  befor4=time(NULL);
+  _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,1,0.01,maxit,konv,false,_timetest,seconds);
   after4=time(NULL);
-  _timediff.push_back(difftime(after4,befor4)); */
+  _timediff.push_back(difftime(after4,befor4));
 }
 //Ausgabe
 void Test:: comparison()
 {
   cout << "Comparison: " << endl;
   cout << endl;
-  cout << "time:  GIS: " << _timediff[0]  << "s SCGIS: " << _timediff[1] << "s GIS smoothed: " << _timediff[2] /*<<  "s SCGIS smoothed: "  << _timediff[3] << "s" */<< endl;
+  cout << "time:  GIS: " << _timediff[0]  << "s SCGIS: " << _timediff[1] << "s GIS smoothed: " << _timediff[2] <<  "s SCGIS smoothed: "  << _timediff[3] << "s" << endl;
   cout << endl;
   vector<double> kl = KL();
-  cout << "KL-distance: GIS: " << kl[0] <<  " SCGIS: " << kl[1] <<" GIS smoothed: "<< kl[2] /*<< " SCGIS smoothed: " << kl[3] */<<endl;
+  cout << "KL-distance: GIS: " << kl[0] <<  " SCGIS: " << kl[1] <<" GIS smoothed: "<< kl[2] << " SCGIS smoothed: " << kl[3] <<endl;
   cout << endl;
   if(_timetest){
-    cout<< "Iterations: GIS: " << _gisTest->getIterations() << " SCGIS: " << _scgisTest->getIterations() << " GIS smoothed: " << _gisgpTest->getIterations() /*<< " SCGIS smoothed: " << _scgisgpTest->getIterations() */<<   endl;
+    cout<< "Iterations: GIS: " << _gisTest->getIterations() << " SCGIS: " << _scgisTest->getIterations() << " GIS smoothed: " << _gisgpTest->getIterations() << " SCGIS smoothed: " << _scgisgpTest->getIterations() <<   endl;
   }
    cout << "lambda: " << endl;
    cout << "vergleichswerte" << endl;
@@ -290,33 +284,34 @@ vector<double> Test:: KL(){
   double p1=0;
   double p2=0;
   double p3=0;
-//  double p4=0;
+  double p4=0;
   double q=0;
   double pm1=0;
   double pm2=0;
   double pm3=0;
- // double pm4=0;
+  double pm4=0;
   for(int rowX=0;rowX< pow(_X->rows(),_sizeColValX) ;rowX++)
   {
     pm1=_gisTest->propm(rowX);
     pm2=_scgisTest->propm(rowX);
     pm3=_gisgpTest->propm(rowX);
-  //  pm4=_scgisgpTest->propm(_alphX,rowX,_alphY);
+    pm4=_scgisgpTest->propm(rowX);
     for(int sizeY=0;sizeY<pow(_Y->rows(),_sizeColValY);sizeY++)
     {
       p1=_gisTest->prop(rowX,sizeY);
       p2=_scgisTest->prop(rowX,sizeY);
       p3=_gisgpTest->prop(rowX,sizeY);
- //     p4=_scgisgpTest->prop(rowX,_alphY,sizeY);
+      p4=_scgisgpTest->prop(rowX,sizeY);
       q= _exact->prop(rowX,sizeY);
       if(fabs(p1)<0.00000001){ p1=0.000001;}
       if(fabs(p2)<0.00000001){ p2=0.000001;}
       if(fabs(p3)<0.00000001){ p3=0.000001;}
+      if(fabs(p4)<0.00000001){ p4=0.000001;}
       if(fabs( q)<0.00000001){ q =0.000001;}
       dist[0]+=pm1*p1*log(p1/q);
       dist[1]+=pm2*p2*log(p2/q);
       dist[2]+=pm3*p3*log(p3/q);
-  //    dist[3]+=pm4*p4*log(p4/q);
+      dist[3]+=pm4*p4*log(p4/q);
     }
   }
   return dist;
@@ -338,9 +333,9 @@ double Test::KL1(){
       case 2:
         pm1=_gisgpTest->propm(rowX);
         break;
-   /*   case 3:
-        pm1=_scgisgpTest->propm(_alphX,rowX,_alphY);
-        break; */
+      case 3:
+        pm1=_scgisgpTest->propm(rowX);
+        break;
       default:
         cout << "default " << endl;
     }
@@ -355,9 +350,9 @@ double Test::KL1(){
         case 2:
           p1=_gisgpTest->prop(rowX,sizeY);
           break;
-     /*   case 3:
-          p1=_scgisgpTest->prop(rowX,_alphY,sizeY);
-          break; */
+        case 3:
+          p1=_scgisgpTest->prop(rowX,sizeY);
+          break;
         default:
           cout << "default " << endl;
       }
@@ -446,9 +441,9 @@ double Test::prop(int indexX, int indexY)
     case 2:
       return _gisgpTest->prop(indexX, indexY);
       break;
- /*   case 3:
-      return _scgisgpTest->prop(feati,featj,valX,valY);
-      break; */
+    case 3:
+      return _scgisgpTest->prop(indexX, indexY);
+      break;
     default:
       cout << "default " << endl;
   }
@@ -468,9 +463,9 @@ double Test:: getconv(int ind)
     case 2:
       return _gisgpTest->getconv(ind);
       break;
- /*   case 3:
+    case 3:
       return _scgisTest->getconv(ind);
-      break; */
+      break;
     default:
       cout << "default " << endl;
   }
@@ -491,9 +486,9 @@ int Test::getsizeconv()
     case 2:
       return _gisgpTest->getsizeconv();
       break;
- /*   case 3:
+    case 3:
       return _scgisTest->getsizeconv();
-      break; */
+      break;
     default:
       cout << "default " << endl;
   }

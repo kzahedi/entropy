@@ -25,43 +25,6 @@
 int main(int argc, char **argv)
 {
 
-	/*  srand(time(NULL));
-	  DContainer *zX = new DContainer(2,1);
-	  *zX << 0 << 1;
-	  DContainer *zY = new DContainer(3,1);
-	  *zY << 0 << 1 << 2;
-	  vector<double> lambda(3);
-	  lambda[0] = 0;
-	  lambda[1] = 1;
-	  lambda[2] = 5;
-
-	  IsParameter param;
-	  param.lambdavalue    = 1.0;
-	  param.lambdadeltaval = 1.0;
-	  param.sigma          = 0.01;
-	  param.maxit          = 200;
-	  param.konv           = 0.0001;
-	  param.time           = false;
-	  param.test           = true;
-	  param.seconds        = 0;
-
-	  vector<vector<int > > alphX(4,vector<int>(0));
-	  alphX[0].push_back(0);
-	  alphX[0].push_back(1);
-	  alphX[1].push_back(0);
-	  alphX[2].push_back(1);
-	  alphX[2].push_back(3);
-	  alphX[3].push_back(2);
-
-	  vector<vector<int > > alphY(4,vector<int>(0));
-	  alphY[0].push_back(0);
-	  alphY[1].push_back(1);
-	  alphY[2].push_back(0);
-	  alphY[3].push_back(2);
-
-	  Test *test     = new Test(4,4,100,lambda,*zX,*zY, alphX, alphY, param,0);
-	  Test *testsc   = new Test(4,4,100,lambda,*zX,*zY, alphX, alphY, param,1); */
-
   DContainer *zX = new DContainer(2,1); // alphabet
   *zX << 0 << 1;
   DContainer *zY = new DContainer(2,1); // alphabet
@@ -70,26 +33,6 @@ int main(int argc, char **argv)
   lambda[0] = 0;
   lambda[1] = 1;
   lambda[2] = 5;
-  vector<int> x(3);
-  x[0]=0;
-  x[1]=1;
-  x[2]=2;
-  vector<int> y(2);
-  y[0]=0;
-  y[1]=1;
-  //DContainer &aX, DContainer &aY,vector<double> systX,vector<double> systY, double valuelambda
- // Feature *M = new Feature(*zX,*zY,3,2,x,y,2);
- // cout << (*M)<< endl;
-
-  //int indexX, int indexY, vector<double> x, vector<double> y
-  vector<double> xi(3);
-  xi[0]=0;
-  xi[1]=0;
-  xi[2]=0;
-  cout << " x3 " << xi[2] << endl;
-  vector<double> yj(2);
-  yj[0]=0;
-  yj[1]=0;
 	//V(3,vector<int>(0))
 vector<vector<int > > alphX(3,vector<int>(0));
 alphX[0].push_back(0);
