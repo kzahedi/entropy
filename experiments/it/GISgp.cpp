@@ -2,34 +2,48 @@
 
 //training data, alphabete , startwert fuer lambda, startwert fuer delta, wert fuer sigma, test auf time, sekunden fuer den test
 // GISgp::GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,double lambdadeltaval, double sigma,int maxit,double konv, bool test,bool time,int seconds)
-GISgp::GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param)
-  :IT(eX, eY, aX, aY, param, true)
+GISgp::GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
+  :IT(eX, eY, aX, aY, systX, systY, param, true)
 {
-  _param    = param;
-  _exponent = new double[_sizeY];
-  _expected = new double***[_sizeColValX];
-  for(int i=0; i<_sizeColValX; i++)
+  _normaliser = new double[_sizeSystX];
+
+  _exponent= new double*[_sizeSystX];
+  for(int i=0;i<_sizeSystX;i++){
+	  _exponent[i]= new double[(int) pow(_Y->rows(),_sizeColValY)];
+  }
+  _expected = new double**[_sizeSystX];
+  for(int i=0; i<_sizeSystX; i++)
   {
-    _expected[i]=new double**[_sizeColValY];
-    for( int j=0;j< _sizeColValY;j++)
+    _expected[i]=new double*[(int) pow(_X->rows(),_systX[i].size())];
+    for(int k=0; k< (int) pow(_X->rows(),_systX[i].size()); k++)
     {
-      _expected[i][j]=new double*[_sizeX];
-      for(int k=0; k< _sizeX; k++)
+      _expected[i][k]= new double[(int) pow(_Y->rows(),_systY[i].size())];
+      for(int l=0; l< _sizeY;l++)
       {
-        _expected[i][j][k]= new double[_sizeY];
-        for(int l=0; l< _sizeY;l++){
-          _expected[i][j][k][l]=0;
-        }
+        _expected[i][k][l]=0;
+      }
+    }
+  }
+  _delta= new double**[_sizeSystX];
+  for(int i=0;i<_sizeSystX;i++)
+  {
+    _delta[i]= new double*[(int) pow(_X->rows(),_systX[i].size())];
+    for(int j=0;j<(int) pow(_X->rows(),_systX[i].size());j++)
+    {
+      _delta[i][j]= new double[(int) pow(_Y->rows(),_systY[i].size())];
+      for(int k=0;k<(int) pow(_Y->rows(),_systY[i].size());k++)
+      {
+        _delta[i][j][k]=param.lambdadeltaval;
       }
     }
   }
   if(param.time)
   {
-    __gisgp(param.maxit, param.konv, param.lambdadeltaval, param.sigma, param.test, param.seconds);
+    __gisgp(param.maxit, param.konv, param.sigma, param.test, param.seconds);
   }
   else
   {
-    __gisgp(param.maxit, param.konv, param.lambdadeltaval, param.sigma, param.test);
+    __gisgp(param.maxit, param.konv, param.sigma, param.test);
   }
 }
 
@@ -37,15 +51,11 @@ GISgp::~GISgp()
 {
   if(_observed!=NULL)
   {
-    for(int i=0;i<_sizeColValX;i++)
+    for(int i=0;i<_sizeSystX;i++)
     {
-      for(int j=0;j<_sizeColValY;j++)
+      for(int k=0;k<pow(_X->rows(),_systX[i].size());k++)
       {
-        for(int k=0;k<_sizeX;k++)
-        {
-          delete [] _observed[i][j][k];
-        }
-        delete [] _observed[i][j];
+        delete [] _observed[i][k];
       }
       delete [] _observed[i];
     }
@@ -54,15 +64,11 @@ GISgp::~GISgp()
 
   if(_expected != NULL)
   {
-    for(int i=0;i<_sizeColValX;i++)
+    for(int i=0;i<_sizeSystX;i++)
     {
-      for(int j=0;j<_sizeColValY;j++)
+      for(int k=0;k<pow(_X->rows(),_systX[i].size());k++)
       {
-        for(int k=0;k<_sizeX;k++)
-        {
-          delete [] _expected[i][j][k];
-        }
-        delete [] _expected[i][j];
+        delete [] _expected[i][k];
       }
       delete[] _expected[i];
     }
@@ -71,14 +77,10 @@ GISgp::~GISgp()
 
   if(_delta != NULL)
   {
-    for(int i=0;i<_sizeColValX;i++)
+    for(int i=0;i<_sizeSystX;i++)
     {
-      for(int j=0;j<_sizeColValY;j++)
+      for(int j=0;j<pow(_X->rows(),_systX[i].size());j++)
       {
-        for(int k=0;k<_sizeX;k++)
-        {
-          delete[] _delta[i][j][k];
-        }
         delete[] _delta[i][j];
       }
       delete[] _delta[i];
@@ -89,36 +91,52 @@ GISgp::~GISgp()
   delete [] _exponent;
 
   _conv.clear();
+  delete [] _normaliser;
 }
+double GISgp::__calculateIteration(double featconst,double sigma, bool test)
+{
 
-void GISgp::__gisgp(int maxit, double konv, double lambdadeltaval, double sigma, bool test,int seconds)
+	    double l=0;
+	    __getexp();
+	    for(int feat=0; feat<_sizeSystX; feat++)
+	    {
+          for(int deltai=0; deltai<  pow(_X->rows(),_systX[feat].size()); deltai++)
+	      {
+	        for(int deltaj=0; deltaj<  pow(_Y->rows(),_systY[feat].size()); deltaj++)
+	        {
+	        	cout << " schleife " << endl;
+	          double newl;
+	          double oldl= (*_FM).getFeatureArraylambda(feat,deltai,deltaj);
+	          double z=1;
+	          while(fabs(z)>0.00001)
+	          {
+	            z=(oldl+_delta[feat][deltai][deltaj])/pow(sigma,2) +_expected[feat][deltai][deltaj]*exp(_delta[feat][deltai][deltaj]*featconst)- _observed[feat][deltai][deltaj] ;
+	            double n= + 1/(pow(sigma,2))+_expected[feat][deltai][deltaj]*featconst*exp(_delta[feat][deltai][deltaj]*featconst);
+	            _delta[feat][deltai][deltaj]= _delta[feat][deltai][deltaj]-(z/n);
+	          }
+	          newl= oldl+_delta[feat][deltai][deltaj];
+	          _FM->setFeatureArraylambda(feat,deltai,deltaj,newl);
+	          l+=fabs((oldl+_delta[feat][deltai][deltaj])/pow(sigma,2)+_expected[feat][deltai][deltaj]*exp(_delta[feat][deltai][deltaj]*featconst)- _observed[feat][deltai][deltaj]);
+	         }
+	       }
+	     }
+	    _iterations++;
+	    if(test){
+	      _conv.push_back(l);
+	    }
+       return l;
+}
+void GISgp::__gisgp(int maxit, double konv, double sigma, bool test,int seconds)
 {
   //constant c for delta
   double featconst = __getFeatconst();
 
-  for(int k=0;k< _sizeY;k++)
+  for(int i=0;i<_sizeSystX;i++)
   {
-    _exponent[k]=0;
-  }
-  _normaliser=0;
-
-  // delta fuer die Newtonit.
-  _delta= new double***[_sizeColValX];
-  for(int i=0;i<_sizeColValX;i++)
-  {
-    _delta[i]= new double**[_sizeColValY];
-    for(int j=0;j<_sizeColValY;j++)
-    {
-      _delta[i][j]= new double*[_sizeX];
-      for(int k=0;k<_sizeX;k++)
-      {
-        _delta[i][j][k]= new double[_sizeY];
-        for(int l=0;l<_sizeY;l++)
-        {
-          _delta[i][j][k][l]=lambdadeltaval;
-        }
-      }
-    }
+	  for(int j=0;j<pow(_Y->rows(),_sizeColValY);j++)
+	  {
+		  _exponent[i][j]= 0.0;
+	  }
   }
   double l=1;
   double utime=0;
@@ -127,111 +145,32 @@ void GISgp::__gisgp(int maxit, double konv, double lambdadeltaval, double sigma,
   _iterations=0;
   while(utime<seconds)
   {
-    befor=time(NULL);
-    l=0;
-    __getexp();
-    for(int Feati=0; Feati<_sizeColValX;Feati++)
-    {
-      for(int Featj=0; Featj< _sizeColValY;Featj++)
-      {
-        for(int deltai=0; deltai< _sizeX; deltai++)
-        {
-          for(int deltaj=0; deltaj< _sizeY; deltaj++)
-          {
-            double newl;
-            double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,deltai,deltaj);
-            double z=1;
-            while(fabs(z)>0.00001)
-            {
-              z=(oldl+_delta[Feati][Featj][deltai][deltaj])/pow(sigma,2) +_expected[Feati][Featj][deltai][deltaj]*exp(_delta[Feati][Featj][deltai][deltaj]*featconst)- _observed[Feati][Featj][deltai][deltaj] ;
-              double n= + 1/(pow(sigma,2))+_expected[Feati][Featj][deltai][deltaj]*featconst*exp(_delta[Feati][Featj][deltai][deltaj]*featconst);
-              _delta[Feati][Featj][deltai][deltaj]= _delta[Feati][Featj][deltai][deltaj]-(z/n);
-            }
-            newl= oldl+_delta[Feati][Featj][deltai][deltaj];
-            _FM->setFeatureArraylambda(Feati,Featj,deltai,deltaj,newl);
-            l+=fabs((oldl+_delta[Feati][Featj][deltai][deltaj])/pow(sigma,2)+_expected[Feati][Featj][deltai][deltaj]*exp(_delta[Feati][Featj][deltai][deltaj]*featconst)- _observed[Feati][Featj][deltai][deltaj]);
-          }
-        }
-      }
-    }
-    _iterations++;
-    if(test){
-      _conv.push_back(l);
-    }
-    after=time(NULL);
-    utime+= difftime(after,befor);
+  befor=time(NULL);
+  l=0;
+   __calculateIteration(featconst,sigma,test);
+   after=time(NULL);
+   utime+= difftime(after,befor);
   }
 }
 
-void GISgp::__gisgp(int maxit, double konv, double lambdadeltaval, double sigma, bool test)
+void GISgp::__gisgp(int maxit, double konv, double sigma, bool test)
 {
   //constant c for delta
   double featconst = __getFeatconst();
 
-  for(int i=0; i<_sizeColValX; i++)
+  for(int i=0;i<_sizeSystX;i++)
   {
-    for(int j=0;j<_sizeColValY;j++)
-    {
-      for(int k=0;k< _sizeY;k++)
-      {
-        _exponent[k]=0;
-      }
-    }
-  }
-
-  // delta fuer die Newtonit.
-  _delta= new double***[_sizeColValX];
-  for(int i=0;i<_sizeColValX;i++)
-  {
-    _delta[i]= new double**[_sizeColValY];
-    for(int j=0;j<_sizeColValY;j++)
-    {
-      _delta[i][j]= new double*[_sizeX];
-      for(int k=0;k<_sizeX;k++)
-      {
-        _delta[i][j][k]= new double[_sizeY];
-        for(int l=0;l<_sizeY;l++)
-        {
-          _delta[i][j][k][l]=lambdadeltaval;
-        }
-      }
-    }
+	  for(int j=0;j<pow(_Y->rows(),_sizeColValY);j++)
+	  {
+		  _exponent[i][j]= 0.0;
+	  }
   }
 
   int i=0;
   double l=1;
   while(i<maxit && fabs(l)>=konv )
   {
-    l=0;
-    __getexp();
-    for(int Feati=0; Feati<_sizeColValX;Feati++)
-    {
-      for(int Featj=0; Featj< _sizeColValY;Featj++)
-      {
-        for(int lambdai=0; lambdai< _sizeX; lambdai++)
-        {
-          for(int lambdaj=0; lambdaj< _sizeY; lambdaj++)
-          {
-            double newl;
-            double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,lambdai,lambdaj);
-            double z=1;
-            while(z>0.00001)
-            {
-              z=(oldl+_delta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2) +_expected[Feati][Featj][lambdai][lambdaj]*exp(_delta[Feati][Featj][lambdai][lambdaj]*featconst)- _observed[Feati][Featj][lambdai][lambdaj] ;
-              double n= + 1/(pow(sigma,2))+_expected[Feati][Featj][lambdai][lambdaj]*featconst*exp(_delta[Feati][Featj][lambdai][lambdaj]*featconst);
-              _delta[Feati][Featj][lambdai][lambdaj]= _delta[Feati][Featj][lambdai][lambdaj]-(z/n);
-            }
-            newl= oldl+_delta[Feati][Featj][lambdai][lambdaj];
-            _FM->setFeatureArraylambda(Feati,Featj,lambdai,lambdaj,newl);
-            l+=fabs((oldl+_delta[Feati][Featj][lambdai][lambdaj])/pow(sigma,2)+_expected[Feati][Featj][lambdai][lambdaj]*exp(_delta[Feati][Featj][lambdai][lambdaj]*featconst)- _observed[Feati][Featj][lambdai][lambdaj]);
-          }
-        }
-      }
-    }
-    i++;
-    if(test){
-      _conv.push_back(l);
-    }
+	  __calculateIteration(featconst,sigma,true);
   }
 }
 
@@ -247,80 +186,57 @@ int GISgp:: getsizeconv()
 
 double GISgp::__getFeatconst()
 {
-  double Featconst=1;
-  int curr=0;
-  for(int i=0; i< _sizeRowValX;i++)
+  double r = 0.0;
+  for(int i=0; i< _sizeRowValX;i++) // i-th data row
   {
-    for(int j=0; j< _sizeY;j++)
-    {
-      for(int delti=0; delti< _sizeColValX; delti++)
-      {
-        for(int deltj=0; deltj< _sizeColValY; deltj++)
-        {
-          for(int deltxi=0; deltxi < _sizeX; deltxi++)
-          {
-            for(int deltyj=0; deltyj < _sizeY; deltyj++)
-            {
-              for(int k=0; k< (*_FM).getMatrixIndexX(i,j).size();k++)
-              {
-                curr++;
-              }
-            }
-          }
-          if(curr> Featconst) Featconst=curr;
-          curr=0;
-        }
-      }
-    }
+    for(int j=0; j< pow(_Y->rows(),_sizeColValY);j++) // y-alphabet
+	{
+	  int v = (*_FM).getMatrixIndexFeat(i,j).size(); // the number of matching deltas
+	  if(v > r) r = v;
+	}
   }
-  return Featconst;
+  return r;
 }
 
 void GISgp::__getexp()
 {
-  for(int i=0; i<_sizeColValX; i++)
-  {
-    for( int j=0;j< _sizeColValY;j++)
-    {
-      for(int k=0; k< _sizeX; k++)
-      {
-        for(int l=0; l< _sizeY;l++)
-        {
-          _expected[i][j][k][l]=0;
-        }
-      }
-    }
-  }
+	cout << " anfang get exp " << endl;
+	  for(int i=0; i<_sizeSystX; i++)
+	  {
+	    for(int k=0; k< (int) pow(_X->rows(),_systX[i].size()); k++)
+	    {
+	      for(int l=0; l< (int) pow(_Y->rows(),_systY[i].size());l++)
+	      {
+	        _expected[i][k][l]=0;
+	      }
+	    }
+	  }
 
-  for(int Feati=0; Feati< _sizeColValX; Feati++)
-  {
-    for(int Featj=0; Featj< _sizeColValY; Featj++)
-    {
-
-      for(int xi=0; xi< _sizeRowValX; xi++)
-      {
-        _normaliser=0;
-        for(int yj=0; yj< _sizeY; yj++)
-        {
-          _exponent[yj]  = _FM->getFeatureArrayvalue(Feati,Featj,(*_valX)(xi,Feati), (*_Y)(yj,0));
-          _normaliser   += exp(_exponent[yj]);
-        }
-        for(int yj=0; yj< _sizeY; yj++)
-        {
-          for(int k=0; k< (*_FM).getMatrixIndexX(xi,yj).size();k++)
-          {
-            if((*_FM).getMatrixIndexX(xi,yj)[k]==Feati && (*_FM).getMatrixIndexY(xi,yj)[k]==Featj)
-            {
-              if((*_FM).getFeatureArraydelta(Feati,Featj,(*_FM).getMatrixIndexdX(xi,yj)[k],(*_FM).getMatrixIndexdY(xi,yj)[k],(*_valX)(xi,Feati),(*_Y)(yj,0))==1)
-              {
-                _expected[Feati][Featj][(*_FM).getMatrixIndexdX(xi,yj)[k]][(*_FM).getMatrixIndexdY(xi,yj)[k]]+=exp(_exponent[yj])/_normaliser;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+	  for(int xi=0; xi< _sizeRowValX; xi++)
+	  {
+	    for(int i=0;i<_sizeSystX;i++){
+	      _normaliser[i]=0;
+	    }
+	    for(int yj=0; yj< pow(_Y->rows(),_sizeColValY); yj++)
+	    {
+	      for(int k=0; k< (*_FM).getMatrixIndexFeat(xi,yj).size();k++){
+	    	int index=_FM->getMatrixIndexFeat(xi,yj)[k];
+	    	_exponent[index][yj]=_FM->getFeatureArrayvalueAlphY(index,xi,yj);
+	        _normaliser[index] += exp(_exponent[index][yj]);
+	      }
+	    }
+	    for(int yj=0; yj< pow(_Y->rows(),_sizeColValY); yj++)
+	    {
+	      for(int k=0; k< (*_FM).getMatrixIndexFeat(xi,yj).size();k++)
+	      {
+	        int index=_FM->getMatrixIndexFeat(xi,yj)[k];
+          _expected[index]
+					 [(*_FM).getMatrixIndexdX(xi,yj)[k]]
+	                 [(*_FM).getMatrixIndexdY(xi,yj)[k]] += exp(_exponent[index][yj])/_normaliser[index];
+	      }
+	    }
+	   }
+	  cout << " ende get expected " << endl;
 }
 
 int GISgp:: getIterations()

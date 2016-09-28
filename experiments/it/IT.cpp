@@ -51,36 +51,6 @@ IT::IT(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY,vector<vector
   _IM          = NULL;
   _observed    = NULL;
 }
-
-// returns p(y_j = valY | x_i = valX)
-double IT::prop(int feat, int indexX, int indexY)
-{
-  assert(feat< _systX.size());
-  double norm     = 0;
-  double exponent = 0;
-  if(_gis)
-  {
-    exponent = exp((*_FM).getFeatureArrayvalueAlphYAlphX(feat,indexX,indexY));
-  }
-  else
-  {
-    exponent = exp((*_IM).getFeatureArrayvalueAlphYAlphX(feat,indexX,indexY));
-  }
-
-  for(int yi = 0; yi < pow(_Y->rows(),_sizeColValY); yi++)
-  {
-    if(_gis)
-    {
-      norm += exp((*_FM).getFeatureArrayvalueAlphYAlphX(feat,indexX,yi));
-    }
-    else
-    {
-      norm += exp((*_IM).getFeatureArrayvalueAlphYAlphX(feat,indexX,yi));
-    }
-  }
-  return exponent/norm;
-}
-
 // p(y | x)
 // double IT::prop(int rowX, vector<vector<double> > Y, int rowY)
 double IT::prop(int rowX, int rowY)
@@ -190,11 +160,11 @@ double*** IT::__getobs()
   _observed = new double**[_sizeSystX];
   for(int i=0; i<_systX.size(); i++)
   {
-      _observed[i]=new double*[(int) pow(_X->rows(),_sizeColValX)];
-      for(int k=0; k< pow(_X->rows(),_sizeColValX); k++)
+      _observed[i]=new double*[(int) pow(_X->rows(),_systX[i].size())];
+      for(int k=0; k< pow(_X->rows(),_systX[i].size()); k++)
       {
-        _observed[i][k]= new double[(int) pow(_Y->rows(),_sizeColValY)];
-        for(int l=0; l< pow(_Y->rows(),_sizeColValY);l++)
+        _observed[i][k]= new double[(int) pow(_Y->rows(),_systY[i].size())];
+        for(int l=0; l< pow(_Y->rows(),_systY[i].size());l++)
         {
           _observed[i][k][l] = 0.0;
         }
@@ -226,13 +196,9 @@ double*** IT::__getobs()
                 _observed[feat][delti][deltj]++;
               }
             }
-
           }
-
         }
-
       }
-
   }
   return _observed;
 }

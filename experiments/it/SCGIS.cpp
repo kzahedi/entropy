@@ -46,7 +46,7 @@ int SCGIS:: getsizeconv(){
 
 SCGIS::~SCGIS(){
   for(int i=0; i<_sizeSystX;i++){
-      for(int k=0;k<(int) pow(_X->rows(),_sizeColValX);k++){
+      for(int k=0;k<(int) pow(_X->rows(),_systX[i].size());k++){
         delete [] _observed[i][k];
       }
     delete [] _observed[i];
@@ -163,7 +163,7 @@ double SCGIS::__calculateIteration(bool test)
 	  if(test){
 	    _conv.push_back(l);
 	  }
-	  cout << " " << l;
+	 // cout << " " << l;
 	  return l;
 }
 int SCGIS:: getIterations()

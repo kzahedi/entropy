@@ -29,7 +29,7 @@ class Test
     vector<double> KL();
     double         KL1();
     void           comparison();
-    double         prop(int feat, int indexX, int indexY);
+    double         prop( int indexX, int indexY);
     double         getconv(int ind);
     int            getsizeconv();
     DContainer&    getvalX();

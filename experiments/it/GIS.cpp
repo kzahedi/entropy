@@ -8,14 +8,14 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<v
 :IT(eX, eY, aX, aY,systX, systY, param, true)
 {
   _param      = param;
-  _expected   = new double**[_sizeSystX]; cout << " hier  " << endl;
+  _expected   = new double**[_sizeSystX];
   for(int i=0; i<_sizeSystX; i++)
   {
-      _expected[i]=new double*[(int) pow(_X->rows(),_sizeColValX)];
-      for(int k=0; k<pow(_X->rows(),_sizeColValX); k++)
+      _expected[i]=new double*[(int) pow(_X->rows(),_systX[i].size())];
+      for(int k=0; k<pow(_X->rows(),_systX[i].size()); k++)
       {
-        _expected[i][k]= new double[(int) pow(_Y->rows(),_sizeColValY)];
-        for(int l=0; l< pow(_Y->rows(),_sizeColValY);l++)
+        _expected[i][k]= new double[(int) pow(_Y->rows(),_systY[i].size())];
+        for(int l=0; l< pow(_Y->rows(),_systY[i].size());l++)
         {
           _expected[i][k][l]=0;
         }
@@ -43,7 +43,7 @@ GIS::~GIS()
   {
     for(int i=0;i<_sizeSystX;i++)
     {
-      for(int j=0;j<(int) pow(_X->rows(),_sizeColValX);j++)
+      for(int j=0;j<(int) pow(_X->rows(),_systX[i].size());j++)
       {
         delete [] _observed[i][j];
       }
@@ -53,7 +53,7 @@ GIS::~GIS()
   }
   if(_expected != NULL){
      for(int i=0;i<_sizeSystX;i++){
-         for(int k=0;k<(int) pow(_X->rows(),_sizeColValX);k++){
+         for(int k=0;k<(int) pow(_X->rows(),_systX[i].size());k++){
           delete [] _expected[i][k];
       }
       delete[] _expected[i];
@@ -95,9 +95,9 @@ void GIS::__getExpected()
 {
 	  for(int i=0; i<_sizeSystX; i++)
 	  {
-	    for(int k=0; k< (int) pow(_X->rows(),_sizeColValX); k++)
+	    for(int k=0; k< (int) pow(_X->rows(),_systX[i].size()); k++)
 	    {
-	      for(int l=0; l< (int) pow(_Y->rows(),_sizeColValY);l++)
+	      for(int l=0; l< (int) pow(_Y->rows(),_systY[i].size());l++)
 	      {
 	        _expected[i][k][l]=0;
 	      }
@@ -191,7 +191,7 @@ double GIS::__calculateIteration(double featconst, bool test)
         }
         if(fabs(_observed[feat][deltai][deltaj]) > EPSILON)
         {
-          // TODO 0.1 as learning rate parameter
+          // TODO 0.4 as learning rate parameter
           newl = oldl + 0.4*(1.0/featconst) *log(_observed[feat][deltai][deltaj]/_expected[feat][deltai][deltaj]);
         }
         else

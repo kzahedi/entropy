@@ -24,6 +24,44 @@
 
 int main(int argc, char **argv)
 {
+
+	/*  srand(time(NULL));
+	  DContainer *zX = new DContainer(2,1);
+	  *zX << 0 << 1;
+	  DContainer *zY = new DContainer(3,1);
+	  *zY << 0 << 1 << 2;
+	  vector<double> lambda(3);
+	  lambda[0] = 0;
+	  lambda[1] = 1;
+	  lambda[2] = 5;
+
+	  IsParameter param;
+	  param.lambdavalue    = 1.0;
+	  param.lambdadeltaval = 1.0;
+	  param.sigma          = 0.01;
+	  param.maxit          = 200;
+	  param.konv           = 0.0001;
+	  param.time           = false;
+	  param.test           = true;
+	  param.seconds        = 0;
+
+	  vector<vector<int > > alphX(4,vector<int>(0));
+	  alphX[0].push_back(0);
+	  alphX[0].push_back(1);
+	  alphX[1].push_back(0);
+	  alphX[2].push_back(1);
+	  alphX[2].push_back(3);
+	  alphX[3].push_back(2);
+
+	  vector<vector<int > > alphY(4,vector<int>(0));
+	  alphY[0].push_back(0);
+	  alphY[1].push_back(1);
+	  alphY[2].push_back(0);
+	  alphY[3].push_back(2);
+
+	  Test *test     = new Test(4,4,100,lambda,*zX,*zY, alphX, alphY, param,0);
+	  Test *testsc   = new Test(4,4,100,lambda,*zX,*zY, alphX, alphY, param,1); */
+
   DContainer *zX = new DContainer(2,1); // alphabet
   *zX << 0 << 1;
   DContainer *zY = new DContainer(2,1); // alphabet
@@ -166,7 +204,8 @@ alphY[2].push_back(0);
   	// cout << (*esY) << endl;
   	 //DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param
   	//int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param
-/*
+
+	/*
  	 SCGIS *_scgisTest = new SCGIS(*eX,*esY,*zX,*zY,alphX,alphY,param);
   	 cout << "vor GIS " << endl;
   	 GIS *_gisTest = new GIS(*eX,*esY,*zX,*zY,alphX,alphY,param);
