@@ -23,6 +23,5 @@ class itTest : public CppUnit::TestFixture
     void SCTwoXTwoY();
     void NotBinary();
     void FourXFourY();
-
 };
 
