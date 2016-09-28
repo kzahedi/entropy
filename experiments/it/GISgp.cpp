@@ -49,19 +49,6 @@ GISgp::GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vect
 
 GISgp::~GISgp()
 {
-  if(_observed!=NULL)
-  {
-    for(int i=0;i<_sizeSystX;i++)
-    {
-      for(int k=0;k<pow(_X->rows(),_systX[i].size());k++)
-      {
-        delete [] _observed[i][k];
-      }
-      delete [] _observed[i];
-    }
-    delete [] _observed;
-  }
-
   if(_expected != NULL)
   {
     for(int i=0;i<_sizeSystX;i++)
@@ -123,7 +110,6 @@ double GISgp::__calculateIteration(double featconst,double sigma, bool test)
 	    if(test){
 	      _conv.push_back(l);
 	    }
-	  //  cout << l << endl;
        return l;
 }
 void GISgp::__gisgp(int maxit, double konv, double sigma, bool test,int seconds)

@@ -39,43 +39,23 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<v
 
 GIS::~GIS()
 {
-  if(_observed!=NULL)
-  {
-    for(int i=0;i<_sizeSystX;i++)
-    {
-      for(int j=0;j<(int) pow(_X->rows(),_systX[i].size());j++)
-      {
-        delete [] _observed[i][j];
-      }
-     delete [] _observed[i];
-  }
-  delete [] _observed;
-  }
   if(_expected != NULL){
      for(int i=0;i<_sizeSystX;i++){
-         for(int k=0;k<(int) pow(_X->rows(),_systX[i].size());k++){
-          delete [] _expected[i][k];
+      for(int k=0;k<(int) pow(_X->rows(),_systX[i].size());k++){
+        delete[] _expected[i][k];
       }
       delete[] _expected[i];
      }
      delete[] _expected;
   }
   if(_exponent != NULL){
-	  for(int i=0; i<_sizeSystX;i++){
-		  delete [] _exponent[i];
-	  }
+	for(int i=0; i<_sizeSystX;i++){
+      delete [] _exponent[i];
+	}
     delete [] _exponent;
   }
-
   delete [] _normaliser;
 }
-//double GIS:: getconv(int i){
- // return _conv[i];
-//}
-//int GIS:: getsizeconv(){
-//  return _conv.size();
-//}
-
 
 double GIS::__getFeatconst()
 {
@@ -149,7 +129,6 @@ void GIS:: __gis(int maxit, double konv, bool test,int seconds){
       __calculateIteration(featconst, test);
       after=time(NULL);
       utime+= difftime(after,befor);
-  //    cout << utime << endl;
     }
 }
 
@@ -204,8 +183,6 @@ double GIS::__calculateIteration(double featconst, bool test)
     }
   }
   _iterations++;
- // cout << _iterations << endl;
- // cout << l << endl;
   if(test){
     _conv.push_back(l);
   }
@@ -217,6 +194,7 @@ int GIS:: getIterations()
 {
   return _iterations;
 }
+
 double GIS:: getconv(int i){
   return _conv[i];
 }

@@ -26,14 +26,17 @@ class Test
     Test(int colX,int colValY, int rowX, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
     Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, int i);
     ~Test();
-    vector<double> KL();
-    double         KL1();
-    void           comparison();
-    double         prop( int indexX, int indexY);
-    double         getconv(int ind);
-    int            getsizeconv();
-    DContainer&    getvalX();
-    DContainer&    getvalY();
+    vector<double>  KL();
+    double          KL1();
+    void            comparison();
+    double          prop( int indexX, int indexY);
+    double          getconv(int ind);
+    int             getsizeconv();
+    vector<double>  propAll(int indexX, int indexY);
+    vector<double>  getconvAll(int ind);
+    vector<int>     getsizeconvAll();
+    DContainer&     getvalX();
+    DContainer&     getvalY();
 
   private:
     IT*                     _exact;
@@ -60,7 +63,5 @@ class Test
     void __setLambdaRand(vector<double> lambdaval);
     void __comptime(IsParameter param);
 };
-
-    // void      __comptime(int maxit, double konv,int seconds);
 #endif
 

@@ -181,7 +181,6 @@ double*** IT::__getobs()
         {
           for(int deltj=0; deltj<pow(_Y->rows(),_systY[feat].size()); deltj++)
           {
-       //       cout << feat << " "<< delti << " " << deltj << " obs " << _observed[feat][delti][deltj] << " delta  " <<_FM->getFeatureArraydelta(feat,delti,deltj,i,i) << endl;
             if(_gis)
             {
               if(_FM->getFeatureArraydelta(feat,delti,deltj,i,i)==1)
@@ -202,7 +201,30 @@ double*** IT::__getobs()
   }
   return _observed;
 }
-
+IT::~IT(){
+	if(_observed!=NULL)
+	  {
+	    for(int i=0;i<_sizeSystX;i++)
+	    {
+	      for(int k=0;k<pow(_X->rows(),_systX[i].size());k++)
+	      {
+	        delete [] _observed[i][k];
+	      }
+	      delete [] _observed[i];
+	    }
+	    delete [] _observed;
+	  }
+	  for(int i=0; i< _systX.size();i++)
+	  {
+	    _systX[i].clear();
+	  }
+	  _systX.clear();
+	  for(int j=0; j<_systY.size();j++)
+	  {
+		_systY[j].clear();
+	  }
+	  _systY.clear();
+}
 void IT::setFeatureArraylambda(int feati, int ilambdaX, int ilambdaY,double valuelambda){
   assert(feati<_systX.size());
   assert(_gis == true);

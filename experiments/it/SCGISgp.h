@@ -17,9 +17,8 @@ using namespace std;
 
 class SCGISgp : public IT{
   public:
-    // SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,double lambdadeltaval, double sigma ,int maxit, double konv, bool test,bool time,int seconds);
     SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
-      ~SCGISgp();
+    ~SCGISgp();
     double getconv(int i);
     int    getsizeconv();
     int    getIterations();

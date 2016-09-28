@@ -53,17 +53,6 @@ SCGISgp::SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,
 
 SCGISgp:: ~SCGISgp()
 {
-  for(int i=0; i<_sizeSystX;i++)
-  {
-    for(int k=0;k< pow(_X->rows(),_systX[i].size());k++)
-    {
-      delete [] _observed[i][k];
-    }
-    delete [] _observed[i];
-  }
-  delete [] _observed;
-
-
   for(int i=0;i<_sizeSystX;i++)
   {
     for(int j=0;j< pow(_X->rows(),_sizeColValX);j++)
@@ -132,9 +121,9 @@ double SCGISgp::__calculateIteration(bool test, double sigma)
 	    double z=1;
 	    while(fabs(z)>0.00001)
 	    {
-	    z=(oldl+_delta[feat][delti][deltj])/pow(sigma,2) +expected*exp(_delta[feat][delti][deltj])- _observed[feat][delti][deltj] ;
-	              double n= + 1/(pow(sigma,2))+expected*exp(_delta[feat][delti][deltj]);
-	              _delta[feat][delti][deltj]= _delta[feat][delti][deltj]-(z/n);
+	      z=(oldl+_delta[feat][delti][deltj])/pow(sigma,2) +expected*exp(_delta[feat][delti][deltj])- _observed[feat][delti][deltj] ;
+	      double n=  1/(pow(sigma,2))+expected*exp(_delta[feat][delti][deltj]);
+	      _delta[feat][delti][deltj]= _delta[feat][delti][deltj]-(z/n);
 	    }
 	    newl= _IM->getFeatureArraylambda(feat,delti,deltj)+_delta[feat][delti][deltj];
 	    l+=fabs((oldl+_delta[feat][delti][deltj])/pow(sigma,2) +expected*exp(_delta[feat][delti][deltj])- _observed[feat][delti][deltj] );

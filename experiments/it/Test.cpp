@@ -82,7 +82,7 @@ Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, D
   _exact= new IT(colValY,*_valX,*_X,*_Y,systX,systY);
   __setLambdaRand(lambda);
   __getValY(colValY,rowX);
-  _case=4;
+  _case=5;
 }
 
 Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, int i) // int maxit, double konv, bool time,bool test,int seconds,int i){
@@ -102,13 +102,13 @@ Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &a
   __getValY(colValY,rowX);
   switch(i){
     case 0:
-      _gisTest=new GIS(*_valX, *_valY, *_X, *_Y,systX,systY, param); //1,maxit,konv,test,_timetest,seconds);
+      _gisTest= new GIS(*_valX, *_valY, *_X, *_Y,systX,systY, param); //1,maxit,konv,test,_timetest,seconds);
       break;
     case 1:
-      _scgisTest=new SCGIS(*_valX,*_valY,*_X,*_Y,systX,systY, param); // 1,maxit,konv,test,_timetest,seconds);
+      _scgisTest= new SCGIS(*_valX,*_valY,*_X,*_Y,systX,systY, param); // 1,maxit,konv,test,_timetest,seconds);
       break;
     case 2:
-      _gisgpTest=new GISgp(*_valX,*_valY,*_X,*_Y,systX,systY, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
+      _gisgpTest= new GISgp(*_valX,*_valY,*_X,*_Y,systX,systY, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
       break;
     case 3:
       _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,systX,systY, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
@@ -220,11 +220,13 @@ void Test:: comparison()
    cout << _gisTest->getFeatureArraylambda(1,0,1) <<endl;
    cout << _gisTest->getFeatureArraylambda(1,1,1) <<endl;
    cout << endl;
+
    cout << _gisTest->getFeatureArraylambda(2,0,0) <<endl;
    cout << _gisTest->getFeatureArraylambda(2,1,0) <<endl;
    cout << _gisTest->getFeatureArraylambda(2,0,1) <<endl;
    cout << _gisTest->getFeatureArraylambda(2,1,1) <<endl;
    cout << endl;
+
    cout << "SCGIS" << endl;
    cout << _scgisTest->getFeatureArraylambda(0,0,0) <<endl;
    cout << _scgisTest->getFeatureArraylambda(0,1,0) <<endl;
@@ -241,11 +243,13 @@ void Test:: comparison()
    cout << _scgisTest->getFeatureArraylambda(1,0,1) <<endl;
    cout << _scgisTest->getFeatureArraylambda(1,1,1) <<endl;
    cout << endl;
+
    cout << _scgisTest->getFeatureArraylambda(2,0,0) <<endl;
    cout << _scgisTest->getFeatureArraylambda(2,1,0) <<endl;
    cout << _scgisTest->getFeatureArraylambda(2,0,1) <<endl;
    cout << _scgisTest->getFeatureArraylambda(2,1,1) <<endl;
    cout << endl;
+
   // cout << _gisTest->getFeatureArraylambda(3,0,0) <<endl;
   // cout << _gisTest->getFeatureArraylambda(3,1,0) <<endl;
   // cout << _gisTest->getFeatureArraylambda(3,0,1) <<endl;
@@ -261,16 +265,19 @@ void Test:: comparison()
    cout << _gisgpTest->getFeatureArraylambda(0,2,1) <<endl;
    cout << _gisgpTest->getFeatureArraylambda(0,3,1) <<endl;
    cout << endl;
+
    cout << _gisgpTest->getFeatureArraylambda(1,0,0) <<endl;
    cout << _gisgpTest->getFeatureArraylambda(1,1,0) <<endl;
    cout << _gisgpTest->getFeatureArraylambda(1,0,1) <<endl;
    cout << _gisgpTest->getFeatureArraylambda(1,1,1) <<endl;
    cout << endl;
+
    cout << _gisgpTest->getFeatureArraylambda(2,0,0) <<endl;
    cout << _gisgpTest->getFeatureArraylambda(2,1,0) <<endl;
    cout << _gisgpTest->getFeatureArraylambda(2,0,1) <<endl;
    cout << _gisgpTest->getFeatureArraylambda(2,1,1) <<endl;
    cout << endl;
+
  //  cout << _gisgpTest->getFeatureArraylambda(3,0,0) <<endl;
  //  cout << _gisgpTest->getFeatureArraylambda(1,1,1,0) <<endl;
  //  cout << _gisgpTest->getFeatureArraylambda(1,1,0,1) <<endl;
@@ -380,7 +387,6 @@ void Test:: __setLambdaRand(vector<double> lambda){
       for(int deltj=0; deltj<pow(_Y->rows(),_systY[feat].size());deltj++){
         double r = rand() % lambda.size();
         _exact->setFeatureArraylambda(feat,delti,deltj,lambda[r]);
-
       }
     }
   }
@@ -464,7 +470,7 @@ double Test:: getconv(int ind)
       return _gisgpTest->getconv(ind);
       break;
     case 3:
-      return _scgisTest->getconv(ind);
+      return _scgisgpTest->getconv(ind);
       break;
     default:
       cout << "default " << endl;
@@ -487,11 +493,37 @@ int Test::getsizeconv()
       return _gisgpTest->getsizeconv();
       break;
     case 3:
-      return _scgisTest->getsizeconv();
+      return _scgisgpTest->getsizeconv();
       break;
     default:
       cout << "default " << endl;
   }
   return -1;
 }
-
+vector<double> Test::propAll(int indexX, int indexY){
+	assert(_case==4);
+	vector<double> prop(4);
+    prop[0]=_gisTest->prop( indexX, indexY);
+    prop[1]=_scgisTest->prop( indexX, indexY);
+    prop[2]=_gisgpTest->prop( indexX, indexY);
+    prop[3]=_scgisgpTest->prop( indexX, indexY);
+    return prop;
+}
+ vector<double> Test::getconvAll(int ind){
+	assert(_case==4);
+	vector<double> conv(4);
+	conv[0]=_gisTest->getconv(ind);
+    conv[1]=_scgisTest->getconv(ind);
+    conv[2]=_gisgpTest->getconv(ind);
+    conv[3]=_scgisgpTest->getconv(ind);
+    return conv;
+}
+vector<int> Test::getsizeconvAll(){
+    assert(_case==4);
+    vector<int> convsize(4);
+    convsize[0]= _gisTest->getsizeconv();
+    convsize[1]= _scgisTest->getsizeconv();
+    convsize[2]= _gisgpTest->getsizeconv();
+    convsize[3]= _scgisgpTest->getsizeconv();
+    return convsize;
+ }

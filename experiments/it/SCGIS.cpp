@@ -45,15 +45,6 @@ int SCGIS:: getsizeconv(){
 }
 
 SCGIS::~SCGIS(){
-  for(int i=0; i<_sizeSystX;i++){
-      for(int k=0;k<(int) pow(_X->rows(),_systX[i].size());k++){
-        delete [] _observed[i][k];
-      }
-    delete [] _observed[i];
-  }
-  delete [] _observed;
-
-
   for(int i=0;i<_sizeSystX;i++){
 	  for(int j=0;j<_sizeRowValX;j++){
 	      delete [] _exponent[i][j];
@@ -126,7 +117,7 @@ double SCGIS::__calculateIteration(bool test)
 	            }
 	          }
 	          double newl = 0.0;
-	          if(fabs(expected)<EPSILON)
+	          if((fabs(expected)<EPSILON)  && (_observed[feat][delti][deltj]>EPSILON ))
 	          {
 	            expected=0.01;
 	          }
@@ -163,7 +154,6 @@ double SCGIS::__calculateIteration(bool test)
 	  if(test){
 	    _conv.push_back(l);
 	  }
-	 // cout << " " << l;
 	  return l;
 }
 int SCGIS:: getIterations()
