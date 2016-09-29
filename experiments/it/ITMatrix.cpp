@@ -100,12 +100,14 @@ int   ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowValX, i
   bool equ = true;
   for(int j=0; j<_systX[i].size();j++)
   {
+	  assert(_systX[i][j]<= _sizeColValX);
 	  if((*_valX)(rowValX,_systX[i][j]) != x[j]){
 		  equ = false;
 	  }
 	//  cout << (*_valX)(rowValX,_systX[i][j]) << " " << _systX[i][j] << " " << i << " " <<  j << " " << x[_systX[i][j]] << "row " << rowValX << " " << rowValY << " " << equ <<  endl;
   }
   for(int j=0;j<_systY[i].size();j++){
+	  assert(_systY[i][j]<= _sizeColValY);
 	  if((*_valY)(rowValY,_systY[i][j]) != y[j]){
 		  equ = false;
 	  }
@@ -130,11 +132,13 @@ int   ITMatrix::getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowVa
   bool equ = true;
   for(int j=0; j<_systX[i].size();j++)
   {
+	  assert(_systX[i][j]<= _sizeColValX);
 	  if((*_valX)(rowValX,_systX[i][j]) != x[j]){
 		  equ = false;
 	  }
   }
   for(int j=0;j<_systY[i].size();j++){
+	  assert(_systY[i][j]<= _sizeColValY);
 	  if( valy[_systY[i][j]]!= y[j]){
 		  equ = false;
 	  }
@@ -161,11 +165,13 @@ int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int in
   bool equ = true;
   for(int j=0; j<_systX[i].size();j++)
   {
+	  assert(_systX[i][j]<= _sizeColValX);
 	  if(valx[_systX[i][j]] != x[j]){
 		  equ = false;
 	  }
   }
   for(int j=0;j<_systY[i].size();j++){
+	  assert(_systY[i][j]<= _sizeColValY);
 	  if( valy[_systY[i][j]]!= y[j]){
 		  equ = false;
 	  }

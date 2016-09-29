@@ -46,7 +46,7 @@ IT::IT(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY,vector<vector
   _sizeColValX = (*_valX).columns();
   _sizeRowValX = (*_valX).rows();
   _valY        = new DContainer(_sizeRowValX,ColValY);
-  _sizeRowValY = 0;
+  _sizeRowValY = _sizeRowValX;
   _FM          = new FeatureMatrix(*_valX,*_valY,*_X,*_Y,systX,systY,1);
   _IM          = NULL;
   _observed    = NULL;
@@ -84,8 +84,6 @@ double IT::prop(int rowX, int rowY)
           featnorm += (*_IM).getFeatureArrayvalueAlphY(feat,rowX,yi);
         }
     }
-
-
     norm     += exp(featnorm);
     featnorm  = 0;
   }

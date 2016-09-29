@@ -394,6 +394,7 @@ void Test:: __setLambdaRand(vector<double> lambda){
 
 void Test::__getValX(int colX,int rowX)
 {
+	cout << "getValX" << endl;
   _valX = new DContainer(rowX,colX);
   for(int i=0;i < rowX; i++)
   {
@@ -403,10 +404,12 @@ void Test::__getValX(int colX,int rowX)
       *_valX << (*_X)(z,0);
     }
   }
+  cout << " ende get ValX" << endl;
 }
 
 void  Test::__getValY(int colY,int rowX)
 {
+	cout << " getValY " << endl;
   srand(time(NULL));
   _valY = new DContainer(rowX,colY);
   for(int i=0;i<rowX;i++){
