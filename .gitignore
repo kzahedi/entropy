@@ -1,8 +1,6 @@
 
 *.vim
 
-*.csv
-
 experiments/RBOHand/.ipynb_checkpoints/*.ipynb
 
 experiments/RBOHand/rbo_mc.*
@@ -24,9 +22,21 @@ experiments/RBOHand/Makefile.4
 experiments/RBOHand/.ipynb_checkpoints/Untitled-checkpoint.ipynb
 
 experiments/RBOHand/rbo_mc
-<<<<<<< HEAD
-/.project
-=======
 
 tags
->>>>>>> refs/remotes/origin/iterative-scaling
+
+matlab/data/results_w300_a300_s300.txt
+
+matlab/data/mc_data_dyn_lin_300.csv
+
+matlab/data/mc_data_dyn_fib_300.csv
+
+matlab/data/mc_data_dyn_dcmot_300.csv
+
+matlab/data/hopping_data_MusLin_ModelOutput.csv
+
+matlab/data/hopping_data_MusFib_ModelOutput.csv
+
+matlab/data/hopping_data_DCMot_ModelOutput.csv
+
+experiments/RBOHand/hand.sofastates.csv
