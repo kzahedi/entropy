@@ -26,15 +26,13 @@
 int main(int argc, char **argv)
 {
 	 srand(time(NULL));
- int n=100;
+ int n=10000;
  DContainer *eX = new DContainer(n,2);
  for(int i=0;i< n;i++ ){
  	for(int j=0;j<2;j++){
  		*eX << rand() % 2;
 	}
  }
-// DContainer *eX = new DContainer(10,2);
-// (*eX) << 0 << 0 << 0 << 0 << 0 <<1 << 1 << 1 << 1 << 1  << 1 << 1 << 1 << 1 << 1 ;
 
  DContainer *zX = new DContainer(2,1); // alphabet
  *zX << 0 << 1;
@@ -46,13 +44,11 @@ int main(int argc, char **argv)
  lambda[1] = 1;
  lambda[2] = 5;
 
- vector<vector<int > > alphX(2,vector<int>(0));
+ vector<vector<int > > alphX(1,vector<int>(0));
  alphX[0].push_back(0);
- alphX[1].push_back(1);
 
- vector<vector<int > > alphY(2,vector<int>(0));
+ vector<vector<int > > alphY(1,vector<int>(0));
  alphY[0].push_back(0);
- alphY[1].push_back(1);
 
  vector<vector<int > > alphbX(4,vector<int>(0));
  alphbX[0].push_back(0);
@@ -65,19 +61,19 @@ int main(int argc, char **argv)
  alphbY[1].push_back(1);
  alphbY[2].push_back(0);
  alphbY[3].push_back(1);
- cout << (*eX) << endl;
+
 
  IsParameter param;
  param.lambdavalue    = 1.0;
  param.lambdadeltaval = 1.0;
  param.sigma          = 0.01;
  param.maxit          = 10;
- param.konv           = 0.001;
- param.time           = true;
+ param.konv           = 0.000001;
+ param.time           = false;
  param.test           = false;
  param.seconds        = 10;
 
- IT *Test = new IT(2,*eX,*zX,*zY,alphX,alphY);
+ /*IT *Test = new IT(2,*eX,*zX,*zY,alphX,alphY);
 
  	 Test->setFeatureArraylambda(0,0,0,1);
  	 Test->setFeatureArraylambda(0,1,0,4);
@@ -120,9 +116,11 @@ int main(int argc, char **argv)
  		 if(ind==3) (*esY) << 1 << 1;
 
  	 }
+ 	 //int colX,int colValY, int rowX,DContainer &aX, DContainer &aY,vector<double> lambda, vector<vector<int> > systAX, vector<vector<int> > systAY, vector<vector<int> > systBX, vector<vector<int> > systBY,vector<vector<int> > systCX, vector<vector<int> > systCY, IsParameter param){
+*/
  	 //DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, vector<double> lambda, vector<vector<int> > systAX, vector<vector<int> > systAY, vector<vector<int> > systBX, vector<vector<int> > systBY, IsParameter param, int version)
- 	 TestMI *test = new TestMI(*eX,*esY,*zX,*zY,lambda,alphX, alphY,alphbX,alphbY,param,0);
- 	 cout << test->getMI() << endl;
+ //	 TestMI *test = new TestMI(2,2,10000,*zX,*zY,lambda,alphbX, alphbY,alphX,alphY,alphbX,alphbY,param);
+
  //	 cout << (*esY) << endl;
  /*
 
@@ -154,7 +152,12 @@ alphY[3].push_back(0);
   param.seconds        = 30;
 
   // for test cases
+*/
+   Test *test2 = new Test(2,2,10000,lambda,*zX,*zY,alphbX,alphbY,param);
+   test2->comparison();
+   Test *test1 = new Test(2,2,10000,lambda,*zX,*zY,alphbX,alphbY,param,0);
+   Test *test = new Test(2,2,10000,lambda,*zX,*zY,alphbX,alphbY,param,1);
+  cout << " kl gis " << test1->KL1() << endl;
+   cout << " kl " << test->KL1() << endl;
 
-   Test *test = new Test(3,3,100000,lambda,*zX,*zY,alphX,alphY,param);
-   test->comparison(); */
 }

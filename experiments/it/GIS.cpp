@@ -40,8 +40,10 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<v
 GIS::~GIS()
 {
   if(_expected != NULL){
-     for(int i=0;i<_sizeSystX;i++){
-      for(int k=0;k<(int) pow(_X->rows(),_systX[i].size());k++){
+     for(int i=0;i<_sizeSystX;i++)
+     {
+      for(int k=0;k< pow(_X->rows(),_systX[i].size());k++)
+      {
         delete[] _expected[i][k];
       }
       delete[] _expected[i];
@@ -61,13 +63,13 @@ double GIS::__getFeatconst()
 {
   double r = 0.0;
   for(int i=0; i< _sizeRowValX;i++) // i-th data row
-  {
-    for(int j=0; j< pow(_Y->rows(),_sizeColValY);j++) // y-alphabet
     {
-      int v = (*_FM).getMatrixIndexFeat(i,j).size(); // the number of matching deltas
-      if(v > r) r = v;
-    }
-  }
+	  for(int j=0; j< pow(_Y->rows(),_sizeColValY);j++) // y-alphabet
+	  {
+	    int v = (*_FM).getMatrixIndexFeat(i,j).size(); // the number of matching deltas
+	    if(v > r) r = v;
+	  }
+	}
   return r;
 }
 
@@ -106,7 +108,7 @@ void GIS::__getExpected()
 	                 [(*_FM).getMatrixIndexdY(xi,yj)[k]] += exp(_exponent[index][yj])/_normaliser[index];
 	      }
 	    }
-	   }
+	  }
 }
 void GIS:: __gis(int maxit, double konv, bool test,int seconds){
     //constant c for delta
@@ -164,14 +166,14 @@ double GIS::__calculateIteration(double featconst, bool test)
       {
         double oldl = (*_FM).getFeatureArraylambda(feat, deltai, deltaj);
         double newl = 0.0;
-        if(fabs(_expected[feat][deltai][deltaj]) < EPSILON)
+        if((fabs(_expected[feat][deltai][deltaj]) < EPSILON) && (fabs(_observed[feat][deltai][deltaj]) > EPSILON))
         {
           _expected[feat][deltai][deltaj] = 0.01; // TODO check if other values might be better
         }
         if(fabs(_observed[feat][deltai][deltaj]) > EPSILON)
         {
-          // TODO 0.4 as learning rate parameter
-          newl = oldl + 0.4*(1.0/featconst) *log(_observed[feat][deltai][deltaj]/_expected[feat][deltai][deltaj]);
+          // TODO 0.1 as learning rate parameter
+          newl = oldl + 0.1*(1.0/featconst) *log(_observed[feat][deltai][deltaj]/_expected[feat][deltai][deltaj]);
         }
         else
         {
@@ -186,6 +188,7 @@ double GIS::__calculateIteration(double featconst, bool test)
   if(test){
     _conv.push_back(l);
   }
+  cout << l << " " << _iterations << endl;
   return l;
 
 }

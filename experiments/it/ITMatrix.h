@@ -28,7 +28,7 @@ public:
   vector<double> index(int index,bool x, int sizeCol);
 
 protected:
-  void    FeatureArray(double valuelambda);
+  void    _FeatureArray(double valuelambda);
 
   int         _sizeColValX;
   int         _sizeColValY;

@@ -15,7 +15,7 @@ ITMatrix::ITMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &a
   _sizeRowValY = _valY->rows();
   _sizeX       = _X->rows();
   _sizeY       = _Y->rows();
-  FeatureArray(lambdavalue);
+  _FeatureArray(lambdavalue);
 }
 
 ITMatrix::ITMatrix()
@@ -30,7 +30,7 @@ ITMatrix::ITMatrix()
   _sizeRowValY = 0;
   _sizeX       = _X->rows();
   _sizeY       = _Y->rows();
-  FeatureArray(0);
+  _FeatureArray(0);
 }
 
 ITMatrix::~ITMatrix()
@@ -120,6 +120,7 @@ int   ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowValX, i
   }
 
 }
+// Feature i, indizes der zu vergleichenden Werte aus den tatsaechlich auftetenden X und den moeglichen Y
 int   ITMatrix::getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowValX, int indexValY)
 {
   assert(i<_systX.size());
@@ -150,7 +151,7 @@ int   ITMatrix::getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowVa
 	  return -1;
   }
 }
-// Feature i, indizes der zu vergleichenden Werte
+// Feature i, indizes der zu vergleichenden Werte aus den moeglichen X und Y
 int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int indexValX, int indexValY)
 {
 	  assert(i<_systX.size());
@@ -211,12 +212,13 @@ vector<double> ITMatrix::index(int index,bool x,int sizeCol)
   }
   return zeile;
 }
-void ITMatrix::FeatureArray( double valuelambda)
+//ein Array mit den benoetigten Features fuellen
+void ITMatrix::_FeatureArray( double valuelambda)
 {
   _FA = new Feature[_systX.size()];
   for(int m=0; m< _systX.size(); m++)
   { //(DContainer &aX, DContainer &aY,int colValX, int colValY, int systX, int systXsize,int systYsize , double valuelambda);
-      Feature *K = new Feature(*_X,*_Y,_sizeColValX,_sizeColValY,m,_systX[m].size(),_systY[m].size(),valuelambda);
+      Feature *K = new Feature(*_X,*_Y,_sizeColValX,_sizeColValY,_systX[m].size(),_systY[m].size(),valuelambda);
       _FA[m]= *K;
   }
 

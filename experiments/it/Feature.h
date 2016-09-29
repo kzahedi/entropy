@@ -16,8 +16,8 @@ class Feature
 {
   public:
     Feature();
-    Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int systX, int systXsize,int systYsize , double valuelambda);
-    Feature(DContainer &aX, DContainer &aY,int colValX, int colValY,int systX,int sizeSystX,int sizeSystY, Matrix &lambda);
+    Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int systXsize,int systYsize , double valuelambda);
+    Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int sizeSystX,int sizeSystY, Matrix &lambda);
     ~Feature();
 
     friend std::ostream& operator<<(std::ostream& str,Feature& feature){
@@ -34,11 +34,9 @@ class Feature
     double getlambda(int i, int j);
     void   setlambda(int i, int j, double newvalue);
     int    delta(double x,double y,double ax,double ay);
-//    vector<int> getIndexX();
-//    vector<int> getIndexY();
- //   double value(vector<double> &x,vector<double> &y);
     Feature& operator=(const Feature& c);
-    //FeatureMatrix.cpp ITMatrix.cpp IT.cpp FeatureMatrixsp.cpp GIS.cpp GISsp.cpp InstanceMatrix.cpp SCGIS.cpp Test.cpp GISgp.cpp SCGISgp.cpp
+    //evtl. return index
+
   private:
     int 		_sizeDeltaX;
     int			_sizeDeltaY;

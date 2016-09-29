@@ -12,8 +12,8 @@ Feature::Feature()
 
 }
 
-//(Eingabealphabet, Startwert fuer lambda)
-Feature::Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int systX, int systXsize,int systYsize , double valuelambda)
+//(Eingabealphabet, Anzahl der X und Y Werte, Anzahl der Testwerte, ein Startwert fuer alle  lambda)
+Feature::Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int systXsize,int systYsize , double valuelambda)
 {
   _X                    = &aX;
   _Y                    = &aY;
@@ -32,8 +32,8 @@ Feature::Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int sy
     }
   }
 }
-
-Feature::Feature(DContainer &aX, DContainer &aY,int colValX, int colValY,int systX,int systXsize,int systYsize, Matrix &lambda)
+//alle lambda explizit ueber die Matrix setzen
+Feature::Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int systXsize,int systYsize, Matrix &lambda)
 {
   assert(aX.columns()==1);
   assert(aY.columns()==1);

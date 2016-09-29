@@ -19,10 +19,9 @@
 using namespace std;
 
 class TestMI{
-	//int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
   public:
-	TestMI(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<double> lambda, vector<vector<int> > systAX, vector<vector<int> > systAY, vector<vector<int> > systBX, vector<vector<int> > systBY, IsParameter param, int version);
-    TestMI(DContainer &eX, DContainer &eY, IContainer &indizes, DContainer &lambdas, DContainer &aX, DContainer &aY, vector<vector<int> > systAX, vector<vector<int> > systAY, vector<vector<int> > systBX, vector<vector<int> > systBY, IsParameter param, int version);
+	TestMI(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systAX, vector<vector<int> > systAY, vector<vector<int> > systBX, vector<vector<int> > systBY, IsParameter param, int version);
+    TestMI(int colX,int colValY, int rowX,DContainer &aX, DContainer &aY,vector<double> lambda, vector<vector<int> > systAX, vector<vector<int> > systAY, vector<vector<int> > systBX, vector<vector<int> > systBY,vector<vector<int> > systCX, vector<vector<int> > systCY, IsParameter param);
     double getMI();
 
   private:
@@ -30,7 +29,8 @@ class TestMI{
     DContainer*     _X;
     DContainer*     _valY;
     DContainer*     _valX;
-    GIS*            _p1;
-    GIS*            _p2;
+    IT*             _p1;
+    IT*             _p2;
+    IT*	            _exact;
 };
 #endif
