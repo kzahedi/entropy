@@ -118,9 +118,11 @@ double SCGISgp::__calculateIteration(bool test, double sigma)
 	    }
 	    double newl;
 	    double oldl= (*_IM).getFeatureArraylambda(feat,delti,deltj);
-	    double z=1;
-	    while(fabs(z)>0.01)
-	    {
+        double zOld=2;
+        double z=1;
+        while(fabs(z-zOld)>0.0001)
+        {
+      	  zOld=z;
 	      z=(oldl+_delta[feat][delti][deltj])/pow(sigma,2) +expected*exp(_delta[feat][delti][deltj])- _observed[feat][delti][deltj] ;
 	      double n=  1/(pow(sigma,2))+expected*exp(_delta[feat][delti][deltj]);
 	      _delta[feat][delti][deltj]= _delta[feat][delti][deltj]-(z/n);

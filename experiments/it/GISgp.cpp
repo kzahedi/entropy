@@ -92,9 +92,11 @@ double GISgp::__calculateIteration(double featconst,double sigma, bool test)
 	        {
 	          double newl;
 	          double oldl= (*_FM).getFeatureArraylambda(feat,deltai,deltaj);
+	          double zOld=2;
 	          double z=1;
-	          while(fabs(z)>0.01)
+	          while(fabs(z-zOld)>0.0001)
 	          {
+	        	zOld=z;
 	            z=(oldl+_delta[feat][deltai][deltaj])/pow(sigma,2) +_expected[feat][deltai][deltaj]*exp(_delta[feat][deltai][deltaj]*featconst)- _observed[feat][deltai][deltaj] ;
 	            double n= + 1/(pow(sigma,2))+_expected[feat][deltai][deltaj]*featconst*exp(_delta[feat][deltai][deltaj]*featconst);
 	            _delta[feat][deltai][deltaj]= _delta[feat][deltai][deltaj]-(z/n);
@@ -109,7 +111,7 @@ double GISgp::__calculateIteration(double featconst,double sigma, bool test)
 	    if(test){
 	      _conv.push_back(l);
 	    }
-	    cout << l << " " << _iterations << endl;
+	   // cout << l << " " << _iterations << endl;
        return l;
 }
 void GISgp::__gisgp(int maxit, double konv, double sigma, bool test,int seconds)

@@ -20,11 +20,8 @@ using namespace std;
 class Test
 {
   public:
- //   Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
-    Test(int colX,int colValY, int rowX, vector<double> lambda,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY);
+	Test(int colX,int colValY, int rowX, vector<double> lambda,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY);
     Test(int colX,int colValY, int rowX,  IContainer &indizes, DContainer &lambda,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY);
- //   Test(int colX,int colValY, int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
- //   Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, int i);
     ~Test();
     DContainer&     getvalX();
     DContainer&     getvalY();
@@ -39,11 +36,8 @@ class Test
     DContainer*             _X;
     DContainer*             _valY;
     DContainer*             _valX;
-    int                     _case;
     int                     _sizeColValY;
     int                     _sizeColValX;
-    int                     _index;
-    vector<double>          _timediff;
     vector<vector<int> >    _systX;
     vector<vector<int> >    _systY;
     bool                    _timetest;
@@ -51,7 +45,7 @@ class Test
     int             __getSizeConv(int i);
     void            __getValY(int colY,int rowX);
     void            __getValX(int colX,int rowX);
-    void            __setlambda(IContainer &indizes, DContainer &values);
+    void            __setLambda(IContainer &indizes, DContainer &values);
     void            __setLambdaRand(vector<double> lambdaval);
 };
 #endif

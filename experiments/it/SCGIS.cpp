@@ -154,7 +154,7 @@ double SCGIS::__calculateIteration(bool test)
 	  if(test){
 	    _conv.push_back(l);
 	  }
-	  cout << l << " " << _iterations << endl;
+	//  cout << l << " " << _iterations << endl;
 	  return l;
 }
 int SCGIS:: getIterations()

@@ -10,6 +10,7 @@
 #include <math.h>
 #include <entropy++/Matrix.h>
 #include "InstanceMatrix.h"
+#include "Test.h"
 #include "SCGIS.h"
 #include "GIS.h"
 #include "GISgp.h"
@@ -20,17 +21,8 @@ using namespace std;
 
 class TestMI{
   public:
-	TestMI(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systAX, vector<vector<int> > systAY, vector<vector<int> > systBX, vector<vector<int> > systBY, IsParameter param, int version);
-    double getMI();
-    vector<double>  KL();
-    double          KL1(int i);
-    void            comparison();
-    double          prop( int indexX, int indexY);
-    double          getconv(int ind);
-    int             getsizeconv();
-    vector<double>  propAll(int indexX, int indexY);
-    vector<double>  getconvAll(int ind);
-    vector<int>     getsizeconvAll();
+	TestMI(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param, int version);
+    double            getMI();
 
   private:
     DContainer*     _Y;

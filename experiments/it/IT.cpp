@@ -89,6 +89,44 @@ double IT::prop(int rowX, int rowY)
   }
   return exponent/norm;
 }
+// p(y | x)
+// double IT::prop(int indexX, vector<vector<double> > Y, int indexY)
+double IT::propAlphX(int indexX, int rowY)
+{
+  double featexp   = 0;
+  double featnorm = 0;
+  double norm     = 0;
+  double exponent = 0;
+  for(int feat=0; feat< _systX.size(); feat++)
+  {
+      if(_gis)
+      {
+        featexp += (*_FM).getFeatureArrayvalueAlphYAlphX(feat,indexX, rowY);
+      }
+      else
+      {
+        featexp += (*_IM).getFeatureArrayvalueAlphYAlphX(feat,indexX, rowY);
+      }
+  }
+  exponent = exp(featexp);
+  for(int yi=0;yi<pow(_Y->rows(),_sizeColValY);yi++)
+  {
+    for(int feat=0; feat< _systX.size(); feat++)
+    {
+        if(_gis)
+        {
+          featnorm += (*_FM).getFeatureArrayvalueAlphYAlphX(feat,indexX,yi);
+        }
+        else
+        {
+          featnorm += (*_IM).getFeatureArrayvalueAlphYAlphX(feat,indexX,yi);
+        }
+    }
+    norm     += exp(featnorm);
+    featnorm  = 0;
+  }
+  return exponent/norm;
+}
 // P(x)
 double IT::propm(int rowX){
   double z=0;
@@ -124,7 +162,7 @@ double IT::propm(int rowX){
           }
           else
           {
-            exponent+=(*_IM).getFeatureArrayvalue(feat,x,y);
+            exponent+=(*_IM).getFeatureArrayvalueAlphYAlphX(feat,x,y);
           }
 
       }

@@ -31,6 +31,7 @@ class IT{
     IT(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY);
     ~IT();
     double  prop(int rowX, int rowY);
+    double  propAlphX(int indexX, int rowY);
     double  propm(int rowX);
     double  getFeatureArraylambda(int feat, int indexLambdaX, int indexLambdaY);
     void    setFeatureArraylambda(int feat, int indexLambdaX, int indexLambdaY, double valuelambda);

@@ -188,7 +188,7 @@ double GIS::__calculateIteration(double featconst, bool test)
   if(test){
     _conv.push_back(l);
   }
-  cout << l << " " << _iterations << endl;
+ // cout << l << " " << _iterations << endl;
   return l;
 
 }
