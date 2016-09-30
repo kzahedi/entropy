@@ -47,20 +47,20 @@ int main(int argc, char **argv)
  IsParameter param;
  param.lambdavalue    = 1.0;
  param.lambdadeltaval = 1.0;
- param.sigma          = 0.0000001;
+ param.sigma          = 0.01;   //TODO find best sigma value
  param.maxit          = 10;
  param.konv           = 0.000001;
  param.time           = true;
  param.test           = true;
- param.seconds        = 330;
+ param.seconds        = 10;
 
  vector<int> cases(4);
  cases[0]=0;
  cases[1]=1;
  cases[2]=2;
  cases[3]=3;
-  Test *test = new Test(2,1,100000,lambda, *zX,*zY,alphbX, alphbY);
-//  test->compareCases(param,cases);
+  Test *test = new Test(2,1,100,lambda, *zX,*zY,alphbX, alphbY);
+  test->compareCases(param,cases);
   //(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param, int version)
   TestMI *testmi = new TestMI(test->getvalX(),test->getvalY(),*zX,*zY,param,0);
   cout << testmi->getMI() << endl;

@@ -35,7 +35,6 @@ class Feature
     void   setlambda(int i, int j, double newvalue);
     int    delta(double x,double y,double ax,double ay);
     Feature& operator=(const Feature& c);
-    //evtl. return index
 
   private:
     int 		_sizeDeltaX;

@@ -1,5 +1,7 @@
 #include "GISsp.h"
 
+#define EPSILON 0.00000001
+
 GISsp::GISsp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test)
 {
   assert(eX.rows() == eY.rows());
@@ -394,10 +396,9 @@ void GISsp:: __gis(int maxit, double konv, bool test)
           {
             double oldl= (*_FM).getFeatureArraylambda(Feati,Featj,lambdai,lambdaj);
             double newl=0;
-            // TODO EPSILON 
-            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) < 0.00000001)
+            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) < EPSILON)
             {_expected[Feati][Featj][lambdai][lambdaj]=0.01;}
-            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) > 0.00000001 && fabs(observ[Feati][Featj][lambdai][lambdaj]) > 0.00000001 )
+            if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) > EPSILON && fabs(observ[Feati][Featj][lambdai][lambdaj]) > EPSILON )
             {
               newl= oldl + (1/featconst)*log(observ[Feati][Featj][lambdai][lambdaj]/_expected[Feati][Featj][lambdai][lambdaj]);
             }

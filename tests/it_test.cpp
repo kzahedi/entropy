@@ -45,21 +45,21 @@ void itTest::OneXOneY()
   param.seconds        = 0;
 
   IsParameter paramgp;
-  param.lambdavalue    = 1.0;
-  param.lambdadeltaval = 1.0;
-  param.sigma          = 0.01;
-  param.maxit          = 500;
-  param.konv           = 0.0001;
-  param.time           = true;
-  param.test           = true;
-  param.seconds        = 5;
+  paramgp.lambdavalue    = 1.0;
+  paramgp.lambdadeltaval = 1.0;
+  paramgp.sigma          = 0.01;
+  paramgp.maxit          = 500;
+  paramgp.konv           = 0.0001;
+  paramgp.time           = true;
+  paramgp.test           = true;
+  paramgp.seconds        = 5;
 
   Test *testval = new Test(1,1,100,lambda, *zX,*zY,alphX, alphY); //get data
 
   GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
-  GISgp *testgp     = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  GISgp *testgp     = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,paramgp);
   SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
-  SCGISgp *testscgp = new SCGISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  SCGISgp *testscgp = new SCGISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,paramgp);
 
   // p(y_0 = 0 | x_0 = 0) + p(y_0 = 1 | x_0 = 0) = 1.0
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1, test->prop( 0, 0)+test->prop( 0, 1), 0.1);
@@ -69,6 +69,7 @@ void itTest::OneXOneY()
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1, testgp->prop(0, 0)+testgp->prop(0,1), 0.1);
   // p(y_0 = 0 | x_0 = 1) + p(y_0 = 1 | x_0 = 1) = 1.0 for tes-gp
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1, testgp->prop(0, 0)+testgp->prop(0,1), 0.1);
+
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1, testsc->prop(0, 0)+testsc->prop(0, 1), 0.1);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1, testsc->prop(1, 0)+testsc->prop(1, 1), 0.1);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1, testscgp->prop(0, 0)+testscgp->prop(0, 1), 0.1);
@@ -95,10 +96,10 @@ void itTest::OneXOneY()
         CPPUNIT_ASSERT  (testsc->getconv(i) >= testsc->getconv(i+1) );
       }
     }
- // cout <<"KL1 " <<  test->KL1() << endl;
- // cout <<"KL1gp " <<  testgp->KL1() << endl;
-//  CPPUNIT_ASSERT(test->KL1()   < 1);
-//  CPPUNIT_ASSERT(testgp->KL1() < 1);
+  cout << " GIS: " << testval->KL(test);
+  cout << " SCGIS: " << testval->KL(testsc);
+  cout << " GISgp: " << testval->KL(testgp);
+  cout << " SCGISgp: " << testval->KL(testscgp);
 }
 void itTest::TwoXOneY()
 {
@@ -135,20 +136,20 @@ void itTest::TwoXOneY()
   param.seconds        = 0;
 
   IsParameter paramgp;
-  param.lambdavalue    = 1.0;
-  param.lambdadeltaval = 1.0;
-  param.sigma          = 0.01;
-  param.maxit          = 500;
-  param.konv           = 0.0001;
-  param.time           = true;
-  param.test           = true;
-  param.seconds        = 5;
+  paramgp.lambdavalue    = 1.0;
+  paramgp.lambdadeltaval = 1.0;
+  paramgp.sigma          = 0.01;
+  paramgp.maxit          = 500;
+  paramgp.konv           = 0.0001;
+  paramgp.time           = true;
+  paramgp.test           = true;
+  paramgp.seconds        = 5;
 
-  Test *testval   = new Test(2,1,100,lambda, *zX,*zY,alphX, alphY);
-  GIS *test     = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
-  GISgp *testgp = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  Test *testval     = new Test(2,1,100,lambda, *zX,*zY,alphX, alphY);
+  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  GISgp *testgp     = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,paramgp);
   SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
-  SCGISgp *testscgp = new SCGISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  SCGISgp *testscgp = new SCGISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,paramgp);
 
     for(int k=0;k<2;k++)
     {
@@ -181,10 +182,10 @@ void itTest::TwoXOneY()
       CPPUNIT_ASSERT  (testsc->getconv(i) >= testsc->getconv(i+1) );
     }
   }
- // cout <<"KL1 " <<  test->KL1() << endl;
- // cout << "KL1gp" << testgp->KL1() << endl;
-  //CPPUNIT_ASSERT(test->KL1()<1);
-//  CPPUNIT_ASSERT(testgp->KL1()<2);
+  cout << " GIS: " << testval->KL(test);
+  cout << " SCGIS: " << testval->KL(testsc);
+  cout << " GISgp: " << testval->KL(testgp);
+  cout << " SCGISgp: " << testval->KL(testscgp);
 }
 void itTest::TwoXTwoY()
 {
@@ -221,27 +222,27 @@ void itTest::TwoXTwoY()
   param.seconds        = 0;
 
   IsParameter paramgp;
-  param.lambdavalue    = 1.0;
-  param.lambdadeltaval = 1.0;
-  param.sigma          = 0.01;
-  param.maxit          = 500;
-  param.konv           = 0.0001;
-  param.time           = true;
-  param.test           = true;
-  param.seconds        = 5;
+  paramgp.lambdavalue    = 1.0;
+  paramgp.lambdadeltaval = 1.0;
+  paramgp.sigma          = 0.01;
+  paramgp.maxit          = 500;
+  paramgp.konv           = 0.0001;
+  paramgp.time           = true;
+  paramgp.test           = true;
+  paramgp.seconds        = 5;
 
-  Test *testval   = new Test(2,2,100,lambda, *zX,*zY,alphX, alphY);
-  GIS *test     = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
-  GISgp *testgp = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  Test *testval     = new Test(2,2,100,lambda, *zX,*zY,alphX, alphY);
+  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  GISgp *testgp     = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,paramgp);
   SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
-  SCGISgp *testscgp = new SCGISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  SCGISgp *testscgp = new SCGISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,paramgp);
 
   for(int i=0;i<4;i++){
         CPPUNIT_ASSERT_DOUBLES_EQUAL(1,test->prop(i,0)+test->prop(i,1)+ test->prop(i,2) +test->prop(i,3),0.1);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(1,testgp->prop(i,0)+testgp->prop(i,1)+ testgp->prop(i,2) + testgp->prop(i,3),0.1);
 
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(1,testsc->prop(i,0)+test->prop(i,1)+ testsc->prop(i,2) +test->prop(i,3),0.1);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(1,testscgp->prop(i,0)+testgp->prop(i,1)+ testscgp->prop(i,2) +testgp->prop(i,3),0.1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1,testsc->prop(i,0)+testsc->prop(i,1)+ testsc->prop(i,2) +testsc->prop(i,3),0.1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1,testscgp->prop(i,0)+testscgp->prop(i,1)+ testscgp->prop(i,2) +testscgp->prop(i,3),0.1);
   }
 
   for(int i=0; i< test->getsizeconv()-1; i++ )
@@ -267,11 +268,10 @@ void itTest::TwoXTwoY()
       CPPUNIT_ASSERT  (testsc->getconv(i) >= testsc->getconv(i+1) );
     }
   }
- // CPPUNIT_ASSERT(test->KL1()<1);
- // CPPUNIT_ASSERT(testgp->KL1()<2);
-//  cout << "KL1 "<< test->KL1() << endl;
- // cout << "KL1gp " <<testgp->KL1() << endl;
-//  cout << testgp->KL1() << endl;
+  cout << " GIS: " << testval->KL(test);
+  cout << " SCGIS: " << testval->KL(testsc);
+  cout << " GISgp: " << testval->KL(testgp);
+  cout << " SCGISgp: " << testval->KL(testscgp);
 }
 
 void itTest::NotBinary()
@@ -305,18 +305,18 @@ void itTest::NotBinary()
   param.seconds        = 0;
 
   IsParameter paramgp;
-  param.lambdavalue    = 1.0;
-  param.lambdadeltaval = 1.0;
-  param.sigma          = 0.01;
-  param.maxit          = 500;
-  param.konv           = 0.0001;
-  param.time           = true;
-  param.test           = true;
-  param.seconds        = 5;
+  paramgp.lambdavalue    = 1.0;
+  paramgp.lambdadeltaval = 1.0;
+  paramgp.sigma          = 0.01;
+  paramgp.maxit          = 500;
+  paramgp.konv           = 0.0001;
+  paramgp.time           = true;
+  paramgp.test           = true;
+  paramgp.seconds        = 5;
 
-  Test *testval   = new Test(1,1,100,lambda, *zX,*zY,alphX, alphY);
-  GIS *test     = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
-  GISgp *testgp = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  Test *testval = new Test(1,1,100,lambda, *zX,*zY,alphX, alphY);
+  GIS *test     = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zY,alphX,alphY,param);
+  GISgp *testgp = new GISgp(testval->getvalX(),testval->getvalY(),*zX,*zY,alphX,alphY,paramgp);
 
   for(int i=0;i<4;i++){
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1,test->prop(i,0)+test->prop(i,1),0.1);
@@ -328,10 +328,8 @@ void itTest::NotBinary()
   {
     CPPUNIT_ASSERT(test->getconv(i) >= test->getconv(i+1));
   }
-//  cout <<"KL1 " <<  test->KL1() << endl;
-//  cout <<"KL1gp " << testgp->KL1() << endl;
- // CPPUNIT_ASSERT (test->KL1()<1);
- // CPPUNIT_ASSERT (testgp->KL1()<1.5);
+  cout << " GIS: " << testval->KL(test);
+  cout << " GISgp: " << testval->KL(testgp);
 }
 /*
 void itTest::FourXFourY()
@@ -371,8 +369,12 @@ void itTest::FourXFourY()
   alphY[1].push_back(1);
   alphY[2].push_back(0);
   alphY[3].push_back(2);
-//ohne cases...
-  Test *test     = new Test(4,4,100,lambda,*zX,*zY, alphX, alphY, param);
+
+  Test *testval     = new Test(4,4,100,lambda, *zX,*zY,alphX, alphY);
+  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  GISgp *testgp     = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  SCGISgp *testscgp = new SCGISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
 
   double sum1 = 0.0;
   double sum2 = 0.0;
@@ -381,10 +383,10 @@ void itTest::FourXFourY()
 
       for(int k=0;k<16;k++){
     	  for(int i=0;i<81;i++){
-   		  sum1+=test->propAll(k,i)[0];
-   		  sum2+=test->propAll(k,i)[1];
-    		  sum3+=test->propAll(k,i)[2];
-   		  sum4+=test->propAll(k,i)[3];
+   		    sum1+=test->prop(k,i);
+   		    sum2+=testgp->prop(k,i);
+            sum3+=testsc->prop(k,i);
+   		    sum4+=testscgp->prop(k,i);
     	  }
           CPPUNIT_ASSERT_DOUBLES_EQUAL  (  1,sum1,0.1);
           CPPUNIT_ASSERT_DOUBLES_EQUAL  (  1,sum2,0.1);
@@ -395,14 +397,7 @@ void itTest::FourXFourY()
           sum3 = 0;
           sum4 = 0;
   }
-      cout <<"KL1 " <<  test->KL()[0] << endl;
-      cout <<"KL1sc " <<  test->KL()[1]<< endl;
-      cout <<"KL1gp"  << test->KL()[2] << endl;
-      cout <<"KL1scgp " << test->KL()[3]<< endl;
- // CPPUNIT_ASSERT (test->KL1()<2);
- // CPPUNIT_ASSERT (testsc->KL1()<2);
- // CPPUNIT_ASSERT (testgp->KL1()<2);
- // CPPUNIT_ASSERT (testscgp->KL1()<2);
-}
 
+}
 */
+

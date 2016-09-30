@@ -99,6 +99,7 @@ double GISgp::__calculateIteration(double featconst,double sigma, bool test)
 	        	zOld=z;
 	            z=(oldl+_delta[feat][deltai][deltaj])/pow(sigma,2) +_expected[feat][deltai][deltaj]*exp(_delta[feat][deltai][deltaj]*featconst)- _observed[feat][deltai][deltaj] ;
 	            double n= + 1/(pow(sigma,2))+_expected[feat][deltai][deltaj]*featconst*exp(_delta[feat][deltai][deltaj]*featconst);
+	            if(fabs(n)<0.00000001){ cout << "  hieer " << endl;}
 	            _delta[feat][deltai][deltaj]= _delta[feat][deltai][deltaj]-(z/n);
 	          }
 	          newl= oldl+_delta[feat][deltai][deltaj];
@@ -111,8 +112,8 @@ double GISgp::__calculateIteration(double featconst,double sigma, bool test)
 	    if(test){
 	      _conv.push_back(l);
 	    }
-	   // cout << l << " " << _iterations << endl;
-       return l;
+	 //   cout << "l" <<l << " " << _iterations << endl;
+        return l;
 }
 void GISgp::__gisgp(int maxit, double konv, double sigma, bool test,int seconds)
 {
@@ -155,6 +156,7 @@ void GISgp::__gisgp(int maxit, double konv, double sigma, bool test)
   }
 
   double l=1;
+  _iterations=0;
   while(_iterations<maxit && fabs(l)>=konv )
   {
 	  l=__calculateIteration(featconst,sigma,true);

@@ -1,5 +1,6 @@
 #include "Test.h"
 
+//create values only
 Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY){
   _X= &aX;
   _Y= &aY;
@@ -12,7 +13,7 @@ Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, D
   __setLambdaRand(lambda);
   __getValY(colValY,rowX);
 }
-
+//create values only
 Test::Test(int colX,int colValY,int rowX,IContainer &indizes, DContainer &lambda,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY){
   _X= &aX;
   _Y= &aY;
@@ -29,47 +30,36 @@ Test::Test(int colX,int colValY,int rowX,IContainer &indizes, DContainer &lambda
 void Test::compareCases( IsParameter param, vector<int>& cases){
   time_t befor;
   time_t after;
-  for(int i=0;i<cases.size();i++){
-	  switch(cases[i]){
-	      case 0:
-	        befor=time(NULL);
-	        _gisTest= new GIS(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); //1,maxit,konv,test,_timetest,seconds);
-	        after=time(NULL);
-	        cout <<"GIS: ";
-	        cout <<" time: " << difftime(after,befor);
-	        cout <<" distance: " << __KL(0);
-	        cout <<" iterations: " << __getSizeConv(0) << endl;
-	        break;
-	      case 1:
-	        befor=time(NULL);
-	        _scgisTest= new SCGIS(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,maxit,konv,test,_timetest,seconds);
-	        after=time(NULL);
-	        cout <<"SCGIS: ";
-	        cout <<" time: " << difftime(after,befor);
-	        cout <<" distance: " << __KL(1);
-	        cout <<" iterations: " << __getSizeConv(1) << endl;
-	        break;
-	      case 2:
-	        befor=time(NULL);
-	        _gisgpTest= new GISgp(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
-	        after=time(NULL);
-	        cout <<"GISgp: ";
-	        cout <<" time: " << difftime(after,befor);
-	        cout <<" distance: " << __KL(2);
-	        cout <<" iterations: " << __getSizeConv(2) << endl;
-	        break;
-	      case 3:
-	      	befor=time(NULL);
-	        _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
-	        after=time(NULL);
-	        cout <<"SCGISgp: ";
-	        cout <<" time: " << difftime(after,befor);
-	        cout <<" distance: " << __KL(3);
-	        cout <<" iterations: " << __getSizeConv(3) << endl;
-	        break;
-	      default:
-	        cout << "default " << endl;
-	    }
+  for(int i=0;i<cases.size();i++)
+  {
+	switch(cases[i]){
+	  case 0:
+        befor=time(NULL);
+        _gisTest= new GIS(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); //1,maxit,konv,test,_timetest,seconds);
+	    after=time(NULL);
+	    cout <<"GIS: " <<" time: " << difftime(after,befor) <<" distance: " << __KL(0)<< " iterations: " << __getSizeConv(0) << endl;
+	    break;
+	  case 1:
+	    befor=time(NULL);
+	    _scgisTest= new SCGIS(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,maxit,konv,test,_timetest,seconds);
+	    after=time(NULL);
+	    cout <<"SCGIS: " << " time: " << difftime(after,befor) <<" distance: " << __KL(1) <<" iterations: " << __getSizeConv(1) << endl;
+        break;
+	  case 2:
+	    befor=time(NULL);
+        _gisgpTest= new GISgp(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
+	    after=time(NULL);
+        cout <<"GISgp: " <<" time: " << difftime(after,befor) <<" distance: " << __KL(2) <<" iterations: " << __getSizeConv(2) << endl;
+	    break;
+	  case 3:
+	    befor=time(NULL);
+	    _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
+	    after=time(NULL);
+	    cout <<"SCGISgp: " <<" time: " << difftime(after,befor)  <<" distance: " << __KL(3) <<" iterations: " << __getSizeConv(3) << endl;
+	    break;
+	  default:
+	    cout << "default " << endl;
+	}
   }
 }
 Test::~Test()
@@ -97,7 +87,8 @@ double Test::__KL(int i){
   double q=0;
   double pm1=0;
   assert(abs(i)>=0 && abs(i)<4);
-  for(int rowX=0;rowX<pow(_X->rows(),_sizeColValX);rowX++){
+  for(int rowX=0;rowX<pow(_X->rows(),_sizeColValX);rowX++)
+  {
     switch(i){
       case 0:
         pm1=_gisTest->propm(rowX);
@@ -132,7 +123,7 @@ double Test::__KL(int i){
         default:
           cout << "default " << endl;
       }
-      q= _exact->prop(rowX,sizeY);
+      q= _exact->propAlphX(rowX,sizeY);
       if(fabs(p1)<0.00000001){ p1=0.000001;}
       if(fabs( q)<0.00000001){ q =0.000001;}
       dist+=pm1*p1*log(p1/q);
@@ -140,7 +131,25 @@ double Test::__KL(int i){
   }
   return dist;
 }
-
+//fuer die Tests
+double Test:: KL(IT *it){
+  double dist=0;
+  double p1=0;
+  double q=0;
+  double pm1=0;
+  for(int rowX=0;rowX<pow(_X->rows(),_sizeColValX);rowX++){
+        pm1=it->propm(rowX);
+    for(int sizeY=0;sizeY<pow(_Y->rows(),_sizeColValY);sizeY++)
+    {
+      p1=it->propAlphX(rowX,sizeY);
+      q= _exact->propAlphX(rowX,sizeY);
+      if(fabs(p1)<0.00000001){ p1=0.000001;}
+      if(fabs( q)<0.00000001){ q =0.000001;}
+      dist+=pm1*p1*log(p1/q);
+    }
+  }
+  return dist;
+}
 //DContainer mit Indizes fuer das lambda und den Wert
 void Test:: __setLambda(IContainer &indizes, DContainer &values ){
   assert(indizes.columns() ==3);
@@ -183,7 +192,8 @@ void  Test::__getValY(int colY,int rowX)
 {
   srand(time(NULL));
   _valY = new DContainer(rowX,colY);
-  for(int i=0;i<rowX;i++){
+  for(int i=0;i<rowX;i++)
+  {
     double z= (double) rand()/RAND_MAX;
     double s=0;
     int ind=0;

@@ -109,7 +109,7 @@ double SCGISgp::__calculateIteration(bool test, double sigma)
 	        if(_IM->getInstanceMatrixY(feat,delti,deltj)[k]==y)
 	        {
 	          int x=_IM->getInstanceMatrixX(feat,delti,deltj)[k];
-	          if(fabs(_normaliser[feat][x])>0.00000001 )
+	          if(fabs(_normaliser[feat][x])> EPSILON )
 	          {
 	            expected+=exp(_exponent[feat][x][y])/_normaliser[feat][x];
 	          }
@@ -170,8 +170,8 @@ void SCGISgp:: __scgis(int maxit, double konv,bool test,double sigma,int seconds
 
 void SCGISgp:: __scgis(int maxit, double konv,bool test,double sigma)
 {
-	cout << " scgis " << endl;
   double l=1;
+  _iterations=0;
   while(_iterations<maxit  ) //&& fabs(l)>konv
   {
     l=__calculateIteration(test,sigma);

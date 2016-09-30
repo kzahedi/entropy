@@ -16,6 +16,6 @@ class itTest : public CppUnit::TestFixture
     void TwoXOneY();
     void TwoXTwoY();
     void NotBinary();
-//    void FourXFourY();
+  //  void FourXFourY();
 };
 
