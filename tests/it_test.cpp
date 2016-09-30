@@ -53,9 +53,13 @@ void itTest::OneXOneY()
   param.time           = true;
   param.test           = true;
   param.seconds        = 5;
-/*
-  Test *test   = new Test(1, 1, 100, lambda, *zX, *zY, alphX, alphY, param, 0); // for test cases
-  Test *testgp = new Test(1, 1, 100, lambda, *zX, *zY, alphX, alphY, paramgp, 2);
+
+  Test *testval = new Test(1,1,100,lambda, *zX,*zY,alphX, alphY); //get data
+
+  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  GISgp *testgp     = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  SCGISgp *testscgp = new SCGISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
 
   // p(y_0 = 0 | x_0 = 0) + p(y_0 = 1 | x_0 = 0) = 1.0
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1, test->prop( 0, 0)+test->prop( 0, 1), 0.1);
@@ -65,6 +69,10 @@ void itTest::OneXOneY()
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1, testgp->prop(0, 0)+testgp->prop(0,1), 0.1);
   // p(y_0 = 0 | x_0 = 1) + p(y_0 = 1 | x_0 = 1) = 1.0 for tes-gp
   CPPUNIT_ASSERT_DOUBLES_EQUAL(1, testgp->prop(0, 0)+testgp->prop(0,1), 0.1);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(1, testsc->prop(0, 0)+testsc->prop(0, 1), 0.1);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(1, testsc->prop(1, 0)+testsc->prop(1, 1), 0.1);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(1, testscgp->prop(0, 0)+testscgp->prop(0, 1), 0.1);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(1, testscgp->prop(1, 0)+testscgp->prop(1, 1), 0.1);
 
   // getsizeconv -> size of stored l-values (constraints)
   // constraints: difference betweens observed feature frequency vs. expected feature frequency, given the lambdas
@@ -79,73 +87,19 @@ void itTest::OneXOneY()
       CPPUNIT_ASSERT  (test->getconv(i) >= test->getconv(i+1) );
     }
   }
+  for(int i=0; i< testsc->getsizeconv()-1; i++ ){
+      if((testsc->getconv(i)>pow(10,-11))){
+        if(!(testsc->getconv(i) >= testsc->getconv(i+1))){
+          cout << testsc->getconv(i)  << " " << testsc->getconv(i+1) << endl;
+        }
+        CPPUNIT_ASSERT  (testsc->getconv(i) >= testsc->getconv(i+1) );
+      }
+    }
  // cout <<"KL1 " <<  test->KL1() << endl;
  // cout <<"KL1gp " <<  testgp->KL1() << endl;
 //  CPPUNIT_ASSERT(test->KL1()   < 1);
-//  CPPUNIT_ASSERT(testgp->KL1() < 1); */
+//  CPPUNIT_ASSERT(testgp->KL1() < 1);
 }
-
-void itTest::SCOneXOneY()
-{
-  cout << "SCOneXOneY" << endl;
-  srand(time(NULL));
-  DContainer *zX = new DContainer(2,1);
-  *zX << 0 << 1;
-  DContainer *zY = new DContainer(2,1);
-  *zY << 0 << 1;
-  vector<double> lambda(3);
-  lambda[0] = 0;
-  lambda[1] = 1;
-  lambda[2] = 5;
-
-  IsParameter param;
-  param.lambdavalue    = 1.0;
-  param.lambdadeltaval = 1.0;
-  param.sigma          = 0.01;
-  param.maxit          = 500;
-  param.konv           = 0.0001;
-  param.time           = false;
-  param.test           = true;
-  param.seconds        = 0;
-
-  IsParameter paramgp;
-  param.lambdavalue    = 1.0;
-  param.lambdadeltaval = 1.0;
-  param.sigma          = 0.01;
-  param.maxit          = 500;
-  param.konv           = 0.0001;
-  param.time           = true;
-  param.test           = true;
-  param.seconds        = 5;
-
-  vector<vector<int > > alphX(1,vector<int>(0));
-  alphX[0].push_back(0);
-
-  vector<vector<int > > alphY(1,vector<int>(0));
-  alphY[0].push_back(0);
-/*
-  Test *test   = new Test(1,1,100,lambda,*zX,*zY, alphX, alphY, param,1);
-  Test *testgp = new Test(1,1,100,lambda,*zX,*zY, alphX, alphY, paramgp,3);
-
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(1, test->prop(0, 0)+test->prop(0, 1), 0.1);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(1, test->prop(1, 0)+test->prop(1, 1), 0.1);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(1, testgp->prop(0, 0)+testgp->prop(0, 1), 0.1);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(1, testgp->prop(1, 0)+testgp->prop(1, 1), 0.1);
-
-  for(int i=0; i< test->getsizeconv()-1; i++ ){
-    if((test->getconv(i)>pow(10,-11))){
-      if(!(test->getconv(i) >= test->getconv(i+1))){
-        cout << test->getconv(i)  << " " << test->getconv(i+1) << endl;
-      }
-      CPPUNIT_ASSERT  (test->getconv(i) >= test->getconv(i+1) );
-    }
-  }
- // cout <<"KL1 " <<  test->KL1() << endl;
- // cout << " KL1scgp " << testgp->KL1() << endl;
- // CPPUNIT_ASSERT (test->KL1()<1);
- // CPPUNIT_ASSERT (testgp->KL1()<2); */
-}
-
 void itTest::TwoXOneY()
 {
   cout << "TWoXOneY" << endl;
@@ -189,16 +143,21 @@ void itTest::TwoXOneY()
   param.time           = true;
   param.test           = true;
   param.seconds        = 5;
-/*
-  Test *test   = new Test(2,1,100,lambda,*zX,*zY, alphX, alphY, param,0);
-  Test *testgp = new Test(2,1,100,lambda,*zX,*zY, alphX, alphY, paramgp,2);
+
+  Test *testval   = new Test(2,1,100,lambda, *zX,*zY,alphX, alphY);
+  GIS *test     = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  GISgp *testgp = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  SCGISgp *testscgp = new SCGISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
 
     for(int k=0;k<2;k++)
     {
       CPPUNIT_ASSERT_DOUBLES_EQUAL(1,test->prop(k,0)+test->prop(k,1),0.1);
       CPPUNIT_ASSERT_DOUBLES_EQUAL(1,testgp->prop(k,0)+testgp->prop(k,1),0.1);
-    }
 
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(1,testsc->prop(k,0)+testsc->prop(k,1),0.1);
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(1,testscgp->prop(k,0)+testscgp->prop(k,1),0.1);
+    }
 
   for(int i=0; i< test->getsizeconv()-1; i++ )
   {
@@ -211,85 +170,22 @@ void itTest::TwoXOneY()
       CPPUNIT_ASSERT(test->getconv(i) >= test->getconv(i+1));
     }
   }
+  for(int i=0; i< testsc->getsizeconv()-1; i++ )
+  {
+    if((testsc->getconv(i)>pow(10,-11)))
+    {
+      if(!(testsc->getconv(i) >= testsc->getconv(i+1)))
+      {
+        cout << testsc->getconv(i)  << " " << testsc->getconv(i+1) << endl;
+      }
+      CPPUNIT_ASSERT  (testsc->getconv(i) >= testsc->getconv(i+1) );
+    }
+  }
  // cout <<"KL1 " <<  test->KL1() << endl;
  // cout << "KL1gp" << testgp->KL1() << endl;
   //CPPUNIT_ASSERT(test->KL1()<1);
-//  CPPUNIT_ASSERT(testgp->KL1()<2); */
+//  CPPUNIT_ASSERT(testgp->KL1()<2);
 }
-
-void itTest::SCTwoXOneY()
-{
-  cout << "SCTWoXOneY" << endl;
-  srand(time(NULL));
-  DContainer *zX = new DContainer(2,1);
-  *zX << 0 << 1;
-  DContainer *zY = new DContainer(2,1);
-  *zY << 0 << 1;
-  vector<double> lambda(3);
-  lambda[0] = 0;
-  lambda[1] = 1;
-  lambda[2] = 5;
-
-  vector<vector<int > > alphX(3,vector<int>(0));
-  alphX[0].push_back(0);
-  alphX[0].push_back(1);
-  alphX[1].push_back(0);
-  alphX[2].push_back(1);
-
-  vector<vector<int > > alphY(3,vector<int>(0));
-  alphY[0].push_back(0);
-  alphY[1].push_back(0);
-  alphY[2].push_back(0);
-
-  IsParameter param;
-  param.lambdavalue    = 1.0;
-  param.lambdadeltaval = 1.0;
-  param.sigma          = 0.01;
-  param.maxit          = 500;
-  param.konv           = 0.0001;
-  param.time           = false;
-  param.test           = true;
-  param.seconds        = 0;
-
-  IsParameter paramgp;
-  param.lambdavalue    = 1.0;
-  param.lambdadeltaval = 1.0;
-  param.sigma          = 0.01;
-  param.maxit          = 500;
-  param.konv           = 0.0001;
-  param.time           = true;
-  param.test           = true;
-  param.seconds        = 5;
-/*
-  Test *test   = new Test(2,1,100,lambda,*zX,*zY, alphX, alphY, param, 1);
-  Test *testgp = new Test(2,1,100,lambda,*zX,*zY,alphX, alphY, paramgp, 3);
-
-
-    for(int k=0;k<2;k++)
-    {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(1,test->prop(k,0)+test->prop(k,1),0.1);
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(1,testgp->prop(k,0)+testgp->prop(k,1),0.1);
-    }
-
-
-  for(int i=0; i< test->getsizeconv()-1; i++ )
-  {
-    if((test->getconv(i)>pow(10,-11)))
-    {
-      if(!(test->getconv(i) >= test->getconv(i+1)))
-      {
-        cout << test->getconv(i)  << " " << test->getconv(i+1) << endl;
-      }
-      CPPUNIT_ASSERT  (test->getconv(i) >= test->getconv(i+1) );
-    }
-  }
-
-//  cout <<"KL1 " <<  test->KL1() << endl;
-//  cout <<"KL1gpsc " << testgp->KL1() << endl;
- // CPPUNIT_ASSERT(test->KL1()<1);
- // CPPUNIT_ASSERT(testgp->KL1()<2); */
-}
-
 void itTest::TwoXTwoY()
 {
   cout << "TwoXTwoY" << endl;
@@ -333,13 +229,19 @@ void itTest::TwoXTwoY()
   param.time           = true;
   param.test           = true;
   param.seconds        = 5;
-/*
-  Test *test   = new Test(2,2,100,lambda,*zX,*zY, alphX, alphY, param,0);
-  Test *testgp = new Test(2,2,100,lambda,*zX,*zY, alphX, alphY, paramgp,2);
+
+  Test *testval   = new Test(2,2,100,lambda, *zX,*zY,alphX, alphY);
+  GIS *test     = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  GISgp *testgp = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  SCGISgp *testscgp = new SCGISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
 
   for(int i=0;i<4;i++){
         CPPUNIT_ASSERT_DOUBLES_EQUAL(1,test->prop(i,0)+test->prop(i,1)+ test->prop(i,2) +test->prop(i,3),0.1);
         CPPUNIT_ASSERT_DOUBLES_EQUAL(1,testgp->prop(i,0)+testgp->prop(i,1)+ testgp->prop(i,2) + testgp->prop(i,3),0.1);
+
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1,testsc->prop(i,0)+test->prop(i,1)+ testsc->prop(i,2) +test->prop(i,3),0.1);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1,testscgp->prop(i,0)+testgp->prop(i,1)+ testscgp->prop(i,2) +testgp->prop(i,3),0.1);
   }
 
   for(int i=0; i< test->getsizeconv()-1; i++ )
@@ -353,82 +255,23 @@ void itTest::TwoXTwoY()
       CPPUNIT_ASSERT  (test->getconv(i) >= test->getconv(i+1) );
     }
   }
+
+  for(int i=0; i< testsc->getsizeconv()-1; i++ )
+  {
+    if((testsc->getconv(i)> pow(10,-11)))
+    {
+      if(!(testsc->getconv(i) >= testsc->getconv(i+1)))
+      {
+        cout << testsc->getconv(i)  << " " << testsc->getconv(i+1) << endl;
+      }
+      CPPUNIT_ASSERT  (testsc->getconv(i) >= testsc->getconv(i+1) );
+    }
+  }
  // CPPUNIT_ASSERT(test->KL1()<1);
  // CPPUNIT_ASSERT(testgp->KL1()<2);
 //  cout << "KL1 "<< test->KL1() << endl;
  // cout << "KL1gp " <<testgp->KL1() << endl;
-//  cout << testgp->KL1() << endl; */
-}
-
-void itTest::SCTwoXTwoY()
-{
-  cout << "SCTwoXTwoY" << endl;
-  srand(time(NULL));
-  DContainer *zX = new DContainer(2,1);
-  *zX << 0 << 1;
-  DContainer *zY = new DContainer(2,1);
-  *zY << 0 << 1;
-  vector<double> lambda(3);
-  lambda[0] = 0;
-  lambda[1] = 1;
-  lambda[2] = 5;
-
-  vector<vector<int > > alphX(3,vector<int>(0));
-  alphX[0].push_back(0);
-  alphX[0].push_back(1);
-  alphX[1].push_back(0);
-  alphX[2].push_back(1);
-
-  vector<vector<int > > alphY(3,vector<int>(0));
-  alphY[0].push_back(0);
-  alphY[1].push_back(1);
-  alphY[2].push_back(0);
-
-  IsParameter param;
-  param.lambdavalue    = 1.0;
-  param.lambdadeltaval = 1.0;
-  param.sigma          = 0.01;
-  param.maxit          = 500;
-  param.konv           = 0.0001;
-  param.time           = false;
-  param.test           = true;
-  param.seconds        = 0;
-
-  IsParameter paramgp;
-  param.lambdavalue    = 1.0;
-  param.lambdadeltaval = 1.0;
-  param.sigma          = 0.01;
-  param.maxit          = 500;
-  param.konv           = 0.0001;
-  param.time           = true;
-  param.test           = true;
-  param.seconds        = 5;
-/*
-  Test *test   = new Test(2,2,100,lambda,*zX,*zY,alphX, alphY, param,1);
-  Test *testgp = new Test(2,2,100,lambda,*zX,*zY,alphX, alphY, paramgp,3);
-
-
-  for(int i=0;i<4;i++)
-  {
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(1,test->prop(i,0)+test->prop(i,1)+ test->prop(i,2) +test->prop(i,3),0.1);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(1,testgp->prop(i,0)+testgp->prop(i,1)+ testgp->prop(i,2) +testgp->prop(i,3),0.1);
-  }
-
-  for(int i=0; i< test->getsizeconv()-1; i++ )
-  {
-    if((test->getconv(i)> pow(10,-11)))
-    {
-      if(!(test->getconv(i) >= test->getconv(i+1)))
-      {
-        cout << test->getconv(i)  << " " << test->getconv(i+1) << endl;
-      }
-      CPPUNIT_ASSERT  (test->getconv(i) >= test->getconv(i+1) );
-    }
-  }
-//  cout <<"KL1 " <<  test->KL1() << endl;
- // cout <<"KL1scgp " << testgp->KL1() << endl;
- // CPPUNIT_ASSERT (test->KL1()<1);
- // CPPUNIT_ASSERT (testgp->KL1()<2); */
+//  cout << testgp->KL1() << endl;
 }
 
 void itTest::NotBinary()
@@ -470,9 +313,10 @@ void itTest::NotBinary()
   param.time           = true;
   param.test           = true;
   param.seconds        = 5;
-/*
-  Test *test   = new Test(1,1,100,lambda,*zX,*zY, alphX, alphY, param,0);
-  Test *testgp = new Test(1,1,100,lambda,*zX,*zY, alphX, alphY, paramgp,2);
+
+  Test *testval   = new Test(1,1,100,lambda, *zX,*zY,alphX, alphY);
+  GIS *test     = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
+  GISgp *testgp = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
 
   for(int i=0;i<4;i++){
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1,test->prop(i,0)+test->prop(i,1),0.1);
@@ -487,7 +331,7 @@ void itTest::NotBinary()
 //  cout <<"KL1 " <<  test->KL1() << endl;
 //  cout <<"KL1gp " << testgp->KL1() << endl;
  // CPPUNIT_ASSERT (test->KL1()<1);
- // CPPUNIT_ASSERT (testgp->KL1()<1.5); */
+ // CPPUNIT_ASSERT (testgp->KL1()<1.5);
 }
 /*
 void itTest::FourXFourY()
