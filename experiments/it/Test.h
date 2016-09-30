@@ -20,23 +20,15 @@ using namespace std;
 class Test
 {
   public:
-    Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
+ //   Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
     Test(int colX,int colValY, int rowX, vector<double> lambda,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY);
-    Test(int colX,int colValY, int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
-    Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, int i);
+    Test(int colX,int colValY, int rowX,  IContainer &indizes, DContainer &lambda,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY);
+ //   Test(int colX,int colValY, int rowX, IContainer &indizes, DContainer &lambda ,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
+ //   Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, int i);
     ~Test();
-    vector<double>  KL();
-    double          KL1();
-    void            comparison();
-    double          prop( int indexX, int indexY);
-    double          getconv(int ind);
-    int             getsizeconv();
-    vector<double>  propAll(int indexX, int indexY);
-    vector<double>  getconvAll(int ind);
-    vector<int>     getsizeconvAll();
     DContainer&     getvalX();
     DContainer&     getvalY();
-
+    void            compareCases( IsParameter param, vector<int>& cases);
   private:
     IT*                     _exact;
     GIS*                    _gisTest;
@@ -55,12 +47,12 @@ class Test
     vector<vector<int> >    _systX;
     vector<vector<int> >    _systY;
     bool                    _timetest;
-
-    void __getValY(int colY,int rowX);
-    void __getValX(int colX,int rowX);
-    void __setlambda(IContainer &indizes, DContainer &values);
-    void __setLambdaRand(vector<double> lambdaval);
-    void __comptime(IsParameter param);
+    double          __KL(int i);
+    int             __getSizeConv(int i);
+    void            __getValY(int colY,int rowX);
+    void            __getValX(int colX,int rowX);
+    void            __setlambda(IContainer &indizes, DContainer &values);
+    void            __setLambdaRand(vector<double> lambdaval);
 };
 #endif
 

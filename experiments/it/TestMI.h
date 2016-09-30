@@ -21,8 +21,16 @@ using namespace std;
 class TestMI{
   public:
 	TestMI(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systAX, vector<vector<int> > systAY, vector<vector<int> > systBX, vector<vector<int> > systBY, IsParameter param, int version);
-    TestMI(int colX,int colValY, int rowX,DContainer &aX, DContainer &aY,vector<double> lambda, vector<vector<int> > systAX, vector<vector<int> > systAY, vector<vector<int> > systBX, vector<vector<int> > systBY,vector<vector<int> > systCX, vector<vector<int> > systCY, IsParameter param);
     double getMI();
+    vector<double>  KL();
+    double          KL1(int i);
+    void            comparison();
+    double          prop( int indexX, int indexY);
+    double          getconv(int ind);
+    int             getsizeconv();
+    vector<double>  propAll(int indexX, int indexY);
+    vector<double>  getconvAll(int ind);
+    vector<int>     getsizeconvAll();
 
   private:
     DContainer*     _Y;

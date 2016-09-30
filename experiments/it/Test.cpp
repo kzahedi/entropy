@@ -1,5 +1,5 @@
 #include "Test.h"
-
+/*
 //vergleichswerte, gemessene X,Y und Eingabealphabete
 Test::Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
 {
@@ -11,7 +11,7 @@ Test::Test(int colX,int colValY, int rowX, vector<double> lambda, DContainer &aX
   _sizeColValY = colValY;
   __getValX(colX,rowX);
   _sizeColValX = _valX->columns();
-  _exact       = new IT(colValY,*_valX,*_X,*_Y,systX,systY);
+  _exact       = new IT(colValY,*_valX,*_X,*_Y,_systX,_systY);
   //__setLambdaRand(lambda);
 
 	 _exact->setFeatureArraylambda(0,0,0,1);
@@ -54,7 +54,7 @@ Test::Test(int colX,int colValY,int rowX, IContainer &indizes, DContainer &lambd
   __comptime(param);
   _case        = 4;
 }
-
+*/
 Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY){
   _X= &aX;
   _Y= &aY;
@@ -68,7 +68,55 @@ Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, D
   __getValY(colValY,rowX);
   _case=5;
 }
-
+void Test::compareCases( IsParameter param, vector<int>& cases){
+  time_t befor;
+  time_t after;
+  for(int i=0;i<cases.size();i++){
+	  switch(cases[i]){
+	      case 0:
+	        befor=time(NULL);
+	        _gisTest= new GIS(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); //1,maxit,konv,test,_timetest,seconds);
+	        after=time(NULL);
+	        cout <<"GIS: ";
+	        cout <<" time: " << difftime(after,befor);
+	        cout <<" distance: " << __KL(0);
+	        cout <<" iterations: " << __getSizeConv(0) << endl;
+	        break;
+	      case 1:
+	        befor=time(NULL);
+	        _scgisTest= new SCGIS(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,maxit,konv,test,_timetest,seconds);
+	        after=time(NULL);
+	        cout <<"SCGIS: ";
+	        cout <<" time: " << difftime(after,befor);
+	        cout <<" distance: " << __KL(1);
+	        cout <<" iterations: " << __getSizeConv(1) << endl;
+	        break;
+	      case 2:
+	    	  cout << " gisgp Test" << endl;
+	        befor=time(NULL);
+	        _gisgpTest= new GISgp(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
+	        after=time(NULL);
+	        cout <<"GISgp: ";
+	        cout <<" time: " << difftime(after,befor);
+	        cout <<" distance: " << __KL(2);
+	        cout <<" iterations: " << __getSizeConv(2) << endl;
+	        break;
+	      case 3:
+	    	  cout << " vor scgisgptest" << endl;
+	      	befor=time(NULL);
+	        _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
+	        after=time(NULL);
+	        cout <<"SCGISgp: ";
+	        cout <<" time: " << difftime(after,befor);
+	        cout <<" distance: " << __KL(3);
+	        cout <<" iterations: " << __getSizeConv(3) << endl;
+	        break;
+	      default:
+	        cout << "default " << endl;
+	    }
+  }
+}
+/*
 Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, int i)
 {
   assert(abs(i)>=0 && abs(i)<4);
@@ -102,24 +150,38 @@ Test::Test(int colX, int colValY, int rowX, vector<double> lambda, DContainer &a
 	 _exact->setFeatureArraylambda(3,1,0,1);
 	 _exact->setFeatureArraylambda(3,0,1,0);
 	 _exact->setFeatureArraylambda(3,1,1,3);
+	  time_t befor;
+	  time_t after;
   __getValY(colValY,rowX);
   switch(i){
     case 0:
+      befor=time(NULL);
       _gisTest= new GIS(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); //1,maxit,konv,test,_timetest,seconds);
+      after=time(NULL);
+      cout << difftime(after,befor);
       break;
     case 1:
+      befor=time(NULL);
       _scgisTest= new SCGIS(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,maxit,konv,test,_timetest,seconds);
+      after=time(NULL);
+      cout << difftime(after,befor);
       break;
     case 2:
+      befor=time(NULL);
       _gisgpTest= new GISgp(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
+      after=time(NULL);
+      cout << difftime(after,befor);
       break;
     case 3:
+    	befor=time(NULL);
       _scgisgpTest= new SCGISgp(*_valX,*_valY,*_X,*_Y,_systX,_systY, param); // 1,1,0.01,maxit,konv,test,_timetest,seconds);
+      after=time(NULL);
+      cout<< difftime(after,befor);
       break;
     default:
       cout << "default " << endl;
   }
-}
+} */
 Test::~Test()
 {
   _timediff.clear();
@@ -139,6 +201,7 @@ Test::~Test()
   }
   _systY.clear();
 }
+/*
 //GIS und SCGIS ausfuehren mit Zeitmessung
 void Test::__comptime(IsParameter param)
 {
@@ -181,11 +244,11 @@ void Test:: comparison()
   vector<double> kl = KL();
   cout << "KL-distance: GIS: " << kl[0] <<  " SCGIS: " << kl[1] <<" GIS smoothed: "<< kl[2] << " SCGIS smoothed: " << kl[3] <<endl;
   cout << endl;
- // cout << KL1(0) << " " << KL1(1) <<" " <<  KL1(2) << " " << KL1(3) << endl;
+  cout << KL1(0) << " " << KL1(1) <<" " <<  KL1(2) << " " << KL1(3) << endl;
   //if(_timetest){
     cout<< "Iterations: GIS: " << _gisTest->getIterations() << " SCGIS: " << _scgisTest->getIterations() << " GIS smoothed: " << _gisgpTest->getIterations() << " SCGIS smoothed: " << _scgisgpTest->getIterations() <<   endl;
 //  }
-    /*
+
    cout << "lambda: " << endl;
    cout << "vergleichswerte" << endl;
    cout << _exact->getFeatureArraylambda(0,0,0) <<endl;
@@ -208,10 +271,10 @@ void Test:: comparison()
    cout << _exact->getFeatureArraylambda(2,0,1) <<endl;
    cout << _exact->getFeatureArraylambda(2,1,1) <<endl;
    cout << endl;
-  // cout << _exact->getFeatureArraylambda(3,0,0) <<endl;
-  // cout << _exact->getFeatureArraylambda(3,1,0) <<endl;
-  // cout << _exact->getFeatureArraylambda(3,0,1) <<endl;
-  // cout << _exact->getFeatureArraylambda(3,1,1) <<endl;
+   cout << _exact->getFeatureArraylambda(3,0,0) <<endl;
+   cout << _exact->getFeatureArraylambda(3,1,0) <<endl;
+   cout << _exact->getFeatureArraylambda(3,0,1) <<endl;
+   cout << _exact->getFeatureArraylambda(3,1,1) <<endl;
 
    cout << "GIS" << endl;
    cout << _gisTest->getFeatureArraylambda(0,0,0) <<endl;
@@ -235,6 +298,11 @@ void Test:: comparison()
    cout << _gisTest->getFeatureArraylambda(2,0,1) <<endl;
    cout << _gisTest->getFeatureArraylambda(2,1,1) <<endl;
    cout << endl;
+   cout << endl;
+   cout << _gisTest->getFeatureArraylambda(3,0,0) <<endl;
+   cout << _gisTest->getFeatureArraylambda(3,1,0) <<endl;
+   cout << _gisTest->getFeatureArraylambda(3,0,1) <<endl;
+   cout << _gisTest->getFeatureArraylambda(3,1,1) <<endl;
 
    cout << "SCGIS" << endl;
    cout << _scgisTest->getFeatureArraylambda(0,0,0) <<endl;
@@ -259,11 +327,12 @@ void Test:: comparison()
    cout << _scgisTest->getFeatureArraylambda(2,1,1) <<endl;
    cout << endl;
 
-  // cout << _gisTest->getFeatureArraylambda(3,0,0) <<endl;
-  // cout << _gisTest->getFeatureArraylambda(3,1,0) <<endl;
-  // cout << _gisTest->getFeatureArraylambda(3,0,1) <<endl;
-  // cout << _gisTest->getFeatureArraylambda(3,1,1) <<endl;
-
+   cout << _scgisTest->getFeatureArraylambda(3,0,0) <<endl;
+   cout << _scgisTest->getFeatureArraylambda(3,1,0) <<endl;
+   cout << _scgisTest->getFeatureArraylambda(3,0,1) <<endl;
+   cout << _scgisTest->getFeatureArraylambda(3,1,1) <<endl;
+   cout << endl;
+/*
    cout << "GIS smoothed " << endl;
    cout << _gisgpTest->getFeatureArraylambda(0,0,0) <<endl;
    cout << _gisgpTest->getFeatureArraylambda(0,1,0) <<endl;
@@ -292,7 +361,7 @@ void Test:: comparison()
  //  cout << _gisgpTest->getFeatureArraylambda(1,1,0,1) <<endl;
  //  cout << _gisgpTest->getFeatureArraylambda(1,1,1,1) <<endl;
 
- */
+
 }
 //Abstand
 vector<double> Test:: KL(){
@@ -332,15 +401,15 @@ vector<double> Test:: KL(){
   }
   //cout << dist[0] << " " << dist[1] <<" " << dist[2] << " " << dist[3] << endl;
   return dist;
-}
-double Test::KL1(){
+} */
+double Test::__KL(int i){
   double dist=0;
   double p1=0;
   double q=0;
   double pm1=0;
-  assert(abs(_case)>=0 && abs(_case)<4);
+  assert(abs(i)>=0 && abs(i)<4);
   for(int rowX=0;rowX<pow(_X->rows(),_sizeColValX);rowX++){
-    switch(_case){
+    switch(i){
       case 0:
         pm1=_gisTest->propm(rowX);
         break;
@@ -358,7 +427,7 @@ double Test::KL1(){
     }
     for(int sizeY=0;sizeY<pow(_Y->rows(),_sizeColValY);sizeY++)
     {
-      switch(_case){
+      switch(i){
         case 0:
           p1=_gisTest->prop(rowX,sizeY);
           break;
@@ -450,7 +519,7 @@ DContainer& Test:: getvalY()
 {
   return *_valY;
 }
-
+/*
 double Test::prop(int indexX, int indexY)
 {
   assert(abs(_case)>=0 && abs(_case)<4);
@@ -495,16 +564,72 @@ double Test:: getconv(int ind)
   }
   return 0.0;
 }
-
-int Test::getsizeconv()
+*/
+int Test::__getSizeConv(int i)
 {
-  assert(abs(_case)>=0 && abs(_case)<4);
-  switch(_case)
+  assert(abs(i)>=0 && abs(i)<4);
+  switch(i)
   {
     case 0:
+     /* cout << "GIS" << endl;
+      cout << _gisTest->getFeatureArraylambda(0,0,0) <<endl;
+      cout << _gisTest->getFeatureArraylambda(0,1,0) <<endl;
+     // cout << _gisTest->getFeatureArraylambda(0,2,0) <<endl;
+     // cout << _gisTest->getFeatureArraylambda(0,3,0) <<endl;
+      cout << _gisTest->getFeatureArraylambda(0,0,1) <<endl;
+      cout << _gisTest->getFeatureArraylambda(0,1,1) <<endl;
+    //  cout << _gisTest->getFeatureArraylambda(0,2,1) <<endl;
+    //  cout << _gisTest->getFeatureArraylambda(0,3,1) <<endl;
+      cout << endl;
+
+      cout << _gisTest->getFeatureArraylambda(1,0,0) <<endl;
+      cout << _gisTest->getFeatureArraylambda(1,1,0) <<endl;
+      cout << _gisTest->getFeatureArraylambda(1,0,1) <<endl;
+      cout << _gisTest->getFeatureArraylambda(1,1,1) <<endl;
+      cout << endl;
+
+      cout << _gisTest->getFeatureArraylambda(2,0,0) <<endl;
+      cout << _gisTest->getFeatureArraylambda(2,1,0) <<endl;
+      cout << _gisTest->getFeatureArraylambda(2,0,1) <<endl;
+      cout << _gisTest->getFeatureArraylambda(2,1,1) <<endl;
+      cout << endl;
+      cout << endl;
+      cout << _gisTest->getFeatureArraylambda(3,0,0) <<endl;
+      cout << _gisTest->getFeatureArraylambda(3,1,0) <<endl;
+      cout << _gisTest->getFeatureArraylambda(3,0,1) <<endl;
+      cout << _gisTest->getFeatureArraylambda(3,1,1) <<endl; */
       return _gisTest->getsizeconv();
       break;
     case 1:
+
+     /* cout << "SCGIS" << endl;
+      cout << _scgisTest->getFeatureArraylambda(0,0,0) <<endl;
+      cout << _scgisTest->getFeatureArraylambda(0,1,0) <<endl;
+    //  cout << _scgisTest->getFeatureArraylambda(0,2,0) <<endl;
+    //  cout << _scgisTest->getFeatureArraylambda(0,3,0) <<endl;
+      cout << _scgisTest->getFeatureArraylambda(0,0,1) <<endl;
+      cout << _scgisTest->getFeatureArraylambda(0,1,1) <<endl;
+    //  cout << _scgisTest->getFeatureArraylambda(0,2,1) <<endl;
+    //  cout << _scgisTest->getFeatureArraylambda(0,3,1) <<endl;
+      cout << endl;
+
+      cout << _scgisTest->getFeatureArraylambda(1,0,0) <<endl;
+      cout << _scgisTest->getFeatureArraylambda(1,1,0) <<endl;
+      cout << _scgisTest->getFeatureArraylambda(1,0,1) <<endl;
+      cout << _scgisTest->getFeatureArraylambda(1,1,1) <<endl;
+      cout << endl;
+
+      cout << _scgisTest->getFeatureArraylambda(2,0,0) <<endl;
+      cout << _scgisTest->getFeatureArraylambda(2,1,0) <<endl;
+      cout << _scgisTest->getFeatureArraylambda(2,0,1) <<endl;
+      cout << _scgisTest->getFeatureArraylambda(2,1,1) <<endl;
+      cout << endl;
+
+      cout << _scgisTest->getFeatureArraylambda(3,0,0) <<endl;
+      cout << _scgisTest->getFeatureArraylambda(3,1,0) <<endl;
+      cout << _scgisTest->getFeatureArraylambda(3,0,1) <<endl;
+      cout << _scgisTest->getFeatureArraylambda(3,1,1) <<endl;
+      cout << endl; */
       return _scgisTest->getsizeconv();
       break;
     case 2:
@@ -518,6 +643,7 @@ int Test::getsizeconv()
   }
   return -1;
 }
+/*
 //einzelausgaben fuer it_test
 vector<double> Test::propAll(int indexX, int indexY){
 	assert(_case==4);
@@ -546,3 +672,4 @@ vector<int> Test::getsizeconvAll(){
     convsize[3]= _scgisgpTest->getsizeconv();
     return convsize;
  }
+*/

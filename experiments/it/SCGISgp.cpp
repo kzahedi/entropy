@@ -119,7 +119,7 @@ double SCGISgp::__calculateIteration(bool test, double sigma)
 	    double newl;
 	    double oldl= (*_IM).getFeatureArraylambda(feat,delti,deltj);
 	    double z=1;
-	    while(fabs(z)>0.00001)
+	    while(fabs(z)>0.01)
 	    {
 	      z=(oldl+_delta[feat][delti][deltj])/pow(sigma,2) +expected*exp(_delta[feat][delti][deltj])- _observed[feat][delti][deltj] ;
 	      double n=  1/(pow(sigma,2))+expected*exp(_delta[feat][delti][deltj]);
@@ -168,10 +168,12 @@ void SCGISgp:: __scgis(int maxit, double konv,bool test,double sigma,int seconds
 
 void SCGISgp:: __scgis(int maxit, double konv,bool test,double sigma)
 {
+	cout << " scgis " << endl;
   double l=1;
-  while(_iterations<maxit && fabs(l)>konv )
+  while(_iterations<maxit  ) //&& fabs(l)>konv
   {
     l=__calculateIteration(test,sigma);
+    cout << l << endl;
   }
 }
 

@@ -53,7 +53,7 @@ void itTest::OneXOneY()
   param.time           = true;
   param.test           = true;
   param.seconds        = 5;
-
+/*
   Test *test   = new Test(1, 1, 100, lambda, *zX, *zY, alphX, alphY, param, 0); // for test cases
   Test *testgp = new Test(1, 1, 100, lambda, *zX, *zY, alphX, alphY, paramgp, 2);
 
@@ -82,7 +82,7 @@ void itTest::OneXOneY()
  // cout <<"KL1 " <<  test->KL1() << endl;
  // cout <<"KL1gp " <<  testgp->KL1() << endl;
 //  CPPUNIT_ASSERT(test->KL1()   < 1);
-//  CPPUNIT_ASSERT(testgp->KL1() < 1);
+//  CPPUNIT_ASSERT(testgp->KL1() < 1); */
 }
 
 void itTest::SCOneXOneY()
@@ -123,7 +123,7 @@ void itTest::SCOneXOneY()
 
   vector<vector<int > > alphY(1,vector<int>(0));
   alphY[0].push_back(0);
-
+/*
   Test *test   = new Test(1,1,100,lambda,*zX,*zY, alphX, alphY, param,1);
   Test *testgp = new Test(1,1,100,lambda,*zX,*zY, alphX, alphY, paramgp,3);
 
@@ -143,7 +143,7 @@ void itTest::SCOneXOneY()
  // cout <<"KL1 " <<  test->KL1() << endl;
  // cout << " KL1scgp " << testgp->KL1() << endl;
  // CPPUNIT_ASSERT (test->KL1()<1);
- // CPPUNIT_ASSERT (testgp->KL1()<2);
+ // CPPUNIT_ASSERT (testgp->KL1()<2); */
 }
 
 void itTest::TwoXOneY()
@@ -189,7 +189,7 @@ void itTest::TwoXOneY()
   param.time           = true;
   param.test           = true;
   param.seconds        = 5;
-
+/*
   Test *test   = new Test(2,1,100,lambda,*zX,*zY, alphX, alphY, param,0);
   Test *testgp = new Test(2,1,100,lambda,*zX,*zY, alphX, alphY, paramgp,2);
 
@@ -214,7 +214,7 @@ void itTest::TwoXOneY()
  // cout <<"KL1 " <<  test->KL1() << endl;
  // cout << "KL1gp" << testgp->KL1() << endl;
   //CPPUNIT_ASSERT(test->KL1()<1);
-//  CPPUNIT_ASSERT(testgp->KL1()<2);
+//  CPPUNIT_ASSERT(testgp->KL1()<2); */
 }
 
 void itTest::SCTwoXOneY()
@@ -260,7 +260,7 @@ void itTest::SCTwoXOneY()
   param.time           = true;
   param.test           = true;
   param.seconds        = 5;
-
+/*
   Test *test   = new Test(2,1,100,lambda,*zX,*zY, alphX, alphY, param, 1);
   Test *testgp = new Test(2,1,100,lambda,*zX,*zY,alphX, alphY, paramgp, 3);
 
@@ -287,7 +287,7 @@ void itTest::SCTwoXOneY()
 //  cout <<"KL1 " <<  test->KL1() << endl;
 //  cout <<"KL1gpsc " << testgp->KL1() << endl;
  // CPPUNIT_ASSERT(test->KL1()<1);
- // CPPUNIT_ASSERT(testgp->KL1()<2);
+ // CPPUNIT_ASSERT(testgp->KL1()<2); */
 }
 
 void itTest::TwoXTwoY()
@@ -333,7 +333,7 @@ void itTest::TwoXTwoY()
   param.time           = true;
   param.test           = true;
   param.seconds        = 5;
-
+/*
   Test *test   = new Test(2,2,100,lambda,*zX,*zY, alphX, alphY, param,0);
   Test *testgp = new Test(2,2,100,lambda,*zX,*zY, alphX, alphY, paramgp,2);
 
@@ -357,7 +357,7 @@ void itTest::TwoXTwoY()
  // CPPUNIT_ASSERT(testgp->KL1()<2);
 //  cout << "KL1 "<< test->KL1() << endl;
  // cout << "KL1gp " <<testgp->KL1() << endl;
-//  cout << testgp->KL1() << endl;
+//  cout << testgp->KL1() << endl; */
 }
 
 void itTest::SCTwoXTwoY()
@@ -403,7 +403,7 @@ void itTest::SCTwoXTwoY()
   param.time           = true;
   param.test           = true;
   param.seconds        = 5;
-
+/*
   Test *test   = new Test(2,2,100,lambda,*zX,*zY,alphX, alphY, param,1);
   Test *testgp = new Test(2,2,100,lambda,*zX,*zY,alphX, alphY, paramgp,3);
 
@@ -428,7 +428,7 @@ void itTest::SCTwoXTwoY()
 //  cout <<"KL1 " <<  test->KL1() << endl;
  // cout <<"KL1scgp " << testgp->KL1() << endl;
  // CPPUNIT_ASSERT (test->KL1()<1);
- // CPPUNIT_ASSERT (testgp->KL1()<2);
+ // CPPUNIT_ASSERT (testgp->KL1()<2); */
 }
 
 void itTest::NotBinary()
@@ -470,7 +470,7 @@ void itTest::NotBinary()
   param.time           = true;
   param.test           = true;
   param.seconds        = 5;
-
+/*
   Test *test   = new Test(1,1,100,lambda,*zX,*zY, alphX, alphY, param,0);
   Test *testgp = new Test(1,1,100,lambda,*zX,*zY, alphX, alphY, paramgp,2);
 
@@ -487,7 +487,7 @@ void itTest::NotBinary()
 //  cout <<"KL1 " <<  test->KL1() << endl;
 //  cout <<"KL1gp " << testgp->KL1() << endl;
  // CPPUNIT_ASSERT (test->KL1()<1);
- // CPPUNIT_ASSERT (testgp->KL1()<1.5);
+ // CPPUNIT_ASSERT (testgp->KL1()<1.5); */
 }
 /*
 void itTest::FourXFourY()

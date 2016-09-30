@@ -66,12 +66,12 @@ int main(int argc, char **argv)
  IsParameter param;
  param.lambdavalue    = 1.0;
  param.lambdadeltaval = 1.0;
- param.sigma          = 0.01;
+ param.sigma          = 0.0000001;
  param.maxit          = 10;
  param.konv           = 0.000001;
- param.time           = false;
- param.test           = false;
- param.seconds        = 10;
+ param.time           = true;
+ param.test           = true;
+ param.seconds        = 2;
 
  /*IT *Test = new IT(2,*eX,*zX,*zY,alphX,alphY);
 
@@ -153,11 +153,18 @@ alphY[3].push_back(0);
 
   // for test cases
 */
-   Test *test2 = new Test(2,2,10000,lambda,*zX,*zY,alphbX,alphbY,param);
-   test2->comparison();
-   Test *test1 = new Test(2,2,10000,lambda,*zX,*zY,alphbX,alphbY,param,0);
-   Test *test = new Test(2,2,10000,lambda,*zX,*zY,alphbX,alphbY,param,1);
-  cout << " kl gis " << test1->KL1() << endl;
-   cout << " kl " << test->KL1() << endl;
+ //  Test *test2 = new Test(2,2,10000,lambda,*zX,*zY,alphbX,alphbY);
 
+ //  Test *test1 = new Test(2,2,10000,lambda,*zX,*zY,alphbX,alphbY,param,0);
+ //  Test *test = new Test(2,2,10000,lambda,*zX,*zY,alphbX,alphbY,param,1);
+//  cout << " kl gis " << test1->KL1(0) << " " << test1->getsizeconv() << endl;
+//   cout << " kl " << test->KL1(1) << " " << test->getsizeconv()<< endl;
+   //    Test(int colX,int colValY, int rowX, vector<double> lambda,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY);
+ vector<int> cases(4);
+ cases[0]=0;
+ cases[1]=1;
+ cases[2]=2;
+ cases[3]=3;
+  Test *test = new Test(2,2,100,lambda, *zX,*zY,alphbX, alphbY);
+  test->compareCases(param,cases);
 }
