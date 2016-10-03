@@ -176,8 +176,8 @@ class Container
       int newrows    = MIN(this->_rows, c._rows);
       int newcolumns = this->_columns + c._columns;
 
-      double** tmp   = new double*[newrows];
-      int* newBins   = new int[newcolumns];
+      T** tmp      = new T*[newrows];
+      int* newBins = new int[newcolumns];
 
       for(int i = 0; i < _columns; i++)
       {
@@ -190,7 +190,7 @@ class Container
 
       for(int i = 0; i < newrows; i++)
       {
-        tmp[i] = new double[newcolumns];
+        tmp[i] = new T[newcolumns];
         int index = 0;
         for(int j = 0; j < _columns; j++)
         {

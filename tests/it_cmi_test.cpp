@@ -192,19 +192,21 @@ void itCmiTest::testITvsCMI()
   // Tests start here
 
   // I(Y;X|Z) = I(W';W|A)
-  DContainer dcX  = dcW2;
-  DContainer dcYZ = dcW1;
-  dcYZ += dcA1; // 2 columns. 1st column = A1, 2nd column = W1. 
+  ULContainer *dcX  = dcW2;
+  ULContainer *dcYZ = dcW1;
+  (*dcYZ) += *dcA1; // 2 columns. 1st column = A1, 2nd column = W1. 
   //CPPUNIT_ASSERT_DOUBLES_EQUAL(dcmc_w, IT-value(dcX, dcY), 0.000001);
 
-  DContainer mlX  = mlW2;
-  DContainer mlYZ = mlW1;
-  mlYZ += mlA1; // 2 columns. 1st column = A1, 2nd column = W1. 
+
+
+  ULContainer *mlX  = mlW2;
+  ULContainer *mlYZ = mlW1;
+  (*mlYZ) += *mlA1; // 2 columns. 1st column = A1, 2nd column = W1. 
   //CPPUNIT_ASSERT_DOUBLES_EQUAL(mlmc_w, IT-value(mlX, mlY), 0.000001);
 
-  DContainer mfX  = mfW2;
-  DContainer mfYZ = mfW1;
-  mfYZ += mfA1; // 2 columns. 1st column = A1, 2nd column = W1. 
+  ULContainer *mfX  = mfW2;
+  ULContainer *mfYZ = mfW1;
+  (*mfYZ) += *mfA1; // 2 columns. 1st column = A1, 2nd column = W1. 
   //CPPUNIT_ASSERT_DOUBLES_EQUAL(mfmc_w, IT-value(mfX, mfY), 0.000001);
 */
 }
