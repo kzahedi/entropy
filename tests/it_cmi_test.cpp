@@ -44,7 +44,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION( itCmiTest );
 
 void itCmiTest::testITvsCMI()
 {
-/*
   cout << PARENT << "/dcmot.csv" << endl;
 
   Csv *csv = new Csv();
@@ -195,18 +194,37 @@ void itCmiTest::testITvsCMI()
   ULContainer *dcX  = dcW2;
   ULContainer *dcYZ = dcW1;
   (*dcYZ) += *dcA1; // 2 columns. 1st column = A1, 2nd column = W1. 
+  CPPUNIT_ASSERT(dcW1->rows() > 0);
+  for(int r = 0; r < dcW1->rows(); r++)
+  {
+    CPPUNIT_ASSERT_EQUAL((*dcYZ)(r,0), (*dcW1)(r,0));
+    CPPUNIT_ASSERT_EQUAL((*dcYZ)(r,1), (*dcA1)(r,0));
+  }
+
   //CPPUNIT_ASSERT_DOUBLES_EQUAL(dcmc_w, IT-value(dcX, dcY), 0.000001);
-
-
 
   ULContainer *mlX  = mlW2;
   ULContainer *mlYZ = mlW1;
   (*mlYZ) += *mlA1; // 2 columns. 1st column = A1, 2nd column = W1. 
+  CPPUNIT_ASSERT(mlW1->rows() > 0);
+  for(int r = 0; r < mlW1->rows(); r++)
+  {
+    CPPUNIT_ASSERT_EQUAL((*mlYZ)(r,0), (*mlW1)(r,0));
+    CPPUNIT_ASSERT_EQUAL((*mlYZ)(r,1), (*mlA1)(r,0));
+  }
+
   //CPPUNIT_ASSERT_DOUBLES_EQUAL(mlmc_w, IT-value(mlX, mlY), 0.000001);
 
   ULContainer *mfX  = mfW2;
   ULContainer *mfYZ = mfW1;
   (*mfYZ) += *mfA1; // 2 columns. 1st column = A1, 2nd column = W1. 
+  CPPUNIT_ASSERT(mfW1->rows() > 0);
+  for(int r = 0; r < mfW1->rows(); r++)
+  {
+    CPPUNIT_ASSERT_EQUAL((*mfYZ)(r,0), (*mfW1)(r,0));
+    CPPUNIT_ASSERT_EQUAL((*mfYZ)(r,1), (*mfA1)(r,0));
+  }
+
   //CPPUNIT_ASSERT_DOUBLES_EQUAL(mfmc_w, IT-value(mfX, mfY), 0.000001);
-*/
+
 }
