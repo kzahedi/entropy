@@ -8,18 +8,21 @@
 
 using namespace std;
 
-class Csv
+namespace entropy
 {
-  public:
-    Csv();
+  class Csv
+  {
+    public:
+      Csv();
 
-    DContainer* read(string filename, int n, ...);
-    DContainer* read(string filename);
-    DContainer* read(string filename, vector<int>);
-    void write(string filename, DContainer* c);
-    void write(string filename, ULContainer* c);
+      DContainer* read(string filename, int n, ...);
+      DContainer* read(string filename);
+      DContainer* read(string filename, vector<int>);
+      void write(string filename, DContainer* c);
+      void write(string filename, ULContainer* c);
 
-  private:
-};
+    private:
+  };
+}
 
 #endif // __CSV_H__

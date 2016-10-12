@@ -9,6 +9,7 @@
 #include <cstdarg>
 
 using namespace boost;
+using namespace entropy;
 
 Csv::Csv()
 {

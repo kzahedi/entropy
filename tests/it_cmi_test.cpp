@@ -38,6 +38,7 @@ using namespace entropy::sparse::state;
 #include <string>
 
 using namespace std;
+using namespace entropy;
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( itCmiTest );
