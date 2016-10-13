@@ -10,6 +10,7 @@ set(SRC sparse/CMI.cpp
   MC_W.cpp
   MI.cpp
   PI.cpp
+  ConditionalEntropy.cpp
 
   state/CMI.cpp
   state/MC_CW.cpp

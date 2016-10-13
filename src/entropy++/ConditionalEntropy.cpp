@@ -16,8 +16,14 @@ double __empericalH(ULContainer* X, ULContainer* Y)
   double sum  = 0.0;
 
   double  *py     = new double[maxY];
-  double **pxy    = new double[maxX][maxY];
-  double **px_c_y = new double[maxX][maxY];
+  double **pxy    = new double*[maxX];
+  double **px_c_y = new double*[maxX];
+
+  for(int x = 0; x < maxX; x++)
+  {
+    pxy[x]    = new double[maxY];
+    px_c_y[x] = new double[maxY];
+  }
 
   for(int y = 0; y < maxY; y++)
   {
@@ -83,7 +89,7 @@ double __empericalH(ULContainer* X, ULContainer* Y)
     delete [] px_c_y[x];
   }
 
-  delete[] px;
+  delete[] py;
   delete[] pxy;
   delete[] px_c_y;
 
