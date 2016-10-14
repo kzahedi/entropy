@@ -43,7 +43,6 @@ TestMI::TestMI(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, I
 
 }
 TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
-	cout << " begin TestMI " << endl;
     assert(eX.columns() ==2 && eY.columns()==1);
     vector<vector<int> > systAX(1,vector<int>(0));
     systAX[0].push_back(0);
@@ -61,11 +60,10 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
     _valX=NULL;
     _valY=NULL;
     _Y = NULL;
-    _X=new DContainer(4,1);
-    for(int i=0;i<4;i++){
+    _X=new DContainer(7,1);
+    for(int i=0;i<7;i++){
     	(*_X) << i;
     }
-	cout << " vor param " << endl;
     IsParameter param;
     param.lambdavalue    = 1.0;
     param.lambdadeltaval = 1.0;
@@ -76,10 +74,9 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
     param.test           = true;
     param.seconds        = 10;
 
-	cout << " vor version " << endl;
     switch(version){
       case 0:
-  		  _p1   = new GIS(*_valXUL,*_valYUL,*_X,*_X,systAX,systAY, param);
+  		  _p1   = new GIS(*_valXUL,*_valYUL, *_X, *_X,systAX,systAY, param);
           _p2   = new GIS(*_valXUL, *_valYUL, *_X, *_X, systBX, systBY, param);
         break;
       case 1:
@@ -108,7 +105,6 @@ double TestMI::getMI(){
 	double val;
 	double p;
 	if(_cmi==false){
-		cout << " if " << endl;
 		for(int i=0;i< pow(_X->rows(),_valX->columns() );i++ ){
 	      for( int j=0; j< pow(_Y->rows(),_valY->columns() );j++){
 	    	  p=_p1->propAlphX(i,j);
@@ -118,12 +114,9 @@ double TestMI::getMI(){
 		return val;
 	}
 	else{
-		cout << " else " << _valXUL->columns()<< " " << _valYUL->columns()   << endl;
 		for(int i=0;i< pow(_X->rows(),_valXUL->columns() );i++ ){
 	      for( int j=0; j< pow(_X->rows(),_valYUL->columns() );j++){
-	    	  cout << " hier 1 " << endl;
 	    	  p=_p1->propAlphX(i,j);
-	    	  cout << " hier 2 " << endl;
 	    	  val+=p*_p1->propm(i)*log2(p/ (_p2->propAlphX(i,j)));
 	      }
 		}

@@ -9,7 +9,6 @@ InstanceMatrix:: InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, 
 InstanceMatrix:: InstanceMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, double valuelambda)
   :ITMatrix(eX,eY,aX,aY,systX, systY,valuelambda)
 {
-	cout << " vor _getMatrix " << endl;
   _getMatrix(valuelambda);
 }
 
@@ -50,8 +49,6 @@ vector<int> InstanceMatrix::getInstanceMatrixY(int feat, int deltai, int deltaj)
 
 void InstanceMatrix::_getMatrix(double valuelambda)
 {
-	cout << " instanceMatrix " << endl;
-	cout << " hier " << endl;
 	vector<vector<int> > V(2,vector<int>(0));
 	_mat = new vector<vector<int> >**[_systX.size()];
 	for(int i=0;i<_systX.size();i++)
@@ -66,7 +63,6 @@ void InstanceMatrix::_getMatrix(double valuelambda)
         }
 	  }
 	}
-	cout << " nach dem ersten Block " << endl;
 	for(int feat=0;feat<_systX.size();feat++)
 	{
       for(int delti=0; delti<pow(_sizeX,_systX[feat].size());delti++)

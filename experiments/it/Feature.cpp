@@ -14,20 +14,16 @@ Feature::Feature()
 
 //(Eingabealphabet, Anzahl der X und Y Werte, Anzahl der Testwerte, ein Startwert fuer alle  lambda)
 Feature::Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int systXsize,int systYsize , double valuelambda)
-{ cout << " Konstruktor Feature " << endl;
+{
   _X                    = &aX;
   _Y                    = &aY;
   assert(_X->columns() == 1);
   assert(_Y->columns() == 1);
-  cout << " vor pow " << endl;
   _sizeDeltaX           = pow(_X->rows(),systXsize);
   _sizeDeltaY           = pow(_Y->rows(),systYsize);
-  cout << " hier " << endl;
   _sizeY                = _Y->rows();
   _sizeX                = _X->rows();
-  cout << " hier 1" <<  _sizeDeltaX << " " << _sizeDeltaY<< endl;
   _lambda               = new Matrix(_sizeDeltaX,_sizeDeltaY);
-  cout << " hier 2" << endl;
   for(int i=0; i< _sizeDeltaX; i++)
   {
     for(int j=0; j< _sizeDeltaY; j++)
@@ -35,7 +31,6 @@ Feature::Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int sy
       (*_lambda)(i,j) = valuelambda;
     }
   }
-  cout << "ende Konstruktor Feature" << endl;
 }
 //alle lambda explizit ueber die Matrix setzen
 Feature::Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int systXsize,int systYsize, Matrix &lambda)
