@@ -15,6 +15,7 @@ class GIS : public IT
 {
   public:
     GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
+    GIS(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
     ~GIS();
     double getconv(int i);
     int    getsizeconv();

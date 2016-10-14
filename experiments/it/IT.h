@@ -28,6 +28,7 @@ class IT{
   public:
     // IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,bool GIS);
     IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX,vector<vector<int> > systY, IsParameter param, bool gis);
+    IT(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX,vector<vector<int> > systY, IsParameter param, bool gis);
     IT(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY);
     ~IT();
     double  prop(int rowX, int rowY);

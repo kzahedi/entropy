@@ -19,6 +19,7 @@ class InstanceMatrix : public ITMatrix{
 public:
   //InstanceMatrix();
   InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, double valuelambda);
+  InstanceMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, double valuelambda);
   ~InstanceMatrix();
   // TODO copying vectors can be expensive
 

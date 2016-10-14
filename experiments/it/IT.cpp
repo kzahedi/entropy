@@ -30,6 +30,37 @@ IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vec
   }
   _observed=__getobs();
 }
+IT::IT(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, bool gis)
+{
+  assert(eX.rows() == eY.rows());
+  _param       = param;
+  _gis         = gis;
+  _valX        = NULL;
+  _valY        = NULL;
+  ULContainer *valX = &eX;
+  ULContainer *valY = &eY;
+  _X           = &aX;
+  _Y           = &aY;
+  _sizeSystX   = systX.size();
+  _sizeX       = _X->rows();
+  _sizeY       = _Y->rows();
+  _sizeColValY = valY->columns();
+  _sizeColValX = valX->columns();
+  _sizeRowValX = valX->rows();
+  _sizeRowValY = valY->rows();
+  _systX       = systX;
+  _systY       = systY;
+
+  if(_gis) // gis and csgis require different feature matrices
+  {
+    _FM = new FeatureMatrix(*valX,*valY,*_X,*_Y, systX, systY, param.lambdavalue);
+  }
+  else
+  {
+    _IM = new InstanceMatrix(*valX,*valY,*_X,*_Y, systX, systY, param.lambdavalue);
+  }
+  _observed=__getobs();
+}
 //umstellen
 IT::IT(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY)
 {

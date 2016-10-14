@@ -22,6 +22,7 @@ using namespace std;
 class TestMI{
   public:
 	TestMI(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param, int version);
+	TestMI(ULContainer &eX, ULContainer &eY, int version);
     double            getMI();
 
   private:
@@ -31,6 +32,5 @@ class TestMI{
     DContainer*     _valX;
     IT*             _p1;
     IT*             _p2;
-    IT*	            _exact;
 };
 #endif

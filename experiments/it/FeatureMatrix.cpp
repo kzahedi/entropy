@@ -6,7 +6,12 @@ FeatureMatrix::FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DCo
   _sizeAlphY = pow(_Y->rows(),_sizeColValY);
   __getMatrix(lambdavalue);
 }
-
+FeatureMatrix::FeatureMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY,double lambdavalue)
+  :ITMatrix(eX,eY,aX,aY,systX,systY,lambdavalue)
+{
+  _sizeAlphY = pow(_Y->rows(),_sizeColValY);
+  __getMatrix(lambdavalue);
+}
 FeatureMatrix::FeatureMatrix():ITMatrix()
 {
   __getMatrix(0);

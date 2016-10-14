@@ -51,6 +51,55 @@ SCGISgp::SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,
   }
 }
 
+SCGISgp::SCGISgp(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
+  :IT(eX, eY, aX, aY,systX,systY, param, false)
+
+{
+  _exponent= new double**[_sizeSystX];
+  for(int i=0;i<_sizeSystX; i++)
+  {
+    _exponent[i]=new double*[_sizeRowValX];
+    for(int xi=0;xi<_sizeRowValX;xi++)
+    {
+      _exponent[i][xi]=new double[(int) pow(_Y->rows(),_sizeColValY)];
+      for(int y=0;y< pow(_Y->rows(),_sizeColValY);y++)
+      {
+        _exponent[i][xi][y]=0;
+      }
+    }
+  }
+  _normaliser=new double*[_sizeSystX];
+  for(int i=0; i< _sizeSystX;i++)
+  {
+    _normaliser[i]=new double[_sizeRowValX];
+    for(int k=0;k<_sizeRowValX;k++)
+    {
+      _normaliser[i][k]=pow(_Y->rows(),_sizeColValY);
+    }
+  }
+  _delta= new double**[_sizeSystX];
+  for(int i=0;i<_sizeSystX;i++)
+  {
+    _delta[i]= new double*[(int) pow(_X->rows(),_systX[i].size())];
+    for(int k=0;k< pow(_X->rows(),_systX[i].size());k++)
+    {
+      _delta[i][k]= new double[(int) pow(_Y->rows(),_systY[i].size())];
+      for(int l=0;l<pow(_Y->rows(),_systY[i].size());l++)
+      {
+        _delta[i][k][l]=param.lambdadeltaval;
+      }
+    }
+  }
+  if(param.time)
+  {
+    __scgis(param.maxit,param.konv,param.test,param.sigma,param.seconds);
+  }
+  else
+  {
+    __scgis(param.maxit,param.konv,param.test,param.sigma);
+  }
+}
+
 SCGISgp:: ~SCGISgp()
 {
   for(int i=0;i<_sizeSystX;i++)

@@ -16,6 +16,7 @@ class FeatureMatrix :public ITMatrix
 {
   public:
     FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY,double lambdavalue);
+    FeatureMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY,double lambdavalue);
     FeatureMatrix();
     ~FeatureMatrix();
 

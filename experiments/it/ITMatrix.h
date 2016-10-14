@@ -16,6 +16,7 @@ class ITMatrix
 public:
   ITMatrix();
   ITMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systX, vector<vector<int> > systY, double lambdavalue);
+  ITMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systX, vector<vector<int> > systY, double lambdavalue);
   virtual ~ITMatrix();
   double  getFeatureArraylambda(int i,int ilambdaX, int ilambdaY);
   double  getFeatureArrayvalue(int i,int rowX, int rowY);
@@ -36,10 +37,13 @@ protected:
   int         _sizeRowValY;
   int         _sizeX;
   int         _sizeY;
+  bool        _cmi;
   vector<vector<int> > _systX;
   vector<vector<int> > _systY;
   DContainer* _valX;
   DContainer* _valY;
+  ULContainer* _valXUL;
+  ULContainer* _valYUL;
   DContainer* _X;
   DContainer* _Y;
   Feature*    _FA;

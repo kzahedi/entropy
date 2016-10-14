@@ -47,6 +47,51 @@ GISgp::GISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vect
   }
 }
 
+GISgp::GISgp(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
+  :IT(eX, eY, aX, aY, systX, systY, param, true)
+{
+  _normaliser = new double[_sizeSystX];
+
+  _exponent= new double*[_sizeSystX];
+  for(int i=0;i<_sizeSystX;i++){
+	  _exponent[i]= new double[(int) pow(_Y->rows(),_sizeColValY)];
+  }
+  _expected = new double**[_sizeSystX];
+  for(int i=0; i<_sizeSystX; i++)
+  {
+    _expected[i]=new double*[(int) pow(_X->rows(),_systX[i].size())];
+    for(int k=0; k< (int) pow(_X->rows(),_systX[i].size()); k++)
+    {
+      _expected[i][k]= new double[(int) pow(_Y->rows(),_systY[i].size())];
+      for(int l=0; l< _sizeY;l++)
+      {
+        _expected[i][k][l]=0;
+      }
+    }
+  }
+  _delta= new double**[_sizeSystX];
+  for(int i=0;i<_sizeSystX;i++)
+  {
+    _delta[i]= new double*[(int) pow(_X->rows(),_systX[i].size())];
+    for(int j=0;j<(int) pow(_X->rows(),_systX[i].size());j++)
+    {
+      _delta[i][j]= new double[(int) pow(_Y->rows(),_systY[i].size())];
+      for(int k=0;k<(int) pow(_Y->rows(),_systY[i].size());k++)
+      {
+        _delta[i][j][k]=param.lambdadeltaval;
+      }
+    }
+  }
+  if(param.time)
+  {
+    __gisgp(param.maxit, param.konv, param.sigma, param.test, param.seconds);
+  }
+  else
+  {
+    __gisgp(param.maxit, param.konv, param.sigma, param.test);
+  }
+}
+
 GISgp::~GISgp()
 {
   if(_expected != NULL)

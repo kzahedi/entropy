@@ -37,6 +37,38 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<v
   }
 }
 
+GIS::GIS(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
+:IT(eX, eY, aX, aY,systX, systY, param, true)
+{
+  _param      = param;
+  _expected   = new double**[_sizeSystX];
+  for(int i=0; i<_sizeSystX; i++)
+  {
+      _expected[i]=new double*[(int) pow(_X->rows(),_systX[i].size())];
+      for(int k=0; k<pow(_X->rows(),_systX[i].size()); k++)
+      {
+        _expected[i][k]= new double[(int) pow(_Y->rows(),_systY[i].size())];
+        for(int l=0; l< pow(_Y->rows(),_systY[i].size());l++)
+        {
+          _expected[i][k][l]=0;
+        }
+      }
+   }
+  _normaliser = new double[_sizeSystX];
+  _exponent= new double*[_sizeSystX];
+  for(int i=0;i<_sizeSystX;i++){
+	  _exponent[i]= new double[(int) pow(_Y->rows(),_sizeColValY)];
+  }
+  // cout << "Data X:" << endl << eX << endl << "Data Y: " << endl << eY << endl;
+  if(param.time)
+  {
+    __gis(param.maxit, param.konv, param.test, param.seconds);
+  }
+  else
+  {
+    __gis(param.maxit, param.konv, param.test);
+  }
+}
 GIS::~GIS()
 {
   if(_expected != NULL){

@@ -36,6 +36,40 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vect
   }
 }
 
+SCGIS::SCGIS(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
+:IT(eX, eY, aX, aY, systX, systY, param, false)
+{
+  _param = param;
+  _exponent= new double**[_sizeSystX];
+  for(int i=0;i<_sizeSystX; i++){
+      _exponent[i]=new double*[_sizeRowValX];
+      for(int xi=0;xi<_sizeRowValX;xi++){
+        _exponent[i][xi]=new double[(int) pow(_Y->rows() ,_sizeColValY )];
+        for(int y=0;y< pow(_Y->rows() ,_sizeColValY );y++){
+          _exponent[i][xi][y]=0;
+        }
+      }
+
+  }
+  _normaliser=new double*[_sizeSystX];
+  for(int i=0; i< _sizeSystX;i++){
+      _normaliser[i]=new double[_sizeRowValX];
+      for(int k=0;k<_sizeRowValX;k++){
+        _normaliser[i][k]=pow(_Y->rows(),_sizeColValY);
+      }
+  }
+  _delta=0.0;
+  if(param.time)
+  {
+    __scgis(param.maxit,param.konv,param.test,param.seconds);
+  }
+  else
+  {
+    __scgis(param.maxit,param.konv,param.test);
+  }
+}
+
+
 double SCGIS:: getconv(int i){
   return _conv[i];
 }

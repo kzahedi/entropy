@@ -6,6 +6,12 @@ InstanceMatrix:: InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, 
   _getMatrix(valuelambda);
 }
 
+InstanceMatrix:: InstanceMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, double valuelambda)
+  :ITMatrix(eX,eY,aX,aY,systX, systY,valuelambda)
+{
+  _getMatrix(valuelambda);
+}
+
 InstanceMatrix:: ~InstanceMatrix()
 {
   delete [] _FA;

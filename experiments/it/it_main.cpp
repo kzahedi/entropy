@@ -25,7 +25,6 @@
 
 int main(int argc, char **argv)
 {
-
   DContainer *zX = new DContainer(2,1); // alphabet
     *zX << 0 << 1;
   DContainer *zY = new DContainer(2,1); // alphabet
@@ -52,22 +51,18 @@ int main(int argc, char **argv)
  param.konv           = 0.000001;
  param.time           = true;
  param.test           = true;
- param.seconds        = 10;
+ param.seconds        = 100;
 
- vector<int> cases(4);
+ vector<int> cases(2);
  cases[0]=0;
  cases[1]=1;
- cases[2]=2;
- cases[3]=3;
-  Test *test = new Test(2,1,100,lambda, *zX,*zY,alphbX, alphbY);
+  Test *test = new Test(2,1,10000,lambda, *zX,*zY,alphbX, alphbY);
   test->compareCases(param,cases);
   //(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param, int version)
   TestMI *testmi = new TestMI(test->getvalX(),test->getvalY(),*zX,*zY,param,0);
   cout << testmi->getMI() << endl;
   TestMI *testmisc = new TestMI(test->getvalX(),test->getvalY(),*zX,*zY,param,1);
   cout << testmisc->getMI() << endl;
-  TestMI *testmigp = new TestMI(test->getvalX(),test->getvalY(),*zX,*zY,param,2);
-  cout << testmigp->getMI() << endl;
-  TestMI *testmiscgp = new TestMI(test->getvalX(),test->getvalY(),*zX,*zY,param,3);
-  cout << testmiscgp->getMI() << endl;
+
+
 }
