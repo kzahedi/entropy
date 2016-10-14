@@ -11,8 +11,9 @@ TestMI::TestMI(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, I
 	    systBX[0].push_back(1);
 	    vector<vector<int> > systBY(1,vector<int>(0));
 	    systBY[0].push_back(0);
-	    _cmi=false;
-
+	    _cmi  = false;
+        _valXUL = NULL;
+        _valYUL = NULL;
 	    _valX = &eX;
 	    _valY = &eY;
 	    _X    = &aX;
@@ -55,13 +56,13 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
     systBY[0].push_back(0);
     _cmi=true;
 
-    ULContainer *valX = &eX;
-    ULContainer *valY = &eY;
+    _valXUL = &eX;
+    _valYUL = &eY;
     _valX=NULL;
     _valY=NULL;
     _Y = NULL;
-    _X=new DContainer(10,1);
-    for(int i=0;i<10;i++){
+    _X=new DContainer(4,1);
+    for(int i=0;i<4;i++){
     	(*_X) << i;
     }
 	cout << " vor param " << endl;
@@ -78,36 +79,38 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
 	cout << " vor version " << endl;
     switch(version){
       case 0:
-  		  _p1   = new GIS(*valX,*valY,*_X,*_X,systAX,systAY, param);
-          _p2   = new GIS(*valX, *valY, *_X, *_X, systBX, systBY, param);
+  		  _p1   = new GIS(*_valXUL,*_valYUL,*_X,*_X,systAX,systAY, param);
+          _p2   = new GIS(*_valXUL, *_valYUL, *_X, *_X, systBX, systBY, param);
         break;
       case 1:
     	  cout << " vor SCGIS " << endl;
-  		  _p1   = new SCGIS(*valX, *valY, *_X, *_X, systAX, systAY, param);
-          _p2   = new SCGIS(*valX, *valY, *_X, *_X, systBX, systBY, param);
+  		  _p1   = new SCGIS(*_valXUL, *_valYUL, *_X, *_X, systAX, systAY, param);
+          _p2   = new SCGIS(*_valXUL, *_valYUL, *_X, *_X, systBX, systBY, param);
         break;
       case 2:
-  		  _p1   = new GISgp(*valX, *valY, *_X, *_X, systAX, systAY, param);
-          _p2   = new GISgp(*valX, *valY, *_X, *_X, systBX, systBY, param);
+  		  _p1   = new GISgp(*_valXUL, *_valYUL, *_X, *_X, systAX, systAY, param);
+          _p2   = new GISgp(*_valXUL, *_valYUL, *_X, *_X, systBX, systBY, param);
         break;
       case 3:
-  		  _p1   = new SCGISgp(*valX, *valY, *_X, *_X, systAX, systAY, param);
-          _p2   = new SCGISgp(*valX, *valY, *_X, *_X, systBX, systBY, param);
+  		  _p1   = new SCGISgp(*_valXUL, *_valYUL, *_X, *_X, systAX, systAY, param);
+          _p2   = new SCGISgp(*_valXUL, *_valYUL, *_X, *_X, systBX, systBY, param);
         break;
       default:
         cout << "default " << endl;
-  		  _p1   = new GIS(*valX, *valY, *_X, *_X, systAX, systAY, param);
-          _p2   = new GIS(*valX, *valY, *_X, *_X, systBX, systBY, param);
+  		  _p1   = new GIS(*_valXUL, *_valYUL, *_X, *_X, systAX, systAY, param);
+          _p2   = new GIS(*_valXUL, *_valYUL, *_X, *_X, systBX, systBY, param);
     }
     cout << " ende " << endl;
 }
 
 double TestMI::getMI(){
+	cout << " in getMI " << endl;
 	double val;
 	double p;
-	if(_cmi==true){
+	if(_cmi==false){
+		cout << " if " << endl;
 		for(int i=0;i< pow(_X->rows(),_valX->columns() );i++ ){
-	      for( int j=0; j< pow(_X->rows(),_valY->columns() );j++){
+	      for( int j=0; j< pow(_Y->rows(),_valY->columns() );j++){
 	    	  p=_p1->propAlphX(i,j);
 	    	  val+=p*_p1->propm(i)*log2(p/ (_p2->propAlphX(i,j)));
 	      }
@@ -115,9 +118,12 @@ double TestMI::getMI(){
 		return val;
 	}
 	else{
-		for(int i=0;i< pow(_X->rows(),_valX->columns() );i++ ){
-	      for( int j=0; j< pow(_Y->rows(),_valY->columns() );j++){
+		cout << " else " << _valXUL->columns()<< " " << _valYUL->columns()   << endl;
+		for(int i=0;i< pow(_X->rows(),_valXUL->columns() );i++ ){
+	      for( int j=0; j< pow(_X->rows(),_valYUL->columns() );j++){
+	    	  cout << " hier 1 " << endl;
 	    	  p=_p1->propAlphX(i,j);
+	    	  cout << " hier 2 " << endl;
 	    	  val+=p*_p1->propm(i)*log2(p/ (_p2->propAlphX(i,j)));
 	      }
 		}

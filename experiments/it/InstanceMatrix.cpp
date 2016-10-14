@@ -69,19 +69,14 @@ void InstanceMatrix::_getMatrix(double valuelambda)
 	cout << " nach dem ersten Block " << endl;
 	for(int feat=0;feat<_systX.size();feat++)
 	{
-		cout << " hier 1 " << endl;
       for(int delti=0; delti<pow(_sizeX,_systX[feat].size());delti++)
       {
-    		cout << " hier 2 " << endl;
 	    for(int deltj=0; deltj <pow(_sizeY,_systY[feat].size()); deltj++)
 	    {
-	    	cout << " hier 3 " << endl;
 		  for(int xi=0; xi< _sizeRowValX; xi++)
 		  {
-				cout << " hier 4 " << endl;
 		    for(int y=0; y<pow(_sizeY,_sizeColValY); y++)
 		    {
-		    	cout << " hier 5 " << endl;
 			  if(getFeatureArraydeltaAlphY(feat,delti,deltj,xi,y)==1)
 			  {
 			    _mat[feat][delti][deltj][0].push_back(xi);

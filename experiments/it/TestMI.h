@@ -33,5 +33,7 @@ class TestMI{
     DContainer*     _valX;
     IT*             _p1;
     IT*             _p2;
+    ULContainer*    _valXUL;
+    ULContainer*    _valYUL;
 };
 #endif
