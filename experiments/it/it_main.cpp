@@ -24,7 +24,7 @@
 
 
 int main(int argc, char **argv)
-{
+{/*
   DContainer *zX = new DContainer(2,1); // alphabet
     *zX << 0 << 1;
   DContainer *zY = new DContainer(2,1); // alphabet
@@ -64,5 +64,7 @@ int main(int argc, char **argv)
   TestMI *testmisc = new TestMI(test->getvalX(),test->getvalY(),*zX,*zY,param,1);
   cout << testmisc->getMI() << endl;
 
-
+*/
+	Matrix *m= new Matrix(1000000,1000);
+	cout << " hier " << endl;
 }

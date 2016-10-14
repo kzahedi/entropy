@@ -26,6 +26,7 @@ class TestMI{
     double            getMI();
 
   private:
+    bool            _cmi;
     DContainer*     _Y;
     DContainer*     _X;
     DContainer*     _valY;

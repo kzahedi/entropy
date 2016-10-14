@@ -32,6 +32,7 @@ IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vec
 }
 IT::IT(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, bool gis)
 {
+  cout << " Konstruktor IT " << endl;
   assert(eX.rows() == eY.rows());
   _param       = param;
   _gis         = gis;
@@ -50,7 +51,7 @@ IT::IT(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<v
   _sizeRowValY = valY->rows();
   _systX       = systX;
   _systY       = systY;
-
+  cout << " vor Feat\Inst-Matrix " << endl;
   if(_gis) // gis and csgis require different feature matrices
   {
     _FM = new FeatureMatrix(*valX,*valY,*_X,*_Y, systX, systY, param.lambdavalue);

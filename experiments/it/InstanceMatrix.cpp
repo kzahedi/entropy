@@ -9,6 +9,7 @@ InstanceMatrix:: InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, 
 InstanceMatrix:: InstanceMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, double valuelambda)
   :ITMatrix(eX,eY,aX,aY,systX, systY,valuelambda)
 {
+	cout << " vor _getMatrix " << endl;
   _getMatrix(valuelambda);
 }
 
@@ -49,6 +50,8 @@ vector<int> InstanceMatrix::getInstanceMatrixY(int feat, int deltai, int deltaj)
 
 void InstanceMatrix::_getMatrix(double valuelambda)
 {
+	cout << " instanceMatrix " << endl;
+	cout << " hier " << endl;
 	vector<vector<int> > V(2,vector<int>(0));
 	_mat = new vector<vector<int> >**[_systX.size()];
 	for(int i=0;i<_systX.size();i++)
@@ -63,16 +66,22 @@ void InstanceMatrix::_getMatrix(double valuelambda)
         }
 	  }
 	}
+	cout << " nach dem ersten Block " << endl;
 	for(int feat=0;feat<_systX.size();feat++)
 	{
+		cout << " hier 1 " << endl;
       for(int delti=0; delti<pow(_sizeX,_systX[feat].size());delti++)
       {
+    		cout << " hier 2 " << endl;
 	    for(int deltj=0; deltj <pow(_sizeY,_systY[feat].size()); deltj++)
 	    {
+	    	cout << " hier 3 " << endl;
 		  for(int xi=0; xi< _sizeRowValX; xi++)
 		  {
+				cout << " hier 4 " << endl;
 		    for(int y=0; y<pow(_sizeY,_sizeColValY); y++)
 		    {
+		    	cout << " hier 5 " << endl;
 			  if(getFeatureArraydeltaAlphY(feat,delti,deltj,xi,y)==1)
 			  {
 			    _mat[feat][delti][deltj][0].push_back(xi);

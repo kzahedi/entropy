@@ -11,6 +11,7 @@ TestMI::TestMI(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, I
 	    systBX[0].push_back(1);
 	    vector<vector<int> > systBY(1,vector<int>(0));
 	    systBY[0].push_back(0);
+	    _cmi=false;
 
 	    _valX = &eX;
 	    _valY = &eY;
@@ -41,6 +42,7 @@ TestMI::TestMI(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, I
 
 }
 TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
+	cout << " begin TestMI " << endl;
     assert(eX.columns() ==2 && eY.columns()==1);
     vector<vector<int> > systAX(1,vector<int>(0));
     systAX[0].push_back(0);
@@ -51,17 +53,18 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
     systBX[0].push_back(1);
     vector<vector<int> > systBY(1,vector<int>(0));
     systBY[0].push_back(0);
+    _cmi=true;
 
     ULContainer *valX = &eX;
     ULContainer *valY = &eY;
     _valX=NULL;
     _valY=NULL;
     _Y = NULL;
-    _X=new DContainer(2001,1);
-    for(int i=0;i<2001;i++){
+    _X=new DContainer(10,1);
+    for(int i=0;i<10;i++){
     	(*_X) << i;
     }
-
+	cout << " vor param " << endl;
     IsParameter param;
     param.lambdavalue    = 1.0;
     param.lambdadeltaval = 1.0;
@@ -70,14 +73,16 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
     param.konv           = 0.000001;
     param.time           = true;
     param.test           = true;
-    param.seconds        = 100;
+    param.seconds        = 10;
 
+	cout << " vor version " << endl;
     switch(version){
       case 0:
   		  _p1   = new GIS(*valX,*valY,*_X,*_X,systAX,systAY, param);
           _p2   = new GIS(*valX, *valY, *_X, *_X, systBX, systBY, param);
         break;
       case 1:
+    	  cout << " vor SCGIS " << endl;
   		  _p1   = new SCGIS(*valX, *valY, *_X, *_X, systAX, systAY, param);
           _p2   = new SCGIS(*valX, *valY, *_X, *_X, systBX, systBY, param);
         break;
@@ -94,16 +99,29 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
   		  _p1   = new GIS(*valX, *valY, *_X, *_X, systAX, systAY, param);
           _p2   = new GIS(*valX, *valY, *_X, *_X, systBX, systBY, param);
     }
+    cout << " ende " << endl;
 }
 
 double TestMI::getMI(){
 	double val;
 	double p;
-	for(int i=0;i< pow(_X->rows(),_valX->columns() );i++ ){
-      for( int j=0; j< pow(_X->rows(),_valY->columns() );j++){
-    	  p=_p1->propAlphX(i,j);
-    	  val+=p*_p1->propm(i)*log2(p/ (_p2->propAlphX(i,j)));
-      }
+	if(_cmi==true){
+		for(int i=0;i< pow(_X->rows(),_valX->columns() );i++ ){
+	      for( int j=0; j< pow(_X->rows(),_valY->columns() );j++){
+	    	  p=_p1->propAlphX(i,j);
+	    	  val+=p*_p1->propm(i)*log2(p/ (_p2->propAlphX(i,j)));
+	      }
+		}
+		return val;
 	}
-	return val;
+	else{
+		for(int i=0;i< pow(_X->rows(),_valX->columns() );i++ ){
+	      for( int j=0; j< pow(_Y->rows(),_valY->columns() );j++){
+	    	  p=_p1->propAlphX(i,j);
+	    	  val+=p*_p1->propm(i)*log2(p/ (_p2->propAlphX(i,j)));
+	      }
+		}
+		return val;
+	}
+
 }

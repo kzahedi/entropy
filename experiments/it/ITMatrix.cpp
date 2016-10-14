@@ -20,6 +20,7 @@ ITMatrix::ITMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &a
 }
 ITMatrix::ITMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systX, vector<vector<int> > systY, double lambdavalue)
 {
+	cout << " Konstruktor IT-Matrix" << endl;
   _valX        = NULL;
   _valY        = NULL;
   _valXUL      = &eX;
@@ -36,6 +37,7 @@ ITMatrix::ITMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer 
   _sizeRowValY = _valYUL->rows();
   _sizeX       = _X->rows();
   _sizeY       = _Y->rows();
+  cout << " vor FeatureArray " << endl;
   _FeatureArray(lambdavalue);
 }
 
@@ -170,8 +172,15 @@ int   ITMatrix::getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowVa
   for(int j=0; j<_systX[i].size();j++)
   {
 	  assert(_systX[i][j]<= _sizeColValX);
-	  if((*_valX)(rowValX,_systX[i][j]) != x[j]){
+	  if(_cmi==false){
+	    if((*_valX)(rowValX,_systX[i][j]) != x[j]){
 		  equ = false;
+	    }
+	  }
+	  else{
+        if((*_valXUL)(rowValX,_systX[i][j]) != x[j]){
+          equ = false;
+        }
 	  }
   }
   for(int j=0;j<_systY[i].size();j++){
@@ -251,11 +260,16 @@ vector<double> ITMatrix::index(int index,bool x,int sizeCol)
 //ein Array mit den benoetigten Features fuellen
 void ITMatrix::_FeatureArray( double valuelambda)
 {
+	cout << " FeatureArray " << endl;
   _FA = new Feature[_systX.size()];
+   cout << " nach new Feature " << endl;
   for(int m=0; m< _systX.size(); m++)
   { //(DContainer &aX, DContainer &aY,int colValX, int colValY, int systX, int systXsize,int systYsize , double valuelambda);
+	  cout << " hier1 " << endl;
       Feature *K = new Feature(*_X,*_Y,_sizeColValX,_sizeColValY,_systX[m].size(),_systY[m].size(),valuelambda);
+	  cout << " hier2 " << endl;
       _FA[m]= *K;
+	  cout << " hier3 " << endl;
   }
-
+	cout << "  Ende FeatureArray " << endl;
 }
