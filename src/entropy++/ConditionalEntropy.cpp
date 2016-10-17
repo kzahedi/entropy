@@ -65,7 +65,7 @@ double __empericalH(ULContainer* X, ULContainer* Y)
   assert(fabs(sum - 1.0) < 0.000001);
 
   sum = 0.0;
-  for(int x = 0; x < maxY; x++)
+  for(int x = 0; x < maxX; x++)
   {
     for(int y = 0; y < maxY; y++)
     {

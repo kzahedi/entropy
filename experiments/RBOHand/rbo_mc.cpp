@@ -7,6 +7,8 @@
 #include <entropy++/Csv.h>
 #include <entropy++/sparse/MC_W.h>
 #include <entropy++/sparse/state/MC_W.h>
+#include <entropy++/sparse/MC_CW.h>
+#include <entropy++/sparse/state/MC_CW.h>
 
 #include <gflags/gflags.h>
 #include <glog/logging.h>
@@ -312,10 +314,14 @@ int main(int argc, char** argv)
     csv->write(FLAGS_d + "/A_domains.csv", a_domains);
   }
 
-  double     mc  = entropy::sparse::MC_W(W2, W1, A1);
-  DContainer* mcd = entropy::sparse::state::MC_W(W2, W1, A1);
+  double      mcw   = entropy::sparse::MC_W(W2,        W1, A1);
+  DContainer* mcwd  = entropy::sparse::state::MC_W(W2, W1, A1);
 
-  if(FLAGS_silent == false) cout << "MC: " << mc << endl;
+  double      mccw  = entropy::sparse::MC_CW(W2,        W1, A1);
+  DContainer* mccwd = entropy::sparse::state::MC_CW(W2, W1, A1);
+
+  if(FLAGS_silent == false) cout << "MC_W:  " << mcw  << endl;
+  if(FLAGS_silent == false) cout << "MC_CW: " << mccw << endl;
 
   sst.str("");
   sst << FLAGS_d << "/mc_w-averaged_" << FLAGS_wbins << "_" << FLAGS_abins << ".txt";
@@ -326,12 +332,27 @@ int main(int argc, char** argv)
 #else
   output.open(sst.str().c_str());
 #endif
-  output << mc << endl;
+  output << mcw << endl;
+  output.close();
+
+  sst.str("");
+  sst << FLAGS_d << "/mc_cw-averaged_" << FLAGS_wbins << "_" << FLAGS_abins << ".txt";
+  VLOG(10) << "writing \"" << sst.str() << "\"";
+#ifdef __APPLE__
+  output.open(sst.str());
+#else
+  output.open(sst.str().c_str());
+#endif
+  output << mccw << endl;
   output.close();
 
   sst.str("");
   sst << FLAGS_d << "/mc_w-state_dependent_" << FLAGS_wbins << "_" << FLAGS_abins << ".csv";
-  csv->write(sst.str().c_str(), mcd);
+  csv->write(sst.str().c_str(), mcwd);
+
+  sst.str("");
+  sst << FLAGS_d << "/mc_cw-state_dependent_" << FLAGS_wbins << "_" << FLAGS_abins << ".csv";
+  csv->write(sst.str().c_str(), mccwd);
 
   VLOG(1) << "done.";
 }
