@@ -1,7 +1,7 @@
 #ifndef __SPARSE_MATRIX_H__
 #define __SPARSE_MATRIX_H__
 
-#include <entropy++/MatrixException.h>
+#include <entropy++/EntropyException.h>
 
 #include <vector>
 #include <string>
@@ -76,17 +76,17 @@ namespace entropy
       ~SparseMatrix();
 
       /** Allows to access and modification of the values by indexing */
-      double&   operator()(int first) throw(MatrixException);
-      double    operator()(int first) const throw(MatrixException);
+      double&   operator()(int first) throw(EntropyException);
+      double    operator()(int first) const throw(EntropyException);
 
-      double&   operator()(int first, int second) throw(MatrixException);
-      double    operator()(int first, int second) const throw(MatrixException);
+      double&   operator()(int first, int second) throw(EntropyException);
+      double    operator()(int first, int second) const throw(EntropyException);
 
-      double&   operator()(int first, int second, int third) throw(MatrixException);
-      double    operator()(int first, int second, int third) const throw(MatrixException);
+      double&   operator()(int first, int second, int third) throw(EntropyException);
+      double    operator()(int first, int second, int third) const throw(EntropyException);
 
-      SparseMatrix&   operator+=(const SparseMatrix &m)  throw(MatrixException);
-      SparseMatrix&   operator-=(const SparseMatrix &m)  throw(MatrixException);
+      SparseMatrix&   operator+=(const SparseMatrix &m)  throw(EntropyException);
+      SparseMatrix&   operator-=(const SparseMatrix &m)  throw(EntropyException);
 
       // TODO: SparseMatrix A(10,10); SparseMatrix A = B; does not work
       const SparseMatrix operator* (const double factor);
@@ -128,7 +128,7 @@ namespace entropy
 
       // void   rescaleRows(double value, bool verbose);
 
-      // double det() throw(MatrixException);
+      // double det() throw(EntropyException);
       // void   invert();
       // void   transpose();
       // void   adjunct();

@@ -81,13 +81,13 @@ double entropy::SparseMatrix::__get(const int f, const int s, const int t) const
 }
 
 double entropy::SparseMatrix::operator()(int first) const
-  throw(MatrixException)
+  throw(EntropyException)
 {
   return __get(first, -1, -1);
 }
 
 double& entropy::SparseMatrix::operator()(int first)
-  throw(MatrixException)
+  throw(EntropyException)
 {
   for(int i = 0; i < (int)_indices.size(); i++)
   {
@@ -105,13 +105,13 @@ double& entropy::SparseMatrix::operator()(int first)
 }
 
 double entropy::SparseMatrix::operator()(int first, int second) const
-  throw(MatrixException)
+  throw(EntropyException)
 {
   return __get(first, second, -1);
 }
 
 double& entropy::SparseMatrix::operator()(int first, int second)
-  throw(MatrixException)
+  throw(EntropyException)
 {
   for(int i = 0; i < (int)_indices.size(); i++)
   {
@@ -130,13 +130,13 @@ double& entropy::SparseMatrix::operator()(int first, int second)
 }
 
 double entropy::SparseMatrix::operator()(int first, int second, int third) const
-  throw(MatrixException)
+  throw(EntropyException)
 {
   return __get(first, second, third);
 }
 
 double& entropy::SparseMatrix::operator()(int first, int second, int third)
-  throw(MatrixException)
+  throw(EntropyException)
 {
   for(int i = 0; i < (int)_indices.size(); i++)
   {
@@ -173,7 +173,7 @@ void entropy::SparseMatrix::__copy(const SparseMatrix &m)
 }
 
 entropy::SparseMatrix& entropy::SparseMatrix::operator+=(const SparseMatrix &m)
-  throw(MatrixException)
+  throw(EntropyException)
 {
   for(int i = 0; i < (int)m._indices.size(); i++)
   {
@@ -186,7 +186,7 @@ entropy::SparseMatrix& entropy::SparseMatrix::operator+=(const SparseMatrix &m)
 }
 
 entropy::SparseMatrix& entropy::SparseMatrix::operator-=(const SparseMatrix &m)
-  throw(MatrixException)
+  throw(EntropyException)
 {
   for(int i = 0; i < (int)m._indices.size(); i++)
   {

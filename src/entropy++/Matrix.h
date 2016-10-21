@@ -1,7 +1,7 @@
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 
-#include <entropy++/MatrixException.h>
+#include <entropy++/EntropyException.h>
 
 #include <vector>
 #include <string>
@@ -32,10 +32,10 @@ namespace entropy
       ~Matrix();
 
       /** Allows to access and modification of the values by indexing */
-      double&   operator()(int row, int col) throw(MatrixException);
-      double    operator()(int row, int col) const throw(MatrixException);
-      Matrix&   operator+=(const Matrix &m)  throw(MatrixException);
-      Matrix&   operator-=(const Matrix &m)  throw(MatrixException);
+      double&   operator()(int row, int col) throw(EntropyException);
+      double    operator()(int row, int col) const throw(EntropyException);
+      Matrix&   operator+=(const Matrix &m)  throw(EntropyException);
+      Matrix&   operator-=(const Matrix &m)  throw(EntropyException);
 
       // TODO: Matrix A(10,10); Matrix A = B; does not work
       const Matrix operator* (const double factor);
@@ -66,7 +66,7 @@ namespace entropy
       void   reset(int rows, int cols, double value = (double)0.0);
       void   rescaleRows(double value, bool verbose);
 
-      double det() throw(MatrixException);
+      double det() throw(EntropyException);
       void   invert();
       void   transpose();
       void   adjunct();
@@ -95,7 +95,7 @@ namespace entropy
       void     __deleteCells();
       void     __copy(const Matrix &m);
       void     __init(const int rows, const int cols, double initialValue);
-      void     __check(int  row, int col) throw(MatrixException);
+      void     __check(int  row, int col) throw(EntropyException);
       int      _rows;
       int      _cols;
       double** _cell;
