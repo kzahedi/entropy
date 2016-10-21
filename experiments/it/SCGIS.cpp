@@ -159,14 +159,13 @@ double SCGIS::__calculateIteration(bool test)
 	          {
 	            _delta = log(_observed[feat][delti][deltj]/expected);
 	            newl = _IM->getFeatureArraylambda(feat,delti,deltj) + _delta;
+		        _IM->setFeatureArraylambda(feat,delti,deltj,newl);
 	          }
 	          else
 	          {
 	        	_delta = -1;               // evtl besseren Wert finden
-	            newl = 0.0;
 	          }
 	          l+=fabs(_observed[feat][delti][deltj]-expected);
-	          _IM->setFeatureArraylambda(feat,delti,deltj,newl);
 	          for(int y=0;y< pow(_sizeY,_sizeColValY);y++)
 	          {
 	            for(int k=0; k<_IM->getInstanceMatrixX(feat,delti,deltj).size();k++)

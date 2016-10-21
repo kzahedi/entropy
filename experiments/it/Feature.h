@@ -24,7 +24,7 @@ class Feature
       str<< "Feature:" <<endl;
       for(int i=0; i<feature._sizeDeltaX; i++){
         for(int j=0; j<feature._sizeDeltaY; j++){
-          str<< feature.getlambda(i,j) << " ";
+          str<< feature.getLambda(i,j) << " ";
         }
         str<< endl;
       }

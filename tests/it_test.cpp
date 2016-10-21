@@ -14,7 +14,6 @@ using namespace std;
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( itTest );
-
 void itTest::OneXOneY()
 {
   cout << "OneXOneY" << endl;
@@ -398,6 +397,10 @@ void itTest::FourXFourY()
           sum4 = 0;
   }
 
+	      cout << " GIS: " << testval->KL(test);
+	      cout << " GISgp: " << testval->KL(testgp);
+	      cout << " SCGIS " << testval->KL(testsc);
+	      cout << " SCGISgp " << testval->KL(testscgp);
 }
-*/
 
+*/

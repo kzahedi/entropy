@@ -76,7 +76,7 @@ Feature& Feature::operator=(const Feature& c)
   _Y            = c._Y;
   _X            = c._X;
 
-  _lambda       = new Matrix(_sizeX,_sizeY);
+  _lambda       = new SparseMatrix();
   this->_lambda = c._lambda;
 
   return *this;

@@ -1,5 +1,7 @@
 #include "TestMI.h"
 
+#define EPSILON 0.00000001
+
 TestMI::TestMI(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, IsParameter param, int version){
 	    assert(eX.columns() ==2 && eY.columns()==1);
 	    vector<vector<int> > systAX(1,vector<int>(0));
@@ -60,8 +62,9 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
     _valX=NULL;
     _valY=NULL;
     _Y = NULL;
-    _X=new DContainer(10,1);
-    for(int i=0;i<10;i++){
+    //Festlegung des Eingabealphabets
+    _X=new DContainer(6,1);
+    for(int i=0;i<6;i++){
     	(*_X) << i;
     }
     IsParameter param;
@@ -72,7 +75,7 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
     param.konv           = 0.000001;
     param.time           = true;
     param.test           = true;
-    param.seconds        = 10;
+    param.seconds        = 80;
 
     switch(version){
       case 0:
@@ -101,11 +104,15 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
 double TestMI::getMI(){
 	double val;
 	double p;
+	double p2;
 	if(_cmi==false){
 		for(int i=0;i< pow(_X->rows(),_valX->columns() );i++ ){
 	      for( int j=0; j< pow(_Y->rows(),_valY->columns() );j++){
 	    	  p=_p1->propAlphX(i,j);
-	    	  val+=p*_p1->propm(i)*log2(p/ (_p2->propAlphX(i,j)));
+	    	  p2=_p2->propAlphX(i,j);
+	    	  if((p2) > EPSILON){
+	    		  val+=p*_p1->propm(i)*log2(p/ p2);
+	    	  }
 	      }
 		}
 		return val;
@@ -114,7 +121,10 @@ double TestMI::getMI(){
 		for(int i=0;i< pow(_X->rows(),_valXUL->columns() );i++ ){
 	      for( int j=0; j< pow(_X->rows(),_valYUL->columns() );j++){
 	    	  p=_p1->propAlphX(i,j);
-	    	  val+=p*_p1->propm(i)*log2(p/ (_p2->propAlphX(i,j)));
+	    	  p2=_p2->propAlphX(i,j);
+	    	  if((p2) > EPSILON){
+	    		  val+=p*_p1->propm(i)*log2(p/ p2);
+	    	  }
 	      }
 		}
 		return val;

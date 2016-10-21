@@ -3,6 +3,7 @@
 #include "../experiments/it/GIS.h"
 #include "../experiments/it/SCGIS.h"
 #include "../experiments/it/Test.h"
+#include "../experiments/it/TestMI.h"
 #include <entropy++/Container.h>
 #include <entropy++/Csv.h>
 #include <entropy++/sparse/MC_W.h>
@@ -201,7 +202,11 @@ void itCmiTest::testITvsCMI()
     CPPUNIT_ASSERT_EQUAL((*dcYZ)(r,0), (*dcW1)(r,0));
     CPPUNIT_ASSERT_EQUAL((*dcYZ)(r,1), (*dcA1)(r,0));
   }
-
+  // Ein Test mit GIS und einer mit SCGIS
+  TestMI *test1= new TestMI(*dcYZ,*dcX,0);
+  TestMI *test12= new TestMI(*dcYZ,*dcX,1);
+  cout << " dc " << test1->getMI() << endl;
+  cout << " dcscgis " << test12->getMI() << endl;
   //CPPUNIT_ASSERT_DOUBLES_EQUAL(dcmc_w, IT-value(dcX, dcY), 0.000001);
 
   ULContainer *mlX  = mlW2;
@@ -213,7 +218,10 @@ void itCmiTest::testITvsCMI()
     CPPUNIT_ASSERT_EQUAL((*mlYZ)(r,0), (*mlW1)(r,0));
     CPPUNIT_ASSERT_EQUAL((*mlYZ)(r,1), (*mlA1)(r,0));
   }
-
+  TestMI *test2= new TestMI(*mlYZ,*mlX,0);
+  TestMI *test22= new TestMI(*mlYZ,*mlX,1);
+  cout << " ml " << test2->getMI() << endl;
+  cout << " mlscgis " << test22->getMI() << endl;
   //CPPUNIT_ASSERT_DOUBLES_EQUAL(mlmc_w, IT-value(mlX, mlY), 0.000001);
 
   ULContainer *mfX  = mfW2;
@@ -225,7 +233,10 @@ void itCmiTest::testITvsCMI()
     CPPUNIT_ASSERT_EQUAL((*mfYZ)(r,0), (*mfW1)(r,0));
     CPPUNIT_ASSERT_EQUAL((*mfYZ)(r,1), (*mfA1)(r,0));
   }
-
+  TestMI *test3= new TestMI(*mfYZ,*mfX,0);
+  TestMI *test32= new TestMI(*mfYZ,*mfX,1);
+  cout << " mf " << test3->getMI() << endl;
+  cout << " mfscgis " << test32->getMI() << endl;
   //CPPUNIT_ASSERT_DOUBLES_EQUAL(mfmc_w, IT-value(mfX, mfY), 0.000001);
 
 }

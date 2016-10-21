@@ -70,7 +70,7 @@ ITMatrix::~ITMatrix()
 double  ITMatrix::getFeatureArraylambda(int i,int ilambdaX, int ilambdaY)
 {
   assert(i<_systX.size());
-  double lambda=_FA[i].getlambda(ilambdaX,ilambdaY);
+  double lambda=_FA[i].getLambda(ilambdaX,ilambdaY);
   return lambda;
 }
 
@@ -80,7 +80,7 @@ double ITMatrix::getFeatureArrayvalue(int feat,int rowX,int rowY)
  double val=0.0;
  for(int i=0; i<  pow(_X->rows(),_systX[feat].size());i++){
 	 for(int j=0;j <pow(_Y->rows(),_systY[feat].size());j++){
-		 val+= getFeatureArraydelta(feat,i,j,rowX,rowY)*_FA[feat].getlambda(i,j);
+		 val+= getFeatureArraydelta(feat,i,j,rowX,rowY)*_FA[feat].getLambda(i,j);
 	 }
  }
  return val;
@@ -90,7 +90,7 @@ double ITMatrix::getFeatureArrayvalueAlphY(int feat,int rowX,int indexY){
 	 double val=0.0;
 	 for(int i=0; i<  pow(_X->rows(),_systX[feat].size());i++){
 		 for(int j=0;j <pow(_Y->rows(),_systY[feat].size());j++){
-			 val+= getFeatureArraydeltaAlphY(feat,i,j,rowX,indexY)*_FA[feat].getlambda(i,j);
+			 val+= getFeatureArraydeltaAlphY(feat,i,j,rowX,indexY)*_FA[feat].getLambda(i,j);
 		 }
 	 }
 	 return val;
@@ -100,7 +100,7 @@ double ITMatrix::getFeatureArrayvalueAlphYAlphX(int feat,int indexX,int indexY){
 	 double val=0.0;
 	 for(int i=0; i<  pow(_X->rows(),_systX[feat].size());i++){
 		 for(int j=0;j <pow(_Y->rows(),_systY[feat].size());j++){
-			 val+= getFeatureArraydeltaAlphYAlphX(feat,i,j,indexX,indexY)*_FA[feat].getlambda(i,j);
+			 val+= getFeatureArraydeltaAlphYAlphX(feat,i,j,indexX,indexY)*_FA[feat].getLambda(i,j);
 		 }
 	 }
 	 return val;
@@ -108,7 +108,7 @@ double ITMatrix::getFeatureArrayvalueAlphYAlphX(int feat,int indexX,int indexY){
 void  ITMatrix::setFeatureArraylambda(int i, int ilambdaX, int ilambdaY,double valuelambda)
 {
   assert(i<_systX.size());
-  _FA[i].setlambda(ilambdaX,ilambdaY,valuelambda);
+  _FA[i].setLambda(ilambdaX,ilambdaY,valuelambda);
 }
 int   ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowValX, int rowValY)
 {
