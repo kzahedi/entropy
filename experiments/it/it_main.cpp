@@ -65,6 +65,9 @@ int main(int argc, char **argv)
   cout << testmisc->getMI() << endl;
 
 */
-	Matrix *m= new Matrix(1000000,1000);
+	SparseMatrix *m= new SparseMatrix(-3);
+	cout << (*m)(1,1,1) << endl;
+	(*m)(1,1,1)= 5;
+	cout << (*m)(1,1,1) << endl;
 	cout << " hier " << endl;
 }

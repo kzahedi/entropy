@@ -8,7 +8,7 @@
 #include <iostream>
 #include <ostream>
 #include <math.h>
-#include <entropy++/Matrix.h>
+#include <entropy++/SparseMatrix.h>
 
 using namespace std;
 
@@ -17,7 +17,7 @@ class Feature
   public:
     Feature();
     Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int systXsize,int systYsize , double valuelambda);
-    Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int sizeSystX,int sizeSystY, Matrix &lambda);
+    Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int sizeSystX,int sizeSystY, SparseMatrix &lambda);
     ~Feature();
 
     friend std::ostream& operator<<(std::ostream& str,Feature& feature){
@@ -30,9 +30,9 @@ class Feature
       }
       return str;
     };
-
-    double getlambda(int i, int j);
-    void   setlambda(int i, int j, double newvalue);
+    int    getLambdaSize();
+    double getLambda(int i, int j);
+    void   setLambda(int i, int j, double newvalue);
     int    delta(double x,double y,double ax,double ay);
     Feature& operator=(const Feature& c);
 
@@ -43,7 +43,7 @@ class Feature
     int         _sizeY;
     DContainer* _X;
     DContainer* _Y;
-    Matrix*     _lambda;
+    SparseMatrix*     _lambda;
 };
 
 #endif

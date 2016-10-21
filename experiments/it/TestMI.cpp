@@ -60,8 +60,8 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
     _valX=NULL;
     _valY=NULL;
     _Y = NULL;
-    _X=new DContainer(7,1);
-    for(int i=0;i<7;i++){
+    _X=new DContainer(10,1);
+    for(int i=0;i<10;i++){
     	(*_X) << i;
     }
     IsParameter param;
@@ -80,7 +80,6 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
           _p2   = new GIS(*_valXUL, *_valYUL, *_X, *_X, systBX, systBY, param);
         break;
       case 1:
-    	  cout << " vor SCGIS " << endl;
   		  _p1   = new SCGIS(*_valXUL, *_valYUL, *_X, *_X, systAX, systAY, param);
           _p2   = new SCGIS(*_valXUL, *_valYUL, *_X, *_X, systBX, systBY, param);
         break;
@@ -97,11 +96,9 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
   		  _p1   = new GIS(*_valXUL, *_valYUL, *_X, *_X, systAX, systAY, param);
           _p2   = new GIS(*_valXUL, *_valYUL, *_X, *_X, systBX, systBY, param);
     }
-    cout << " ende " << endl;
 }
 
 double TestMI::getMI(){
-	cout << " in getMI " << endl;
 	double val;
 	double p;
 	if(_cmi==false){

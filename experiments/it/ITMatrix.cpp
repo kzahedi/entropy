@@ -112,10 +112,10 @@ void  ITMatrix::setFeatureArraylambda(int i, int ilambdaX, int ilambdaY,double v
 }
 int   ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowValX, int rowValY)
 {
-	  assert(i<_systX.size());
-	  assert(indexX < pow(_X->rows(),_systX[i].size()) && indexY<pow(_Y->rows(),_systY[i].size()));
-	  assert(rowValX < _sizeRowValX);
-	  assert(rowValY < _sizeRowValY);
+  assert(i<_systX.size());
+  assert(indexX < pow(_X->rows(),_systX[i].size()) && indexY<pow(_Y->rows(),_systY[i].size()));
+  assert(rowValX < _sizeRowValX);
+  assert(rowValY < _sizeRowValY);
   vector<double> x = index(indexX,true,_systX[i].size());
   vector<double> y = index(indexY,false,_systY[i].size());
   bool equ = true;
@@ -132,7 +132,6 @@ int   ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowValX, i
           equ = false;
         }
 	  }
-	//  cout << (*_valX)(rowValX,_systX[i][j]) << " " << _systX[i][j] << " " << i << " " <<  j << " " << x[_systX[i][j]] << "row " << rowValX << " " << rowValY << " " << equ <<  endl;
   }
   for(int j=0;j<_systY[i].size();j++){
 	  assert(_systY[i][j]<= _sizeColValY);
@@ -197,11 +196,10 @@ int   ITMatrix::getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowVa
 // Feature i, indizes der zu vergleichenden Werte aus den moeglichen X und Y
 int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int indexValX, int indexValY)
 {
-	  assert(i<_systX.size());
-	  assert(indexX < pow(_X->rows(),_systX[i].size()) && indexY<pow(_Y->rows(),_systY[i].size()));
-	  assert(indexValX < pow(_sizeX,_sizeColValX));
-	  assert(indexValY < pow(_Y->rows(),_sizeColValY));
-  //assert(idelta < _sizeX && jdelta < _sizeY);
+  assert(i<_systX.size());
+  assert(indexX < pow(_X->rows(),_systX[i].size()) && indexY<pow(_Y->rows(),_systY[i].size()));
+  assert(indexValX < pow(_sizeX,_sizeColValX));
+  assert(indexValY < pow(_Y->rows(),_sizeColValY));
   vector<double> x = index(indexX,true, _systX[i].size());
   vector<double> y = index(indexY,false,_systY[i].size());
   vector<double> valy = index(indexValY,false, _sizeColValY);
@@ -260,7 +258,7 @@ void ITMatrix::_FeatureArray( double valuelambda)
 {
   _FA = new Feature[_systX.size()];
   for(int m=0; m< _systX.size(); m++)
-  { //(DContainer &aX, DContainer &aY,int colValX, int colValY, int systX, int systXsize,int systYsize , double valuelambda);
+  {
       Feature *K = new Feature(*_X,*_Y,_sizeColValX,_sizeColValY,_systX[m].size(),_systY[m].size(),valuelambda);
       _FA[m]= *K;
   }

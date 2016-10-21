@@ -6,7 +6,7 @@ Feature::Feature()
        _Y = new DContainer(0, 0);
    _sizeY = _Y->rows();
    _sizeX = _X->rows();
-  _lambda = new Matrix(_sizeX,_sizeY);
+  _lambda = new SparseMatrix();
   _sizeDeltaX = 0;
   _sizeDeltaY = 0;
 
@@ -23,25 +23,18 @@ Feature::Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int sy
   _sizeDeltaY           = pow(_Y->rows(),systYsize);
   _sizeY                = _Y->rows();
   _sizeX                = _X->rows();
-  _lambda               = new Matrix(_sizeDeltaX,_sizeDeltaY);
-  for(int i=0; i< _sizeDeltaX; i++)
-  {
-    for(int j=0; j< _sizeDeltaY; j++)
-    {
-      (*_lambda)(i,j) = valuelambda;
-    }
-  }
+  _lambda               = new SparseMatrix(valuelambda);
 }
 //alle lambda explizit ueber die Matrix setzen
-Feature::Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int systXsize,int systYsize, Matrix &lambda)
+Feature::Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int systXsize,int systYsize, SparseMatrix &lambda)
 {
   assert(aX.columns()==1);
   assert(aY.columns()==1);
 
   _sizeDeltaX  = pow(aX.rows(),systXsize);
   _sizeDeltaY  = pow(aY.rows(),systYsize);
-  assert(lambda.rows()==_sizeDeltaX);
-  assert(lambda.cols()==_sizeDeltaY);
+ // assert(lambda.rows()==_sizeDeltaX);
+ // assert(lambda.cols()==_sizeDeltaY);
   _lambda = &lambda;
   _X      = &aX;
   _Y      = &aY;
@@ -55,14 +48,17 @@ Feature::~Feature()
   delete _X;
   delete _Y;
 }
-
-double Feature::getlambda(int i, int j)
+int Feature::getLambdaSize(){
+	int j= _lambda->size();       //zusammenfassen
+	return j;
+}
+double Feature::getLambda(int i, int j)
 {
   assert(i < _sizeDeltaX && j < _sizeDeltaY);
   return (*_lambda)(i,j);
 }
 
-void Feature::setlambda(int i, int j, double newvalue)
+void Feature::setLambda(int i, int j, double newvalue)
 {
   assert(i < _sizeDeltaX && j < _sizeDeltaY);
   (*_lambda)(i,j) = newvalue;

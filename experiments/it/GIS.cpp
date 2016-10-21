@@ -206,12 +206,8 @@ double GIS::__calculateIteration(double featconst, bool test)
         {
           // TODO 0.1 as learning rate parameter
           newl = oldl + 0.1*(1.0/featconst) *log(_observed[feat][deltai][deltaj]/_expected[feat][deltai][deltaj]);
+          (*_FM).setFeatureArraylambda(feat,deltai,deltaj,newl);
         }
-        else
-        {
-          newl = 0.0;
-        }
-        (*_FM).setFeatureArraylambda(feat,deltai,deltaj,newl);
         l+=fabs((_observed[feat][deltai][deltaj]-_expected[feat][deltai][deltaj]));
       }
     }
@@ -220,9 +216,7 @@ double GIS::__calculateIteration(double featconst, bool test)
   if(test){
     _conv.push_back(l);
   }
- // cout << l << " " << _iterations << endl;
   return l;
-
 }
 
 int GIS:: getIterations()

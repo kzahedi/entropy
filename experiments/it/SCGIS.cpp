@@ -39,7 +39,6 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vect
 SCGIS::SCGIS(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
 :IT(eX, eY, aX, aY, systX, systY, param, false)
 {
-	cout << " Konstruktor SCGIS " << endl;
   _param = param;
   _exponent= new double**[_sizeSystX];
   for(int i=0;i<_sizeSystX; i++){
@@ -60,7 +59,6 @@ SCGIS::SCGIS(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,ve
       }
   }
   _delta=0.0;
-  cout << " vor _scgis " << endl;
   if(param.time)
   {
     __scgis(param.maxit,param.konv,param.test,param.seconds);
