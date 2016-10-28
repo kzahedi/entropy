@@ -1,6 +1,6 @@
 #include "Test.h"
 
-//create values only
+//create values only with random lambda
 Test::Test(int colX,int colValY,int rowX,vector<double> lambda,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY){
   _X= &aX;
   _Y= &aY;
@@ -26,8 +26,8 @@ Test::Test(int colX,int colValY,int rowX,IContainer &indizes, DContainer &lambda
   __setLambda(indizes,lambda);
   __getValY(colValY,rowX);
 }
-
-void Test::compareCases( IsParameter param, vector<int>& cases){
+//Angabe der zu vergleichenden Algorithmen, case 0= GIS, 1=SCGIS , 2= GISgp, 3 = SCGISgp
+void Test::compareCases(IsParameter param, vector<int>& cases){
   time_t befor;
   time_t after;
   for(int i=0;i<cases.size();i++)

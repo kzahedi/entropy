@@ -123,7 +123,7 @@ void itCmiTest::testITvsCMI()
     wdomain[i][0] = 0.0;
     wdomain[i][1] = 1.0;
   }
-  int bins   = 300;
+  int bins   = 30;
   int *wbins = new int[3];
   wbins[0]   = bins;
   wbins[1]   = bins;
@@ -196,19 +196,23 @@ void itCmiTest::testITvsCMI()
   ULContainer *dcX  = dcW2;
   ULContainer *dcYZ = dcW1;
   (*dcYZ) += *dcA1; // 2 columns. 1st column = A1, 2nd column = W1. 
-  CPPUNIT_ASSERT(dcW1->rows() > 0);
   cout << (*dcX) << endl;
   cout << (*dcYZ) << endl;
+  CPPUNIT_ASSERT(dcW1->rows() > 0);
   for(int r = 0; r < dcW1->rows(); r++)
   {
     CPPUNIT_ASSERT_EQUAL((*dcYZ)(r,0), (*dcW1)(r,0));
     CPPUNIT_ASSERT_EQUAL((*dcYZ)(r,1), (*dcA1)(r,0));
   }
-  // Ein Test mit GIS und einer mit SCGIS
+  // Ein Test mit GIS
   TestMI *test1= new TestMI(*dcYZ,*dcX,0);
-  TestMI *test12= new TestMI(*dcYZ,*dcX,1);
+  // Die Parameter werden in TestMI gesetzt und MI wird berechnet durch getMI():
   cout << " dc " << test1->getMI() << endl;
+
+  // Der selbe Test mit SCGIS:
+  TestMI *test12= new TestMI(*dcYZ,*dcX,1);
   cout << " dcscgis " << test12->getMI() << endl;
+
   //CPPUNIT_ASSERT_DOUBLES_EQUAL(dcmc_w, IT-value(dcX, dcY), 0.000001);
 
   ULContainer *mlX  = mlW2;
@@ -235,10 +239,10 @@ void itCmiTest::testITvsCMI()
     CPPUNIT_ASSERT_EQUAL((*mfYZ)(r,0), (*mfW1)(r,0));
     CPPUNIT_ASSERT_EQUAL((*mfYZ)(r,1), (*mfA1)(r,0));
   }
-//  TestMI *test3= new TestMI(*mfYZ,*mfX,0);
-//  TestMI *test32= new TestMI(*mfYZ,*mfX,1);
-//  cout << " mf " << test3->getMI() << endl;
-//  cout << " mfscgis " << test32->getMI() << endl;
+  TestMI *test3= new TestMI(*mfYZ,*mfX,0);
+  TestMI *test32= new TestMI(*mfYZ,*mfX,1);
+  cout << " mf " << test3->getMI() << endl;
+  cout << " mfscgis " << test32->getMI() << endl;
   //CPPUNIT_ASSERT_DOUBLES_EQUAL(mfmc_w, IT-value(mfX, mfY), 0.000001);
 
 }

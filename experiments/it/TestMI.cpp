@@ -81,10 +81,28 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
       case 0:
   		  _p1   = new GIS(*_valXUL,*_valYUL, *_X, *_X,systAX,systAY, param);
           _p2   = new GIS(*_valXUL, *_valYUL, *_X, *_X, systBX, systBY, param);
+          //Ausgabe lambda
+          cout << "lambda p1 " << endl;
+          for(int i=0;i<4;i++){
+        	  cout << _p1->getFeatureArraylambda(0,i,0)<< " " << _p1->getFeatureArraylambda(0,i,1) << endl;
+          }
+          cout << " lambda p2 " << endl;
+          for(int i=0;i<4;i++){
+        	  cout << _p2->getFeatureArraylambda(0,i,0)<< " " << _p2->getFeatureArraylambda(0,i,1) << endl;
+          }
         break;
       case 1:
   		  _p1   = new SCGIS(*_valXUL, *_valYUL, *_X, *_X, systAX, systAY, param);
           _p2   = new SCGIS(*_valXUL, *_valYUL, *_X, *_X, systBX, systBY, param);
+          //Ausgabe lambda
+          cout << "lambda p1 " << endl;
+          for(int i=0;i<4;i++){
+        	  cout << _p1->getFeatureArraylambda(0,i,0)<< " " <<  _p1->getFeatureArraylambda(0,i,1) << endl;
+          }
+          cout << " lambda p2 " << endl;
+          for(int i=0;i<4;i++){
+        	  cout << _p2->getFeatureArraylambda(0,i,0)<< " " << _p2->getFeatureArraylambda(0,i,1) << endl;
+          }
         break;
       case 2:
   		  _p1   = new GISgp(*_valXUL, *_valYUL, *_X, *_X, systAX, systAY, param);
@@ -112,6 +130,7 @@ double TestMI::getMI(){
 	    	  p2=_p2->propAlphX(i,j);
 	    	  if((p2) > EPSILON){
 	    		  val+=p*_p1->propm(i)*log2(p/ p2);
+	    	//	  cout <<" wahrsch. "<< p << " " <<_p1->propm(i) << " " << log2(p/ p2) << endl;
 	    	  }
 	      }
 		}
@@ -124,6 +143,7 @@ double TestMI::getMI(){
 	    	  p2=_p2->propAlphX(i,j);
 	    	  if((p2) > EPSILON){
 	    		  val+=p*_p1->propm(i)*log2(p/ p2);
+	       	//	  cout <<" wahrsch. " <<  p << " " <<_p1->propm(i) << " " << log2(p/ p2) << endl;
 	    	  }
 	      }
 		}

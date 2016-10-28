@@ -18,6 +18,7 @@ ITMatrix::ITMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &a
   _cmi         = false;
   _FeatureArray(lambdavalue);
 }
+//die Alphabetwerte als unsigned long
 ITMatrix::ITMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systX, vector<vector<int> > systY, double lambdavalue)
 {
   _valX        = NULL;
@@ -69,7 +70,7 @@ ITMatrix::~ITMatrix()
 
 double  ITMatrix::getFeatureArraylambda(int i,int ilambdaX, int ilambdaY)
 {
-  assert(i<_systX.size());
+  assert(i<_systX.size());  //ilambdaX und ilambdaY werden in Feature geprueft
   double lambda=_FA[i].getLambda(ilambdaX,ilambdaY);
   return lambda;
 }

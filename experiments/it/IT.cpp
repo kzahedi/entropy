@@ -30,6 +30,7 @@ IT::IT(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vec
   }
   _observed=__getobs();
 }
+// Konstruktor fuer Alphabete mit unsigned long
 IT::IT(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, bool gis)
 {
   assert(eX.rows() == eY.rows());
@@ -60,7 +61,7 @@ IT::IT(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<v
   }
   _observed=__getobs();
 }
-//umstellen
+
 IT::IT(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY)
 {
   _systX       = systX;
@@ -207,7 +208,7 @@ double IT::propm(int rowX){
 
 double IT::getFeatureArraylambda(int Feati, int ilambdaX, int ilambdaY)
 {
-  assert(Feati<_systX.size());
+  assert(Feati<_systX.size()); //kontrolle der Parameter ilambdaX und ilambdaY findet in Feature statt
   double lambda = 0.0;
   if(_gis)
   {
@@ -223,6 +224,7 @@ double IT::getFeatureArraylambda(int Feati, int ilambdaX, int ilambdaY)
 // get observed
 double*** IT::__getobs()
 {
+  //erzeugen von observed
   _observed = new double**[_sizeSystX];
   for(int i=0; i<_systX.size(); i++)
   {
@@ -236,14 +238,12 @@ double*** IT::__getobs()
         }
       }
    }
-  vector<double> x;
-  vector<double> y;
-  //vector observed
+  // fuellen von observed
   for(int i=0;i<_sizeRowValX;i++ )
   {
     for(int feat=0; feat< _sizeSystX;feat++)
     {
-        for(int delti = 0; delti<pow(_X->rows(),_systX[feat].size()); delti++)   //Achtung  hier ueber die tatsaechliche anzahl der feature
+        for(int delti = 0; delti<pow(_X->rows(),_systX[feat].size()); delti++)
         {
           for(int deltj=0; deltj<pow(_Y->rows(),_systY[feat].size()); deltj++)
           {
@@ -291,6 +291,7 @@ IT::~IT(){
 	  }
 	  _systY.clear();
 }
+//veraendern der lambdas im Algorithmus funktioniert mit einer Methode in ITMatrix, hier nur zum erzeugen von Testwerten
 void IT::setFeatureArraylambda(int feati, int ilambdaX, int ilambdaY,double valuelambda){
   assert(feati<_systX.size());
   assert(_gis == true);

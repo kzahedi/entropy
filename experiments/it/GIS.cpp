@@ -36,7 +36,7 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<v
     __gis(param.maxit, param.konv, param.test);
   }
 }
-
+//die Alphabetwerte als unsigned long
 GIS::GIS(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
 :IT(eX, eY, aX, aY,systX, systY, param, true)
 {
