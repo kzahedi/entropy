@@ -33,8 +33,6 @@ Feature::Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int sy
 
   _sizeDeltaX  = pow(aX.rows(),systXsize);
   _sizeDeltaY  = pow(aY.rows(),systYsize);
- // assert(lambda.rows()==_sizeDeltaX);
- // assert(lambda.cols()==_sizeDeltaY);
   _lambda = &lambda;
   _X      = &aX;
   _Y      = &aY;
@@ -49,7 +47,7 @@ Feature::~Feature()
   delete _Y;
 }
 int Feature::getLambdaSize(){
-	int j= _lambda->size();       //zusammenfassen
+	int j= _lambda->size();
 	return j;
 }
 double Feature::getLambda(int i, int j)

@@ -75,7 +75,7 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
     param.konv           = 0.000001;
     param.time           = true;
     param.test           = true;
-    param.seconds        = 80;
+    param.seconds        = 10;
 
     switch(version){
       case 0:

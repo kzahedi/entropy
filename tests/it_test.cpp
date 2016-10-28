@@ -102,6 +102,7 @@ void itTest::OneXOneY()
 }
 void itTest::TwoXOneY()
 {
+  cout << endl;
   cout << "TWoXOneY" << endl;
   srand(time(NULL));
   DContainer *zX = new DContainer(2,1);
@@ -113,16 +114,13 @@ void itTest::TwoXOneY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  vector<vector<int > > alphX(3,vector<int>(0));
+  vector<vector<int > > alphX(2,vector<int>(0));
   alphX[0].push_back(0);
-  alphX[0].push_back(1);
-  alphX[1].push_back(0);
-  alphX[2].push_back(1);
+  alphX[1].push_back(1);
 
-  vector<vector<int > > alphY(3,vector<int>(0));
+  vector<vector<int > > alphY(2,vector<int>(0));
   alphY[0].push_back(0);
   alphY[1].push_back(0);
-  alphY[2].push_back(0);
 
   IsParameter param;
   param.lambdavalue    = 1.0;
@@ -188,6 +186,7 @@ void itTest::TwoXOneY()
 }
 void itTest::TwoXTwoY()
 {
+  cout << endl;
   cout << "TwoXTwoY" << endl;
   srand(time(NULL));
   DContainer *zX = new DContainer(2,1);
@@ -199,16 +198,17 @@ void itTest::TwoXTwoY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  vector<vector<int > > alphX(3,vector<int>(0));
+  vector<vector<int > > alphX(4,vector<int>(0));
   alphX[0].push_back(0);
-  alphX[0].push_back(1);
   alphX[1].push_back(0);
   alphX[2].push_back(1);
+  alphX[3].push_back(1);
 
-  vector<vector<int > > alphY(3,vector<int>(0));
+  vector<vector<int > > alphY(4,vector<int>(0));
   alphY[0].push_back(0);
   alphY[1].push_back(1);
   alphY[2].push_back(0);
+  alphY[3].push_back(1);
 
   IsParameter param;
   param.lambdavalue    = 1.0;
@@ -275,6 +275,7 @@ void itTest::TwoXTwoY()
 
 void itTest::NotBinary()
 {
+  cout << endl;
   cout << "NotBinary" << endl;
   srand(time(NULL));
   DContainer *zX = new DContainer(4,1);

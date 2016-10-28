@@ -197,6 +197,8 @@ void itCmiTest::testITvsCMI()
   ULContainer *dcYZ = dcW1;
   (*dcYZ) += *dcA1; // 2 columns. 1st column = A1, 2nd column = W1. 
   CPPUNIT_ASSERT(dcW1->rows() > 0);
+  cout << (*dcX) << endl;
+  cout << (*dcYZ) << endl;
   for(int r = 0; r < dcW1->rows(); r++)
   {
     CPPUNIT_ASSERT_EQUAL((*dcYZ)(r,0), (*dcW1)(r,0));
@@ -233,10 +235,10 @@ void itCmiTest::testITvsCMI()
     CPPUNIT_ASSERT_EQUAL((*mfYZ)(r,0), (*mfW1)(r,0));
     CPPUNIT_ASSERT_EQUAL((*mfYZ)(r,1), (*mfA1)(r,0));
   }
-  TestMI *test3= new TestMI(*mfYZ,*mfX,0);
-  TestMI *test32= new TestMI(*mfYZ,*mfX,1);
-  cout << " mf " << test3->getMI() << endl;
-  cout << " mfscgis " << test32->getMI() << endl;
+//  TestMI *test3= new TestMI(*mfYZ,*mfX,0);
+//  TestMI *test32= new TestMI(*mfYZ,*mfX,1);
+//  cout << " mf " << test3->getMI() << endl;
+//  cout << " mfscgis " << test32->getMI() << endl;
   //CPPUNIT_ASSERT_DOUBLES_EQUAL(mfmc_w, IT-value(mfX, mfY), 0.000001);
 
 }
