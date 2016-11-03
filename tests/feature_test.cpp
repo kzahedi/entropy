@@ -15,6 +15,7 @@ using namespace std;
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( featureTest );
+/*
 void featureTest::createFeature()
 {
 	DContainer *aX = new DContainer(3,1);
@@ -115,4 +116,4 @@ void featureTest::TwoFeatures(){
 		CPPUNIT_ASSERT(scgis->getFeatureArraylambda(1,0,1) == param.lambdavalue);
 		CPPUNIT_ASSERT(scgis->getFeatureArraylambda(1,1,0) != param.lambdavalue);
 		CPPUNIT_ASSERT(scgis->getFeatureArraylambda(1,1,1) == param.lambdavalue);
-}
+}*/

@@ -83,8 +83,8 @@ IT::IT(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY,vector<vector
   _observed    = NULL;
 }
 // p(y | x)
-// double IT::prop(int rowX, vector<vector<double> > Y, int rowY)
-double IT::prop(int rowX, int rowY)
+// double IT::prop(int rowX,  int indexY)
+double IT::prop(int rowX, int indexY)
 {
   double featexp   = 0;
   double featnorm = 0;
@@ -94,11 +94,11 @@ double IT::prop(int rowX, int rowY)
   {
       if(_gis)
       {
-        featexp += (*_FM).getFeatureArrayvalueAlphY(feat,rowX, rowY);
+        featexp += (*_FM).getFeatureArrayvalueAlphY(feat,rowX, indexY);
       }
       else
       {
-        featexp += (*_IM).getFeatureArrayvalueAlphY(feat,rowX, rowY);
+        featexp += (*_IM).getFeatureArrayvalueAlphY(feat,rowX, indexY);
       }
   }
   exponent = exp(featexp);
@@ -121,10 +121,10 @@ double IT::prop(int rowX, int rowY)
   return exponent/norm;
 }
 // p(y | x)
-// double IT::prop(int indexX, vector<vector<double> > Y, int indexY)
+// double IT::prop(int indexX, int indexY)
 double IT::propAlphX(int indexX, int rowY)
 {
-  double featexp   = 0;
+  double featexp  = 0;
   double featnorm = 0;
   double norm     = 0;
   double exponent = 0;

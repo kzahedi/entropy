@@ -63,8 +63,8 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
     _valY=NULL;
     _Y = NULL;
     //Festlegung des Eingabealphabets
-    _X=new DContainer(6,1);
-    for(int i=0;i<6;i++){
+    _X=new DContainer(8,1);
+    for(int i=0;i<8;i++){
     	(*_X) << i;
     }
     IsParameter param;
@@ -75,7 +75,7 @@ TestMI::TestMI(ULContainer &eX, ULContainer &eY, int version){
     param.konv           = 0.000001;
     param.time           = true;
     param.test           = true;
-    param.seconds        = 10;
+    param.seconds        = 60;
 
     switch(version){
       case 0:
@@ -130,7 +130,6 @@ double TestMI::getMI(){
 	    	  p2=_p2->propAlphX(i,j);
 	    	  if((p2) > EPSILON){
 	    		  val+=p*_p1->propm(i)*log2(p/ p2);
-	    	//	  cout <<" wahrsch. "<< p << " " <<_p1->propm(i) << " " << log2(p/ p2) << endl;
 	    	  }
 	      }
 		}
@@ -143,7 +142,6 @@ double TestMI::getMI(){
 	    	  p2=_p2->propAlphX(i,j);
 	    	  if((p2) > EPSILON){
 	    		  val+=p*_p1->propm(i)*log2(p/ p2);
-	       	//	  cout <<" wahrsch. " <<  p << " " <<_p1->propm(i) << " " << log2(p/ p2) << endl;
 	    	  }
 	      }
 		}

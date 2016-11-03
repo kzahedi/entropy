@@ -131,6 +131,10 @@ double Test::__KL(int i){
   }
   return dist;
 }
+//Ausgabe der exakten Wahrscheinlichkeiten
+double Test:: getProp(int indexX,int indexY){
+	return _exact->propAlphX(indexX,indexY);
+}
 //fuer die Tests
 double Test:: KL(IT *it){
   double dist=0;
