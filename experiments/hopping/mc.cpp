@@ -1,7 +1,9 @@
 #include <entropy++/Csv.h>
 #include <entropy++/sparse/MC_MI.h>
 #include <entropy++/sparse/MC_W.h>
+#include <entropy++/sparse/MC_CW.h>
 #include <entropy++/sparse/state/MC_W.h>
+#include <entropy++/sparse/state/MC_CW.h>
 #include <entropy++/sparse/state/MC_MI.h>
 
 #include <string>
@@ -12,13 +14,14 @@
 
 using namespace std;
 using namespace boost::filesystem;
+using namespace entropy;
 using namespace entropy::sparse;
 using namespace entropy::sparse::state;
 
-# define MAX(a,b)    ((a>b)?a:b)
+// # define MAX(a,b)    ((a>b)?a:b)
 # define MAX3(a,b,c) MAX(a,MAX(b,c))
 
-# define MIN(a,b)    ((a<b)?a:b)
+// # define MIN(a,b)    ((a<b)?a:b)
 # define MIN3(a,b,c) MIN(a,MIN(b,c))
 
 # define POS 0
@@ -142,6 +145,7 @@ int main(int argc, char **argv)
     wdomain[i][1] = 1.0;
   }
   int bins   = 300;
+  cout << "Bins: " << bins << endl;
   int *wbins = new int[3];
   wbins[0]   = bins;
   wbins[1]   = bins;
@@ -223,50 +227,77 @@ int main(int argc, char **argv)
   ULContainer *mfS1 = DmusfibS->drop(-1);
 
   cout << "Calculating DCMot:" << endl;
-  double     dcmc_w   = entropy::sparse::MC_W(dcW2, dcW1, dcA1);
-  double     dcmc_mi  = entropy::sparse::MC_MI(dcW2, dcW1, dcS1, dcA1);
-  DContainer* dcmc_mid = entropy::sparse::state::MC_MI(dcW2, dcW1, dcS1, dcA1);
-  DContainer* dcmc_wd  = entropy::sparse::state::MC_W(dcW2, dcW1, dcA1);
-  double     s        = dcmc_mid->columnSum(0) / ((double)dcmc_mid->rows());
-  double     ss       = dcmc_wd->columnSum(0)  / ((double)dcmc_mid->rows());
-  cout << "  DCMot MC_W:  " << dcmc_w  << endl;
-  cout << "  DCMot MC_MI: " << dcmc_mi << endl;
-  cout << "  checking values: " << s  << " vs. " << dcmc_mi << " = " << fabs(s  - dcmc_mi) << endl;
-  cout << "  checking values: " << ss << " vs. " << dcmc_w  << " = " << fabs(ss - dcmc_w)  << endl;
+  double     dcmc_w     = entropy::sparse::MC_W(dcW2, dcW1, dcA1);
+  double     dcmc_cw    = entropy::sparse::MC_CW(dcW2, dcW1, dcA1);
+  double     dcmc_cw_mi = entropy::sparse::MC_CW(dcW2, dcW1, dcA1, MC_CW_MODE_MI);
+  double     dcmc_mi    = entropy::sparse::MC_MI(dcW2, dcW1, dcS1, dcA1);
+  DContainer* dcmc_mid  = entropy::sparse::state::MC_MI(dcW2, dcW1, dcS1, dcA1);
+  DContainer* dcmc_wd   = entropy::sparse::state::MC_W(dcW2, dcW1, dcA1);
+  DContainer* dcmc_cwd  = entropy::sparse::state::MC_CW(dcW2, dcW1, dcA1);
+  double     s          = dcmc_mid->columnSum(0) / ((double)dcmc_mid->rows());
+  double     ss         = dcmc_wd->columnSum(0)  / ((double)dcmc_wd->rows());
+  double     sss        = dcmc_cwd->columnSum(0) / ((double)dcmc_cwd->rows());
+  cout << "  DCMot MC_W:       " << dcmc_w  << endl;
+  cout << "  DCMot MC_CW (h):  " << dcmc_cw << endl;
+  cout << "  DCMot MC_CW (mi): " << dcmc_cw << endl;
+  cout << "  DCMot MC_MI:      " << dcmc_mi << endl;
+  cout << "  checking values:  " << s  << " vs. " << dcmc_mi << " = " << fabs(s  - dcmc_mi) << endl;
+  cout << "  checking values:  " << ss << " vs. " << dcmc_w  << " = " << fabs(ss - dcmc_w)  << endl;
+  cout << "  checking values:  " << sss << " vs. " << dcmc_cw  << " = " << fabs(sss - dcmc_cw)  << endl;
   cout << "writing DCMot state-dependent MC_W" << endl;
   csv->write("state-dependent-dc_mc_w.csv", dcmc_wd);
+  cout << "writing DCMot state-dependent MC_CW" << endl;
+  csv->write("state-dependent-dc_mc_cw.csv", dcmc_cwd);
   cout << "writing DCMot state-dependent MC_MI" << endl;
   csv->write("state-dependent-dc_mc_mi.csv", dcmc_mid);
 
   cout << "Calculating MusLin:" << endl;
-  double     mlmc_w   = entropy::sparse::MC_W(mlW2, mlW1, mlA1);
-  double     mlmc_mi  = entropy::sparse::MC_MI(mlW2, mlW1, mlS1, mlA1);
-  DContainer* mlmc_mid = entropy::sparse::state::MC_MI(mlW2, mlW1, mlS1, mlA1);
-  DContainer* mlmc_wd  = entropy::sparse::state::MC_W(mlW2, mlW1, mlA1);
-  double     t        = mlmc_mid->columnSum(0) / ((double)mlmc_mid->rows());
-  double     tt       = mlmc_wd->columnSum(0) / ((double)mlmc_wd->rows());
-  cout << "MusLin MC_W:  " << mlmc_w  << endl;
-  cout << "MusLin MC_MI: " << mlmc_mi << endl;
+  double     mlmc_w     = entropy::sparse::MC_W(mlW2, mlW1, mlA1);
+  double     mlmc_cw    = entropy::sparse::MC_CW(mlW2, mlW1, mlA1);
+  double     mlmc_cw_mi = entropy::sparse::MC_CW(mlW2, mlW1, mlA1, MC_CW_MODE_MI);
+  double     mlmc_mi    = entropy::sparse::MC_MI(mlW2, mlW1, mlS1, mlA1);
+  DContainer* mlmc_mid  = entropy::sparse::state::MC_MI(mlW2, mlW1, mlS1, mlA1);
+  DContainer* mlmc_wd   = entropy::sparse::state::MC_W(mlW2, mlW1, mlA1);
+  DContainer* mlmc_cwd  = entropy::sparse::state::MC_CW(mlW2, mlW1, mlA1);
+  double     t          = mlmc_mid->columnSum(0) / ((double)mlmc_mid->rows());
+  double     tt         = mlmc_wd->columnSum(0) / ((double)mlmc_wd->rows());
+  double     ttt        = mlmc_cwd->columnSum(0) / ((double)mlmc_cwd->rows());
+  cout << "  MusLin MC_W:       " << mlmc_w     << endl;
+  cout << "  MusLin MC_CW (H):  " << mlmc_cw    << endl;
+  cout << "  MusLin MC_CW (MI): " << mlmc_cw_mi << endl;
+  cout << "  MusLin MC_MI:      " << mlmc_mi    << endl;
   cout << "  checking values: " << t  << " vs. " << mlmc_mi << " = " << fabs(t  - mlmc_mi) << endl;
   cout << "  checking values: " << tt << " vs. " << mlmc_w  << " = " << fabs(tt - mlmc_w)  << endl;
+  cout << "  checking values: " << ttt << " vs. " << mlmc_cw  << " = " << fabs(ttt - mlmc_cw)  << endl;
   cout << "writing MusLin state-dependent MC_W" << endl;
   csv->write("state-dependent-ml_mc_w.csv", mlmc_wd);
+  cout << "writing MusLin state-dependent MC_CW" << endl;
+  csv->write("state-dependent-ml_mc_cw.csv", mlmc_cwd);
   cout << "writing MusLin state-dependent MC_MI" << endl;
   csv->write("state-dependent-ml_mc_mi.csv", mlmc_mid);
 
   cout << "Calculating MusFib:" << endl;
-  double     mfmc_w   = entropy::sparse::MC_W(mfW2, mfW1, mfA1);
-  double     mfmc_mi  = entropy::sparse::MC_MI(mfW2, mfW1, mfS1, mfA1);
-  DContainer* mfmc_mid = entropy::sparse::state::MC_MI(mfW2, mfW1, mfS1, mfA1);
-  DContainer* mfmc_wd  = entropy::sparse::state::MC_W(mfW2, mfW1, mfA1);
-  double     u        = mfmc_mid->columnSum(0) / ((double)mfmc_mid->rows());
-  double     uu       = mfmc_wd->columnSum(0)  / ((double)mfmc_mid->rows());
-  cout << "MusFib MC_W:  " << mfmc_w  << endl;
-  cout << "MusFib MC_MI: " << mfmc_mi << endl;
+  double     mfmc_w     = entropy::sparse::MC_W(mfW2, mfW1, mfA1);
+  double     mfmc_cw    = entropy::sparse::MC_CW(mfW2, mfW1, mfA1);
+  double     mfmc_cw_mi = entropy::sparse::MC_CW(mfW2, mfW1, mfA1, MC_CW_MODE_MI);
+  double     mfmc_mi    = entropy::sparse::MC_MI(mfW2, mfW1, mfS1, mfA1);
+  DContainer* mfmc_mid  = entropy::sparse::state::MC_MI(mfW2, mfW1, mfS1, mfA1);
+  DContainer* mfmc_wd   = entropy::sparse::state::MC_W(mfW2, mfW1, mfA1);
+  DContainer* mfmc_cwd  = entropy::sparse::state::MC_CW(mfW2, mfW1, mfA1);
+  double     u          = mfmc_mid->columnSum(0) / ((double)mfmc_mid->rows());
+  double     uu         = mfmc_wd->columnSum(0)  / ((double)mfmc_wd->rows());
+  double     uuu        = mfmc_cwd->columnSum(0) / ((double)mfmc_cwd->rows());
+  cout << "  MusFib MC_W:       " << mfmc_w  << endl;
+  cout << "  MusFib MC_CW (h):  " << mfmc_cw << endl;
+  cout << "  MusFib MC_CW (mi): " << mfmc_cw_mi << endl;
+  cout << "  MusFib MC_MI:      " << mfmc_mi << endl;
   cout << "  checking values: " << u  << " vs. " << mfmc_mi << " = " << fabs(u  - mfmc_mi) << endl;
   cout << "  checking values: " << uu << " vs. " << mfmc_w  << " = " << fabs(uu - mfmc_w)  << endl;
+  cout << "  checking values: " << uuu << " vs. " << mfmc_cw  << " = " << fabs(uuu - mfmc_cw)  << endl;
   cout << "writing MusFib state-dependent MC_W" << endl;
   csv->write("state-dependent-mf_mc_w.csv", mfmc_wd);
+  cout << "writing MusFib state-dependent MC_CW" << endl;
+  csv->write("state-dependent-mf_mc_cw.csv", mfmc_wd);
   cout << "writing MusFib state-dependent MC_MI" << endl;
   csv->write("state-dependent-mf_mc_mi.csv", mfmc_mid);
 

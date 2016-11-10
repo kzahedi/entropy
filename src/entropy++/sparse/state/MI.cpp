@@ -28,10 +28,10 @@ DContainer* __empericalMIssd(ULContainer* X, ULContainer* Y)
   maxX = maxX + 1;
   maxY = maxY + 1;
 
-  SparseMatrix pxy;
-  SparseMatrix mi;
-  SparseMatrix px;
-  SparseMatrix py;
+  entropy::SparseMatrix pxy;
+  entropy::SparseMatrix mi;
+  entropy::SparseMatrix px;
+  entropy::SparseMatrix py;
 
   for(int i = 0; i < X->rows(); i++)
   {
@@ -60,7 +60,7 @@ DContainer* __empericalMIssd(ULContainer* X, ULContainer* Y)
 
   for(int i = 0; i < pxy.size(); i++)
   {
-    MatrixIndex m = pxy.getmi(i);
+    entropy::MatrixIndex m = pxy.getmi(i);
     int x = m.first;
     int y = m.second;
     if(px(x) > 0.0 && py(y) > 0.0 && pxy(x,y) > 0.0)

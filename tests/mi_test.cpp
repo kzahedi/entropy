@@ -43,7 +43,7 @@ void miTest::testSinus()
   ULContainer *dx = X.discretise();
   ULContainer *dy = Y.discretise();
 
-  double s = MI(dx, dy);
+  double s = entropy::MI(dx, dy);
 
   CPPUNIT_ASSERT_DOUBLES_EQUAL(4.17221, s, 0.00001); // recalcuate somewhere else
 
@@ -79,7 +79,7 @@ void miTest::testSparseVsNonSparse()
   ULContainer *dx = X.discretise();
   ULContainer *dy = Y.discretise();
 
-  double s1 = MI(dx, dy);
+  double s1 = entropy::MI(dx, dy);
   double s2 = entropy::sparse::MI(dx, dy);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(s1, s2, 0.00001);
 

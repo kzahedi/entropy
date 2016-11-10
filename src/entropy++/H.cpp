@@ -6,7 +6,7 @@
 
 using namespace std;
 
-double __empericalH(IContainer* X)
+double __empericalH(ULContainer* X)
 {
   assert(X->isDiscretised());
 
@@ -43,7 +43,7 @@ double __empericalH(IContainer* X)
   double r = 0.0;
   for(int x = 0; x < maxX; x++)
   {
-    if(px[x] > 0.0) r += px[x] * log2(px[x]);
+    if(px[x] > 0.0) r -= px[x] * log2(px[x]);
   }
 
   delete[] px;
@@ -51,7 +51,7 @@ double __empericalH(IContainer* X)
   return r;
 }
 
-double H(IContainer* X, int mode)
+double entropy::H(ULContainer* X, int mode)
 {
   switch(mode)
   {

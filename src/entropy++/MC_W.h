@@ -1,8 +1,11 @@
 #ifndef __MC_W_H__
 #define __MC_W_H__
 
-#include <entropy++/Entropy.h>
+#include <entropy++/Container.h>
 
-double MC_W(IContainer* W2, IContainer* W1, IContainer* A1, int mode = EMPERICAL);
+namespace entropy
+{
+  double MC_W(ULContainer* W2, ULContainer* W1, ULContainer* A1, int mode = EMPERICAL);
+}
 
 #endif // __MC_W_H__

@@ -31,11 +31,11 @@ DContainer* __empericalCMIssd(ULContainer* X, ULContainer* Y, ULContainer* Z)
   maxY = maxY + 1;
   maxZ = maxZ + 1;
 
-  SparseMatrix pxyz;
-  SparseMatrix pxy_c_z;
-  SparseMatrix px_c_z;
-  SparseMatrix py_c_z;
-  SparseMatrix pz;
+  entropy::SparseMatrix pxyz;
+  entropy::SparseMatrix pxy_c_z;
+  entropy::SparseMatrix px_c_z;
+  entropy::SparseMatrix py_c_z;
+  entropy::SparseMatrix pz;
 
   for(int i = 0; i < X->rows(); i++)
   {
@@ -53,7 +53,7 @@ DContainer* __empericalCMIssd(ULContainer* X, ULContainer* Y, ULContainer* Z)
 
   for(int i = 0; i < pxyz.size(); i++)
   {
-    MatrixIndex mi = pxyz.getmi(i);
+    entropy::MatrixIndex mi = pxyz.getmi(i);
     int x = mi.first;
     int y = mi.second;
     int z = mi.third;
@@ -66,7 +66,7 @@ DContainer* __empericalCMIssd(ULContainer* X, ULContainer* Y, ULContainer* Z)
   
   for(int i = 0; i < pxyz.size(); i++)
   {
-    MatrixIndex mi = pxyz.getmi(i);
+    entropy::MatrixIndex mi = pxyz.getmi(i);
     int x = mi.first;
     int y = mi.second;
     int z = mi.third;
@@ -75,7 +75,7 @@ DContainer* __empericalCMIssd(ULContainer* X, ULContainer* Y, ULContainer* Z)
 
   for(int i = 0; i < pxyz.size(); i++)
   {
-    MatrixIndex mi = pxyz.getmi(i);
+    entropy::MatrixIndex mi = pxyz.getmi(i);
     int x = mi.first;
     int y = mi.second;
     int z = mi.third;
@@ -83,7 +83,7 @@ DContainer* __empericalCMIssd(ULContainer* X, ULContainer* Y, ULContainer* Z)
   }
   for(int i = 0; i < py_c_z.size(); i++)
   {
-    MatrixIndex mi = py_c_z.getmi(i);
+    entropy::MatrixIndex mi = py_c_z.getmi(i);
     int y = mi.first;
     int z = mi.second;
     py_c_z(y,z) = py_c_z(y,z) / pz(z);
@@ -91,7 +91,7 @@ DContainer* __empericalCMIssd(ULContainer* X, ULContainer* Y, ULContainer* Z)
 
   for(int i = 0; i < pxyz.size(); i++)
   {
-    MatrixIndex mi = pxyz.getmi(i);
+    entropy::MatrixIndex mi = pxyz.getmi(i);
     int x = mi.first;
     int y = mi.second;
     int z = mi.third;
@@ -99,7 +99,7 @@ DContainer* __empericalCMIssd(ULContainer* X, ULContainer* Y, ULContainer* Z)
   }
   for(int i = 0; i < px_c_z.size(); i++)
   {
-    MatrixIndex mi = px_c_z.getmi(i);
+    entropy::MatrixIndex mi = px_c_z.getmi(i);
     int x = mi.first;
     int z = mi.second;
     px_c_z(x,z) = px_c_z(x,z) / pz(z);
@@ -108,10 +108,10 @@ DContainer* __empericalCMIssd(ULContainer* X, ULContainer* Y, ULContainer* Z)
 
   // CHECK MATRICES
 
-  SparseMatrix mi;
+  entropy::SparseMatrix mi;
   for(int i = 0; i < pxyz.size(); i++)
   {
-    MatrixIndex m = pxyz.getmi(i);
+    entropy::MatrixIndex m = pxyz.getmi(i);
     int x = m.first;
     int y = m.second;
     int z = m.third;

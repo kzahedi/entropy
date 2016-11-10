@@ -50,7 +50,7 @@ void cmiTest::testSinus()
   ULContainer *dy = Y.discretise();
   ULContainer *dz = Z.discretise();
 
-  double s = CMI(dx, dy, dz);
+  double s = entropy::CMI(dx, dy, dz);
 
   CPPUNIT_ASSERT_DOUBLES_EQUAL(2.473493, s, 0.00001); // recalcuate somewhere else
 
@@ -93,7 +93,7 @@ void cmiTest::testSparseVsNonSparse()
   ULContainer *dy = Y.discretise();
   ULContainer *dz = Z.discretise();
 
-  double s1 = CMI(dx, dy, dz);
+  double s1 = entropy::CMI(dx, dy, dz);
   double s2 = entropy::sparse::CMI(dx, dy, dz);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(s1, s2, 0.00001);
 
@@ -343,11 +343,11 @@ void cmiTest::testMatrixWiseComparision()
   // Sparse Matrix version
   //
 
-  SparseMatrix spxyz;
-  SparseMatrix spxy_c_z;
-  SparseMatrix spx_c_z;
-  SparseMatrix spy_c_z;
-  SparseMatrix spz;
+  entropy::SparseMatrix spxyz;
+  entropy::SparseMatrix spxy_c_z;
+  entropy::SparseMatrix spx_c_z;
+  entropy::SparseMatrix spy_c_z;
+  entropy::SparseMatrix spz;
 
   for(int i = 0; i < dx->rows(); i++)
   {
@@ -363,7 +363,7 @@ void cmiTest::testMatrixWiseComparision()
 
   for(int i = 0; i < spxyz.size(); i++)
   {
-    MatrixIndex mi = spxyz.getmi(i);
+    entropy::MatrixIndex mi = spxyz.getmi(i);
     int x = mi.first;
     int y = mi.second;
     int z = mi.third;
@@ -372,7 +372,7 @@ void cmiTest::testMatrixWiseComparision()
 
   for(int i = 0; i < spxyz.size(); i++)
   {
-    MatrixIndex mi = spxyz.getmi(i);
+    entropy::MatrixIndex mi = spxyz.getmi(i);
     int x = mi.first;
     int y = mi.second;
     int z = mi.third;
@@ -380,7 +380,7 @@ void cmiTest::testMatrixWiseComparision()
   }
   for(int i = 0; i < spy_c_z.size(); i++)
   {
-    MatrixIndex mi = spy_c_z.getmi(i);
+    entropy::MatrixIndex mi = spy_c_z.getmi(i);
     int y = mi.first;
     int z = mi.second;
     spy_c_z(y,z) = spy_c_z(y,z) / spz(z);
@@ -388,7 +388,7 @@ void cmiTest::testMatrixWiseComparision()
 
   for(int i = 0; i < spxyz.size(); i++)
   {
-    MatrixIndex mi = spxyz.getmi(i);
+    entropy::MatrixIndex mi = spxyz.getmi(i);
     int x = mi.first;
     int y = mi.second;
     int z = mi.third;
@@ -396,7 +396,7 @@ void cmiTest::testMatrixWiseComparision()
   }
   for(int i = 0; i < spx_c_z.size(); i++)
   {
-    MatrixIndex mi = spx_c_z.getmi(i);
+    entropy::MatrixIndex mi = spx_c_z.getmi(i);
     int x = mi.first;
     int z = mi.second;
     spx_c_z(x,z) = spx_c_z(x,z) / spz(z);
@@ -408,7 +408,7 @@ void cmiTest::testMatrixWiseComparision()
   double s_r = 0.0;
   for(int i = 0; i < spxyz.size(); i++)
   {
-    MatrixIndex mi = spxyz.getmi(i);
+    entropy::MatrixIndex mi = spxyz.getmi(i);
     int x = mi.first;
     int y = mi.second;
     int z = mi.third;

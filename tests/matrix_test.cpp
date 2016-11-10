@@ -15,7 +15,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( matrixTest );
 
 void matrixTest::testInitialisation()
 {
-  SparseMatrix sm;
+  entropy::SparseMatrix sm;
 
   for(int row = 0; row < 10; row++)
   {
@@ -25,7 +25,7 @@ void matrixTest::testInitialisation()
     }
   }
 
-  SparseMatrix sm2(2.0);
+  entropy::SparseMatrix sm2(2.0);
 
   for(int row = 0; row < 10; row++)
   {
@@ -38,7 +38,7 @@ void matrixTest::testInitialisation()
 
 void matrixTest::testSet()
 {
-  SparseMatrix sm;
+  entropy::SparseMatrix sm;
 
   sm(1, 1) = 2.0;
 
@@ -64,11 +64,11 @@ void matrixTest::testAdd()
   time(&t);
   srand48(t);
 
-  SparseMatrix sm1;
-  SparseMatrix sm2;
+  entropy::SparseMatrix sm1;
+  entropy::SparseMatrix sm2;
 
-  Matrix m1(10,10);
-  Matrix m2(10,10);
+  entropy::Matrix m1(10,10);
+  entropy::Matrix m2(10,10);
 
   for(int row = 0; row < 10; row++)
   {
@@ -102,8 +102,8 @@ void matrixTest::testAdd()
     }
   }
 
-  SparseMatrix sm3 = sm1 + sm2;
-  Matrix        m3 =  m1 +  m2;
+  entropy::SparseMatrix sm3 = sm1 + sm2;
+  entropy::Matrix        m3 =  m1 +  m2;
 
   for(int row = 0; row < 10; row++)
   {
@@ -120,11 +120,11 @@ void matrixTest::testMul()
   time(&t);
   srand48(t);
 
-  SparseMatrix sm1;
-  SparseMatrix sm2;
+  entropy::SparseMatrix sm1;
+  entropy::SparseMatrix sm2;
 
-  Matrix m1(10,10);
-  Matrix m2(10,10);
+  entropy::Matrix m1(10,10);
+  entropy::Matrix m2(10,10);
 
   for(int row = 0; row < 10; row++)
   {
@@ -147,8 +147,8 @@ void matrixTest::testMul()
     }
   }
 
-  SparseMatrix sm3 = sm1 * 2.0;
-  Matrix        m3 =  m1 * 2.0;
+  entropy::SparseMatrix sm3 = sm1 * 2.0;
+  entropy::Matrix        m3 =  m1 * 2.0;
 
   for(int row = 0; row < 10; row++)
   {
@@ -165,11 +165,11 @@ void matrixTest::testDiv()
   time(&t);
   srand48(t);
 
-  SparseMatrix sm1;
-  SparseMatrix sm2;
+  entropy::SparseMatrix sm1;
+  entropy::SparseMatrix sm2;
 
-  Matrix m1(10,10);
-  Matrix m2(10,10);
+  entropy::Matrix m1(10,10);
+  entropy::Matrix m2(10,10);
 
   for(int row = 0; row < 10; row++)
   {
