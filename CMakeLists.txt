@@ -10,22 +10,26 @@ set(EXECUTABLE_OUTPUT_PATH       ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH          ${PROJECT_BINARY_DIR}/lib)
 
 set(CMAKE_VERBOSE_MAKEFILE       OFF)
-set(CMAKE_CXX_COMPILER           "g++")
-set(CMAKE_CXX_COMPILER_FULLPATH  "g++")
+#set(CMAKE_CXX_COMPILER           "g++")
+#set(CMAKE_CXX_COMPILER_FULLPATH  "g++")
 
 if(APPLE)
-set(CMAKE_CXX_FLAGS_DEBUG        "-g -arch x86_64")
-set(CMAKE_CXX_FLAGS_RELEASE      "-arch x86_64")
+set(CMAKE_CXX_FLAGS_DEBUG        "-g")
+set(CMAKE_CXX_FLAGS_RELEASE      "-g")
 set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O3")
 else(APPLE)
-set(CMAKE_CXX_FLAGS_DEBUG        "-g -fPIC")
-set(CMAKE_CXX_FLAGS_RELEASE      "-fPIC")
+set(CMAKE_CXX_FLAGS_DEBUG        "-g  -fPIC")
+set(CMAKE_CXX_FLAGS_RELEASE      "-g  -fPIC")
 set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O3")
 endif(APPLE)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(/usr/local/include)
 link_directories(/usr/local/lib)
+
+include_directories(~/local/include)
+link_directories(~/local/lib)
+
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED filesystem system)
@@ -48,8 +52,9 @@ INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/src/entropy++/
   )
 
 option(COMPILE_HOPPING "Compile MC example with hopping data" OFF)
-option(COMPILE_RBO     "Compile MC example for RBOHand data" OFF)
-option(ENTROPY_TESTS   "Compile test cases" OFF)
+option(COMPILE_RBO     "Compile MC example for RBOHand data"  OFF)
+option(COMPILE_IT      "Compile IT example"                   OFF)
+option(ENTROPY_TESTS   "Compile test cases"                   OFF)
 
 if(COMPILE_HOPPING)
   add_subdirectory(experiments/hopping)
@@ -58,6 +63,10 @@ endif(COMPILE_HOPPING)
 if(COMPILE_RBO)
   add_subdirectory(experiments/RBOHand)
 endif(COMPILE_RBO)
+
+if(COMPILE_IT)
+  add_subdirectory(experiments/it)
+endif(COMPILE_IT)
 
 if(ENTROPY_TESTS)
   add_subdirectory(tests)

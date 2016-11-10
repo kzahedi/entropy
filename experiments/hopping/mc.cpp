@@ -44,6 +44,7 @@ using namespace entropy::sparse::state;
 
 int main(int argc, char **argv)
 {
+
   if(argc != 2)
   {
     cout << "usage: " << argv[0] << " <directory>" << endl;
@@ -51,6 +52,8 @@ int main(int argc, char **argv)
   }
 
   string d = string(argv[1]);
+
+  cout << "hier 0" << endl;
 
   Csv *csv = new Csv();
 
@@ -124,7 +127,7 @@ int main(int argc, char **argv)
   muslinW->normaliseColumn(0, p_min,  p_max);
   muslinW->normaliseColumn(1, v_min,  v_max);
   muslinW->normaliseColumn(2, a_min,  a_max);
-
+  cout << "hier 1" << endl;
   muslinS->normaliseColumn(0, mi_min, mi_max);
 
   // normalising MusFib

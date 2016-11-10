@@ -1,8 +1,6 @@
 
 *.vim
 
-*.csv
-
 experiments/RBOHand/.ipynb_checkpoints/*.ipynb
 
 experiments/RBOHand/rbo_mc
@@ -34,3 +32,8 @@ matlab/data/results_w300_a300_s300.txt
 html
 
 latex
+
+tags
+
+experiments/RBOHand/hand.sofastates.csv
+
