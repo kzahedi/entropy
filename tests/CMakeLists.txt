@@ -21,7 +21,7 @@ add_executable(mi-tests               main.cpp  mi_test.cpp)
 target_link_libraries(mi-tests        Entropy++ cppunit dl)
 
 add_executable(entropy-tests          main.cpp  entropy_test.cpp)
-target_link_libraries(entropy-tests   Entropy++ cppunit)
+target_link_libraries(entropy-tests   Entropy++ cppunit dl)
 
 add_executable(cmi-tests              main.cpp  cmi_test.cpp)
 target_link_libraries(cmi-tests       Entropy++ cppunit dl)
