@@ -36,12 +36,9 @@ target_link_libraries(csv-tests       Entropy++ cppunit dl)
 ADD_TEST(container "${PROJECT_BINARY_DIR}/bin/container-tests")
 ADD_TEST(matrix    "${PROJECT_BINARY_DIR}/bin/matrix-tests")
 ADD_TEST(mi        "${PROJECT_BINARY_DIR}/bin/mi-tests")
-<<<<<<< HEAD
 ADD_TEST(entropy   "${PROJECT_BINARY_DIR}/bin/entropy-tests")
-=======
 ADD_TEST(feature   "${PROJECT_BINARY_DIR}/bin/feature-tests")
 ADD_TEST(it        "${PROJECT_BINARY_DIR}/bin/it-tests")
 ADD_TEST(itcmi     "${PROJECT_BINARY_DIR}/bin/it-cmi-tests")
->>>>>>> iterative-scaling
 ADD_TEST(cmi       "${PROJECT_BINARY_DIR}/bin/cmi-tests")
 ADD_TEST(csv       "${PROJECT_BINARY_DIR}/bin/csv-tests")

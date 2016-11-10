@@ -11,6 +11,7 @@
 #include <entropy++/SparseMatrix.h>
 
 using namespace std;
+using namespace entropy;
 
 class Feature
 {
