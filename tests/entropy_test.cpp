@@ -90,7 +90,12 @@ void entropyTest::testConditional()
   DContainer X(1000,1);
   DContainer Y(1000,1);
 
+#ifdef __APPLE__
   sranddev();
+#else // __APPLE__
+  srand(time(NULL));
+#endif // __APPLE__
+
   for(int i = 0; i < 1000; i++)
   {
     X << ((float)rand())/((float)RAND_MAX);
