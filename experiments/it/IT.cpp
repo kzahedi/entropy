@@ -132,11 +132,11 @@ double IT::propAlphX(int indexX, int rowY)
   {
       if(_gis)
       {
-        featexp += (*_FM).getFeatureArrayvalueAlphYAlphX(feat,indexX, rowY);
+        featexp += (*_FM).getFeatureArrayvalueAlphYAlphX(feat, indexX, rowY);
       }
       else
       {
-        featexp += (*_IM).getFeatureArrayvalueAlphYAlphX(feat,indexX, rowY);
+        featexp += (*_IM).getFeatureArrayvalueAlphYAlphX(feat, indexX, rowY);
       }
   }
   exponent = exp(featexp);

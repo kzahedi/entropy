@@ -27,13 +27,19 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<v
 	  _exponent[i]= new double[(int) pow(_Y->rows(),_sizeColValY)];
   }
   // cout << "Data X:" << endl << eX << endl << "Data Y: " << endl << eY << endl;
-  if(param.time)
+  if(param.konvtime)
   {
-    __gis(param.maxit, param.konv, param.test, param.seconds);
+     __gis(param.konv, param.seconds, param.test);
   }
-  else
-  {
-    __gis(param.maxit, param.konv, param.test);
+  else{
+	  if(param.time )
+	  {
+	     __gis(param.seconds, param.test);
+	  }
+	  else
+	  {
+		 __gis(param.maxit, param.konv, param.test);
+	  }
   }
 }
 //die Alphabetwerte als unsigned long
@@ -60,13 +66,19 @@ GIS::GIS(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector
 	  _exponent[i]= new double[(int) pow(_Y->rows(),_sizeColValY)];
   }
   // cout << "Data X:" << endl << eX << endl << "Data Y: " << endl << eY << endl;
-  if(param.time)
+  if(param.konvtime)
   {
-    __gis(param.maxit, param.konv, param.test, param.seconds);
+     __gis( param.konv, param.seconds, param.test);
   }
-  else
-  {
-    __gis(param.maxit, param.konv, param.test);
+  else{
+	  if(param.time )
+	  {
+	     __gis(param.seconds, param.test);
+	  }
+	  else
+	  {
+		 __gis(param.maxit, param.konv, param.test);
+	  }
   }
 }
 GIS::~GIS()
@@ -142,7 +154,8 @@ void GIS::__getExpected()
 	    }
 	  }
 }
-void GIS:: __gis(int maxit, double konv, bool test,int seconds){
+// auf zeit
+void GIS:: __gis(int seconds, bool test){
     //constant c for delta
     double featconst = __getFeatconst();
 
@@ -157,16 +170,39 @@ void GIS:: __gis(int maxit, double konv, bool test,int seconds){
     double utime = 0;
     time_t befor;
     time_t after;
-    while(utime<seconds )
+    while(utime<seconds)
     {
       befor=time(NULL);
-      __calculateIteration(featconst, test);
+      __calculateIteration(featconst,test);
       after=time(NULL);
       utime+= difftime(after,befor);
     }
 }
+// auf zeit und konv
+void GIS::__gis( double konv,int seconds, bool test){
+    double featconst = __getFeatconst();
 
-void GIS::__gis(int maxit, double konv, bool test)
+    for(int k=0;k< _sizeSystX;k++){
+      for(int i=0;i< pow(_Y->rows(),_sizeColValY);i++){
+    	  _exponent[k][i]=0.0;
+      }
+    }
+    _normaliser  = new double[_sizeSystX];
+    _iterations  = 0;
+    double l     = 1;
+    double utime = 0;
+    time_t befor;
+    time_t after;
+    while(utime<seconds && fabs(l) >= konv)
+    {
+      befor=time(NULL);
+      l=__calculateIteration(featconst,test);
+      after=time(NULL);
+      utime+= difftime(after,befor);
+    }
+}
+// nach iterationen und konv
+void GIS::__gis(int maxit, double konv,bool test)
 {
   //constant c for delta
   double featconst = __getFeatconst();
@@ -214,7 +250,7 @@ double GIS::__calculateIteration(double featconst, bool test)
   }
   _iterations++;
   if(test){
-    _conv.push_back(l);
+	  _conv.push_back(l);
   }
   return l;
 }

@@ -10,6 +10,7 @@ class IsParameter
       lambdadeltaval = 0.0;
       maxit          = -1;
       konv           = 0.0;
+      konvtime       = false;
       test           = false;
       time           = false;
       seconds        = 0;
@@ -27,6 +28,7 @@ class IsParameter
     double     konv;
     bool       test;
     bool       time;
+    bool       konvtime;
     int        seconds;
 };
 

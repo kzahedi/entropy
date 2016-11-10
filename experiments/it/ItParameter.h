@@ -12,6 +12,7 @@ class IsParameter
       konv           = 0.0;
       test           = false;
       time           = false;
+      konvtime       = false;
       seconds        = 0;
       sigma          = 0;
     };
@@ -27,6 +28,7 @@ class IsParameter
     double     konv;
     bool       test;
     bool       time;
+    bool 	   konvtime;
     int        seconds;
 };
 

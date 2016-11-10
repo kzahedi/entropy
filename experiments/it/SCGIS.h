@@ -27,8 +27,9 @@ public:
   int     getIterations();
 
 private:
-  void      __scgis(int maxit, double konv,bool test);
-  void      __scgis(int maxit, double konv,bool test,int seconds);
+  void      __scgis(int maxit, double konv, bool test);
+  void 		__scgis(int seconds, bool test);
+  void      __scgis(double konv,int seconds, bool test);
   double    __calculateIteration(bool test);
 
   double     _delta;

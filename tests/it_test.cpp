@@ -66,9 +66,10 @@ void itTest::OneXOneY()
   param.sigma          = 0.01;
   param.maxit          = 500;
   param.konv           = 0.0001;
-  param.time           = true;
+  param.konvtime       = true;
+  param.time           = false;
   param.test           = true;
-  param.seconds        = 60;
+  param.seconds        = 72000;
 /*
   IsParameter paramgp;
   paramgp.lambdavalue    = 1.0;
@@ -80,7 +81,7 @@ void itTest::OneXOneY()
   paramgp.test           = true;
   paramgp.seconds        = 60; */
 
-  Test *testval = new Test(1,1,100,lambda, *zX,*zY,alphX, alphY); //get data
+  Test *testval = new Test(1,1,10000,lambda, *zX,*zY,alphX, alphY); //get data
 
   GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zY,alphX,alphY,param);
 //  GISgp *testgp     = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,paramgp);
@@ -168,12 +169,13 @@ void itTest:: OneXOneYFour(){
 	  param.sigma          = 0.01;
 	  param.maxit          = 500;
 	  param.konv           = 0.0001;
-	  param.time           = true;
+	  param.konvtime       = true;
+	  param.time           = false;
 	  param.test           = true;
-	  param.seconds        = 60;
+	  param.seconds        = 72000;
 
 
-	  Test *testval = new Test(1,1,100,lambda, *zX,*zX,alphX, alphY); //get data
+	  Test *testval = new Test(1,1,10000,lambda, *zX,*zX,alphX, alphY); //get data
 
 	  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zX,alphX,alphY,param);
 	  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zX,*zX,alphX,alphY,param);
@@ -220,7 +222,6 @@ void itTest:: OneXOneYFour(){
 	    }
 	  cout << " GIS: " << testval->KL(test);
 	  cout << " SCGIS: " << testval->KL(testsc);
-
 }
 void itTest::OneXOneYEight(){
 	  cout << "OneXOneYEight" << endl;
@@ -244,12 +245,13 @@ void itTest::OneXOneYEight(){
 	  param.sigma          = 0.01;
 	  param.maxit          = 500;
 	  param.konv           = 0.0001;
-	  param.time           = true;
+	  param.konvtime       = true;
+	  param.time           = false;
 	  param.test           = true;
-	  param.seconds        = 60;
+	  param.seconds        = 72000;
 
 
-	  Test *testval = new Test(1,1,100,lambda, *zX,*zX,alphX, alphY); //get data
+	  Test *testval = new Test(1,1,10000,lambda, *zX,*zX,alphX, alphY); //get data
 
 	  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zX,alphX,alphY,param);
 	  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zX,*zX,alphX,alphY,param);
@@ -302,7 +304,7 @@ void itTest::OneXOneYEight(){
 	  cout << " SCGIS: " << testval->KL(testsc);
 }
 void itTest::OneXOneYTwenty(){
-	  cout << "OneXOneYEight" << endl;
+	  cout << "OneXOneYTwenty" << endl;
 	  srand(time(NULL));
 	  DContainer *zX = new DContainer(20,1); // alphabet
 	  for(int i=0;i<20;i++){
@@ -311,7 +313,7 @@ void itTest::OneXOneYTwenty(){
 	  vector<double> lambda(3);
 	  lambda[0] = 0;
 	  lambda[1] = 1;
-	  lambda[2] = 5;
+	  lambda[2] = 2;
 
 	  vector<vector<int > > alphX(1,vector<int>(0));
 	  alphX[0].push_back(0);
@@ -325,12 +327,13 @@ void itTest::OneXOneYTwenty(){
 	  param.sigma          = 0.01;
 	  param.maxit          = 500;
 	  param.konv           = 0.0001;
-	  param.time           = true;
+	  param.konvtime       = true;
+	  param.time           = false;
 	  param.test           = true;
-	  param.seconds        = 60;
+	  param.seconds        = 72000;
 
 
-	  Test *testval = new Test(1,1,100,lambda, *zX,*zX,alphX, alphY); //get data
+	  Test *testval = new Test(1,1,10000,lambda, *zX, *zX, alphX, alphY); //get data
 
 	  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zX,alphX,alphY,param);
 	  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zX,*zX,alphX,alphY,param);
@@ -349,7 +352,6 @@ void itTest::OneXOneYTwenty(){
 	          sum2 = 0;
 	  }
 
-	  double exact;
 	  for(int i=0;i<20; i++){
 		  for(int j=0; j<20; j++){
 			  cout << i << " " << j << endl;
@@ -408,9 +410,10 @@ void itTest::TwoXOneY()
   param.sigma          = 0.01;
   param.maxit          = 500;
   param.konv           = 0.0001;
-  param.time           = true;
+  param.konvtime       = true;
+  param.time           = false;
   param.test           = true;
-  param.seconds        = 60;
+  param.seconds        = 72000;
 
   /*
   IsParameter paramgp;
@@ -423,7 +426,7 @@ void itTest::TwoXOneY()
   paramgp.test           = true;
   paramgp.seconds        = 60; */
 
-  Test *testval     = new Test(2,1,100,lambda, *zY,*zY,alphX, alphY);
+  Test *testval     = new Test(2,1,10000,lambda, *zY,*zY,alphX, alphY);
   GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
 //  GISgp *testgp     = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,paramgp);
   SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
@@ -470,8 +473,8 @@ void itTest::TwoXOneY()
 	//	  cout << "gisgp: " << testgp->propAlphX(i,j) << endl;
 	//	  cout << "scgisgp: " << testscgp->propAlphX(i,j) << endl;
 		  exact= testval->getProp(i,j);
-//		  CPPUNIT_ASSERT_DOUBLES_EQUAL(exact,test->propAlphX(i,j),0.3);
-//		  CPPUNIT_ASSERT_DOUBLES_EQUAL(exact,testsc->propAlphX(i,j),0.3);
+    //	  CPPUNIT_ASSERT_DOUBLES_EQUAL(exact,test->propAlphX(i,j),0.3);
+    //    CPPUNIT_ASSERT_DOUBLES_EQUAL(exact,testsc->propAlphX(i,j),0.3);
 	//	  CPPUNIT_ASSERT_DOUBLES_EQUAL(exact,testgp->propAlphX(i,j),0.3);
 	//	  CPPUNIT_ASSERT_DOUBLES_EQUAL(exact,testscgp->propAlphX(i,j),0.3);
 	  }
@@ -512,10 +515,11 @@ void itTest::TwoXTwoY()
   param.sigma          = 0.01;
   param.maxit          = 500;
   param.konv           = 0.0001;
-  param.time           = true;
+  param.konvtime       = true;
+  param.time           = false;
   param.test           = true;
-  param.seconds        = 60;
-
+  param.seconds        = 72000;
+/*
   IsParameter paramgp;
   paramgp.lambdavalue    = 1.0;
   paramgp.lambdadeltaval = 1.0;
@@ -524,9 +528,9 @@ void itTest::TwoXTwoY()
   paramgp.konv           = 0.0001;
   paramgp.time           = true;
   paramgp.test           = true;
-  paramgp.seconds        = 60;
+  paramgp.seconds        = 60; */
 
-  Test *testval     = new Test(2,2,300,lambda, *zY,*zY,alphX, alphY);
+  Test *testval     = new Test(2,2,10000,lambda, *zY,*zY,alphX, alphY);
   GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
 //  GISgp *testgp     = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,paramgp);
   SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
@@ -608,11 +612,12 @@ void itTest::NotBinarySix()
   param.sigma          = 0.01;
   param.maxit          = 500;
   param.konv           = 0.0001;
-  param.time           = true;
+  param.konvtime       = true;
+  param.time           = false;
   param.test           = true;
-  param.seconds        = 60;
+  param.seconds        = 72000;
 
-  Test *testval = new Test(1,1,100,lambda, *zX,*zY,alphX, alphY);
+  Test *testval = new Test(1,1,10000,lambda, *zX,*zY,alphX, alphY);
   GIS *test     = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zY,alphX,alphY,param);
   SCGIS *testsc = new SCGIS(testval->getvalX(),testval->getvalY(),*zX,*zY,alphX,alphY,param);
 

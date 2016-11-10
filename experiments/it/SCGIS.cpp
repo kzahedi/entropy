@@ -26,13 +26,19 @@ SCGIS::SCGIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vect
       }
   }
   _delta=0.0;
-  if(param.time)
+  if(param.konvtime)
   {
-    __scgis(param.maxit,param.konv,param.test,param.seconds);
+     __scgis(param.konv, param.seconds, param.test);
   }
-  else
-  {
-    __scgis(param.maxit,param.konv,param.test);
+  else{
+	  if(param.time )
+	  {
+	     __scgis(param.seconds, param.test);
+	  }
+	  else
+	  {
+		 __scgis(param.maxit, param.konv, param.test);
+	  }
   }
 }
 
@@ -59,14 +65,20 @@ SCGIS::SCGIS(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,ve
       }
   }
   _delta=0.0;
-  if(param.time)
-  {
-    __scgis(param.maxit,param.konv,param.test,param.seconds);
-  }
-  else
-  {
-    __scgis(param.maxit,param.konv,param.test);
-  }
+  if(param.konvtime)
+    {
+       __scgis(param.konv, param.seconds, param.test);
+    }
+    else{
+  	  if(param.time )
+  	  {
+  	     __scgis(param.seconds, param.test);
+  	  }
+  	  else
+  	  {
+  		 __scgis(param.maxit, param.konv, param.test);
+  	  }
+    }
 }
 
 
@@ -98,7 +110,7 @@ SCGIS::~SCGIS(){
 }
 
 
-void SCGIS:: __scgis(int maxit, double konv, bool test,int seconds)
+void SCGIS:: __scgis( double konv,int seconds, bool test)
 {
   double l=1;
   double utime=0;
@@ -106,7 +118,23 @@ void SCGIS:: __scgis(int maxit, double konv, bool test,int seconds)
   time_t after;
   _iterations = 0;
 
-  while(utime<seconds ){
+  while(utime<seconds && fabs(l)>konv){
+    befor=time(NULL);
+    l=__calculateIteration(test);
+    after=time(NULL);
+    utime+= difftime(after,befor);
+  }
+
+}
+void SCGIS:: __scgis(int seconds, bool test)
+{
+  double l=1;
+  double utime=0;
+  time_t befor;
+  time_t after;
+  _iterations = 0;
+
+  while(utime<seconds){
     befor=time(NULL);
     __calculateIteration(test);
     after=time(NULL);
@@ -114,7 +142,6 @@ void SCGIS:: __scgis(int maxit, double konv, bool test,int seconds)
   }
 
 }
-
 void SCGIS:: __scgis(int maxit, double konv, bool test)
 {
   double l=1;
@@ -185,7 +212,7 @@ double SCGIS::__calculateIteration(bool test)
 
 	  _iterations++;
 	  if(test){
-	    _conv.push_back(l);
+		  _conv.push_back(l);
 	  }
 	//  cout << l << " " << _iterations << endl;
 	  return l;

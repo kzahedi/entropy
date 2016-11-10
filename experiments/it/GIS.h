@@ -26,7 +26,8 @@ class GIS : public IT
     // get expected frequency of the features, given the current lambdas
     void   __getExpected();
     void   __gis(int maxit, double konv, bool test);
-    void   __gis(int maxit, double konv, bool test,int seconds);
+    void   __gis(int seconds, bool test);
+    void   __gis(double konv, int seconds, bool test);
     double __calculateIteration(double featconst, bool test);
 
     double***      _expected;
