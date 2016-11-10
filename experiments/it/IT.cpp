@@ -86,10 +86,10 @@ IT::IT(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY,vector<vector
 // double IT::prop(int rowX,  int indexY)
 double IT::prop(int rowX, int indexY)
 {
-  double featexp   = 0;
+  double featexp  = 0;
   double featnorm = 0;
   double norm     = 0;
-  double exponent = 0;
+  double exponent = 1;
   for(int feat=0; feat< _systX.size(); feat++)
   {
       if(_gis)
@@ -101,7 +101,6 @@ double IT::prop(int rowX, int indexY)
         featexp += (*_IM).getFeatureArrayvalueAlphY(feat,rowX, indexY);
       }
   }
-  exponent = exp(featexp);
   for(int yi=0;yi<pow(_Y->rows(),_sizeColValY);yi++)
   {
     for(int feat=0; feat< _systX.size(); feat++)
@@ -115,7 +114,7 @@ double IT::prop(int rowX, int indexY)
           featnorm += (*_IM).getFeatureArrayvalueAlphY(feat,rowX,yi);
         }
     }
-    norm     += exp(featnorm);
+    norm     += exp(featnorm-featexp);
     featnorm  = 0;
   }
   return exponent/norm;
@@ -127,7 +126,7 @@ double IT::propAlphX(int indexX, int rowY)
   double featexp  = 0;
   double featnorm = 0;
   double norm     = 0;
-  double exponent = 0;
+  double exponent = 1;
   for(int feat=0; feat< _systX.size(); feat++)
   {
       if(_gis)
@@ -139,7 +138,6 @@ double IT::propAlphX(int indexX, int rowY)
         featexp += (*_IM).getFeatureArrayvalueAlphYAlphX(feat, indexX, rowY);
       }
   }
-  exponent = exp(featexp);
   for(int yi=0;yi<pow(_Y->rows(),_sizeColValY);yi++)
   {
     for(int feat=0; feat< _systX.size(); feat++)
@@ -153,7 +151,7 @@ double IT::propAlphX(int indexX, int rowY)
           featnorm += (*_IM).getFeatureArrayvalueAlphYAlphX(feat,indexX,yi);
         }
     }
-    norm     += exp(featnorm);
+    norm     += exp(featnorm-featexp);
     featnorm  = 0;
   }
   return exponent/norm;

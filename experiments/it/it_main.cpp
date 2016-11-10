@@ -27,14 +27,14 @@ int main(int argc, char **argv)
 {
 	  cout << "OneXOneYTwenty" << endl;
 	  srand(time(NULL));
-	  DContainer *zX = new DContainer(30,1); // alphabet
-	  for(int i=0;i<30;i++){
+	  DContainer *zX = new DContainer(20,1); // alphabet
+	  for(int i=0;i<20;i++){
 		  (*zX) <<i;
 	  }
 	  vector<double> lambda(3);
 	  lambda[0] = 0;
-	  lambda[1] = 0.3;
-	  lambda[2] = 0.5;
+	  lambda[1] = 1;
+	  lambda[2] = 5;
 
 	  vector<vector<int > > alphX(1,vector<int>(0));
 	  alphX[0].push_back(0);
@@ -42,8 +42,8 @@ int main(int argc, char **argv)
 	  vector<vector<int > > alphY(1,vector<int>(0));
 	  alphY[0].push_back(0);
 	  Test *testval = new Test(1,1,100,lambda, *zX, *zX, alphX, alphY); //get data
-	  for(int i=0;i<30; i++){
-		  for(int j=0; j<30; j++){
+	  for(int i=0;i<20; i++){
+		  for(int j=0; j<20; j++){
 			  cout << i << " " << j << endl;
 			  cout << "exakt: " <<  testval->getProp(i,j) << endl;
 		  }

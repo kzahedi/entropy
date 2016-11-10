@@ -165,7 +165,7 @@ int   ITMatrix::getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowVa
   assert(indexValY < pow(_Y->rows(),_sizeColValY));
   vector<double> x = index(indexX,true,_systX[i].size());
   vector<double> y = index(indexY,false,_systY[i].size());
-  vector<double> valy = index(indexValY,false, _sizeColValY);
+  vector<double> valy = index(indexValY,false,_sizeColValY);
   bool equ = true;
   for(int j=0; j<_systX[i].size();j++)
   {

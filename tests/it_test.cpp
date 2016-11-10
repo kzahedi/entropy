@@ -65,7 +65,7 @@ void itTest::OneXOneY()
   param.lambdadeltaval = 1.0;
   param.sigma          = 0.01;
   param.maxit          = 500;
-  param.konv           = 0.0001;
+  param.konv           = 0.00001;
   param.konvtime       = true;
   param.time           = false;
   param.test           = true;
