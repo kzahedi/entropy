@@ -29,7 +29,6 @@ namespace entropy
   {
     class IterativeScaling
     {
-
       public:
         IterativeScaling(DContainer &xData,
                          DContainer &yData,

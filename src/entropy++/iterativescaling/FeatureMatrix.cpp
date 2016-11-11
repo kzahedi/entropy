@@ -1,5 +1,7 @@
 #include "FeatureMatrix.h"
-//DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systX, vector<vector<int> > systY, double lambdavalue
+
+using namespace entropy::iterativescaling;
+
 FeatureMatrix::FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systX, vector<vector<int> > systY,double lambdavalue)
   :ITMatrix(eX,eY,aX,aY,systX, systY,lambdavalue)
 {

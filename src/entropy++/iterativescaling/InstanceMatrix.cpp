@@ -1,5 +1,7 @@
 #include "InstanceMatrix.h"
 
+using namespace entropy::iterativescaling;
+
 //die Alphabetwerte als double
 InstanceMatrix:: InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, double valuelambda)
   :ITMatrix(eX,eY,aX,aY,systX, systY,valuelambda)

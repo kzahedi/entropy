@@ -15,22 +15,28 @@
 
 using namespace std;
 
-class InstanceMatrix : public ITMatrix{
+namespace entropy
+{
+  namespace iterativescaling
+  {
+    class InstanceMatrix : public ITMatrix
+    {
+      public:
+        //InstanceMatrix();
+        InstanceMatrix(DContainer  &eX, DContainer  &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, double valuelambda);
+        InstanceMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, double valuelambda);
+        ~InstanceMatrix();
+        // TODO copying vectors can be expensive
 
-public:
-  //InstanceMatrix();
-  InstanceMatrix(DContainer  &eX, DContainer  &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, double valuelambda);
-  InstanceMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, double valuelambda);
-  ~InstanceMatrix();
-  // TODO copying vectors can be expensive
+        ivector getInstanceMatrixX(int feat, int deltai, int deltaj);
+        ivector getInstanceMatrixY(int feat, int deltai, int deltaj);
 
-  ivector getInstanceMatrixX(int feat, int deltai, int deltaj);
-  ivector getInstanceMatrixY(int feat, int deltai, int deltaj);
+      private:
+        void _getMatrix(double valuelambda);
+        // TODO check for a better way to store
+        ivvector ***_mat;
 
-private:
-  void _getMatrix(double valuelambda);
-  // TODO check for a better way to store
-  ivvector ***_mat;
-
-};
+    };
+  }
+}
 #endif

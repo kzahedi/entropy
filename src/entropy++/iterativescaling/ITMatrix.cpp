@@ -1,5 +1,7 @@
 #include "ITMatrix.h"
 
+using namespace entropy::iterativescaling;
+
 ITMatrix::ITMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systX, vector<vector<int> > systY, double lambdavalue)
 {
   _valX        = &eX;

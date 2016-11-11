@@ -1,5 +1,7 @@
 #include "Feature.h"
 
+using namespace entropy::iterativescaling;
+
 Feature::Feature()
 {
        _X = new DContainer(0, 0);
