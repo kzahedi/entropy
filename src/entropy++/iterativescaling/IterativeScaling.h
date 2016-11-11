@@ -35,24 +35,24 @@ namespace entropy
                          DContainer &yData,
                          DContainer &xAlphabet,
                          DContainer &yAlphabet,
-                         vector<vector<int> > systX, // TODO: what does syst mean?
-                         vector<vector<int> > systY, 
+                         ivvector systX, // TODO: what does syst mean?
+                         ivvector systY, 
                          IsParameter param,
-                         bool isGis);
+                         bool useFeatures);
         IterativeScaling(ULContainer &xData,
                          ULContainer &yData,
                          DContainer &xAlphabet,
                          DContainer &yAlphabet,
-                         vector<vector<int> > systX, // TODO: what does syst mean?
-                         vector<vector<int> > systY,
+                         ivvector systX, // TODO: what does syst mean?
+                         ivvector systY,
                          IsParameter param,
-                         bool isGis);
+                         bool useFeatures);
         IterativeScaling(int ColDataY,
                          DContainer &xData,
                          DContainer &xAlphabet,
                          DContainer &yAlphabet,
-                         vector<vector<int> > systX, // TODO: what does syst mean?
-                         vector<vector<int> > systY);
+                         ivvector systX, // TODO: what does syst mean?
+                         ivvector systY);
         ~IterativeScaling();
 
         double  prop(int rowX, int rowY);
@@ -60,31 +60,29 @@ namespace entropy
         double  propm(int rowX);
         double  getFeatureArraylambda(int feat, int indexLambdaX, int indexLambdaY);
         void    setFeatureArraylambda(int feat, int indexLambdaX, int indexLambdaY, double valuelambda);
-        vector<double> index(int index,bool x, int sizeCol);
+        dvector index(int index,bool x, int sizeCol);
 
       protected:
-        double***      __getobs();
+        double***   __getobs();
 
-        int             _sizeX;
-        int             _sizeY;
-        int             _sizeColDataX;
-        int             _sizeColDataY;
-        int             _sizeRowDataX;
-        int             _sizeRowDataY;
-        int             _sizeSystX;
-        double***       _observed;
-        bool            _isGis;
+        int         _sizeX;
+        int         _sizeY;
+        int         _sizeColDataX;
+        int         _sizeColDataY;
+        int         _sizeRowDataX;
+        int         _sizeRowDataY;
+        int         _sizeSystX;
+        double***   _observed;
 
-        DContainer*     _yAlphabet;
-        DContainer*     _xAlphabet;
-        DContainer*     _yData;
-        DContainer*     _xData;
-        FeatureMatrix*  _FM;
-        InstanceMatrix* _IM;
-        IsParameter     _param;
+        DContainer* _yAlphabet;
+        DContainer* _xAlphabet;
+        DContainer* _yData;
+        DContainer* _xData;
+        ITMatrix*   _im;
+        IsParameter _param;
 
-        vector<vector<int> > _systX;
-        vector<vector<int> > _systY;
+        ivvector _systX;
+        ivvector _systY;
 
     };
   }

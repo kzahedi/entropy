@@ -19,18 +19,18 @@ class InstanceMatrix : public ITMatrix{
 
 public:
   //InstanceMatrix();
-  InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, double valuelambda);
-  InstanceMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, double valuelambda);
+  InstanceMatrix(DContainer  &eX, DContainer  &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, double valuelambda);
+  InstanceMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, double valuelambda);
   ~InstanceMatrix();
   // TODO copying vectors can be expensive
 
-  vector<int> getInstanceMatrixX(int feat, int deltai, int deltaj);
-  vector<int> getInstanceMatrixY(int feat, int deltai, int deltaj);
+  ivector getInstanceMatrixX(int feat, int deltai, int deltaj);
+  ivector getInstanceMatrixY(int feat, int deltai, int deltaj);
 
 private:
   void _getMatrix(double valuelambda);
   // TODO check for a better way to store
-  vector<vector<int> > ***_mat;
+  ivvector ***_mat;
 
 };
 #endif

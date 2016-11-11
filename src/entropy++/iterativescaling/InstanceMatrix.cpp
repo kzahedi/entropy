@@ -1,13 +1,13 @@
 #include "InstanceMatrix.h"
 
 //die Alphabetwerte als double
-InstanceMatrix:: InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, double valuelambda)
+InstanceMatrix:: InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, double valuelambda)
   :ITMatrix(eX,eY,aX,aY,systX, systY,valuelambda)
 {
   _getMatrix(valuelambda);
 }
 //die Alphabetwerte als unsigned long
-InstanceMatrix:: InstanceMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, double valuelambda)
+InstanceMatrix:: InstanceMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, double valuelambda)
   :ITMatrix(eX,eY,aX,aY,systX, systY,valuelambda)
 {
   _getMatrix(valuelambda);
@@ -32,13 +32,13 @@ InstanceMatrix:: ~InstanceMatrix()
   delete [] _mat;
 }
 
-vector<int> InstanceMatrix::getInstanceMatrixX(int feat, int deltai, int deltaj)
+ivector InstanceMatrix::getInstanceMatrixX(int feat, int deltai, int deltaj)
 {
    assert(feat<_systX.size());
    assert(deltai<pow(_sizeX,_systX[feat].size()) && deltaj< pow(_sizeY,_systY[feat].size()));
 	return _mat[feat][deltai][deltaj][0];
 }
-vector<int> InstanceMatrix::getInstanceMatrixY(int feat, int deltai, int deltaj)
+ivector InstanceMatrix::getInstanceMatrixY(int feat, int deltai, int deltaj)
 {
   assert(feat<_systX.size());
   assert(deltai<pow(_sizeX,_systX[feat].size()) && deltaj< pow(_sizeY,_systY[feat].size()));
@@ -51,14 +51,14 @@ vector<int> InstanceMatrix::getInstanceMatrixY(int feat, int deltai, int deltaj)
 void InstanceMatrix::_getMatrix(double valuelambda)
 {
 	//Matrix erstellen
-	vector<vector<int> > V(2,vector<int>(0));
-	_mat = new vector<vector<int> >**[_systX.size()];
+	ivvector V(2,ivector(0));
+	_mat = new ivvector**[_systX.size()];
 	for(int i=0;i<_systX.size();i++)
 	{
-	  _mat[i]= new vector<vector<int> >*[(int) pow(_sizeX,_systX[i].size())];
+	  _mat[i]= new ivvector*[(int) pow(_sizeX,_systX[i].size())];
 	  for(int k=0;k<pow(_sizeX,_systX[i].size());k++)
 	  {
-	    _mat[i][k]= new vector<vector<int> >[(int) pow(_sizeY,_systY[i].size())];
+	    _mat[i][k]= new ivvector[(int) pow(_sizeY,_systY[i].size())];
 	    for(int l=0;l<pow(_sizeY,_systY[i].size());l++)
 	    {
 	   	  _mat[i][k][l]=V;
