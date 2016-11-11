@@ -27,9 +27,10 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(/usr/local/include)
 link_directories(/usr/local/lib)
 
-include_directories(~/local/include)
-link_directories(~/local/lib)
-
+if(UNIX AND NOT APPLE)
+  include_directories(~/local/include)
+  link_directories(~/local/lib)
+endif(UNIX AND NOT APPLE)
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED filesystem system)

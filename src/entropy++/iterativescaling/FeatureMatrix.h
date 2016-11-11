@@ -21,18 +21,18 @@ namespace entropy
     class FeatureMatrix :public ITMatrix
     {
       public:
-        FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY,double lambdavalue);
-        FeatureMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY,double lambdavalue);
+        FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY,double lambdavalue);
+        FeatureMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY,double lambdavalue);
         FeatureMatrix();
         ~FeatureMatrix();
 
-        vector<int> getMatrixIndexFeat(int i,int j);
-        vector<int> getMatrixIndexdX(int i,int j);
-        vector<int> getMatrixIndexdY(int i,int j);
+        ivector getMatrixIndexFeat(int i,int j);
+        ivector getMatrixIndexdX(int i,int j);
+        ivector getMatrixIndexdY(int i,int j);
 
       private:
         void __getMatrix(double valuelambda);
-        vector<vector<int> > **_mat;
+        ivvector **_mat;
         int  _sizeAlphY;
     };
   }

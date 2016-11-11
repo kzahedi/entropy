@@ -22,20 +22,21 @@ namespace entropy
     {
       public:
         Feature();
-        Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int systXsize,int systYsize , double valuelambda);
-        Feature(DContainer &aX, DContainer &aY,int colValX, int colValY, int sizeSystX,int sizeSystY, SparseMatrix &lambda);
+        Feature(int sizeX, int sizeY, double valuelambda);
+        Feature(int sizeX, int sizeY, SparseMatrix &lambda);
         ~Feature();
 
         friend std::ostream& operator<<(std::ostream& str,Feature& feature){
-          str<< "Feature:" <<endl;
-          for(int i=0; i<feature._sizeDeltaX; i++){
-            for(int j=0; j<feature._sizeDeltaY; j++){
-              str<< feature.getLambda(i,j) << " ";
+          str << "Feature:" << endl;
+          for(int i = 0; i < feature._sizeX; i++){
+            for(int j = 0; j < feature._sizeY; j++){
+              str << feature.getLambda(i,j) << " ";
             }
-            str<< endl;
+            str << endl;
           }
           return str;
         };
+
         int    getLambdaSize();
         double getLambda(int i, int j);
         void   setLambda(int i, int j, double newvalue);
@@ -43,13 +44,9 @@ namespace entropy
         Feature& operator=(const Feature& c);
 
       private:
-        int 		_sizeDeltaX;
-        int			_sizeDeltaY;
-        int         _sizeX;
-        int         _sizeY;
-        DContainer* _X;
-        DContainer* _Y;
-        SparseMatrix*     _lambda;
+        int           _sizeX;
+        int           _sizeY;
+        SparseMatrix* _lambda;
     };
   }
 }

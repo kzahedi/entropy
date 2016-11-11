@@ -2,7 +2,7 @@
 
 using namespace entropy::iterativescaling;
 
-IterativeScaling::IterativeScaling(DContainer &xData,
+IterativeScalingBase::IterativeScalingBase(DContainer &xData,
                                    DContainer &yData,
                                    DContainer &xAlphabet,
                                    DContainer &yAlphabet,
@@ -39,7 +39,7 @@ IterativeScaling::IterativeScaling(DContainer &xData,
 }
 
 // Konstruktor fuer Alphabete mit unsigned long
-IterativeScaling::IterativeScaling(ULContainer &xData,
+IterativeScalingBase::IterativeScalingBase(ULContainer &xData,
                                    ULContainer &yData,
                                    DContainer &xAlphabet,
                                    DContainer &yAlphabet,
@@ -78,7 +78,7 @@ IterativeScaling::IterativeScaling(ULContainer &xData,
   _observed = __getobs();
 }
 
-IterativeScaling::IterativeScaling(int ColDataY,
+IterativeScalingBase::IterativeScalingBase(int ColDataY,
                                    DContainer &xData,
                                    DContainer &xAlphabet,
                                    DContainer &yAlphabet,
@@ -103,8 +103,8 @@ IterativeScaling::IterativeScaling(int ColDataY,
 }
 
 // p(y | x)
-// double IterativeScaling::prop(int rowX,  int indexY)
-double IterativeScaling::prop(int rowX, int indexY)
+// double IterativeScalingBase::prop(int rowX,  int indexY)
+double IterativeScalingBase::prop(int rowX, int indexY)
 {
   double featexp  = 0;
   double featnorm = 0;
@@ -129,8 +129,8 @@ double IterativeScaling::prop(int rowX, int indexY)
 }
 
 // p(y | x)
-// double IterativeScaling::prop(int indexX, int indexY)
-double IterativeScaling::propAlphX(int indexX, int rowY)
+// double IterativeScalingBase::prop(int indexX, int indexY)
+double IterativeScalingBase::propAlphX(int indexX, int rowY)
 {
   double featexp  = 0;
   double featnorm = 0;
@@ -153,7 +153,7 @@ double IterativeScaling::propAlphX(int indexX, int rowY)
 }
 
 // P(x)
-double IterativeScaling::propm(int rowX)
+double IterativeScalingBase::propm(int rowX)
 {
   double z        = 0.0;
   double exponent = 0.0;
@@ -188,14 +188,14 @@ double IterativeScaling::propm(int rowX)
   return z / n;
 }
 
-double IterativeScaling::getFeatureArraylambda(int Feati, int ilambdaX, int ilambdaY)
+double IterativeScalingBase::getFeatureArraylambda(int Feati, int ilambdaX, int ilambdaY)
 {
   assert(Feati<_systX.size()); //kontrolle der Parameter ilambdaX und ilambdaY findet in Feature statt
   return _im->getFeatureArraylambda(Feati, ilambdaX, ilambdaY);
 }
 
 // get observed
-double*** IterativeScaling::__getobs()
+double*** IterativeScalingBase::__getobs()
 {
   //erzeugen von observed
   _observed = new double**[_sizeSystX];
@@ -231,7 +231,7 @@ double*** IterativeScaling::__getobs()
   return _observed;
 }
 
-IterativeScaling::~IterativeScaling()
+IterativeScalingBase::~IterativeScalingBase()
 {
   if(_observed!=NULL)
   {
@@ -258,14 +258,14 @@ IterativeScaling::~IterativeScaling()
 }
 
 //veraendern der lambdas im Algorithmus funktioniert mit einer Methode in ITMatrix, hier nur zum erzeugen von Testwerten
-void IterativeScaling::setFeatureArraylambda(int feati, int ilambdaX, int ilambdaY,double valuelambda)
+void IterativeScalingBase::setFeatureArraylambda(int feati, int ilambdaX, int ilambdaY,double valuelambda)
 {
   assert(feati<_systX.size());
   _im->setFeatureArraylambda(feati, ilambdaX, ilambdaY, valuelambda);
 }
 
 // Berechnung der Alphabetreihe aus dem Index
-dvector IterativeScaling::index(int index, bool x, int sizeCol)
+dvector IterativeScalingBase::index(int index, bool x, int sizeCol)
 {
   int sizeAlph;
   dvector row;

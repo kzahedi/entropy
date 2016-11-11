@@ -1,5 +1,5 @@
-#ifndef __ITERATIVE_SCALING_H__
-#define __ITERATIVE_SCALING_H__
+#ifndef __ITERATIVE_SCALING_BASE_H__
+#define __ITERATIVE_SCALING_BASE_H__
 
 #include <entropy++/Csv.h>
 #include <entropy++/sparse/MC_MI.h>
@@ -27,10 +27,10 @@ namespace entropy
 {
   namespace iterativescaling
   {
-    class IterativeScaling
+    class IterativeScalingBase
     {
       public:
-        IterativeScaling(DContainer &xData,
+        IterativeScalingBase(DContainer &xData,
                          DContainer &yData,
                          DContainer &xAlphabet,
                          DContainer &yAlphabet,
@@ -38,7 +38,7 @@ namespace entropy
                          ivvector systY, 
                          IsParameter param,
                          bool useFeatures);
-        IterativeScaling(ULContainer &xData,
+        IterativeScalingBase(ULContainer &xData,
                          ULContainer &yData,
                          DContainer &xAlphabet,
                          DContainer &yAlphabet,
@@ -46,13 +46,13 @@ namespace entropy
                          ivvector systY,
                          IsParameter param,
                          bool useFeatures);
-        IterativeScaling(int ColDataY,
+        IterativeScalingBase(int ColDataY,
                          DContainer &xData,
                          DContainer &xAlphabet,
                          DContainer &yAlphabet,
                          ivvector systX, // TODO: what does syst mean?
                          ivvector systY);
-        ~IterativeScaling();
+        ~IterativeScalingBase();
 
         double  prop(int rowX, int rowY);
         double  propAlphX(int indexX, int rowY);
@@ -87,4 +87,4 @@ namespace entropy
   }
 }
 
-#endif
+#endif // __ITERATIVE_SCALING_BASE_H__

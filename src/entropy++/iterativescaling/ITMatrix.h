@@ -22,38 +22,38 @@ namespace entropy
     {
       public:
         ITMatrix();
-        ITMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systX, vector<vector<int> > systY, double lambdavalue);
-        ITMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY, vector<vector<int> > systX, vector<vector<int> > systY, double lambdavalue);
+        ITMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ivvector systX, ivvector systY, double lambdavalue);
+        ITMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY, ivvector systX, ivvector systY, double lambdavalue);
         virtual ~ITMatrix();
         double  getFeatureArraylambda(int i,int ilambdaX, int ilambdaY);
         double  getFeatureArrayvalue(int i,int rowX, int rowY);
         double  getFeatureArrayvalueAlphY(int feat,int rowX,int indexY);
         double  getFeatureArrayvalueAlphYAlphX(int feat,int indexX,int indexY);
-        int 	  getFeatureArraydelta(int i,int indexX, int indexY, int rowValX, int rowValY);
-        int     getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowValX, int indexValY);
-        int     getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int indexValX, int indexValY);
+        int 	  getFeatureArraydelta(int i,int indexX, int indexY, int rowDataX, int rowDataY);
+        int     getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowDataX, int indexDataY);
+        int     getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int indexDataX, int indexDataY);
         void    setFeatureArraylambda(int i, int ilambdaX, int ilambdaY,double valuelambda);
         vector<double> index(int index,bool x, int sizeCol);
 
       protected:
-        void    _FeatureArray(double valuelambda);
+        void         __featureArray(double valuelambda);
 
-        int         _sizeColValX;
-        int         _sizeColValY;
-        int         _sizeRowValX;
-        int         _sizeRowValY;
-        int         _sizeX;
-        int         _sizeY;
-        bool        _cmi;
-        vector<vector<int> > _systX;
-        vector<vector<int> > _systY;
-        DContainer* _valX;
-        DContainer* _valY;
+        int          _sizeColDataX;
+        int          _sizeColDataY;
+        int          _sizeRowDataX;
+        int          _sizeRowDataY;
+        int          _sizeX;
+        int          _sizeY;
+        bool         _cmi;
+        ivvector     _systX;
+        ivvector     _systY;
+        DContainer*  _valX;
+        DContainer*  _valY;
         ULContainer* _valXUL;
         ULContainer* _valYUL;
-        DContainer* _X;
-        DContainer* _Y;
-        Feature*    _FA;
+        DContainer*  _xAlphabet;
+        DContainer*  _yAlphabet;
+        Feature*     _featureArray;
     };
   }
 }
