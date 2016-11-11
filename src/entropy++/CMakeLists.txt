@@ -33,6 +33,13 @@ set(SRC sparse/CMI.cpp
   sparse/state/MC_W.cpp
   sparse/state/MI.cpp
 
+  iterativescaling/IterativeScaling.cpp
+  iterativescaling/Feature.cpp
+  iterativescaling/FeatureMatrix.cpp
+  # iterativescaling/FeatureMatrixsp.cpp
+  iterativescaling/InstanceMatrix.cpp
+  iterativescaling/ITMatrix.cpp
+
   SparseMatrix.cpp
   # Container.cpp
   Matrix.cpp
