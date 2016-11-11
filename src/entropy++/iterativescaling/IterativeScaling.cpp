@@ -2,88 +2,109 @@
 
 using namespace entropy::iterativescaling;
 
-// IterativeScaling::IterativeScaling(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue, bool gis)
-IterativeScaling::IterativeScaling(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, bool gis)
+IterativeScaling::IterativeScaling(DContainer &xData,
+                                   DContainer &yData,
+                                   DContainer &xAlphabet,
+                                   DContainer &yAlphabet,
+                                   vector<vector<int> > systX,
+                                   vector<vector<int> > systY,
+                                   IsParameter param,
+                                   bool isGis)
 {
-  assert(eX.rows() == eY.rows());
+  assert(xData.rows() == yData.rows());
   _param       = param;
-  _gis         = gis;
-  _valX        = &eX;
-  _valY        = &eY;
-  _X           = &aX;
-  _Y           = &aY;
+  _isGis       = isGis;
+  _xData       = &xData;
+  _yData       = &yData;
+  _xAlphabet   = &xAlphabet;
+  _yAlphabet   = &yAlphabet;
   _sizeSystX   = systX.size();
-  _sizeX       = _X->rows();
-  _sizeY       = _Y->rows();
-  _sizeColValY = _valY->columns();
-  _sizeColValX = _valX->columns();
-  _sizeRowValX = _valX->rows();
-  _sizeRowValY = _valY->rows();
+  _sizeX       = _xAlphabet->rows();
+  _sizeY       = _yAlphabet->rows();
+  _sizeColDataY = _yData->columns();
+  _sizeColDataX = _xData->columns();
+  _sizeRowDataX = _xData->rows();
+  _sizeRowDataY = _yData->rows();
   _systX       = systX;
   _systY       = systY;
 
-  if(_gis) // gis and csgis require different feature matrices
+  if(_isGis) // isGis and csisGis require different feature matrices
   {
-    _FM = new FeatureMatrix(*_valX,*_valY,*_X,*_Y, systX, systY, param.lambdavalue);
+    _FM = new FeatureMatrix(*_xData, *_yData, *_xAlphabet, *_yAlphabet, systX, systY, param.lambdavalue);
   }
   else
   {
-    _IM = new InstanceMatrix(*_valX,*_valY,*_X,*_Y, systX, systY, param.lambdavalue);
+    _IM = new InstanceMatrix(*_xData, *_yData, *_xAlphabet, *_yAlphabet, systX, systY, param.lambdavalue);
   }
-  _observed=__getobs();
+  _observed = __getobs();
 }
 // Konstruktor fuer Alphabete mit unsigned long
-IterativeScaling::IterativeScaling(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param, bool gis)
+IterativeScaling::IterativeScaling(ULContainer &xData,
+                                   ULContainer &yData,
+                                   DContainer &xAlphabet,
+                                   DContainer &yAlphabet,
+                                   vector<vector<int> > systX,
+                                   vector<vector<int> > systY,
+                                   IsParameter param,
+                                   bool isGis)
 {
-  assert(eX.rows() == eY.rows());
-  _param       = param;
-  _gis         = gis;
-  _valX        = NULL;
-  _valY        = NULL;
-  ULContainer *valX = &eX;
-  ULContainer *valY = &eY;
-  _X           = &aX;
-  _Y           = &aY;
-  _sizeSystX   = systX.size();
-  _sizeX       = _X->rows();
-  _sizeY       = _Y->rows();
-  _sizeColValY = valY->columns();
-  _sizeColValX = valX->columns();
-  _sizeRowValX = valX->rows();
-  _sizeRowValY = valY->rows();
-  _systX       = systX;
-  _systY       = systY;
-  if(_gis) // gis and csgis require different feature matrices
+  assert(xData.rows() == yData.rows());
+  _param            = param;
+  _isGis            = isGis;
+  _xData            = NULL;
+  _yData            = NULL;
+  ULContainer *valX = &xData;
+  ULContainer *valY = &yData;
+  _xAlphabet        = &xAlphabet;
+  _yAlphabet        = &yAlphabet;
+  _sizeSystX        = systX.size();
+  _sizeX            = _xAlphabet->rows();
+  _sizeY            = _yAlphabet->rows();
+  _sizeColDataY     = valY->columns();
+  _sizeColDataX     = valX->columns();
+  _sizeRowDataX     = valX->rows();
+  _sizeRowDataY     = valY->rows();
+  _systX            = systX;
+  _systY            = systY;
+
+  if(_isGis) // isGis and csisGis require different feature matrices
   {
-    _FM = new FeatureMatrix(*valX,*valY,*_X,*_Y, systX, systY, param.lambdavalue);
+    _FM = new FeatureMatrix(*valX,*valY,*_xAlphabet,*_yAlphabet, systX, systY, param.lambdavalue);
   }
   else
   {
-    _IM = new InstanceMatrix(*valX,*valY,*_X,*_Y, systX, systY, param.lambdavalue);
+    _IM = new InstanceMatrix(*valX,*valY,*_xAlphabet,*_yAlphabet, systX, systY, param.lambdavalue);
   }
-  _observed=__getobs();
+
+  _observed = __getobs();
 }
 
-IterativeScaling::IterativeScaling(int ColValY, DContainer &eX, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY)
+IterativeScaling::IterativeScaling(int ColDataY,
+                                   DContainer &xData,
+                                   DContainer &xAlphabet,
+                                   DContainer &yAlphabet,
+                                   vector<vector<int> > systX,
+                                   vector<vector<int> > systY)
 {
-  _systX       = systX;
-  _systY       = systY;
-  _gis         = true;
-  _X           = &aX;
-  _Y           = &aY;
-  _sizeSystX   = systX.size();
-  _sizeX       = _X->rows();
-  _sizeY       = _Y->rows();
-  _valX        = &eX;
-  _sizeColValY = ColValY;
-  _sizeColValX = (*_valX).columns();
-  _sizeRowValX = (*_valX).rows();
-  _valY        = new DContainer(_sizeRowValX,ColValY);
-  _sizeRowValY = _sizeRowValX;
-  _FM          = new FeatureMatrix(*_valX,*_valY,*_X,*_Y,systX,systY,1);
-  _IM          = NULL;
-  _observed    = NULL;
+  _isGis        = true;
+  _systX        = systX;
+  _systY        = systY;
+  _xAlphabet    = &xAlphabet;
+  _yAlphabet    = &yAlphabet;
+  _sizeSystX    = systX.size();
+  _sizeX        = _xAlphabet->rows();
+  _sizeY        = _yAlphabet->rows();
+  _xData        = &xData;
+  _sizeColDataY = ColDataY;
+  _sizeColDataX = (*_xData).columns();
+  _sizeRowDataX = (*_xData).rows();
+  _yData        = new DContainer(_sizeRowDataX,ColDataY);
+  _sizeRowDataY = _sizeRowDataX;
+  _FM           = new FeatureMatrix(*_xData,*_yData,*_xAlphabet,*_yAlphabet,systX,systY,1);
+  _IM           = NULL;
+  _observed     = NULL;
 }
+
 // p(y | x)
 // double IterativeScaling::prop(int rowX,  int indexY)
 double IterativeScaling::prop(int rowX, int indexY)
@@ -92,9 +113,10 @@ double IterativeScaling::prop(int rowX, int indexY)
   double featnorm = 0;
   double norm     = 0;
   double exponent = 1;
-  for(int feat=0; feat< _systX.size(); feat++)
+
+  for(int feat = 0; feat < _systX.size(); feat++)
   {
-    if(_gis)
+    if(_isGis)
     {
       featexp += (*_FM).getFeatureArrayvalueAlphY(feat,rowX, indexY);
     }
@@ -103,11 +125,12 @@ double IterativeScaling::prop(int rowX, int indexY)
       featexp += (*_IM).getFeatureArrayvalueAlphY(feat,rowX, indexY);
     }
   }
-  for(int yi=0;yi<pow(_Y->rows(),_sizeColValY);yi++)
+
+  for(int yi=0;yi<pow(_yAlphabet->rows(),_sizeColDataY);yi++)
   {
     for(int feat=0; feat< _systX.size(); feat++)
     {
-      if(_gis)
+      if(_isGis)
       {
         featnorm += (*_FM).getFeatureArrayvalueAlphY(feat,rowX,yi);
       }
@@ -119,8 +142,10 @@ double IterativeScaling::prop(int rowX, int indexY)
     norm     += exp(featnorm-featexp);
     featnorm  = 0;
   }
+
   return exponent/norm;
 }
+
 // p(y | x)
 // double IterativeScaling::prop(int indexX, int indexY)
 double IterativeScaling::propAlphX(int indexX, int rowY)
@@ -131,7 +156,7 @@ double IterativeScaling::propAlphX(int indexX, int rowY)
   double exponent = 1;
   for(int feat=0; feat< _systX.size(); feat++)
   {
-    if(_gis)
+    if(_isGis)
     {
       featexp += (*_FM).getFeatureArrayvalueAlphYAlphX(feat, indexX, rowY);
     }
@@ -140,11 +165,11 @@ double IterativeScaling::propAlphX(int indexX, int rowY)
       featexp += (*_IM).getFeatureArrayvalueAlphYAlphX(feat, indexX, rowY);
     }
   }
-  for(int yi=0;yi<pow(_Y->rows(),_sizeColValY);yi++)
+  for(int yi=0;yi<pow(_yAlphabet->rows(),_sizeColDataY);yi++)
   {
     for(int feat=0; feat< _systX.size(); feat++)
     {
-      if(_gis)
+      if(_isGis)
       {
         featnorm += (*_FM).getFeatureArrayvalueAlphYAlphX(feat,indexX,yi);
       }
@@ -158,15 +183,18 @@ double IterativeScaling::propAlphX(int indexX, int rowY)
   }
   return exponent/norm;
 }
+
 // P(x)
-double IterativeScaling::propm(int rowX){
-  double z=0;
-  double exponent=0;
-  for(int y=0;y<pow(_Y->rows(),_sizeColValY);y++)
+double IterativeScaling::propm(int rowX)
+{
+  double z        = 0.0;
+  double exponent = 0.0;
+
+  for(int y=0;y<pow(_yAlphabet->rows(),_sizeColDataY);y++)
   {
     for(int feat=0;feat<  _systX.size();feat++)
     {
-      if(_gis)
+      if(_isGis)
       {
         exponent+=(*_FM).getFeatureArrayvalueAlphYAlphX(feat,rowX,y);
       }
@@ -179,15 +207,17 @@ double IterativeScaling::propm(int rowX){
     z+=exp(exponent);
     exponent=0;
   }
-  double n;
-  double nexp=0;
-  for(int x=0;x<pow(_X->rows(),_sizeColValX);x++)
+
+  double n    = 0.0;
+  double nexp = 0.0;
+
+  for(int x=0; x <pow(_xAlphabet->rows(),_sizeColDataX);x++)
   {
-    for(int y=0;y<pow(_Y->rows(),_sizeColValY);y++)
+    for(int y=0;y<pow(_yAlphabet->rows(),_sizeColDataY);y++)
     {
       for(int feat=0;feat< _systX.size();feat++)
       {
-        if(_gis)
+        if(_isGis)
         {
           exponent+=(*_FM).getFeatureArrayvalueAlphYAlphX(feat,x,y);
         }
@@ -195,7 +225,6 @@ double IterativeScaling::propm(int rowX){
         {
           exponent+=(*_IM).getFeatureArrayvalueAlphYAlphX(feat,x,y);
         }
-
       }
       nexp +=exp(exponent);
       exponent=0;
@@ -210,7 +239,7 @@ double IterativeScaling::getFeatureArraylambda(int Feati, int ilambdaX, int ilam
 {
   assert(Feati<_systX.size()); //kontrolle der Parameter ilambdaX und ilambdaY findet in Feature statt
   double lambda = 0.0;
-  if(_gis)
+  if(_isGis)
   {
     lambda = _FM->getFeatureArraylambda(Feati, ilambdaX, ilambdaY);
   }
@@ -228,26 +257,26 @@ double*** IterativeScaling::__getobs()
   _observed = new double**[_sizeSystX];
   for(int i=0; i<_systX.size(); i++)
   {
-    _observed[i]=new double*[(int) pow(_X->rows(),_systX[i].size())];
-    for(int k=0; k< pow(_X->rows(),_systX[i].size()); k++)
+    _observed[i]=new double*[(int) pow(_xAlphabet->rows(),_systX[i].size())];
+    for(int k=0; k< pow(_xAlphabet->rows(),_systX[i].size()); k++)
     {
-      _observed[i][k]= new double[(int) pow(_Y->rows(),_systY[i].size())];
-      for(int l=0; l< pow(_Y->rows(),_systY[i].size());l++)
+      _observed[i][k]= new double[(int) pow(_yAlphabet->rows(),_systY[i].size())];
+      for(int l=0; l< pow(_yAlphabet->rows(),_systY[i].size());l++)
       {
         _observed[i][k][l] = 0.0;
       }
     }
   }
   // fuellen von observed
-  for(int i=0;i<_sizeRowValX;i++ )
+  for(int i=0;i<_sizeRowDataX;i++ )
   {
     for(int feat=0; feat< _sizeSystX;feat++)
     {
-      for(int delti = 0; delti<pow(_X->rows(),_systX[feat].size()); delti++)
+      for(int delti = 0; delti<pow(_xAlphabet->rows(),_systX[feat].size()); delti++)
       {
-        for(int deltj=0; deltj<pow(_Y->rows(),_systY[feat].size()); deltj++)
+        for(int deltj=0; deltj<pow(_yAlphabet->rows(),_systY[feat].size()); deltj++)
         {
-          if(_gis)
+          if(_isGis)
           {
             if(_FM->getFeatureArraydelta(feat,delti,deltj,i,i)==1)
             {
@@ -272,7 +301,7 @@ IterativeScaling::~IterativeScaling(){
   {
     for(int i=0;i<_sizeSystX;i++)
     {
-      for(int k=0;k<pow(_X->rows(),_systX[i].size());k++)
+      for(int k=0;k<pow(_xAlphabet->rows(),_systX[i].size());k++)
       {
         delete [] _observed[i][k];
       }
@@ -294,7 +323,7 @@ IterativeScaling::~IterativeScaling(){
 //veraendern der lambdas im Algorithmus funktioniert mit einer Methode in ITMatrix, hier nur zum erzeugen von Testwerten
 void IterativeScaling::setFeatureArraylambda(int feati, int ilambdaX, int ilambdaY,double valuelambda){
   assert(feati<_systX.size());
-  assert(_gis == true);
+  assert(_isGis == true);
   _FM->setFeatureArraylambda(feati,ilambdaX,ilambdaY,valuelambda);
 }
 
@@ -305,11 +334,11 @@ vector<double> IterativeScaling::index(int index,bool x,int sizeCol)
   vector<double> zeile;
   double z;
   if(x){
-    assert(index<pow(_X->rows(),sizeCol));
+    assert(index<pow(_xAlphabet->rows(),sizeCol));
     sizeAlph=_sizeX;
   }
   else{
-    assert(index<pow(_Y->rows(),sizeCol));
+    assert(index<pow(_yAlphabet->rows(),sizeCol));
     sizeAlph=_sizeY;
   }
   for(int i = sizeCol; i>0 ; i--)
@@ -318,10 +347,10 @@ vector<double> IterativeScaling::index(int index,bool x,int sizeCol)
     z = z/ (pow(sizeAlph,i-1));
     int j= (int) z;
     if(x){
-      zeile.push_back((*_X)(j,0));
+      zeile.push_back((*_xAlphabet)(j,0));
     }
     else{
-      zeile.push_back((*_Y)(j,0));
+      zeile.push_back((*_yAlphabet)(j,0));
     }
   }
   return zeile;

@@ -31,19 +31,30 @@ namespace entropy
     {
 
       public:
-        // IterativeScaling(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,bool GIS);
-        IterativeScaling(DContainer &xData, DContainer &yData,
-                         DContainer &xAlphabet, DContainer &yAlphabet,
-                         vector<vector<int> > systX,vector<vector<int> > systY, 
+        IterativeScaling(DContainer &xData,
+                         DContainer &yData,
+                         DContainer &xAlphabet,
+                         DContainer &yAlphabet,
+                         vector<vector<int> > systX, // TODO: what does syst mean?
+                         vector<vector<int> > systY, 
                          IsParameter param,
-                         bool gis);
-        IterativeScaling(ULContainer &eX, ULContainer &eY,
-                         DContainer &aX, DContainer &aY,
-                         vector<vector<int> > systX,vector<vector<int> > systY,
+                         bool isGis);
+        IterativeScaling(ULContainer &xData,
+                         ULContainer &yData,
+                         DContainer &xAlphabet,
+                         DContainer &yAlphabet,
+                         vector<vector<int> > systX, // TODO: what does syst mean?
+                         vector<vector<int> > systY,
                          IsParameter param,
-                         bool gis);
-        IterativeScaling(int ColValY, DContainer &eX,DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY);
+                         bool isGis);
+        IterativeScaling(int ColDataY,
+                         DContainer &xData,
+                         DContainer &xAlphabet,
+                         DContainer &yAlphabet,
+                         vector<vector<int> > systX, // TODO: what does syst mean?
+                         vector<vector<int> > systY);
         ~IterativeScaling();
+
         double  prop(int rowX, int rowY);
         double  propAlphX(int indexX, int rowY);
         double  propm(int rowX);
@@ -56,23 +67,25 @@ namespace entropy
 
         int             _sizeX;
         int             _sizeY;
-        int             _sizeColValX;
-        int             _sizeColValY;
-        int             _sizeRowValX;
-        int             _sizeRowValY;
+        int             _sizeColDataX;
+        int             _sizeColDataY;
+        int             _sizeRowDataX;
+        int             _sizeRowDataY;
         int             _sizeSystX;
         double***       _observed;
-        bool            _gis;
-        vector<vector<int> > _systX;
-        vector<vector<int> > _systY;
+        bool            _isGis;
 
-        DContainer*     _Y;
-        DContainer*     _X;
-        DContainer*     _valY;
-        DContainer*     _valX;
+        DContainer*     _yAlphabet;
+        DContainer*     _xAlphabet;
+        DContainer*     _yData;
+        DContainer*     _xData;
         FeatureMatrix*  _FM;
         InstanceMatrix* _IM;
         IsParameter     _param;
+
+        vector<vector<int> > _systX;
+        vector<vector<int> > _systY;
+
     };
   }
 }
