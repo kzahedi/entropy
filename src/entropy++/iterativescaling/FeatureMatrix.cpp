@@ -2,10 +2,10 @@
 
 using namespace entropy::iterativescaling;
 
-FeatureMatrix::FeatureMatrix(DContainer &xData,
-                             DContainer &yData,
-                             DContainer &xAlphabet,
-                             DContainer &yAlphabet,
+FeatureMatrix::FeatureMatrix(DContainer *xData,
+                             DContainer *yData,
+                             DContainer *xAlphabet,
+                             DContainer *yAlphabet,
                              ivvector systX,
                              ivvector systY,
                              double lambdavalue)
@@ -15,10 +15,10 @@ FeatureMatrix::FeatureMatrix(DContainer &xData,
   __getMatrix(lambdavalue);
 }
 
-FeatureMatrix::FeatureMatrix(ULContainer &xData,
-                             ULContainer &yData,
-                             DContainer &xAlphabet,
-                             DContainer &yAlphabet,
+FeatureMatrix::FeatureMatrix(ULContainer *xData,
+                             ULContainer *yData,
+                             DContainer *xAlphabet,
+                             DContainer *yAlphabet,
                              ivvector systX,
                              ivvector systY,
                              double lambdavalue)

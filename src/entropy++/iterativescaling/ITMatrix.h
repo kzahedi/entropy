@@ -22,8 +22,8 @@ namespace entropy
     {
       public:
         ITMatrix();
-        ITMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY, ivvector systX, ivvector systY, double lambdavalue);
-        ITMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY, ivvector systX, ivvector systY, double lambdavalue);
+        ITMatrix(DContainer *eX, DContainer *eY, DContainer *aX, DContainer *aY, ivvector systX, ivvector systY, double lambdavalue);
+        ITMatrix(ULContainer *eX, ULContainer *eY, DContainer *aX, DContainer *aY, ivvector systX, ivvector systY, double lambdavalue);
         virtual ~ITMatrix();
         double  getFeatureArraylambda(int i,int ilambdaX, int ilambdaY);
         double  getFeatureArrayvalue(int i,int rowX, int rowY);

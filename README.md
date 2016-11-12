@@ -27,3 +27,6 @@ MC_W and MC_MI are available and more information about these measures can be fo
 The file examples/hopping/mc.cpp contains the calculations that lead to the results discussed in the paper above. 
 
 The files and data used in that publication can also be found in the directory <b> matlab</b>. Running the script <b> analyse_hopping_data </b> will produce the results found in the publication.
+
+### Authors
+Iterative Scaling Algorithms were implemented by Carlotta Langer

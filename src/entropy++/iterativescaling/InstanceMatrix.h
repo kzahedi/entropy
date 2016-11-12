@@ -23,17 +23,17 @@ namespace entropy
     {
       public:
         //InstanceMatrix();
-        InstanceMatrix(DContainer &xData,
-                       DContainer &yData,
-                       DContainer &xAlphabet,
-                       DContainer &yAlphabet,
+        InstanceMatrix(DContainer *xData,
+                       DContainer *yData,
+                       DContainer *xAlphabet,
+                       DContainer *yAlphabet,
                        ivvector systX,
                        ivvector systY,
                        double valuelambda);
-        InstanceMatrix(ULContainer &xData,
-                       ULContainer &yData,
-                       DContainer &xAlphabet,
-                       DContainer &yAlphabet,
+        InstanceMatrix(ULContainer *xData,
+                       ULContainer *yData,
+                       DContainer *xAlphabet,
+                       DContainer *yAlphabet,
                        ivvector systX,
                        ivvector systY,
                        double valuelambda);

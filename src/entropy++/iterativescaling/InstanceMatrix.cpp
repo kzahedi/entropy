@@ -3,10 +3,10 @@
 using namespace entropy::iterativescaling;
 
 //die Alphabetwerte als double
-InstanceMatrix::InstanceMatrix(DContainer &xData,
-                                DContainer &yData,
-                                DContainer &xAlphabet,
-                                DContainer &yAlphabet,
+InstanceMatrix::InstanceMatrix(DContainer *xData,
+                                DContainer *yData,
+                                DContainer *xAlphabet,
+                                DContainer *yAlphabet,
                                 ivvector systX,
                                 ivvector systY,
                                 double valuelambda)
@@ -15,10 +15,10 @@ InstanceMatrix::InstanceMatrix(DContainer &xData,
   __getMatrix(valuelambda);
 }
 //die Alphabetwerte als unsigned long
-InstanceMatrix::InstanceMatrix(ULContainer &xData,
-                                ULContainer &yData,
-                                DContainer &xAlphabet,
-                                DContainer &yAlphabet,
+InstanceMatrix::InstanceMatrix(ULContainer *xData,
+                                ULContainer *yData,
+                                DContainer *xAlphabet,
+                                DContainer *yAlphabet,
                                 ivvector systX,
                                 ivvector systY,
                                 double valuelambda)

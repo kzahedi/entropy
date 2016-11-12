@@ -4,10 +4,10 @@ using namespace entropy::iterativescaling::scgis;
 
 #define EPSILON 0.00000001
 
-IterativeScaling::IterativeScaling(DContainer &xData,
-             DContainer &yData,
-             DContainer &xAlphabet,
-             DContainer &yAlphabet,
+IterativeScaling::IterativeScaling(DContainer *xData,
+             DContainer *yData,
+             DContainer *xAlphabet,
+             DContainer *yAlphabet,
              ivvector systX,
              ivvector systY,
              IsParameter param)
@@ -58,10 +58,10 @@ IterativeScaling::IterativeScaling(DContainer &xData,
   }
 }
 
-IterativeScaling::IterativeScaling(ULContainer &xData,
-             ULContainer &yData,
-             DContainer &xAlphabet,
-             DContainer &yAlphabet,
+IterativeScaling::IterativeScaling(ULContainer *xData,
+             ULContainer *yData,
+             DContainer *xAlphabet,
+             DContainer *yAlphabet,
              ivvector systX,
              ivvector systY,
              IsParameter param)

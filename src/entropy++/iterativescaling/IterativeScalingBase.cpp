@@ -2,21 +2,21 @@
 
 using namespace entropy::iterativescaling;
 
-IterativeScalingBase::IterativeScalingBase(DContainer &xData,
-                                           DContainer &yData,
-                                           DContainer &xAlphabet,
-                                           DContainer &yAlphabet,
+IterativeScalingBase::IterativeScalingBase(DContainer *xData,
+                                           DContainer *yData,
+                                           DContainer *xAlphabet,
+                                           DContainer *yAlphabet,
                                            ivvector systX,
                                            ivvector systY,
                                            IsParameter param,
                                            bool useFeatures)
 {
-  assert(xData.rows() == yData.rows());
+  assert(xData->rows() == yData->rows());
   _param       = param;
-  _xData       = &xData;
-  _yData       = &yData;
-  _xAlphabet   = &xAlphabet;
-  _yAlphabet   = &yAlphabet;
+  _xData       = xData;
+  _yData       = yData;
+  _xAlphabet   = xAlphabet;
+  _yAlphabet   = yAlphabet;
   _sizeSystX   = systX.size();
   _sizeX       = _xAlphabet->rows();
   _sizeY       = _yAlphabet->rows();
@@ -29,20 +29,20 @@ IterativeScalingBase::IterativeScalingBase(DContainer &xData,
 
   if(useFeatures) // isGis and csisGis require different feature matrices
   {
-    _imatrix = new FeatureMatrix(*_xData,
-                                 *_yData,
-                                 *_xAlphabet,
-                                 *_yAlphabet,
+    _imatrix = new FeatureMatrix(_xData,
+                                 _yData,
+                                 _xAlphabet,
+                                 _yAlphabet,
                                  systX,
                                  systY,
                                  param.lambdavalue);
   }
   else
   {
-    _imatrix = new InstanceMatrix(*_xData,
-                                  *_yData,
-                                  *_xAlphabet,
-                                  *_yAlphabet,
+    _imatrix = new InstanceMatrix(_xData,
+                                  _yData,
+                                  _xAlphabet,
+                                  _yAlphabet,
                                   systX,
                                   systY,
                                   param.lambdavalue);
@@ -51,23 +51,23 @@ IterativeScalingBase::IterativeScalingBase(DContainer &xData,
 }
 
 // Konstruktor fuer Alphabete mit unsigned long
-IterativeScalingBase::IterativeScalingBase(ULContainer &xData,
-                                           ULContainer &yData,
-                                           DContainer &xAlphabet,
-                                           DContainer &yAlphabet,
+IterativeScalingBase::IterativeScalingBase(ULContainer *xData,
+                                           ULContainer *yData,
+                                           DContainer *xAlphabet,
+                                           DContainer *yAlphabet,
                                            ivvector systX,
                                            ivvector systY,
                                            IsParameter param,
                                            bool useFeatures)
 {
-  assert(xData.rows() == yData.rows());
+  assert(xData->rows() == yData->rows());
   _param            = param;
   _xData            = NULL;
   _yData            = NULL;
-  ULContainer *valX = &xData;
-  ULContainer *valY = &yData;
-  _xAlphabet        = &xAlphabet;
-  _yAlphabet        = &yAlphabet;
+  ULContainer *valX = xData;
+  ULContainer *valY = yData;
+  _xAlphabet        = xAlphabet;
+  _yAlphabet        = yAlphabet;
   _sizeSystX        = systX.size();
   _sizeX            = _xAlphabet->rows();
   _sizeY            = _yAlphabet->rows();
@@ -80,51 +80,51 @@ IterativeScalingBase::IterativeScalingBase(ULContainer &xData,
 
   if(useFeatures) // isGis and csisGis require different feature matrices
   {
-    _imatrix = new FeatureMatrix(*valX,
-                            *valY,
-                            *_xAlphabet,
-                            *_yAlphabet,
-                            systX,
-                            systY,
-                            param.lambdavalue);
+    _imatrix = new FeatureMatrix(valX,
+                                 valY,
+                                 _xAlphabet,
+                                 _yAlphabet,
+                                 systX,
+                                 systY,
+                                 param.lambdavalue);
   }
   else
   {
-    _imatrix = new InstanceMatrix(*valX,
-                             *valY,
-                             *_xAlphabet,
-                             *_yAlphabet,
-                             systX,
-                             systY,
-                             param.lambdavalue);
+    _imatrix = new InstanceMatrix(valX,
+                                  valY,
+                                  _xAlphabet,
+                                  _yAlphabet,
+                                  systX,
+                                  systY,
+                                  param.lambdavalue);
   }
   _observed = __getobs();
 }
 
 IterativeScalingBase::IterativeScalingBase(int ColDataY,
-                                           DContainer &xData,
-                                           DContainer &xAlphabet,
-                                           DContainer &yAlphabet,
+                                           DContainer *xData,
+                                           DContainer *xAlphabet,
+                                           DContainer *yAlphabet,
                                            ivvector   systX,
                                            ivvector   systY)
 {
   _systX        = systX;
   _systY        = systY;
-  _xAlphabet    = &xAlphabet;
-  _yAlphabet    = &yAlphabet;
+  _xAlphabet    = xAlphabet;
+  _yAlphabet    = yAlphabet;
   _sizeSystX    = systX.size();
   _sizeX        = _xAlphabet->rows();
   _sizeY        = _yAlphabet->rows();
-  _xData        = &xData;
+  _xData        = xData;
   _sizeColDataY = ColDataY;
   _sizeColDataX = _xData->columns();
   _sizeRowDataX = _xData->rows();
   _yData        = new DContainer(_sizeRowDataX,ColDataY);
   _sizeRowDataY = _sizeRowDataX;
-  _imatrix           = new FeatureMatrix(*_xData,
-                                    *_yData,
-                                    *_xAlphabet,
-                                    *_yAlphabet,
+  _imatrix      = new FeatureMatrix(_xData,
+                                    _yData,
+                                    _xAlphabet,
+                                    _yAlphabet,
                                     systX,
                                     systY,
                                     1);

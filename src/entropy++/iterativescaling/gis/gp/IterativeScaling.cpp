@@ -3,10 +3,10 @@
 using namespace entropy::iterativescaling::gp;
 
 //training data, alphabete , startwert fuer lambda, startwert fuer delta, wert fuer sigma, test auf time, sekunden fuer den test
-IterativeScaling::IterativeScaling(DContainer &xData,
-             DContainer &yData,
-             DContainer &xAlphabet,
-             DContainer &yAlphabet,
+IterativeScaling::IterativeScaling(DContainer *xData,
+             DContainer *yData,
+             DContainer *xAlphabet,
+             DContainer *yAlphabet,
              ivvector systX,
              ivvector systY,
              IsParameter param)
@@ -64,10 +64,10 @@ IterativeScaling::IterativeScaling(DContainer &xData,
   }
 }
 
-IterativeScaling::IterativeScaling(ULContainer &xData,
-             ULContainer &yData,
-             DContainer &xAlphabet,
-             DContainer &yAlphabet,
+IterativeScaling::IterativeScaling(ULContainer *xData,
+             ULContainer *yData,
+             DContainer *xAlphabet,
+             DContainer *yAlphabet,
              ivvector systX,
              ivvector systY,
              IsParameter param)

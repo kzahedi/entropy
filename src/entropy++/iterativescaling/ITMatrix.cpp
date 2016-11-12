@@ -2,19 +2,19 @@
 
 using namespace entropy::iterativescaling;
 
-ITMatrix::ITMatrix(DContainer &xData,
-                   DContainer &yData,
-                   DContainer &xAlphabet,
-                   DContainer &yAlphabet,
+ITMatrix::ITMatrix(DContainer *xData,
+                   DContainer *yData,
+                   DContainer *xAlphabet,
+                   DContainer *yAlphabet,
                    vector<vector<int> > systX,
                    vector<vector<int> > systY,
                    double lambdavalue)
 {
   assert(systX.size()==systY.size());
-  _valX         = &xData;
-  _valY         = &yData;
-  _xAlphabet    = &xAlphabet;
-  _yAlphabet    = &yAlphabet;
+  _valX         = xData;
+  _valY         = yData;
+  _xAlphabet    = xAlphabet;
+  _yAlphabet    = yAlphabet;
   _systX        = systX;
   _systY        = systY;
   _sizeColDataY = _valY->columns();
@@ -28,10 +28,10 @@ ITMatrix::ITMatrix(DContainer &xData,
 }
 
 //die Alphabetwerte als unsigned long
-ITMatrix::ITMatrix(ULContainer &xData,
-                   ULContainer &yData,
-                   DContainer &xAlphabet,
-                   DContainer &yAlphabet,
+ITMatrix::ITMatrix(ULContainer *xData,
+                   ULContainer *yData,
+                   DContainer *xAlphabet,
+                   DContainer *yAlphabet,
                    vector<vector<int> > systX,
                    vector<vector<int> > systY,
                    double lambdavalue)
@@ -39,10 +39,10 @@ ITMatrix::ITMatrix(ULContainer &xData,
   assert(systX.size() == systY.size());
   _valX         = NULL;
   _valY         = NULL;
-  _valXUL       = &xData;
-  _valYUL       = &yData;
-  _xAlphabet    = &xAlphabet;
-  _yAlphabet    = &yAlphabet;
+  _valXUL       = xData;
+  _valYUL       = yData;
+  _xAlphabet    = xAlphabet;
+  _yAlphabet    = yAlphabet;
   _cmi          = true;
   _systX        = systX;
   _systY        = systY;
@@ -73,17 +73,14 @@ ITMatrix::ITMatrix()
 ITMatrix::~ITMatrix()
 {
   delete _featureArray;
-  for(int i=0;i<_systX.size();i++){
-    _systX[i].clear();
-  }
+  for(int i=0;i<_systX.size();i++) _systX[i].clear();
   _systX.clear();
-  for(int j=0;j<_systY.size();j++){
-    _systY[j].clear();
-  }
+
+  for(int j=0;j<_systY.size();j++) _systY[j].clear();
   _systY.clear();
 }
 
-double  ITMatrix::getFeatureArraylambda(int i,int ilambdaX, int ilambdaY)
+double ITMatrix::getFeatureArraylambda(int i,int ilambdaX, int ilambdaY)
 {
   assert(i<_systX.size());  //ilambdaX und ilambdaY werden in Feature geprueft
   double lambda = _featureArray[i].getLambda(ilambdaX,ilambdaY);
