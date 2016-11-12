@@ -23,8 +23,20 @@ namespace entropy
     {
       public:
         //InstanceMatrix();
-        InstanceMatrix(DContainer  &eX, DContainer  &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, double valuelambda);
-        InstanceMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, double valuelambda);
+        InstanceMatrix(DContainer &xData,
+                       DContainer &yData,
+                       DContainer &xAlphabet,
+                       DContainer &yAlphabet,
+                       ivvector systX,
+                       ivvector systY,
+                       double valuelambda);
+        InstanceMatrix(ULContainer &xData,
+                       ULContainer &yData,
+                       DContainer &xAlphabet,
+                       DContainer &yAlphabet,
+                       ivvector systX,
+                       ivvector systY,
+                       double valuelambda);
         ~InstanceMatrix();
         // TODO copying vectors can be expensive
 
@@ -32,7 +44,8 @@ namespace entropy
         ivector getInstanceMatrixY(int feat, int deltai, int deltaj);
 
       private:
-        void _getMatrix(double valuelambda);
+        void __getMatrix(double valuelambda);
+
         // TODO check for a better way to store
         ivvector ***_mat;
 

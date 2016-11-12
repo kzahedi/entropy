@@ -19,9 +19,22 @@ namespace entropy
     class GIS : public IterativeScalingBase
     {
       public:
-        GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
-        GIS(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
+        GIS(DContainer &xData,
+            DContainer &yData,
+            DContainer &xAlphabet,
+            DContainer &yAlphabet,
+            ivvector systX,
+            ivvector systY,
+            IsParameter param);
+        GIS(ULContainer &xData,
+            ULContainer &yData,
+            DContainer &xAlphabet,
+            DContainer &yAlphabet,
+            ivvector systX,
+            ivvector systY,
+            IsParameter param);
         ~GIS();
+
         double getconv(int i);
         int    getsizeconv();
         int    getIterations();
@@ -39,7 +52,7 @@ namespace entropy
         double**       _exponent;
         double*        _normaliser;
         int            _iterations;
-        vector<double> _conv;
+        dvector        _conv;
         FeatureMatrix* _fm;
     };
   }

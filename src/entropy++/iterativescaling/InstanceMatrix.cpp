@@ -3,80 +3,101 @@
 using namespace entropy::iterativescaling;
 
 //die Alphabetwerte als double
-InstanceMatrix:: InstanceMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, double valuelambda)
-  :ITMatrix(eX,eY,aX,aY,systX, systY,valuelambda)
+InstanceMatrix::InstanceMatrix(DContainer &xData,
+                                DContainer &yData,
+                                DContainer &xAlphabet,
+                                DContainer &yAlphabet,
+                                ivvector systX,
+                                ivvector systY,
+                                double valuelambda)
+  : ITMatrix(xData,yData,xAlphabet,yAlphabet,systX, systY,valuelambda)
 {
-  _getMatrix(valuelambda);
+  __getMatrix(valuelambda);
 }
 //die Alphabetwerte als unsigned long
-InstanceMatrix:: InstanceMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, double valuelambda)
-  :ITMatrix(eX,eY,aX,aY,systX, systY,valuelambda)
+InstanceMatrix::InstanceMatrix(ULContainer &xData,
+                                ULContainer &yData,
+                                DContainer &xAlphabet,
+                                DContainer &yAlphabet,
+                                ivvector systX,
+                                ivvector systY,
+                                double valuelambda)
+  : ITMatrix(xData,yData,xAlphabet,yAlphabet,systX, systY,valuelambda)
 {
-  _getMatrix(valuelambda);
+  __getMatrix(valuelambda);
 }
 
-InstanceMatrix:: ~InstanceMatrix()
+InstanceMatrix::~InstanceMatrix()
 {
-  delete [] _featureArray;
+  delete[] _featureArray;
 
-  for(int i=0;i<_systX.size();i++)
+  for(int i = 0; i < _systX.size(); i++)
   {
-    for(int j=0; j<  pow(_sizeX,_systX[i].size());j++)
+    int J = pow(_sizeX,_systX[i].size());
+    int K = pow(_sizeY,_systY[i].size());
+    for(int j = 0; j < J; j++)
     {
-      for(int k=0; k< pow(_sizeY,_systY[i].size()); k++)
+      for(int k = 0; k < K; k++)
       {
         _mat[i][j][k].clear();
       }
-      delete [] _mat[i][j];
+      delete[] _mat[i][j];
     }
-    delete [] _mat[i];
+    delete[] _mat[i];
   }
-  delete [] _mat;
+  delete[] _mat;
 }
 
 ivector InstanceMatrix::getInstanceMatrixX(int feat, int deltai, int deltaj)
 {
-  assert(feat<_systX.size());
-  assert(deltai<pow(_sizeX,_systX[feat].size()) && deltaj< pow(_sizeY,_systY[feat].size()));
+  assert(feat < _systX.size());
+  assert(deltai < pow(_sizeX,_systX[feat].size()));
+  assert(deltaj< pow(_sizeY,_systY[feat].size()));
   return _mat[feat][deltai][deltaj][0];
 }
+
 ivector InstanceMatrix::getInstanceMatrixY(int feat, int deltai, int deltaj)
 {
-  assert(feat<_systX.size());
-  assert(deltai<pow(_sizeX,_systX[feat].size()) && deltaj< pow(_sizeY,_systY[feat].size()));
+  assert(feat < _systX.size());
+  assert(deltai < pow(_sizeX,_systX[feat].size()));
+  assert(deltaj < pow(_sizeY,_systY[feat].size()));
   return _mat[feat][deltai][deltaj][1];
 }
 
-
 // Anyahl der deltas varriert
-
-void InstanceMatrix::_getMatrix(double valuelambda)
+void InstanceMatrix::__getMatrix(double valuelambda)
 {
   //Matrix erstellen
   ivvector V(2,ivector(0));
   _mat = new ivvector**[_systX.size()];
-  for(int i=0;i<_systX.size();i++)
+  for(int i = 0; i < _systX.size(); i++)
   {
-    _mat[i]= new ivvector*[(int) pow(_sizeX,_systX[i].size())];
-    for(int k=0;k<pow(_sizeX,_systX[i].size());k++)
+    int K = (int)pow(_sizeX,_systX[i].size());
+    int L = (int)pow(_sizeY,_systY[i].size());
+    _mat[i] = new ivvector*[K];
+    for(int k = 0; k < K; k++)
     {
-      _mat[i][k]= new ivvector[(int) pow(_sizeY,_systY[i].size())];
-      for(int l=0;l<pow(_sizeY,_systY[i].size());l++)
+      _mat[i][k]= new ivvector[L];
+      for(int l = 0; l < L; l++)
       {
-        _mat[i][k][l]=V;
+        _mat[i][k][l] = V;
       }
     }
   }
+
   //Matrix fuellen
-  for(int feat=0;feat<_systX.size();feat++)
+  int Y = pow(_sizeY,_sizeColDataY);
+  for(int feat = 0; feat < _systX.size(); feat++)
   {
-    for(int delti=0; delti<pow(_sizeX,_systX[feat].size());delti++)
+    int DI = pow(_sizeX,_systX[feat].size());
+    int DJ = pow(_sizeY,_systY[feat].size());
+    for(int delti = 0; delti < DI; delti++)
     {
-      for(int deltj=0; deltj <pow(_sizeY,_systY[feat].size()); deltj++)
+      for(int deltj = 0; deltj < DJ; deltj++)
       {
-        for(int xi=0; xi< _sizeRowDataX; xi++)
+        for(int xi = 0; xi < _sizeRowDataX; xi++)
         {
-          for(int y=0; y<pow(_sizeY,_sizeColDataY); y++)
+          for(int y = 0; y < Y; y++)
           {
             if(getFeatureArraydeltaAlphY(feat,delti,deltj,xi,y)==1)
             {

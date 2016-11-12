@@ -31,27 +31,27 @@ namespace entropy
     {
       public:
         IterativeScalingBase(DContainer &xData,
-                         DContainer &yData,
-                         DContainer &xAlphabet,
-                         DContainer &yAlphabet,
-                         ivvector systX, // TODO: what does syst mean?
-                         ivvector systY, 
-                         IsParameter param,
-                         bool useFeatures);
+                             DContainer &yData,
+                             DContainer &xAlphabet,
+                             DContainer &yAlphabet,
+                             ivvector systX, // TODO: what does syst mean?
+                             ivvector systY, 
+                             IsParameter param,
+                             bool useFeatures);
         IterativeScalingBase(ULContainer &xData,
-                         ULContainer &yData,
-                         DContainer &xAlphabet,
-                         DContainer &yAlphabet,
-                         ivvector systX, // TODO: what does syst mean?
-                         ivvector systY,
-                         IsParameter param,
-                         bool useFeatures);
+                             ULContainer &yData,
+                             DContainer &xAlphabet,
+                             DContainer &yAlphabet,
+                             ivvector systX, // TODO: what does syst mean?
+                             ivvector systY,
+                             IsParameter param,
+                             bool useFeatures);
         IterativeScalingBase(int ColDataY,
-                         DContainer &xData,
-                         DContainer &xAlphabet,
-                         DContainer &yAlphabet,
-                         ivvector systX, // TODO: what does syst mean?
-                         ivvector systY);
+                             DContainer &xData,
+                             DContainer &xAlphabet,
+                             DContainer &yAlphabet,
+                             ivvector systX, // TODO: what does syst mean?
+                             ivvector systY);
         ~IterativeScalingBase();
 
         double  prop(int rowX, int rowY);

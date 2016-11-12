@@ -21,8 +21,20 @@ namespace entropy
     class FeatureMatrix :public ITMatrix
     {
       public:
-        FeatureMatrix(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY,double lambdavalue);
-        FeatureMatrix(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY,double lambdavalue);
+        FeatureMatrix(DContainer &xData,
+                      DContainer &yData,
+                      DContainer &xAlphabet,
+                      DContainer &yAlphabet,
+                      ivvector systX,
+                      ivvector systY,
+                      double lambdavalue);
+        FeatureMatrix(ULContainer &xData,
+                      ULContainer &yData,
+                      DContainer &xAlphabet,
+                      DContainer &yAlphabet,
+                      ivvector systX,
+                      ivvector systY,
+                      double lambdavalue);
         FeatureMatrix();
         ~FeatureMatrix();
 
@@ -39,4 +51,3 @@ namespace entropy
 }
 
 #endif
-
