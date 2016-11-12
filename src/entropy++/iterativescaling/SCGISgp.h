@@ -3,39 +3,59 @@
 
 #include <entropy++/Container.h>
 #include <entropy++/defs.h>
+#include <entropy++/Matrix.h>
+#include <entropy++/iterativescaling/Feature.h>
+#include <entropy++/iterativescaling/InstanceMatrix.h>
+#include <entropy++/iterativescaling/IterativeScalingBase.h>
+
 #include <assert.h>
 #include <cstdlib>
 #include <iostream>
 #include <ostream>
 #include <math.h>
-#include <entropy++/Matrix.h>
-#include "Feature.h"
-#include "InstanceMatrix.h"
-#include "IT.h"
 
 using namespace std;
 
-class SCGISgp : public IT{
-  public:
-    SCGISgp(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
-    SCGISgp(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param);
-    ~SCGISgp();
-    double getconv(int i);
-    int    getsizeconv();
-    int    getIterations();
+namespace entropy
+{
+  namespace iterativescaling
+  {
+    class SCGISgp : public IterativeScalingBase
+    {
+      public:
+        SCGISgp(DContainer &xData,
+                DContainer &yData,
+                DContainer &xAlphabet,
+                DContainer &yAlphabet,
+                ivvector systX,
+                ivvector systY,
+                IsParameter param);
+        SCGISgp(ULContainer &xData,
+                ULContainer &yData,
+                DContainer &xAlphabet,
+                DContainer &yAlphabet,
+                ivvector systX,
+                ivvector systY,
+                IsParameter param);
+        ~SCGISgp();
+        double getconv(int i);
+        int    getsizeconv();
+        int    getIterations();
 
-  private:
-    double __calculateIteration(bool test, double sigma);
-    void   __scgis(int maxit, double konv,bool test,double sigma);
-    void   __scgis(int maxit, double konv,bool test,double sigma,int seconds);
+      private:
+        double __calculateIteration(bool test, double sigma);
+        void   __scgis(int maxit, double konv,bool test,double sigma);
+        void   __scgis(int maxit, double konv,bool test,double sigma,int seconds);
 
-    int            _iterations;
-    double***      _exponent;
-    double**       _normaliser;
-    double***      _delta;
-    vector<double> _conv;
-};
-
+        int             _iterations;
+        double***       _exponent;
+        double**        _normaliser;
+        double***       _delta;
+        vector<double>  _conv;
+        InstanceMatrix* _im;
+    };
+  }
+}
 
 #endif
 

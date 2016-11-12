@@ -181,12 +181,12 @@ double GISgp::__calculateIteration(double featconst, double sigma, bool test)
           z        = (oldl+_delta[feat][deltai][deltaj])/pow(sigma,2)
             + _expected[feat][deltai][deltaj]*exp(_delta[feat][deltai][deltaj]*featconst)
             - _observed[feat][deltai][deltaj];
-          double n = + 1/(pow(sigma,2)) // TODO = + ?
+          double n = + 1.0/(pow(sigma,2)) // TODO = + 1?
             + _expected[feat][deltai][deltaj]
             * featconst
             * exp(_delta[feat][deltai][deltaj]* featconst);
 
-            if(fabs(n)<0.00000001){ cout << "  hieer " << endl;} // TODO Exeption?
+            if(fabs(n)<0.00000001){ cout << "  hieer " << endl;} // TODO Exception?
             _delta[feat][deltai][deltaj] = _delta[feat][deltai][deltaj]-(z/n);
         }
 

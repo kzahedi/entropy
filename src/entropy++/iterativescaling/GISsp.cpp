@@ -400,7 +400,7 @@ void GISsp:: __gis(int maxit, double konv, bool test)
             {_expected[Feati][Featj][lambdai][lambdaj]=0.01;}
             if(fabs(_expected[Feati][Featj][lambdai][lambdaj]) > EPSILON && fabs(observ[Feati][Featj][lambdai][lambdaj]) > EPSILON )
             {
-              newl= oldl + (1/featconst)*log(observ[Feati][Featj][lambdai][lambdaj]/_expected[Feati][Featj][lambdai][lambdaj]);
+              newl= oldl + (1.0/featconst)*log(observ[Feati][Featj][lambdai][lambdaj]/_expected[Feati][Featj][lambdai][lambdaj]);
             }
             else
             {
