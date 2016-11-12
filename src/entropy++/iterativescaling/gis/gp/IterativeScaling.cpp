@@ -1,9 +1,9 @@
-#include "GISgp.h"
+#include "IterativeScaling.h"
 
-using namespace entropy::iterativescaling;
+using namespace entropy::iterativescaling::gp;
 
 //training data, alphabete , startwert fuer lambda, startwert fuer delta, wert fuer sigma, test auf time, sekunden fuer den test
-GISgp::GISgp(DContainer &xData,
+IterativeScaling::IterativeScaling(DContainer &xData,
              DContainer &yData,
              DContainer &xAlphabet,
              DContainer &yAlphabet,
@@ -19,14 +19,14 @@ GISgp::GISgp(DContainer &xData,
   int Y = (int)pow(_yAlphabet->rows(),_sizeColDataY);
   for(int i = 0; i < _sizeSystX; i++)
   {
-    _exponent[i]= new double[Y];
+    _exponent[i] = new double[Y];
   }
 
   _expected = new double**[_sizeSystX];
   for(int i = 0; i < _sizeSystX; i++)
   {
-    int K = (int) pow(_xAlphabet->rows(),_systX[i].size());
-    int L = (int) pow(_yAlphabet->rows(),_systY[i].size());
+    int K = (int)pow(_xAlphabet->rows(),_systX[i].size());
+    int L = (int)pow(_yAlphabet->rows(),_systY[i].size());
     _expected[i] = new double*[K];
     for(int k = 0; k < K; k++)
     {
@@ -64,7 +64,7 @@ GISgp::GISgp(DContainer &xData,
   }
 }
 
-GISgp::GISgp(ULContainer &xData,
+IterativeScaling::IterativeScaling(ULContainer &xData,
              ULContainer &yData,
              DContainer &xAlphabet,
              DContainer &yAlphabet,
@@ -124,7 +124,7 @@ GISgp::GISgp(ULContainer &xData,
   }
 }
 
-GISgp::~GISgp()
+IterativeScaling::~IterativeScaling()
 {
   if(_expected != NULL)
   {
@@ -159,7 +159,7 @@ GISgp::~GISgp()
   _conv.clear();
 }
 
-double GISgp::__calculateIteration(double featconst, double sigma, bool test)
+double IterativeScaling::__calculateIteration(double featconst, double sigma, bool test)
 {
   double l = 0;
   __getexp();
@@ -205,7 +205,7 @@ double GISgp::__calculateIteration(double featconst, double sigma, bool test)
   return l;
 }
 
-void GISgp::__gisgp(int maxit, double konv, double sigma, bool test,int seconds)
+void IterativeScaling::__gisgp(int maxit, double konv, double sigma, bool test,int seconds)
 {
   //constant c for delta
   double featconst = __getFeatconst();
@@ -232,7 +232,7 @@ void GISgp::__gisgp(int maxit, double konv, double sigma, bool test,int seconds)
   }
 }
 
-void GISgp::__gisgp(int maxit, double konv, double sigma, bool test)
+void IterativeScaling::__gisgp(int maxit, double konv, double sigma, bool test)
 {
   //constant c for delta
   double featconst = __getFeatconst();
@@ -254,17 +254,17 @@ void GISgp::__gisgp(int maxit, double konv, double sigma, bool test)
   }
 }
 
-double GISgp::getconv(int i)
+double IterativeScaling::getconv(int i)
 {
   return _conv[i];
 }
 
-int GISgp::getsizeconv()
+int IterativeScaling::getsizeconv()
 {
   return _conv.size();
 }
 
-double GISgp::__getFeatconst()
+double IterativeScaling::__getFeatconst()
 {
   double r = 0.0;
   int N = pow(_yAlphabet->rows(),_sizeColDataY);
@@ -279,7 +279,7 @@ double GISgp::__getFeatconst()
   return r;
 }
 
-void GISgp::__getexp()
+void IterativeScaling::__getexp()
 {
   for(int i=0; i<_sizeSystX; i++)
   {
@@ -313,9 +313,9 @@ void GISgp::__getexp()
 
     for(int yj = 0; yj < YJ; yj++)
     {
-      for(int k=0; k< _fm->getMatrixIndexFeat(xi,yj).size();k++)
+      for(int k = 0; k < _fm->getMatrixIndexFeat(xi,yj).size(); k++)
       {
-        int index=_fm->getMatrixIndexFeat(xi,yj)[k];
+        int index = _fm->getMatrixIndexFeat(xi,yj)[k];
         _expected[index]
           [_fm->getMatrixIndexdX(xi,yj)[k]]
           [_fm->getMatrixIndexdY(xi,yj)[k]] += exp(_exponent[index][yj])/_normaliser[index];
@@ -324,7 +324,7 @@ void GISgp::__getexp()
   }
 }
 
-int GISgp::getIterations()
+int IterativeScaling::getIterations()
 {
   return _iterations;
 }

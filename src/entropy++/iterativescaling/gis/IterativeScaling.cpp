@@ -1,10 +1,10 @@
-#include "GIS.h"
+#include "IterativeScaling.h"
 
-using namespace entropy::iterativescaling;
+using namespace entropy::iterativescaling::gis;
 
 #define EPSILON 0.00000001
 
-GIS::GIS(DContainer &xData,
+IterativeScaling::IterativeScaling(DContainer &xData,
          DContainer &yData,
          DContainer &xAlphabet,
          DContainer &yAlphabet,
@@ -56,7 +56,7 @@ GIS::GIS(DContainer &xData,
 }
 
 //die Alphabetwerte als unsigned long
-GIS::GIS(ULContainer &xData,
+IterativeScaling::IterativeScaling(ULContainer &xData,
          ULContainer &yData,
          DContainer &xAlphabet,
          DContainer &yAlphabet,
@@ -104,7 +104,7 @@ GIS::GIS(ULContainer &xData,
   }
 }
 
-GIS::~GIS()
+IterativeScaling::~IterativeScaling()
 {
   if(_expected != NULL)
   {
@@ -130,7 +130,7 @@ GIS::~GIS()
   delete[] _normaliser;
 }
 
-double GIS::__getFeatconst()
+double IterativeScaling::__getFeatconst()
 {
   double r = 0.0;
   int N = pow(_yAlphabet->rows(), _sizeColDataY);
@@ -145,7 +145,7 @@ double GIS::__getFeatconst()
   return r;
 }
 
-void GIS::__getExpected()
+void IterativeScaling::__getExpected()
 {
   for(int i = 0; i < _sizeSystX; i++)
   {
@@ -190,7 +190,7 @@ void GIS::__getExpected()
 }
 
 // auf zeit
-void GIS::__gis(int seconds, bool test) // TODO remove test
+void IterativeScaling::__gis(int seconds, bool test) // TODO remove test
 {
   //constant c for delta
   double featconst = __getFeatconst();
@@ -219,7 +219,7 @@ void GIS::__gis(int seconds, bool test) // TODO remove test
 }
 
 // auf zeit und konv
-void GIS::__gis( double konv,int seconds, bool test)
+void IterativeScaling::__gis( double konv,int seconds, bool test)
 {
   double featconst = __getFeatconst();
 
@@ -247,7 +247,7 @@ void GIS::__gis( double konv,int seconds, bool test)
 }
 
 // nach iterationen und konv
-void GIS::__gis(int maxit, double konv,bool test)
+void IterativeScaling::__gis(int maxit, double konv,bool test)
 {
   //constant c for delta
   double featconst = __getFeatconst();
@@ -269,7 +269,7 @@ void GIS::__gis(int maxit, double konv,bool test)
   }
 } 
 
-double GIS::__calculateIteration(double featconst, bool test)
+double IterativeScaling::__calculateIteration(double featconst, bool test)
 {
   double l = 0;
   __getExpected();
@@ -307,17 +307,17 @@ double GIS::__calculateIteration(double featconst, bool test)
   return l;
 }
 
-int GIS::getIterations()
+int IterativeScaling::getIterations()
 {
   return _iterations;
 }
 
-double GIS::getconv(int i)
+double IterativeScaling::getconv(int i)
 {
   return _conv[i];
 }
 
-int GIS::getsizeconv()
+int IterativeScaling::getsizeconv()
 {
   return _conv.size();
 }

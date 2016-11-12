@@ -1,10 +1,10 @@
-#include "SCGIS.h"
+#include "IterativeScaling.h"
 
-using namespace entropy::iterativescaling;
+using namespace entropy::iterativescaling::scgis;
 
 #define EPSILON 0.00000001
 
-SCGIS::SCGIS(DContainer &xData,
+IterativeScaling::IterativeScaling(DContainer &xData,
              DContainer &yData,
              DContainer &xAlphabet,
              DContainer &yAlphabet,
@@ -58,7 +58,7 @@ SCGIS::SCGIS(DContainer &xData,
   }
 }
 
-SCGIS::SCGIS(ULContainer &xData,
+IterativeScaling::IterativeScaling(ULContainer &xData,
              ULContainer &yData,
              DContainer &xAlphabet,
              DContainer &yAlphabet,
@@ -106,17 +106,17 @@ SCGIS::SCGIS(ULContainer &xData,
 }
 
 
-double SCGIS::getconv(int i)
+double IterativeScaling::getconv(int i)
 {
   return _conv[i];
 }
 
-int SCGIS::getsizeconv()
+int IterativeScaling::getsizeconv()
 {
   return _conv.size();
 }
 
-SCGIS::~SCGIS()
+IterativeScaling::~IterativeScaling()
 {
   for(int i=0;i<_sizeSystX;i++)
   {
@@ -137,7 +137,7 @@ SCGIS::~SCGIS()
 }
 
 
-void SCGIS::__scgis( double konv,int seconds, bool test)
+void IterativeScaling::__scgis( double konv,int seconds, bool test)
 {
   double l     = 1;
   double utime = 0;
@@ -154,7 +154,7 @@ void SCGIS::__scgis( double konv,int seconds, bool test)
   }
 }
 
-void SCGIS::__scgis(int seconds, bool test)
+void IterativeScaling::__scgis(int seconds, bool test)
 {
   double l     = 1;
   double utime = 0;
@@ -171,7 +171,7 @@ void SCGIS::__scgis(int seconds, bool test)
   }
 
 }
-void SCGIS::__scgis(int maxit, double konv, bool test)
+void IterativeScaling::__scgis(int maxit, double konv, bool test)
 {
   double l    = konv + 1.0;
   _iterations = 0;
@@ -181,7 +181,7 @@ void SCGIS::__scgis(int maxit, double konv, bool test)
   }
 }
 
-double SCGIS::__calculateIteration(bool test)
+double IterativeScaling::__calculateIteration(bool test)
 {
   double l = 0.0;
   int    Y = pow(_sizeY,_sizeColDataY);
@@ -253,7 +253,7 @@ double SCGIS::__calculateIteration(bool test)
   return l;
 }
 
-int SCGIS::getIterations()
+int IterativeScaling::getIterations()
 {
   return _iterations;
 }

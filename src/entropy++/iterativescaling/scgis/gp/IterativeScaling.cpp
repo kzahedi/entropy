@@ -1,10 +1,10 @@
-#include "SCGISgp.h"
+#include "IterativeScaling.h"
 
-using namespace entropy::iterativescaling;
+using namespace entropy::iterativescaling::scgis::gp;
 
 #define EPSILON 0.00000001
 
-SCGISgp::SCGISgp(DContainer &xData,
+IterativeScaling::IterativeScaling(DContainer &xData,
                  DContainer &yData,
                  DContainer &xAlphabet,
                  DContainer &yAlphabet,
@@ -59,7 +59,7 @@ SCGISgp::SCGISgp(DContainer &xData,
   else           __scgis(param.maxit,param.konv,param.test,param.sigma);
 }
 
-SCGISgp::SCGISgp(ULContainer &xData,
+IterativeScaling::IterativeScaling(ULContainer &xData,
                  ULContainer &yData,
                  DContainer &xAlphabet,
                  DContainer &yAlphabet,
@@ -112,7 +112,7 @@ SCGISgp::SCGISgp(ULContainer &xData,
   else           __scgis(param.maxit,param.konv,param.test,param.sigma);
 }
 
-SCGISgp::~SCGISgp()
+IterativeScaling::~IterativeScaling()
 {
   int J = pow(_xAlphabet->rows(),_sizeColDataX);
   for(int i = 0; i < _sizeSystX; i++)
@@ -144,17 +144,17 @@ SCGISgp::~SCGISgp()
   _conv.clear();
 }
 
-double SCGISgp::getconv(int i)
+double IterativeScaling::getconv(int i)
 {
   return _conv[i];
 }
 
-int SCGISgp::getsizeconv()
+int IterativeScaling::getsizeconv()
 {
   return _conv.size();
 }
 
-double SCGISgp::__calculateIteration(bool test, double sigma)
+double IterativeScaling::__calculateIteration(bool test, double sigma)
 {
   double l = 0.0;
   int Y = pow(_yAlphabet->rows(),_sizeColDataY);
@@ -219,7 +219,7 @@ double SCGISgp::__calculateIteration(bool test, double sigma)
   return l;
 }
 
-void SCGISgp::__scgis(int maxit, double konv, bool test, double sigma, int seconds)
+void IterativeScaling::__scgis(int maxit, double konv, bool test, double sigma, int seconds)
 {
   double utime = 0;
   _iterations  = 0;
@@ -234,7 +234,7 @@ void SCGISgp::__scgis(int maxit, double konv, bool test, double sigma, int secon
   }
 }
 
-void SCGISgp::__scgis(int maxit, double konv, bool test, double sigma)
+void IterativeScaling::__scgis(int maxit, double konv, bool test, double sigma)
 {
   double l    = 1;
   _iterations = 0;
@@ -245,7 +245,7 @@ void SCGISgp::__scgis(int maxit, double konv, bool test, double sigma)
   }
 }
 
-int SCGISgp::getIterations()
+int IterativeScaling::getIterations()
 {
   return _iterations;
 }
