@@ -40,6 +40,8 @@ set(SRC sparse/CMI.cpp
   iterativescaling/InstanceMatrix.cpp
   iterativescaling/ITMatrix.cpp
   iterativescaling/GIS.cpp
+  iterativescaling/GISgp.cpp
+  iterativescaling/SCGIS.cpp
 
   SparseMatrix.cpp
   # Container.cpp

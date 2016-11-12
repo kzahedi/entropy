@@ -77,7 +77,7 @@ namespace entropy
         DContainer* _xAlphabet;
         DContainer* _yData;
         DContainer* _xData;
-        ITMatrix*   _im;
+        ITMatrix*   _imatrix;
         IsParameter _param;
 
         ivvector _systX;

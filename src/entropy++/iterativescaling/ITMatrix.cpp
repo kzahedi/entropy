@@ -260,7 +260,7 @@ int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i, int indexX, int indexY, int 
 {
   assert(i<_systX.size());
   assert(indexX < pow(_xAlphabet->rows(),_systX[i].size()));
-  assert(indexY<pow(_yAlphabet->rows(),_systY[i].size()));
+  assert(indexY < pow(_yAlphabet->rows(),_systY[i].size()));
   assert(indexDataX < pow(_sizeX,_sizeColDataX));
   assert(indexDataY < pow(_yAlphabet->rows(),_sizeColDataY));
   vector<double> x    = index(indexX,true, _systX[i].size());
@@ -304,7 +304,7 @@ vector<double> ITMatrix::index(int index, bool x, int sizeCol)
   double z;
   if(x)
   {
-    assert(index<pow(_xAlphabet->rows(),sizeCol));
+    assert(index < pow(_xAlphabet->rows(),sizeCol));
     sizeAlph=_sizeX;
   }
   else

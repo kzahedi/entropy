@@ -13,7 +13,7 @@ GIS::GIS(DContainer &xData,
          IsParameter param)
   : IterativeScalingBase(xData, yData, xAlphabet, yAlphabet, systX, systY, param, true)
 {
-  _fm       = (FeatureMatrix*)_im;
+  _fm       = (FeatureMatrix*)_imatrix;
   _param    = param;
   _expected = new double**[_sizeSystX];
 
@@ -67,6 +67,7 @@ GIS::GIS(ULContainer &xData,
 {
   _param    = param;
   _expected = new double**[_sizeSystX];
+  _fm       = (FeatureMatrix*)_imatrix;
   int K = 0;
   int L = 0;
   for(int i=0; i<_sizeSystX; i++)
@@ -232,7 +233,7 @@ void GIS::__gis( double konv,int seconds, bool test)
   }
   _normaliser  = new double[_sizeSystX];
   _iterations  = 0;
-  double l     = 1;
+  double l     = konv + 1.0;
   double utime = 0;
   time_t befor;
   time_t after;
@@ -260,7 +261,7 @@ void GIS::__gis(int maxit, double konv,bool test)
       _exponent[k][i] = 0.0;
     }
   }
-  double l    = 1;
+  double l    = konv + 1.0;
   _iterations = 0;
   while(_iterations < maxit && fabs(l) >= konv)
   {

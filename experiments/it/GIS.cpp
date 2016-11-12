@@ -110,7 +110,7 @@ double GIS::__getFeatconst()
     {
 	  for(int j=0; j< pow(_Y->rows(),_sizeColValY);j++) // y-alphabet
 	  {
-	    int v = (*_FM).getMatrixIndexFeat(i,j).size(); // the number of matching deltas
+	    int v = _FM->getMatrixIndexFeat(i,j).size(); // the number of matching deltas
 	    if(v > r) r = v;
 	  }
 	}
@@ -136,7 +136,7 @@ void GIS::__getExpected()
 	    }
 	    for(int yj=0; yj< pow(_Y->rows(),_sizeColValY); yj++)
 	    {
-	      for(int k=0; k< (*_FM).getMatrixIndexFeat(xi,yj).size();k++){
+	      for(int k=0; k< _FM->getMatrixIndexFeat(xi,yj).size();k++){
 	    	int index=_FM->getMatrixIndexFeat(xi,yj)[k];
 	    	_exponent[index][yj]=_FM->getFeatureArrayvalueAlphY(index,xi,yj);
 	        _normaliser[index] += exp(_exponent[index][yj]);
@@ -144,12 +144,12 @@ void GIS::__getExpected()
 	    }
 	    for(int yj=0; yj< pow(_Y->rows(),_sizeColValY); yj++)
 	    {
-	      for(int k=0; k< (*_FM).getMatrixIndexFeat(xi,yj).size();k++)
+	      for(int k=0; k< _FM->getMatrixIndexFeat(xi,yj).size();k++)
 	      {
 	        int index=_FM->getMatrixIndexFeat(xi,yj)[k];
             _expected[index]
-					 [(*_FM).getMatrixIndexdX(xi,yj)[k]]
-	                 [(*_FM).getMatrixIndexdY(xi,yj)[k]] += exp(_exponent[index][yj])/_normaliser[index];
+					 [_FM->getMatrixIndexdX(xi,yj)[k]]
+	                 [_FM->getMatrixIndexdY(xi,yj)[k]] += exp(_exponent[index][yj])/_normaliser[index];
 	      }
 	    }
 	  }
@@ -232,7 +232,7 @@ double GIS::__calculateIteration(double featconst, bool test)
     {
       for(int deltaj=0; deltaj < pow(_Y->rows(),_systY[feat].size()); deltaj++)
       {
-        double oldl = (*_FM).getFeatureArraylambda(feat, deltai, deltaj);
+        double oldl = _FM->getFeatureArraylambda(feat, deltai, deltaj);
         double newl = 0.0;
         if((fabs(_expected[feat][deltai][deltaj]) < EPSILON) && (fabs(_observed[feat][deltai][deltaj]) > EPSILON))
         {
@@ -242,7 +242,7 @@ double GIS::__calculateIteration(double featconst, bool test)
         {
           // TODO 0.1 as learning rate parameter
           newl = oldl + 0.1*(1.0/featconst) *log(_observed[feat][deltai][deltaj]/_expected[feat][deltai][deltaj]);
-          (*_FM).setFeatureArraylambda(feat,deltai,deltaj,newl);
+          _FM->setFeatureArraylambda(feat,deltai,deltaj,newl);
         }
         l+=fabs((_observed[feat][deltai][deltaj]-_expected[feat][deltai][deltaj]));
       }
