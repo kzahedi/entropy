@@ -232,8 +232,8 @@ void itCmiTest::testITvsCMI()
   param.lambdavalue    = 1.0;
   param.lambdadeltaval = 1.0;
   param.sigma          = 0.01;   //TODO find best sigma value
-  param.maxit          = 10000000;
-  param.konv           = 0.000001;
+  param.maxit          = 100;
+  param.konv           = 0.0001;
   param.time           = false;
   param.test           = true;
   param.seconds        = 600;
