@@ -4,7 +4,7 @@
 
 // GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,double lambdavalue,int maxit, double konv, bool test, bool time, int seconds)
 // :IT(eX, eY, aX, aY, lambdavalue, true)
-GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
+GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, IsParameter param)
 :IT(eX, eY, aX, aY,systX, systY, param, true)
 {
   _param      = param;
@@ -43,7 +43,7 @@ GIS::GIS(DContainer &eX, DContainer &eY, DContainer &aX, DContainer &aY,vector<v
   }
 }
 //die Alphabetwerte als unsigned long
-GIS::GIS(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,vector<vector<int> > systX, vector<vector<int> > systY, IsParameter param)
+GIS::GIS(ULContainer &eX, ULContainer &eY, DContainer &aX, DContainer &aY,ivvector systX, ivvector systY, IsParameter param)
 :IT(eX, eY, aX, aY,systX, systY, param, true)
 {
   _param      = param;

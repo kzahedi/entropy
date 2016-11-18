@@ -512,6 +512,30 @@ class Container
       }
     }
 
+    // returns a single column container with the unique values taken over all
+    // columns
+    Container<T>* globalUnique()
+    {
+      // Container<T> *new = new Container<T>(this->rows(), 1);
+      vector<T> values;
+      for(int c = 0; c < this->columns(); c++)
+      {
+        for(int r = 0; r < this->rows(); r++)
+        {
+          T value = this->get(r,c);
+          if(std::find(values.begin(), values.end(), value) == values.end())
+          {
+            values.push_back(value);
+          }
+        }
+      }
+      Container<T>* new_container = new Container<T>(values.size(), 1);
+      for(int i = 0; i < values.size(); i++)
+      {
+        *new_container << values[i];
+      }
+      return new_container;
+    }
 
   private:
     Container<unsigned long>* __uniformDiscretisationByColumn()
@@ -536,6 +560,7 @@ class Container
       copy->isDiscretised(true);
       return copy;
     }
+
 
     void __copyProperties(Container* dst)
     {
@@ -597,6 +622,7 @@ class Container
     int*        _bins;
     int         _fillMode;
     double**    _domains;
+
 
     bool        _domainsGiven;
     bool        _binsGiven;

@@ -4,64 +4,10 @@ using namespace entropy::iterativescaling::scgis;
 
 #define EPSILON 0.00000001
 
-IterativeScaling::IterativeScaling(DContainer *xData,
-             DContainer *yData,
-             DContainer *xAlphabet,
-             DContainer *yAlphabet,
-             ivvector systX,
-             ivvector systY,
-             IsParameter param)
- : IterativeScalingBase(xData, yData, xAlphabet, yAlphabet, systX, systY, param, false)
-{
-  _param    = param;
-  _exponent = new double**[_sizeSystX];
-  _im       = (InstanceMatrix*)_imatrix;
-  int Y = (int)pow(_yAlphabet->rows(),_sizeColDataY);
-
-  for(int i = 0; i < _sizeSystX; i++)
-  {
-    _exponent[i] = new double*[_sizeRowDataX];
-    for(int xi = 0; xi < _sizeRowDataX; xi++)
-    {
-      _exponent[i][xi] = new double[Y];
-      for(int y = 0; y < Y; y++)
-      {
-        _exponent[i][xi][y] = 0;
-      }
-    }
-  }
-
-  _normaliser = new double*[_sizeSystX];
-  for(int i = 0; i < _sizeSystX; i++)
-  {
-    _normaliser[i] = new double[_sizeRowDataX];
-    for(int k = 0; k < _sizeRowDataX;k++)
-    {
-      _normaliser[i][k] = Y;
-    }
-  }
-
-  _delta=0.0;
-  if(param.konvtime)
-  {
-     __scgis(param.konv, param.seconds, param.test);
-  }
-  else{
-    if(param.time )
-    {
-       __scgis(param.seconds, param.test);
-    }
-    else
-    {
-     __scgis(param.maxit, param.konv, param.test);
-    }
-  }
-}
-
 IterativeScaling::IterativeScaling(ULContainer *xData,
              ULContainer *yData,
-             DContainer *xAlphabet,
-             DContainer *yAlphabet,
+             ULContainer *xAlphabet,
+             ULContainer *yAlphabet,
              ivvector systX,
              ivvector systY,
              IsParameter param)

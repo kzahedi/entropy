@@ -27,17 +27,10 @@ namespace entropy
         class IterativeScaling : public IterativeScalingBase
         {
           public:
-            IterativeScaling(DContainer *xData,
-                             DContainer *yData,
-                             DContainer *xAlphabet,
-                             DContainer *yAlphabet,
-                             ivvector systX,
-                             ivvector systY,
-                             IsParameter param);
             IterativeScaling(ULContainer *xData,
                              ULContainer *yData,
-                             DContainer *xAlphabet,
-                             DContainer *yAlphabet,
+                             ULContainer *xAlphabet,
+                             ULContainer *yAlphabet,
                              ivvector systX,
                              ivvector systY,
                              IsParameter param);

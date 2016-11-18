@@ -3,9 +3,6 @@
 #include <entropy++/Container.h>
 #include <entropy++/MI.h>
 #include <entropy++/sparse/MI.h>
-// #include "../experiments/it/GIS.h"
-// #include "../experiments/it/SCGIS.h"
-// #include "../experiments/it/Test.h"
 
 #include <entropy++/iterativescaling/IterativeScalingBase.h>
 #include <entropy++/iterativescaling/gis/IterativeScaling.h>
@@ -23,20 +20,31 @@ CPPUNIT_TEST_SUITE_REGISTRATION(iterativeScalingTest);
 
 void iterativeScalingTest::ValueTest()
 {
-  DContainer *xAlphabet = new DContainer(2,1); // alphabet
+#ifdef __APPLE__
+  sranddev();
+#else
+  srand(time(NULL));
+#endif
+
+  ULContainer *xAlphabet = new ULContainer(2,1); // alphabet
   *xAlphabet << 0 << 1;
-  DContainer *yAlphabet = new DContainer(2,1); // alphabet
+  ULContainer *yAlphabet = new ULContainer(2,1); // alphabet
   *yAlphabet << 0 << 1;
+
   ivvector alphX(1,ivector(0));
   alphX[0].push_back(0);
+
   ivvector alphY(1,ivector(0));
   alphY[0].push_back(0);
+
   dvector lambda(1);
   lambda[0] = 1;
 
   int xColumns      = 2;
   int xRows         = 1000;
-  DContainer* xData = new DContainer(xRows,xColumns);
+  int yColumns      = 1;
+
+  ULContainer* xData = new ULContainer(xRows,xColumns);
 
   for(int i = 0;i < xRows; i++)
   {
@@ -47,28 +55,68 @@ void iterativeScalingTest::ValueTest()
     }
   }
 
-  IterativeScalingBase *exact = new IterativeScalingBase(1, // colValY,
+  IterativeScalingBase *exact = new IterativeScalingBase(yColumns,
                                                          xData,
                                                          xAlphabet,
                                                          yAlphabet,
                                                          alphX, // TODO what is alphX/Y
                                                          alphY);
 
-
-  // Test *test_1 = new Test(1,1,100,lambda, *zX,*zY,alphX, alphY);
-  // for(int i=0; i<2;i++){
-    // for(int j=0; j<2;j++){
-      // CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, test_1->getProp(i,j), 0.1);
+  // for(int feat = 0; feat < alphX.size(); feat++)
+  // {
+    // for(int delti = 0; delti < pow(xAlphabet->rows(), alphX[feat].size()); delti++)
+    // {
+      // for(int deltj = 0; deltj < pow(yAlphabet->rows(), alphY[feat].size()); deltj++)
+      // {
+        // double r = rand() % lambda.size();
+        // exact->setFeatureArraylambda(feat, delti, deltj, lambda[r]);
+      // }
     // }
   // }
-  // IContainer *indizes = new IContainer(1,3);
-  // (*indizes) << 0 << 0 << 0;
-  // DContainer *values  = new DContainer(1,1);
-  // (*values) << 5;
-  // Test *test_2 = new Test(1,1,100,*indizes,*values, *zX,*zY,alphX, alphY);
-  // CPPUNIT_ASSERT( test_2->getProp(0,0)> test_2->getProp(0,1));
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, test_2->getProp(1,1),0.01);
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, test_2->getProp(1,0),0.01);
+
+  // IContainer* generatedY = new IContainer(xRows, yColumns);
+  // for(int i = 0; i < xRows; i++)
+  // {
+    // double z   = (double)rand()/RAND_MAX;
+    // double s   = 0;
+    // int    ind = 0;
+    // for(int j = 0; j < pow(yAlphabet->rows(), yColumns) && s < z; j++)
+    // {
+      // s   += exact->prop(i,j);
+      // ind  = j;
+    // }
+    // for(int k = 0; k < yColumns; k++)
+    // {
+      // (*generatedY) << exact->index(ind, false, yColumns)[k];
+    // }
+  // }
+
+
+  // Test *test_1 = new Test(1,1,100,lambda, *zX,*zY,alphX, alphY);
+  for(int x = 0; x < 2; x++)
+  {
+    for(int y = 0; y < 2; y++)
+    {
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, exact->p_x_c_y(x, y), 0.1);
+    }
+  }
+
+  IContainer *indizes = new IContainer(1,3);
+  (*indizes) << 0 << 0 << 0;
+  DContainer *values  = new DContainer(1,1);
+  (*values) << 5;
+
+  for(int i = 0; i < indizes->rows(); i++)
+  {
+    exact->setFeatureArraylambda(indizes->get(i,0), indizes->get(i,1), indizes->get(i,2), values->get(i,0));
+  }
+
+
+
+
+  CPPUNIT_ASSERT(exact->p_x_c_y(0,0) > exact->p_x_c_y(0,1));
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, exact->p_x_c_y(1,1), 0.01);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, exact->p_x_c_y(1,0), 0.01);
 
 }
 

@@ -20,6 +20,9 @@ add_definitions(-DPARENT="${CMAKE_SOURCE_DIR}/experiments/hopping/data/")
 add_executable(it-cmi-tests           main.cpp  it_cmi_test.cpp)
 target_link_libraries(it-cmi-tests    Entropy++ cppunit dl eit)
 
+add_executable(iterative-scaling-cmi-tests        main.cpp  iterative_scaling_cmi_test.cpp)
+target_link_libraries(iterative-scaling-cmi-tests Entropy++ cppunit dl eit)
+
 add_executable(mi-tests               main.cpp  mi_test.cpp)
 target_link_libraries(mi-tests        Entropy++ cppunit dl)
 
@@ -43,6 +46,7 @@ ADD_TEST(entropy   "${PROJECT_BINARY_DIR}/bin/entropy-tests")
 ADD_TEST(feature   "${PROJECT_BINARY_DIR}/bin/feature-tests")
 ADD_TEST(it        "${PROJECT_BINARY_DIR}/bin/it-tests")
 ADD_TEST(iterativescaling "${PROJECT_BINARY_DIR}/bin/iterative-scaling-test")
+ADD_TEST(iterativescaling-cmi "${PROJECT_BINARY_DIR}/bin/iterative-scaling-cmi-test")
 ADD_TEST(itcmi     "${PROJECT_BINARY_DIR}/bin/it-cmi-tests")
 ADD_TEST(cmi       "${PROJECT_BINARY_DIR}/bin/cmi-tests")
 ADD_TEST(csv       "${PROJECT_BINARY_DIR}/bin/csv-tests")

@@ -2,19 +2,21 @@
 
 using namespace entropy::iterativescaling;
 
-ITMatrix::ITMatrix(DContainer *xData,
-                   DContainer *yData,
-                   DContainer *xAlphabet,
-                   DContainer *yAlphabet,
+
+ITMatrix::ITMatrix(ULContainer *xData,
+                   ULContainer *yData,
+                   ULContainer *xAlphabet,
+                   ULContainer *yAlphabet,
                    vector<vector<int> > systX,
                    vector<vector<int> > systY,
                    double lambdavalue)
 {
-  assert(systX.size()==systY.size());
+  assert(systX.size() == systY.size());
   _valX         = xData;
   _valY         = yData;
   _xAlphabet    = xAlphabet;
   _yAlphabet    = yAlphabet;
+  _cmi          = true;
   _systX        = systX;
   _systY        = systY;
   _sizeColDataY = _valY->columns();
@@ -23,44 +25,15 @@ ITMatrix::ITMatrix(DContainer *xData,
   _sizeRowDataY = _valY->rows();
   _sizeX        = _xAlphabet->rows();
   _sizeY        = _yAlphabet->rows();
-  _cmi          = false;
-  __featureArray(lambdavalue);
-}
-
-//die Alphabetwerte als unsigned long
-ITMatrix::ITMatrix(ULContainer *xData,
-                   ULContainer *yData,
-                   DContainer *xAlphabet,
-                   DContainer *yAlphabet,
-                   vector<vector<int> > systX,
-                   vector<vector<int> > systY,
-                   double lambdavalue)
-{
-  assert(systX.size() == systY.size());
-  _valX         = NULL;
-  _valY         = NULL;
-  _valXUL       = xData;
-  _valYUL       = yData;
-  _xAlphabet    = xAlphabet;
-  _yAlphabet    = yAlphabet;
-  _cmi          = true;
-  _systX        = systX;
-  _systY        = systY;
-  _sizeColDataY = _valYUL->columns();
-  _sizeColDataX = _valXUL->columns();
-  _sizeRowDataX = _valXUL->rows();
-  _sizeRowDataY = _valYUL->rows();
-  _sizeX        = _xAlphabet->rows();
-  _sizeY        = _yAlphabet->rows();
   __featureArray(lambdavalue);
 }
 
 ITMatrix::ITMatrix()
 {
-  _valX         = new DContainer(0,0);
-  _valY         = new DContainer(0,0);
-  _xAlphabet    = new DContainer(0,0);
-  _yAlphabet    = new DContainer(0,0);
+  _valX         = new ULContainer(0,0);
+  _valY         = new ULContainer(0,0);
+  _xAlphabet    = new ULContainer(0,0);
+  _yAlphabet    = new ULContainer(0,0);
   _sizeColDataY = 0;
   _sizeColDataX = 0;
   _sizeRowDataX = 0;
@@ -167,7 +140,7 @@ int ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowDataX, in
     }
     else
     {
-      if((*_valXUL)(rowDataX,_systX[i][j]) != x[j])
+      if((*_valX)(rowDataX,_systX[i][j]) != x[j])
       {
         equ = false;
       }
@@ -186,7 +159,7 @@ int ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowDataX, in
     }
     else
     {
-      if((*_valYUL)(rowDataY,_systY[i][j]) != y[j])
+      if((*_valY)(rowDataY,_systY[i][j]) != y[j])
       {
         equ = false;
       }
@@ -227,7 +200,7 @@ int ITMatrix::getFeatureArraydeltaAlphY(int i, int indexX, int indexY, int rowDa
     }
     else
     {
-      if((*_valXUL)(rowDataX,_systX[i][j]) != x[j])
+      if((*_valX)(rowDataX,_systX[i][j]) != x[j])
       {
         equ = false;
       }

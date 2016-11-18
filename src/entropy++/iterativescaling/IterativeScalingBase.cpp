@@ -2,59 +2,10 @@
 
 using namespace entropy::iterativescaling;
 
-IterativeScalingBase::IterativeScalingBase(DContainer *xData,
-                                           DContainer *yData,
-                                           DContainer *xAlphabet,
-                                           DContainer *yAlphabet,
-                                           ivvector systX,
-                                           ivvector systY,
-                                           IsParameter param,
-                                           bool useFeatures)
-{
-  assert(xData->rows() == yData->rows());
-  _param       = param;
-  _xData       = xData;
-  _yData       = yData;
-  _xAlphabet   = xAlphabet;
-  _yAlphabet   = yAlphabet;
-  _sizeSystX   = systX.size();
-  _sizeX       = _xAlphabet->rows();
-  _sizeY       = _yAlphabet->rows();
-  _sizeColDataY = _yData->columns();
-  _sizeColDataX = _xData->columns();
-  _sizeRowDataX = _xData->rows();
-  _sizeRowDataY = _yData->rows();
-  _systX       = systX;
-  _systY       = systY;
-
-  if(useFeatures) // isGis and csisGis require different feature matrices
-  {
-    _imatrix = new FeatureMatrix(_xData,
-                                 _yData,
-                                 _xAlphabet,
-                                 _yAlphabet,
-                                 systX,
-                                 systY,
-                                 param.lambdavalue);
-  }
-  else
-  {
-    _imatrix = new InstanceMatrix(_xData,
-                                  _yData,
-                                  _xAlphabet,
-                                  _yAlphabet,
-                                  systX,
-                                  systY,
-                                  param.lambdavalue);
-  }
-  _observed = __getobs();
-}
-
-// Konstruktor fuer Alphabete mit unsigned long
 IterativeScalingBase::IterativeScalingBase(ULContainer *xData,
                                            ULContainer *yData,
-                                           DContainer *xAlphabet,
-                                           DContainer *yAlphabet,
+                                           ULContainer *xAlphabet,
+                                           ULContainer *yAlphabet,
                                            ivvector systX,
                                            ivvector systY,
                                            IsParameter param,
@@ -102,9 +53,9 @@ IterativeScalingBase::IterativeScalingBase(ULContainer *xData,
 }
 
 IterativeScalingBase::IterativeScalingBase(int ColDataY,
-                                           DContainer *xData,
-                                           DContainer *xAlphabet,
-                                           DContainer *yAlphabet,
+                                           ULContainer *xData,
+                                           ULContainer *xAlphabet,
+                                           ULContainer *yAlphabet,
                                            ivvector   systX,
                                            ivvector   systY)
 {
@@ -119,7 +70,7 @@ IterativeScalingBase::IterativeScalingBase(int ColDataY,
   _sizeColDataY = ColDataY;
   _sizeColDataX = _xData->columns();
   _sizeRowDataX = _xData->rows();
-  _yData        = new DContainer(_sizeRowDataX,ColDataY);
+  _yData        = new ULContainer(_sizeRowDataX,ColDataY);
   _sizeRowDataY = _sizeRowDataX;
   _imatrix      = new FeatureMatrix(_xData,
                                     _yData,
@@ -160,7 +111,8 @@ double IterativeScalingBase::prop(int rowX, int indexY)
 
 // p(y | x)
 // double IterativeScalingBase::prop(int indexX, int indexY)
-double IterativeScalingBase::propAlphX(int indexX, int rowY)
+// double IterativeScalingBase::propAlphX(int indexX, int rowY)
+double IterativeScalingBase::p_x_c_y(int indexX, int rowY)
 {
   double featexp  = 0;
   double featnorm = 0;
@@ -186,40 +138,46 @@ double IterativeScalingBase::propAlphX(int indexX, int rowY)
 // P(x)
 double IterativeScalingBase::propm(int rowX)
 {
-  double z        = 0.0;
-  double exponent = 0.0;
-
-  int Y = pow(_yAlphabet->rows(),_sizeColDataY);
-  int X = pow(_xAlphabet->rows(), _sizeColDataX);
-
-  for(int y = 0; y < Y; y++)
+  double max      = 0;
+  double z        = 0;
+  double curr;
+  double exponent = 0;
+  int YI          = pow(_yAlphabet->rows(),_sizeColDataY);
+  for(int y = 0; y < YI; y++)
   {
     for(int feat = 0; feat < _systX.size(); feat++)
     {
-      exponent += _imatrix->getFeatureArrayvalueAlphYAlphX(feat, rowX, y);
+      curr = _imatrix->getFeatureArrayvalueAlphYAlphX(feat,rowX,y);
+      if(fabs(curr) > fabs(max)) max = curr; 
     }
-    z       += exp(exponent);
-    exponent = 0;
   }
-
-  double n    = 0.0;
-  double nexp = 0.0;
-
-  for(int x = 0; x < X; x++)
+  for(int y = 0; y < YI; y++)
   {
-    for(int y = 0; y < Y; y++)
+    for(int feat = 0; feat < _systX.size(); feat++)
+    {
+      exponent += _imatrix->getFeatureArrayvalueAlphYAlphX(feat,rowX,y);
+    }
+    z        += exp(exponent - max);  // = 0 fuer grosse lambda
+    exponent  = 0;
+  }
+  double n;
+  double nexp = 0;
+  int    XI   = pow(_xAlphabet->rows(),_sizeColDataX);
+  for(int x = 0; x < XI; x++)
+  {
+    for(int y = 0; y < YI; y++)
     {
       for(int feat = 0; feat < _systX.size(); feat++)
       {
         exponent += _imatrix->getFeatureArrayvalueAlphYAlphX(feat,x,y);
       }
-      nexp    += exp(exponent);
-      exponent = 0;
+      nexp     += exp(exponent-max);
+      exponent  = 0;
     }
-    n   += nexp;
-    nexp = 0;
+    n    += nexp;
+    nexp  = 0;
   }
-  return z / n;
+  return z/n;
 }
 
 double IterativeScalingBase::getFeatureArraylambda(int Feati, int ilambdaX, int ilambdaY)
@@ -260,7 +218,7 @@ double*** IterativeScalingBase::__getobs()
       {
         for(int deltj=0; deltj < DJ; deltj++)
         {
-          if(_imatrix->getFeatureArraydelta(feat, delti, deltj, i, i)==1)
+          if(_imatrix->getFeatureArraydelta(feat, delti, deltj, i, i) == 1)
           {
             _observed[feat][delti][deltj]++;
           }

@@ -2,72 +2,11 @@
 
 using namespace entropy::iterativescaling::gp;
 
-//training data, alphabete , startwert fuer lambda, startwert fuer delta, wert fuer sigma, test auf time, sekunden fuer den test
-IterativeScaling::IterativeScaling(DContainer *xData,
-             DContainer *yData,
-             DContainer *xAlphabet,
-             DContainer *yAlphabet,
-             ivvector systX,
-             ivvector systY,
-             IsParameter param)
-  : IterativeScalingBase(xData, yData, xAlphabet, yAlphabet, systX, systY, param, true)
-{
-  _fm         = (FeatureMatrix*)_imatrix;
-  _normaliser = new double[_sizeSystX];
-  _exponent   = new double*[_sizeSystX];
-
-  int Y = (int)pow(_yAlphabet->rows(),_sizeColDataY);
-  for(int i = 0; i < _sizeSystX; i++)
-  {
-    _exponent[i] = new double[Y];
-  }
-
-  _expected = new double**[_sizeSystX];
-  for(int i = 0; i < _sizeSystX; i++)
-  {
-    int K = (int)pow(_xAlphabet->rows(),_systX[i].size());
-    int L = (int)pow(_yAlphabet->rows(),_systY[i].size());
-    _expected[i] = new double*[K];
-    for(int k = 0; k < K; k++)
-    {
-      _expected[i][k] = new double[L];
-      for(int l = 0; l < _sizeY; l++)
-      {
-        _expected[i][k][l] = 0;
-      }
-    }
-  }
-
-  _delta = new double**[_sizeSystX];
-  for(int i = 0; i < _sizeSystX; i++)
-  {
-    int J = (int) pow(_xAlphabet->rows(),_systX[i].size());
-    int K = (int) pow(_yAlphabet->rows(),_systY[i].size());
-    _delta[i] = new double*[J];
-    for(int j = 0; j < J; j++)
-    {
-      _delta[i][j]= new double[K];
-      for(int k = 0; k < K; k++)
-      {
-        _delta[i][j][k] = param.lambdadeltaval;
-      }
-    }
-  }
-
-  if(param.time)
-  {
-    __gisgp(param.maxit, param.konv, param.sigma, param.test, param.seconds);
-  }
-  else
-  {
-    __gisgp(param.maxit, param.konv, param.sigma, param.test);
-  }
-}
 
 IterativeScaling::IterativeScaling(ULContainer *xData,
              ULContainer *yData,
-             DContainer *xAlphabet,
-             DContainer *yAlphabet,
+             ULContainer *xAlphabet,
+             ULContainer *yAlphabet,
              ivvector systX,
              ivvector systY,
              IsParameter param)

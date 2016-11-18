@@ -30,32 +30,24 @@ namespace entropy
     class IterativeScalingBase
     {
       public:
-        IterativeScalingBase(DContainer *xData,
-                             DContainer *yData,
-                             DContainer *xAlphabet,
-                             DContainer *yAlphabet,
-                             ivvector systX, // TODO: what does syst mean?
-                             ivvector systY, 
-                             IsParameter param,
-                             bool useFeatures);
         IterativeScalingBase(ULContainer *xData,
                              ULContainer *yData,
-                             DContainer *xAlphabet,
-                             DContainer *yAlphabet,
+                             ULContainer *xAlphabet,
+                             ULContainer *yAlphabet,
                              ivvector systX, // TODO: what does syst mean?
                              ivvector systY,
                              IsParameter param,
                              bool useFeatures);
         IterativeScalingBase(int ColDataY,
-                             DContainer *xData,
-                             DContainer *xAlphabet,
-                             DContainer *yAlphabet,
+                             ULContainer *xData,
+                             ULContainer *xAlphabet,
+                             ULContainer *yAlphabet,
                              ivvector systX, // TODO: what does syst mean?
                              ivvector systY);
         ~IterativeScalingBase();
 
         double  prop(int rowX, int rowY);
-        double  propAlphX(int indexX, int rowY);
+        double  p_x_c_y(int indexX, int rowY); // TODO: check if correct
         double  propm(int rowX);
         double  getFeatureArraylambda(int feat, int indexLambdaX, int indexLambdaY);
         void    setFeatureArraylambda(int feat, int indexLambdaX, int indexLambdaY, double valuelambda);
@@ -73,10 +65,10 @@ namespace entropy
         int         _sizeSystX;
         double***   _observed;
 
-        DContainer* _yAlphabet;
-        DContainer* _xAlphabet;
-        DContainer* _yData;
-        DContainer* _xData;
+        ULContainer* _yAlphabet;
+        ULContainer* _xAlphabet;
+        ULContainer* _yData;
+        ULContainer* _xData;
         ITMatrix*   _imatrix;
         IsParameter _param;
 

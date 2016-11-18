@@ -22,8 +22,13 @@ namespace entropy
     {
       public:
         ITMatrix();
-        ITMatrix(DContainer *eX, DContainer *eY, DContainer *aX, DContainer *aY, ivvector systX, ivvector systY, double lambdavalue);
-        ITMatrix(ULContainer *eX, ULContainer *eY, DContainer *aX, DContainer *aY, ivvector systX, ivvector systY, double lambdavalue);
+        ITMatrix(ULContainer *eX,
+                 ULContainer *eY,
+                 ULContainer *aX,
+                 ULContainer *aY,
+                 ivvector systX,
+                 ivvector systY,
+                 double lambdavalue);
         virtual ~ITMatrix();
         double  getFeatureArraylambda(int i,int ilambdaX, int ilambdaY);
         double  getFeatureArrayvalue(int i,int rowX, int rowY);
@@ -47,12 +52,10 @@ namespace entropy
         bool         _cmi;
         ivvector     _systX;
         ivvector     _systY;
-        DContainer*  _valX;
-        DContainer*  _valY;
-        ULContainer* _valXUL;
-        ULContainer* _valYUL;
-        DContainer*  _xAlphabet;
-        DContainer*  _yAlphabet;
+        ULContainer* _valX;
+        ULContainer* _valY;
+        ULContainer* _xAlphabet;
+        ULContainer* _yAlphabet;
         Feature*     _featureArray;
     };
   }

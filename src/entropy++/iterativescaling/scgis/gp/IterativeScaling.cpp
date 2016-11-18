@@ -4,65 +4,10 @@ using namespace entropy::iterativescaling::scgis::gp;
 
 #define EPSILON 0.00000001
 
-IterativeScaling::IterativeScaling(DContainer *xData,
-                 DContainer *yData,
-                 DContainer *xAlphabet,
-                 DContainer *yAlphabet,
-                 ivvector systX,
-                 ivvector systY,
-                 IsParameter param)
-  : IterativeScalingBase(xData, yData, xAlphabet, yAlphabet,systX,systY, param, false)
-{
-  _im       = (InstanceMatrix*)_imatrix;
-  _exponent = new double**[_sizeSystX];
-  int Y     = pow(_yAlphabet->rows(),_sizeColDataY);
-  for(int i = 0; i < _sizeSystX; i++)
-  {
-    _exponent[i] = new double*[_sizeRowDataX];
-    for(int xi = 0; xi < _sizeRowDataX; xi++)
-    {
-      _exponent[i][xi] = new double[Y];
-      for(int y = 0; y < Y; y++)
-      {
-        _exponent[i][xi][y] = 0.0;
-      }
-    }
-  }
-
-  _normaliser = new double*[_sizeSystX];
-  for(int i = 0; i < _sizeSystX; i++)
-  {
-    _normaliser[i] = new double[_sizeRowDataX];
-    for(int k = 0; k < _sizeRowDataX; k++)
-    {
-      _normaliser[i][k] = Y;
-    }
-  }
-
-  _delta = new double**[_sizeSystX];
-  for(int i = 0; i < _sizeSystX; i++)
-  {
-    int K = (int)pow(_xAlphabet->rows(),_systX[i].size());
-    int L = (int)pow(_yAlphabet->rows(),_systY[i].size());
-    _delta[i] = new double*[K];
-    for(int k = 0; k < K; k++)
-    {
-      _delta[i][k] = new double[L];
-      for(int l = 0; l < L; l++)
-      {
-        _delta[i][k][l] = param.lambdadeltaval;
-      }
-    }
-  }
-  // TODO rename functions
-  if(param.time) __scgis(param.maxit,param.konv,param.test,param.sigma,param.seconds);
-  else           __scgis(param.maxit,param.konv,param.test,param.sigma);
-}
-
 IterativeScaling::IterativeScaling(ULContainer *xData,
                  ULContainer *yData,
-                 DContainer *xAlphabet,
-                 DContainer *yAlphabet,
+                 ULContainer *xAlphabet,
+                 ULContainer *yAlphabet,
                  ivvector systX,
                  ivvector systY,
                  IsParameter param)

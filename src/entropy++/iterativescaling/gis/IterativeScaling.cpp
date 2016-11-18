@@ -4,62 +4,11 @@ using namespace entropy::iterativescaling::gis;
 
 #define EPSILON 0.00000001
 
-IterativeScaling::IterativeScaling(DContainer* xData,
-         DContainer *yData,
-         DContainer *xAlphabet,
-         DContainer *yAlphabet,
-         ivvector systX,
-         ivvector systY,
-         IsParameter param)
-  : IterativeScalingBase(xData, yData, xAlphabet, yAlphabet, systX, systY, param, true)
-{
-  _fm       = (FeatureMatrix*)_imatrix;
-  _param    = param;
-  _expected = new double**[_sizeSystX];
 
-  int K = 0;
-  int L = 0;
-
-  for(int i = 0; i < _sizeSystX; i++)
-  {
-    K = pow(_xAlphabet->rows(), _systX[i].size());
-    L = pow(_yAlphabet->rows(), _systY[i].size());
-    _expected[i] = new double*[K];
-    for(int k = 0; k < K; k++)
-    {
-      _expected[i][k] = new double[L];
-      for(int l = 0; l < L; l++)
-      {
-        _expected[i][k][l] = 0;
-      }
-    }
-  }
-
-  _normaliser = new double[_sizeSystX];
-  _exponent   = new double*[_sizeSystX];
-
-  int size = (int)pow(_yAlphabet->rows(), _sizeColDataY);
-  for(int i=0; i < _sizeSystX; i++)
-  {
-    _exponent[i] = new double[size];
-  }
-
-  if(param.konvtime)
-  {
-    __gis(param.konv, param.seconds, param.test);
-  }
-  else
-  {
-    if(param.time) __gis(param.seconds, param.test);
-    else           __gis(param.maxit, param.konv, param.test);
-  }
-}
-
-//die Alphabetwerte als unsigned long
 IterativeScaling::IterativeScaling(ULContainer *xData,
          ULContainer *yData,
-         DContainer *xAlphabet,
-         DContainer *yAlphabet,
+         ULContainer *xAlphabet,
+         ULContainer *yAlphabet,
          ivvector systX,
          ivvector systY,
          IsParameter param)
