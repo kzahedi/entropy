@@ -172,7 +172,7 @@ void itTest:: OneXOneYFour(){
 	  param.konvtime       = true;
 	  param.time           = false;
 	  param.test           = true;
-	  param.seconds        = 72000;
+	  param.seconds        = 70;
 
 
 	  Test *testval = new Test(1,1,10000,lambda, *zX,*zX,alphX, alphY); //get data
@@ -248,7 +248,7 @@ void itTest::OneXOneYEight(){
 	  param.konvtime       = true;
 	  param.time           = false;
 	  param.test           = true;
-	  param.seconds        = 72000;
+	  param.seconds        = 70;
 
 
 	  Test *testval = new Test(1,1,10000,lambda, *zX,*zX,alphX, alphY); //get data
@@ -303,7 +303,7 @@ void itTest::OneXOneYEight(){
 	  cout << " GIS: " << testval->KL(test);
 	  cout << " SCGIS: " << testval->KL(testsc);
 }
-void itTest::OneXOneYTwenty(){
+void itTest::OneXOneYTwenty(){ /*
 	  cout << "OneXOneYTwenty" << endl;
 	  srand(time(NULL));
 	  DContainer *zX = new DContainer(20,1); // alphabet
@@ -382,10 +382,10 @@ void itTest::OneXOneYTwenty(){
 	      }
 	    }
 	  cout << " GIS: " << testval->KL(test);
-	  cout << " SCGIS: " << testval->KL(testsc);
+	  cout << " SCGIS: " << testval->KL(testsc); */
 }
 void itTest::TwoXOneY()
-{
+{ /*
   cout << endl;
   cout << "TWoXOneY" << endl;
   srand(time(NULL));
@@ -424,7 +424,7 @@ void itTest::TwoXOneY()
   paramgp.konv           = 0.0001;
   paramgp.time           = true;
   paramgp.test           = true;
-  paramgp.seconds        = 60; */
+  paramgp.seconds        = 60;
 
   Test *testval     = new Test(2,1,10000,lambda, *zY,*zY,alphX, alphY);
   GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
@@ -483,10 +483,10 @@ void itTest::TwoXOneY()
   cout << " GIS: " << testval->KL(test);
   cout << " SCGIS: " << testval->KL(testsc);
 //  cout << " GISgp: " << testval->KL(testgp);
-//  cout << " SCGISgp: " << testval->KL(testscgp);
+//  cout << " SCGISgp: " << testval->KL(testscgp); */
 }
 void itTest::TwoXTwoY()
-{
+{ /*
   cout << endl;
   cout << "TwoXTwoY" << endl;
   srand(time(NULL));
@@ -528,7 +528,7 @@ void itTest::TwoXTwoY()
   paramgp.konv           = 0.0001;
   paramgp.time           = true;
   paramgp.test           = true;
-  paramgp.seconds        = 60; */
+  paramgp.seconds        = 60;
 
   Test *testval     = new Test(2,2,10000,lambda, *zY,*zY,alphX, alphY);
   GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,param);
@@ -582,11 +582,11 @@ void itTest::TwoXTwoY()
   cout << " GIS: " << testval->KL(test);
   cout << " SCGIS: " << testval->KL(testsc);
 //  cout << " GISgp: " << testval->KL(testgp);
-//  cout << " SCGISgp: " << testval->KL(testscgp);
+//  cout << " SCGISgp: " << testval->KL(testscgp); */
 }
 
 void itTest::NotBinarySix()
-{
+{ /*
   cout << endl;
   cout << "NotBinary" << endl;
   srand(time(NULL));
@@ -643,7 +643,7 @@ void itTest::NotBinarySix()
     CPPUNIT_ASSERT(test->getconv(i) >= test->getconv(i+1));
   }
   cout << " GIS: " << testval->KL(test);
-  cout << " SCGIS: " << testval->KL(testsc);
+  cout << " SCGIS: " << testval->KL(testsc); */
 }
 /*
 void itTest::FourXFourY()

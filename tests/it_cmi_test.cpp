@@ -43,7 +43,7 @@ using namespace entropy;
 
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( itCmiTest );
-
+/*
 void itCmiTest::testITvsCMI()
 {
   cout << PARENT << "/dcmot.csv" << endl;
@@ -123,7 +123,7 @@ void itCmiTest::testITvsCMI()
     wdomain[i][0] = 0.0;
     wdomain[i][1] = 1.0;
   }
-  int bins   = 30;
+  int bins   = 2;
   int *wbins = new int[3];
   wbins[0]   = bins;
   wbins[1]   = bins;
@@ -196,8 +196,6 @@ void itCmiTest::testITvsCMI()
   ULContainer *dcX  = dcW2;
   ULContainer *dcYZ = dcW1;
   (*dcYZ) += *dcA1; // 2 columns. 1st column = A1, 2nd column = W1. 
-  cout << (*dcX) << endl;
-  cout << (*dcYZ) << endl;
   CPPUNIT_ASSERT(dcW1->rows() > 0);
   for(int r = 0; r < dcW1->rows(); r++)
   {
@@ -246,3 +244,4 @@ void itCmiTest::testITvsCMI()
   //CPPUNIT_ASSERT_DOUBLES_EQUAL(mfmc_w, IT-value(mfX, mfY), 0.000001);
 
 }
+*/

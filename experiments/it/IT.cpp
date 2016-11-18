@@ -158,8 +158,31 @@ double IT::propAlphX(int indexX, int rowY)
 }
 // P(x)
 double IT::propm(int rowX){
+  double max = 0;
   double z=0;
+  double curr;
   double exponent=0;
+  for(int y=0;y<pow(_Y->rows(),_sizeColValY);y++)
+  {
+    for(int feat=0;feat<  _systX.size();feat++)
+    {
+        if(_gis)
+        {
+          curr = (*_FM).getFeatureArrayvalueAlphYAlphX(feat,rowX,y);
+          if(fabs(curr)>fabs(max)){
+        	  max=curr;
+          }
+        }
+        else
+        {
+            curr = (*_IM).getFeatureArrayvalueAlphYAlphX(feat,rowX,y);
+            if(fabs(curr)>fabs(max)){
+          	  max=curr;
+            }
+        }
+
+    }
+  }
   for(int y=0;y<pow(_Y->rows(),_sizeColValY);y++)
   {
     for(int feat=0;feat<  _systX.size();feat++)
@@ -174,7 +197,7 @@ double IT::propm(int rowX){
         }
 
     }
-    z+=exp(exponent);
+    z+=exp(exponent-max);  // = 0 fuer grosse lambda
     exponent=0;
   }
   double n;
@@ -195,7 +218,7 @@ double IT::propm(int rowX){
           }
 
       }
-      nexp +=exp(exponent);
+      nexp +=exp(exponent-max);
       exponent=0;
     }
     n+=nexp;
