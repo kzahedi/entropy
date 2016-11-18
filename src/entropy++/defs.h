@@ -24,5 +24,7 @@ typedef vector<vector<int> > ivvector;
 typedef vector<double>          dvector;
 typedef vector<vector<double> > dvvector;
 
+
+
 #endif // __DEFS_H__
 

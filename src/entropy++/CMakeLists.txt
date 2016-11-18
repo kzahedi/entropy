@@ -49,6 +49,7 @@ set(SRC sparse/CMI.cpp
   Matrix.cpp
 
   Csv.cpp
+  powi.cpp
 )
 
 if(APPLE)

@@ -38,7 +38,8 @@ namespace entropy
         int     getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowDataX, int indexDataY);
         int     getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int indexDataX, int indexDataY);
         void    setFeatureArraylambda(int i, int ilambdaX, int ilambdaY,double valuelambda);
-        vector<double> index(int index,bool x, int sizeCol);
+        // vector<int> index(int index,bool x, int sizeCol);
+        void index(double* array, int index, bool x, int sizeCol);
 
       protected:
         void         __featureArray(double valuelambda);

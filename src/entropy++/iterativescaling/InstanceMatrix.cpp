@@ -1,5 +1,7 @@
 #include "InstanceMatrix.h"
 
+#include <entropy++/powi.h>
+
 using namespace entropy::iterativescaling;
 
 InstanceMatrix::InstanceMatrix(ULContainer *xData,
@@ -20,8 +22,8 @@ InstanceMatrix::~InstanceMatrix()
 
   for(int i = 0; i < _systX.size(); i++)
   {
-    int J = pow(_sizeX,_systX[i].size());
-    int K = pow(_sizeY,_systY[i].size());
+    int J = powi(_sizeX,_systX[i].size());
+    int K = powi(_sizeY,_systY[i].size());
     for(int j = 0; j < J; j++)
     {
       for(int k = 0; k < K; k++)
@@ -38,16 +40,16 @@ InstanceMatrix::~InstanceMatrix()
 ivector InstanceMatrix::getInstanceMatrixX(int feat, int deltai, int deltaj)
 {
   assert(feat < _systX.size());
-  assert(deltai < pow(_sizeX,_systX[feat].size()));
-  assert(deltaj< pow(_sizeY,_systY[feat].size()));
+  assert(deltai < powi(_sizeX,_systX[feat].size()));
+  assert(deltaj< powi(_sizeY,_systY[feat].size()));
   return _mat[feat][deltai][deltaj][0];
 }
 
 ivector InstanceMatrix::getInstanceMatrixY(int feat, int deltai, int deltaj)
 {
   assert(feat < _systX.size());
-  assert(deltai < pow(_sizeX,_systX[feat].size()));
-  assert(deltaj < pow(_sizeY,_systY[feat].size()));
+  assert(deltai < powi(_sizeX,_systX[feat].size()));
+  assert(deltaj < powi(_sizeY,_systY[feat].size()));
   return _mat[feat][deltai][deltaj][1];
 }
 
@@ -59,8 +61,8 @@ void InstanceMatrix::__getMatrix(double valuelambda)
   _mat = new ivvector**[_systX.size()];
   for(int i = 0; i < _systX.size(); i++)
   {
-    int K = (int)pow(_sizeX,_systX[i].size());
-    int L = (int)pow(_sizeY,_systY[i].size());
+    int K = (int)powi(_sizeX,_systX[i].size());
+    int L = (int)powi(_sizeY,_systY[i].size());
     _mat[i] = new ivvector*[K];
     for(int k = 0; k < K; k++)
     {
@@ -73,11 +75,11 @@ void InstanceMatrix::__getMatrix(double valuelambda)
   }
 
   //Matrix fuellen
-  int Y = pow(_sizeY,_sizeColDataY);
+  int Y = powi(_sizeY,_sizeColDataY);
   for(int feat = 0; feat < _systX.size(); feat++)
   {
-    int DI = pow(_sizeX,_systX[feat].size());
-    int DJ = pow(_sizeY,_systY[feat].size());
+    int DI = powi(_sizeX,_systX[feat].size());
+    int DJ = powi(_sizeY,_systY[feat].size());
     for(int delti = 0; delti < DI; delti++)
     {
       for(int deltj = 0; deltj < DJ; deltj++)

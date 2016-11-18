@@ -1,5 +1,7 @@
 #include "IterativeScaling.h"
 
+#include <entropy++/powi.h>
+
 using namespace entropy::iterativescaling::gp;
 
 
@@ -16,7 +18,7 @@ IterativeScaling::IterativeScaling(ULContainer *xData,
   _normaliser = new double[_sizeSystX];
   _exponent   = new double*[_sizeSystX];
 
-  int N = (int) pow(_yAlphabet->rows(),_sizeColDataY);
+  int N = (int) powi(_yAlphabet->rows(),_sizeColDataY);
   for(int i = 0; i < _sizeSystX; i++)
   {
     _exponent[i] = new double[N];
@@ -25,11 +27,11 @@ IterativeScaling::IterativeScaling(ULContainer *xData,
   _expected = new double**[_sizeSystX];
   for(int i = 0; i < _sizeSystX; i++)
   {
-    int K = (int)pow(_xAlphabet->rows(),_systX[i].size());
+    int K = (int)powi(_xAlphabet->rows(),_systX[i].size());
     _expected[i] = new double*[K];
     for(int k = 0; k < K; k++)
     {
-      int L = (int)pow(_yAlphabet->rows(),_systY[i].size());
+      int L = (int)powi(_yAlphabet->rows(),_systY[i].size());
       _expected[i][k] = new double[L];
       for(int l = 0; l < _sizeY; l++)
       {
@@ -41,8 +43,8 @@ IterativeScaling::IterativeScaling(ULContainer *xData,
   _delta = new double**[_sizeSystX];
   for(int i = 0; i < _sizeSystX; i++)
   {
-    int J = (int) pow(_xAlphabet->rows(),_systX[i].size());
-    int K = (int) pow(_yAlphabet->rows(),_systY[i].size());
+    int J = (int) powi(_xAlphabet->rows(),_systX[i].size());
+    int K = (int) powi(_yAlphabet->rows(),_systY[i].size());
     _delta[i] = new double*[J];
     for(int j = 0; j < J; j++)
     {
@@ -69,7 +71,7 @@ IterativeScaling::~IterativeScaling()
   {
     for(int i = 0; i < _sizeSystX; i++)
     {
-      int K = pow(_xAlphabet->rows(),_systX[i].size());
+      int K = powi(_xAlphabet->rows(),_systX[i].size());
       for(int k = 0; k < K; k++)
       {
         delete[] _expected[i][k];
@@ -83,7 +85,7 @@ IterativeScaling::~IterativeScaling()
   {
     for(int i = 0; i < _sizeSystX; i++)
     {
-      for(int j = 0; j < pow(_xAlphabet->rows(),_systX[i].size()); j++)
+      for(int j = 0; j < powi(_xAlphabet->rows(),_systX[i].size()); j++)
       {
         delete[] _delta[i][j];
       }
@@ -104,8 +106,8 @@ double IterativeScaling::__calculateIteration(double featconst, double sigma, bo
   __getexp();
   for(int feat = 0; feat < _sizeSystX; feat++)
   {
-    int DI = pow(_xAlphabet->rows(),_systX[feat].size());
-    int DJ = pow(_yAlphabet->rows(),_systY[feat].size());
+    int DI = powi(_xAlphabet->rows(),_systX[feat].size());
+    int DJ = powi(_yAlphabet->rows(),_systY[feat].size());
     for(int deltai = 0; deltai < DI; deltai++)
     {
       for(int deltaj = 0; deltaj < DJ; deltaj++)
@@ -117,10 +119,10 @@ double IterativeScaling::__calculateIteration(double featconst, double sigma, bo
         while(fabs(z-zOld) > 0.0001)
         {
           zOld     = z;
-          z        = (oldl+_delta[feat][deltai][deltaj])/pow(sigma,2)
+          z        = (oldl+_delta[feat][deltai][deltaj])/powi(sigma,2)
             + _expected[feat][deltai][deltaj]*exp(_delta[feat][deltai][deltaj]*featconst)
             - _observed[feat][deltai][deltaj];
-          double n = + 1.0/(pow(sigma,2)) // TODO = + 1?
+          double n = + 1.0/(powi(sigma,2)) // TODO = + 1?
             + _expected[feat][deltai][deltaj]
             * featconst
             * exp(_delta[feat][deltai][deltaj]* featconst);
@@ -132,7 +134,7 @@ double IterativeScaling::__calculateIteration(double featconst, double sigma, bo
         newl = oldl + _delta[feat][deltai][deltaj];
         _fm->setFeatureArraylambda(feat,deltai,deltaj,newl);
         l += fabs((oldl+_delta[feat][deltai][deltaj])
-                  / pow(sigma,2)
+                  / powi(sigma,2)
                   + _expected[feat][deltai][deltaj]
                   * exp(_delta[feat][deltai][deltaj]*featconst)
                   - _observed[feat][deltai][deltaj]);
@@ -149,7 +151,7 @@ void IterativeScaling::__gisgp(int maxit, double konv, double sigma, bool test,i
   //constant c for delta
   double featconst = __getFeatconst();
 
-  int N = pow(_yAlphabet->rows(),_sizeColDataY);
+  int N = powi(_yAlphabet->rows(),_sizeColDataY);
   for(int i = 0; i < _sizeSystX; i++)
   {
     for(int j = 0; j < N; j++)
@@ -175,7 +177,7 @@ void IterativeScaling::__gisgp(int maxit, double konv, double sigma, bool test)
 {
   //constant c for delta
   double featconst = __getFeatconst();
-  int    N         = pow(_yAlphabet->rows(),_sizeColDataY);
+  int    N         = powi(_yAlphabet->rows(),_sizeColDataY);
 
   for(int i = 0; i < _sizeSystX; i++)
   {
@@ -206,7 +208,7 @@ int IterativeScaling::getsizeconv()
 double IterativeScaling::__getFeatconst()
 {
   double r = 0.0;
-  int N = pow(_yAlphabet->rows(),_sizeColDataY);
+  int N = powi(_yAlphabet->rows(),_sizeColDataY);
   for(int i = 0; i < _sizeRowDataX; i++) // i-th data row
   {
     for(int j = 0; j < N; j++) // y-alphabet
@@ -222,8 +224,8 @@ void IterativeScaling::__getexp()
 {
   for(int i=0; i<_sizeSystX; i++)
   {
-    int K = (int) pow(_xAlphabet->rows(),_systX[i].size());
-    int L = (int) pow(_yAlphabet->rows(),_systY[i].size());
+    int K = (int) powi(_xAlphabet->rows(),_systX[i].size());
+    int L = (int) powi(_yAlphabet->rows(),_systY[i].size());
     for(int k = 0; k < K; k++)
     {
       for(int l = 0; l < L;l++)
@@ -233,7 +235,7 @@ void IterativeScaling::__getexp()
     }
   }
 
-  int YJ = pow(_yAlphabet->rows(),_sizeColDataY);
+  int YJ = powi(_yAlphabet->rows(),_sizeColDataY);
   for(int xi = 0; xi < _sizeRowDataX; xi++)
   {
     for(int i = 0; i < _sizeSystX; i++)

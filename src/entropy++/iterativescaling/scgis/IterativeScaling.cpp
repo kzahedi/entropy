@@ -1,5 +1,7 @@
 #include "IterativeScaling.h"
 
+#include <entropy++/powi.h>
+
 using namespace entropy::iterativescaling::scgis;
 
 #define EPSILON 0.00000001
@@ -16,7 +18,7 @@ IterativeScaling::IterativeScaling(ULContainer *xData,
   _im       = (InstanceMatrix*)_imatrix;
   _param    = param;
   _exponent = new double**[_sizeSystX];
-  int Y     = (int)pow(_yAlphabet->rows(),_sizeColDataY);
+  int Y     = (int)powi(_yAlphabet->rows(),_sizeColDataY);
   for(int i = 0; i < _sizeSystX; i++)
   {
     _exponent[i] = new double*[_sizeRowDataX];
@@ -130,11 +132,11 @@ void IterativeScaling::__scgis(int maxit, double konv, bool test)
 double IterativeScaling::__calculateIteration(bool test)
 {
   double l = 0.0;
-  int    Y = pow(_sizeY,_sizeColDataY);
+  int    Y = powi(_sizeY,_sizeColDataY);
   for(int feat = 0; feat < _sizeSystX; feat++)
   {
-    int DI = pow(_sizeX,_systX[feat].size());
-    int DJ = pow(_sizeY,_systY[feat].size());
+    int DI = powi(_sizeX,_systX[feat].size());
+    int DJ = powi(_sizeY,_systY[feat].size());
     for(int delti = 0; delti < DI; delti++)
     {
       for(int deltj = 0; deltj < DJ; deltj++)

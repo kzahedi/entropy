@@ -1,5 +1,7 @@
 #include "FeatureMatrix.h"
 
+#include <entropy++/powi.h>
+
 using namespace entropy::iterativescaling;
 
 FeatureMatrix::FeatureMatrix(ULContainer *xData,
@@ -11,7 +13,7 @@ FeatureMatrix::FeatureMatrix(ULContainer *xData,
                              double lambdavalue)
   : ITMatrix(xData,yData,xAlphabet,yAlphabet,systX,systY,lambdavalue)
 {
-  _sizeAlphY = pow(_yAlphabet->rows(),_sizeColDataY);
+  _sizeAlphY = powi(_yAlphabet->rows(),_sizeColDataY);
   __getMatrix(lambdavalue);
 }
 
@@ -79,8 +81,8 @@ void FeatureMatrix::__getMatrix(double valuelambda)
     {
       for(int feat = 0; feat < _systX.size(); feat++)
       {
-        int DI = pow(_xAlphabet->rows(), _systX[feat].size());
-        int DJ = pow(_yAlphabet->rows(), _systY[feat].size());
+        int DI = powi(_xAlphabet->rows(), _systX[feat].size());
+        int DJ = powi(_yAlphabet->rows(), _systY[feat].size());
         for(int deltai = 0; deltai < DI; deltai++)
         {
           for(int deltaj = 0; deltaj < DJ; deltaj++)

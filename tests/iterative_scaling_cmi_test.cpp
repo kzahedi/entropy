@@ -15,6 +15,10 @@
 
 #include <boost/filesystem.hpp>
 
+#ifndef PARENT
+#define PARENT "/Users/zahedi/projects/entropy/experiments/hopping/data/"
+#endif
+
 using namespace std;
 using namespace boost::filesystem;
 using namespace entropy::sparse;
@@ -228,9 +232,9 @@ void itCmiTest::testITvsCMI()
   param.lambdavalue    = 1.0;
   param.lambdadeltaval = 1.0;
   param.sigma          = 0.01;   //TODO find best sigma value
-  param.maxit          = 10;
+  param.maxit          = 10000000;
   param.konv           = 0.000001;
-  param.time           = true;
+  param.time           = false;
   param.test           = true;
   param.seconds        = 600;
   // param.verbose        = true;

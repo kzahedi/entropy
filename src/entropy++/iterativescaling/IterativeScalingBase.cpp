@@ -1,5 +1,7 @@
 #include "IterativeScalingBase.h"
 
+#include <entropy++/powi.h>
+
 using namespace entropy::iterativescaling;
 
 IterativeScalingBase::IterativeScalingBase(ULContainer *xData,
@@ -96,7 +98,7 @@ double IterativeScalingBase::prop(int rowX, int indexY)
     featexp += _imatrix->getFeatureArrayvalueAlphY(feat,rowX, indexY);
   }
 
-  int YI = pow(_yAlphabet->rows(),_sizeColDataY);
+  int YI = powi(_yAlphabet->rows(),_sizeColDataY);
   for(int yi = 0; yi < YI; yi++)
   {
     for(int feat = 0; feat < _systX.size(); feat++)
@@ -122,7 +124,7 @@ double IterativeScalingBase::p_x_c_y(int indexX, int rowY)
   {
     featexp += _imatrix->getFeatureArrayvalueAlphYAlphX(feat, indexX, rowY);
   }
-  int YI = pow(_yAlphabet->rows(),_sizeColDataY);
+  int YI = powi(_yAlphabet->rows(),_sizeColDataY);
   for(int yi = 0; yi < YI; yi++)
   {
     for(int feat = 0; feat < _systX.size(); feat++)
@@ -142,7 +144,7 @@ double IterativeScalingBase::propm(int rowX)
   double z        = 0;
   double curr;
   double exponent = 0;
-  int YI          = pow(_yAlphabet->rows(),_sizeColDataY);
+  int YI          = powi(_yAlphabet->rows(),_sizeColDataY);
   for(int y = 0; y < YI; y++)
   {
     for(int feat = 0; feat < _systX.size(); feat++)
@@ -162,7 +164,7 @@ double IterativeScalingBase::propm(int rowX)
   }
   double n;
   double nexp = 0;
-  int    XI   = pow(_xAlphabet->rows(),_sizeColDataX);
+  int    XI   = powi(_xAlphabet->rows(),_sizeColDataX);
   for(int x = 0; x < XI; x++)
   {
     for(int y = 0; y < YI; y++)
@@ -194,8 +196,8 @@ double*** IterativeScalingBase::__getobs()
   _observed = new double**[_sizeSystX];
   for(int i = 0; i < _systX.size(); i++)
   {
-    int K = (int)pow(_xAlphabet->rows(), _systX[i].size());
-    int L = (int)pow(_yAlphabet->rows(), _systY[i].size());
+    int K = (int)powi(_xAlphabet->rows(), _systX[i].size());
+    int L = (int)powi(_yAlphabet->rows(), _systY[i].size());
     _observed[i] = new double*[K];
     for(int k = 0; k < K; k++)
     {
@@ -212,8 +214,8 @@ double*** IterativeScalingBase::__getobs()
   {
     for(int feat = 0; feat< _sizeSystX; feat++)
     {
-      int DI = pow(_xAlphabet->rows(), _systX[feat].size());
-      int DJ = pow(_yAlphabet->rows(), _systY[feat].size());
+      int DI = powi(_xAlphabet->rows(), _systX[feat].size());
+      int DJ = powi(_yAlphabet->rows(), _systY[feat].size());
       for(int delti = 0; delti < DI; delti++)
       {
         for(int deltj=0; deltj < DJ; deltj++)
@@ -235,7 +237,7 @@ IterativeScalingBase::~IterativeScalingBase()
   {
     for(int i = 0; i <_sizeSystX; i++)
     {
-      int K = pow(_xAlphabet->rows(), _systX[i].size());
+      int K = powi(_xAlphabet->rows(), _systX[i].size());
       for(int k = 0; k < K; k++)
       {
         delete[] _observed[i][k];
@@ -266,18 +268,18 @@ dvector IterativeScalingBase::index(int index, bool x, int sizeCol)
   double z;
   if(x)
   {
-    assert(index < pow(_xAlphabet->rows(), sizeCol));
+    assert(index < powi(_xAlphabet->rows(), sizeCol));
     sizeAlph = _sizeX;
   }
   else
   {
-    assert(index < pow(_yAlphabet->rows(), sizeCol));
+    assert(index < powi(_yAlphabet->rows(), sizeCol));
     sizeAlph = _sizeY;
   }
   for(int i = sizeCol; i>0 ; i--)
   {
-    z = index % ((int)pow(sizeAlph, i));
-    z = z / (pow(sizeAlph,i-1));
+    z = index % ((int)powi(sizeAlph, i));
+    z = z / (powi(sizeAlph,i-1));
     int j = (int)z;
     if(x)
     {
