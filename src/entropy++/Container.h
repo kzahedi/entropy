@@ -10,6 +10,7 @@
 #include <math.h>
 #include <ostream>
 #include <vector>
+#include <algorithm>
 
 # define MIN(a,b) (((a)<(b))?a:b)
 # define MAX(a,b) (((a)>(b))?a:b)
@@ -524,6 +525,7 @@ class Container
         {
           T value = this->get(r,c);
           if(std::find(values.begin(), values.end(), value) == values.end())
+          //if(values.find(value) == values.end())
           {
             values.push_back(value);
           }
