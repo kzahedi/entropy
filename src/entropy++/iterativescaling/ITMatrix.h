@@ -39,7 +39,7 @@ namespace entropy
         int     getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int indexDataX, int indexDataY);
         void    setFeatureArraylambda(int i, int ilambdaX, int ilambdaY,double valuelambda);
         // vector<int> index(int index,bool x, int sizeCol);
-        void index(double* array, int index, bool x, int sizeCol);
+        void index(int* array, int index, bool x, int sizeCol);
 
       protected:
         void         __featureArray(double valuelambda);
@@ -58,6 +58,9 @@ namespace entropy
         ULContainer* _xAlphabet;
         ULContainer* _yAlphabet;
         Feature*     _featureArray;
+#if SPEED_OVER_MERMORY
+
+#endif
     };
   }
 }

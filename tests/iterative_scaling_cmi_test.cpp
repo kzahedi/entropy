@@ -98,11 +98,13 @@ void itCmiTest::testITvsCMI()
   double ac_min = dcmotA->min(0);
   double ac_max = dcmotA->max(0);
 
+  int bins   = 10;
   cout << "Domains:" << endl;
   cout << "  Position:          " << p_min  << " " << p_max  << endl;
   cout << "  Velocity:          " << v_min  << " " << v_max  << endl;
   cout << "  Acceleration:      " << a_min  << " " << a_max  << endl;
   cout << "  Action (DC Motor): " << ac_min << " " << ac_max << endl;
+  cout << "  Bins:              " << bins   << endl;
 
   // normalising DCMot
   dcmotW->normaliseColumn(0, p_min,  p_max);
@@ -128,7 +130,6 @@ void itCmiTest::testITvsCMI()
     wdomain[i][0] = 0.0;
     wdomain[i][1] = 1.0;
   }
-  int bins   = 30;
   int *wbins = new int[3];
   wbins[0]   = bins;
   wbins[1]   = bins;

@@ -5,6 +5,7 @@
 using namespace entropy::iterativescaling;
 
 
+
 ITMatrix::ITMatrix(ULContainer *xData,
                    ULContainer *yData,
                    ULContainer *xAlphabet,
@@ -126,8 +127,8 @@ int ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowDataX, in
   // assert(indexY < pow(_yAlphabet->rows(),_systY[i].size()));
   // assert(rowDataX < _sizeRowDataX);
   // assert(rowDataY < _sizeRowDataY);
-  double* x = new double[_systX[i].size()];
-  double* y = new double[_systY[i].size()];
+  int* x = new int[_systX[i].size()];
+  int* y = new int[_systY[i].size()];
   index(x, indexX, true,  _systX[i].size());
   index(y, indexY, false,  _systY[i].size());
   // vector<int> x = index(indexX, true,  _systX[i].size());
@@ -172,6 +173,8 @@ int ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowDataX, in
     }
   }
 
+  delete[] x;
+  delete[] y;
   if(equ)
   {
     return 1;
@@ -180,8 +183,6 @@ int ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowDataX, in
   {
     return -1;
   }
-  delete[] x;
-  delete[] y;
 }
 
 int ITMatrix::getFeatureArraydeltaAlphY(int i, int indexX, int indexY, int rowDataX, int indexDataY)
@@ -191,9 +192,9 @@ int ITMatrix::getFeatureArraydeltaAlphY(int i, int indexX, int indexY, int rowDa
   // assert(indexY < pow(_yAlphabet->rows(),_systY[i].size()));
   // assert(rowDataX < _sizeRowDataX);
   // assert(indexDataY < pow(_yAlphabet->rows(),_sizeColDataY));
-  double* x = new double[_systX[i].size()];
-  double* y = new double[_systY[i].size()];
-  double* valy = new double[_sizeColDataY];
+  int* x = new int[_systX[i].size()];
+  int* y = new int[_systY[i].size()];
+  int* valy = new int[_sizeColDataY];
   index(x, indexX, true,  _systX[i].size());
   index(y, indexY, false,  _systY[i].size());
   index(valy, indexDataY,false,_sizeColDataY);
@@ -228,6 +229,9 @@ int ITMatrix::getFeatureArraydeltaAlphY(int i, int indexX, int indexY, int rowDa
     }
   }
 
+  delete[] x;
+  delete[] y;
+  delete[] valy;
   if(equ)
   {
     return 1;
@@ -236,9 +240,6 @@ int ITMatrix::getFeatureArraydeltaAlphY(int i, int indexX, int indexY, int rowDa
   {
     return -1;
   }
-  delete[] x;
-  delete[] y;
-  delete[] valy;
 }
 
 int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i, int indexX, int indexY, int indexDataX, int indexDataY)
@@ -249,10 +250,10 @@ int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i, int indexX, int indexY, int 
   // assert(indexDataX < pow(_sizeX,_sizeColDataX));
   // assert(indexDataY < pow(_yAlphabet->rows(),_sizeColDataY));
 
-  double* x    = new double[_systX[i].size()];
-  double* y    = new double[_systY[i].size()];
-  double* valy = new double[_sizeColDataY];
-  double* valx = new double[_sizeColDataX];
+  int* x    = new int[_systX[i].size()];
+  int* y    = new int[_systY[i].size()];
+  int* valy = new int[_sizeColDataY];
+  int* valx = new int[_sizeColDataX];
   index(x, indexX, true,  _systX[i].size());
   index(y, indexY, false,  _systY[i].size());
   index(valy, indexDataY,false,_sizeColDataY);
@@ -277,6 +278,11 @@ int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i, int indexX, int indexY, int 
       equ = false;
     }
   }
+
+  delete[] x;
+  delete[] y;
+  delete[] valy;
+  delete[] valx;
   if(equ)
   {
     return 1;
@@ -285,15 +291,11 @@ int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i, int indexX, int indexY, int 
   {
     return -1;
   }
-  delete[] x;
-  delete[] y;
-  delete[] valy;
-  delete[] valx;
 }
 
 // Berechnung der Alphabetreihe aus dem Index
 // vector<int> ITMatrix::index(int index, bool x, int sizeCol)
-void ITMatrix::index(double* array, int index, bool x, int sizeCol)
+void ITMatrix::index(int* array, int index, bool x, int sizeCol)
 {
   int sizeAlph;
   // vector<int> row;
@@ -301,12 +303,12 @@ void ITMatrix::index(double* array, int index, bool x, int sizeCol)
   if(x)
   {
     // assert(index < pow(_xAlphabet->rows(),sizeCol));
-    sizeAlph=_sizeX;
+    sizeAlph = _sizeX;
   }
   else
   {
     // assert(index < pow(_yAlphabet->rows(),sizeCol));
-    sizeAlph=_sizeY;
+    sizeAlph = _sizeY;
   }
 
   for(int i = sizeCol; i>0 ; i--)

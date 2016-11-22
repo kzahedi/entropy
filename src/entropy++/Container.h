@@ -66,7 +66,7 @@ class Container
     {
       if(_data != NULL)
       {
-        for(int r = 0; r < _rows;    r++) delete _data[r];
+        for(int r = 0; r < _rows; r++) delete _data[r];
         delete _data;
       }
 
