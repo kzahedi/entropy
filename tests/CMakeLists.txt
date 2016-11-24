@@ -10,9 +10,6 @@ target_link_libraries(matrix-tests    Entropy++ cppunit dl)
 add_executable(pi-tests               main.cpp  pi_test.cpp)
 target_link_libraries(pi-tests        Entropy++ cppunit dl)
 
-add_executable(itmatrix-tests         main.cpp  itmatrix_test.cpp)
-target_link_libraries(itmatrix-tests  Entropy++ cppunit dl)
-
 # add_executable(it-tests               main.cpp  it_test.cpp)
 # target_link_libraries(it-tests        Entropy++ cppunit dl eit)
 
@@ -45,7 +42,6 @@ target_link_libraries(csv-tests       Entropy++ cppunit dl)
 ADD_TEST(container "${PROJECT_BINARY_DIR}/bin/container-tests")
 ADD_TEST(matrix    "${PROJECT_BINARY_DIR}/bin/matrix-tests")
 ADD_TEST(mi        "${PROJECT_BINARY_DIR}/bin/mi-tests")
-ADD_TEST(itmatrix  "${PROJECT_BINARY_DIR}/bin/itmatrix-tests")
 ADD_TEST(entropy   "${PROJECT_BINARY_DIR}/bin/entropy-tests")
 # ADD_TEST(feature   "${PROJECT_BINARY_DIR}/bin/feature-tests")
 # ADD_TEST(it        "${PROJECT_BINARY_DIR}/bin/it-tests")

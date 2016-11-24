@@ -223,29 +223,29 @@ class Container
 
     T  operator()(const int row, const int column) const
     {
-      assert(row    < _rows);
-      assert(column < _columns);
+      // assert(row    < _rows);
+      // assert(column < _columns);
       return _data[row][column];
     }
 
     T& operator()(const int row, const int column)
     {
-      assert(row    < _rows);
-      assert(column < _columns);
+      // assert(row    < _rows);
+      // assert(column < _columns);
       return _data[row][column];
     }
 
     T get(int row, int column)
     {
-      assert(row    < _rows);
-      assert(column < _columns);
+      // assert(row    < _rows);
+      // assert(column < _columns);
       return _data[row][column];
     }
 
     void set(int row, int column, T value)
     {
-      assert(row    < _rows);
-      assert(column < _columns);
+      // assert(row    < _rows);
+      // assert(column < _columns);
       _data[row][column] = value;
     }
 

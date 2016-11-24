@@ -14,12 +14,10 @@ ITMatrix::ITMatrix(ULContainer *xData,
                    vector<vector<int> > systY,
                    double lambdavalue)
 {
-  // assert(systX.size() == systY.size());
   _valX         = xData;
   _valY         = yData;
   _xAlphabet    = xAlphabet;
   _yAlphabet    = yAlphabet;
-  _cmi          = true;
   _systX        = systX;
   _systY        = systY;
   _sizeColDataY = _valY->columns();
@@ -29,6 +27,11 @@ ITMatrix::ITMatrix(ULContainer *xData,
   _sizeX        = _xAlphabet->rows();
   _sizeY        = _yAlphabet->rows();
   __featureArray(lambdavalue);
+
+#ifndef MEMORY_EFFICIENT
+  __fillX();
+  __fillY();
+#endif
 }
 
 ITMatrix::ITMatrix()
@@ -58,14 +61,12 @@ ITMatrix::~ITMatrix()
 
 double ITMatrix::getFeatureArraylambda(int i,int ilambdaX, int ilambdaY)
 {
-  // assert(i<_systX.size());  //ilambdaX und ilambdaY werden in Feature geprueft
   double lambda = _featureArray[i].getLambda(ilambdaX,ilambdaY);
   return lambda;
 }
 
 double ITMatrix::getFeatureArrayvalue(int feat,int rowX,int rowY)
 {
-  // assert(feat<_systX.size());
   double val=0.0;
   int I = powi(_xAlphabet->rows(),_systX[feat].size());
   int J = powi(_yAlphabet->rows(),_systY[feat].size());
@@ -82,7 +83,6 @@ double ITMatrix::getFeatureArrayvalue(int feat,int rowX,int rowY)
 
 double ITMatrix::getFeatureArrayvalueAlphY(int feat,int rowX,int indexY)
 {
-  // assert(feat<_systX.size());
   double val = 0.0;
   int I = powi(_xAlphabet->rows(),_systX[feat].size());
   int J = powi(_yAlphabet->rows(),_systY[feat].size());
@@ -99,7 +99,6 @@ double ITMatrix::getFeatureArrayvalueAlphY(int feat,int rowX,int indexY)
 
 double ITMatrix::getFeatureArrayvalueAlphYAlphX(int feat,int indexX,int indexY)
 {
-  // assert(feat<_systX.size());
   double val = 0.0;
   int I = powi(_xAlphabet->rows(), _systX[feat].size());
   int J = powi(_yAlphabet->rows(), _systY[feat].size());
@@ -116,65 +115,53 @@ double ITMatrix::getFeatureArrayvalueAlphYAlphX(int feat,int indexX,int indexY)
 
 void ITMatrix::setFeatureArraylambda(int i, int ilambdaX, int ilambdaY,double valuelambda)
 {
-  // assert(i<_systX.size());
   _featureArray[i].setLambda(ilambdaX,ilambdaY,valuelambda);
 }
 
 int ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowDataX, int rowDataY)
 {
-  // assert(i<_systX.size());
-  // assert(indexX < pow(_xAlphabet->rows(),_systX[i].size()));
-  // assert(indexY < pow(_yAlphabet->rows(),_systY[i].size()));
-  // assert(rowDataX < _sizeRowDataX);
-  // assert(rowDataY < _sizeRowDataY);
+#ifdef MEMORY_EFFICIENT
   int* x = new int[_systX[i].size()];
   int* y = new int[_systY[i].size()];
   index(x, indexX, true,  _systX[i].size());
   index(y, indexY, false,  _systY[i].size());
-  // vector<int> x = index(indexX, true,  _systX[i].size());
-  // vector<int> y = index(indexY, false, _systY[i].size());
+#endif
   bool equ = true;
 
   for(int j = 0; j < _systX[i].size(); j++)
   {
-    // assert(_systX[i][j] <= _sizeColDataX);
-    if(_cmi == false)
+#ifdef MEMORY_EFFICIENT
+    if((*_valX)(rowDataX,_systX[i][j]) != x[j])
+#else
+    if((*_valX)(rowDataX,_systX[i][j]) != _xFeatureArray[indexX][_systX[i][j]])
+#endif
     {
-      if((*_valX)(rowDataX,_systX[i][j]) != x[j])
-      {
-        equ = false;
-      }
-    }
-    else
-    {
-      if((*_valX)(rowDataX,_systX[i][j]) != x[j])
-      {
-        equ = false;
-      }
+      equ = false;
+      break;
     }
   }
 
-  for(int j = 0; j < _systY[i].size(); j++)
+  if(equ == true)
   {
-    // assert(_systY[i][j] <= _sizeColDataY);
-    if(_cmi == false)
+    for(int j = 0; j < _systY[i].size(); j++)
     {
-      if((*_valY)(rowDataY,_systY[i][j]) != y[j])
+#ifdef MEMORY_EFFICIENT
+      if((*_valY)(rowDataY,_systY[i][j]) != y[j]) // _yFeatureArray[indexY][j]
+#else
+      if((*_valY)(rowDataY,_systY[i][j]) != _yFeatureArray[indexY][_systY[i][j]])
+#endif
       {
         equ = false;
-      }
-    }
-    else
-    {
-      if((*_valY)(rowDataY,_systY[i][j]) != y[j])
-      {
-        equ = false;
+        break;
       }
     }
   }
 
+#ifdef MEMORY_EFFICIENT
   delete[] x;
   delete[] y;
+#endif
+
   if(equ)
   {
     return 1;
@@ -187,51 +174,50 @@ int ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowDataX, in
 
 int ITMatrix::getFeatureArraydeltaAlphY(int i, int indexX, int indexY, int rowDataX, int indexDataY)
 {
-  // assert(i<_systX.size());
-  // assert(indexX < pow(_xAlphabet->rows(),_systX[i].size()));
-  // assert(indexY < pow(_yAlphabet->rows(),_systY[i].size()));
-  // assert(rowDataX < _sizeRowDataX);
-  // assert(indexDataY < pow(_yAlphabet->rows(),_sizeColDataY));
+#ifdef MEMORY_EFFICIENT
   int* x = new int[_systX[i].size()];
   int* y = new int[_systY[i].size()];
   int* valy = new int[_sizeColDataY];
   index(x, indexX, true,  _systX[i].size());
   index(y, indexY, false,  _systY[i].size());
   index(valy, indexDataY,false,_sizeColDataY);
+#endif
 
-  // vector<int> valy = index(indexDataY,false,_sizeColDataY);
   bool equ = true;
   for(int j = 0; j < _systX[i].size(); j++)
   {
-    // assert(_systX[i][j] <= _sizeColDataX);
-    if(_cmi == false)
-    {
-      if((*_valX)(rowDataX,_systX[i][j]) != x[j])
-      {
-        equ = false;
-      }
-    }
-    else
-    {
-      if((*_valX)(rowDataX,_systX[i][j]) != x[j])
-      {
-        equ = false;
-      }
-    }
-  }
-
-  for(int j=0;j<_systY[i].size();j++)
-  {
-    // assert(_systY[i][j]<= _sizeColDataY);
-    if( valy[_systY[i][j]]!= y[j])
+#ifdef MEMORY_EFFICIENT
+    if((*_valX)(rowDataX,_systX[i][j]) != x[j])
+#else
+    if((*_valX)(rowDataX,_systX[i][j]) != _xFeatureArray[indexX][_systX[i][j]])
+#endif
     {
       equ = false;
+      break;
     }
   }
 
+  if(equ == true)
+  {
+    for(int j=0;j<_systY[i].size();j++)
+    {
+#ifdef MEMORY_EFFICIENT
+      if(valy[_systY[i][j]]!= y[j])
+#else
+      if(_yFeatureArray[indexDataY][_systY[i][j]] != _yFeatureArray[indexY][_systY[i][j]])
+#endif
+      {
+        equ = false;
+        break;
+      }
+    }
+  }
+
+#ifdef MEMORY_EFFICIENT
   delete[] x;
   delete[] y;
   delete[] valy;
+#endif
   if(equ)
   {
     return 1;
@@ -244,12 +230,7 @@ int ITMatrix::getFeatureArraydeltaAlphY(int i, int indexX, int indexY, int rowDa
 
 int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i, int indexX, int indexY, int indexDataX, int indexDataY)
 {
-  // assert(i<_systX.size());
-  // assert(indexX < pow(_xAlphabet->rows(),_systX[i].size()));
-  // assert(indexY < pow(_yAlphabet->rows(),_systY[i].size()));
-  // assert(indexDataX < pow(_sizeX,_sizeColDataX));
-  // assert(indexDataY < pow(_yAlphabet->rows(),_sizeColDataY));
-
+#ifdef MEMORY_EFFICIENT
   int* x    = new int[_systX[i].size()];
   int* y    = new int[_systY[i].size()];
   int* valy = new int[_sizeColDataY];
@@ -258,31 +239,45 @@ int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i, int indexX, int indexY, int 
   index(y, indexY, false,  _systY[i].size());
   index(valy, indexDataY,false,_sizeColDataY);
   index(valx, indexDataX,true,_sizeColDataX);
+#endif
 
   bool equ = true;
 
   for(int j = 0; j < _systX[i].size(); j++)
   {
-    // assert(_systX[i][j] <= _sizeColDataX);
+#ifdef MEMORY_EFFICIENT
     if(valx[_systX[i][j]] != x[j])
+#else
+    if(_xFeatureArray[indexDataX][_systX[i][j]] != _xFeatureArray[indexX][_systX[i][j]])
+#endif
     {
       equ = false;
+      break;
     }
   }
 
-  for(int j = 0; j < _systY[i].size(); j++)
+  if(equ == true)
   {
-    assert(_systY[i][j]<= _sizeColDataY);
-    if(valy[_systY[i][j]] != y[j])
+    for(int j = 0; j < _systY[i].size(); j++)
     {
-      equ = false;
+#ifdef MEMORY_EFFICIENT
+      if(valy[_systY[i][j]] != y[j])
+#else
+      if(_yFeatureArray[indexDataY][_systY[i][j]] != _yFeatureArray[indexY][_systY[i][j]])
+#endif
+      {
+        equ = false;
+        break;
+      }
     }
   }
 
+#ifdef MEMORY_EFFICIENT
   delete[] x;
   delete[] y;
   delete[] valy;
   delete[] valx;
+#endif
   if(equ)
   {
     return 1;
@@ -295,7 +290,7 @@ int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i, int indexX, int indexY, int 
 
 // Berechnung der Alphabetreihe aus dem Index
 // vector<int> ITMatrix::index(int index, bool x, int sizeCol)
-// #ifdef MEMORY_EFFICIENT
+#ifdef MEMORY_EFFICIENT
 void ITMatrix::index(int* array, int index, bool x, int sizeCol)
 {
   int sizeAlph;
@@ -303,12 +298,10 @@ void ITMatrix::index(int* array, int index, bool x, int sizeCol)
   double z;
   if(x)
   {
-    // assert(index < pow(_xAlphabet->rows(),sizeCol));
     sizeAlph = _sizeX;
   }
   else
   {
-    // assert(index < pow(_yAlphabet->rows(),sizeCol));
     sizeAlph = _sizeY;
   }
 
@@ -328,7 +321,7 @@ void ITMatrix::index(int* array, int index, bool x, int sizeCol)
   }
   // return row;
 }
-// #endif // MEMORY_EFFICIENT
+#endif // MEMORY_EFFICIENT
 
 //ein Array mit den benoetigten Features fuellen
 void ITMatrix::__featureArray(double valuelambda)
@@ -350,7 +343,7 @@ void ITMatrix::__featureArray(double valuelambda)
 
 // #ifndef MEMORY_EFFICIENT
 
-void ITMatrix::fillX()
+void ITMatrix::__fillX()
 {
   int nr = powi(_xAlphabet->rows(), _valX->columns());
   int nc = _valX->columns();
@@ -369,13 +362,33 @@ void ITMatrix::fillX()
       float f  = powi(nx, c);
       int   rf = (int)(((float)r) / f);
       int   xindex = rf % nx;
-      _xFeatureArray[r][c] = _xAlphabet->get(xindex, 0);
+      _xFeatureArray[r][nc-c-1] = _xAlphabet->get(xindex, 0);
     }
   }
 }
 
-int ITMatrix::getFillX(int i, int j)
+void ITMatrix::__fillY()
 {
-  return _xFeatureArray[i][j];
+  int nr = powi(_yAlphabet->rows(), _valY->columns());
+  int nc = _valY->columns();
+  int nx = _yAlphabet->rows();
+
+  _yFeatureArray = new int*[nr];
+  for(int r = 0; r < nr; r++)
+  {
+    _yFeatureArray[r] = new int[nc];
+  }
+
+  for(int r = 0; r < nr; r++)
+  {
+    for(int c = 0; c < nc; c++)
+    {
+      float f  = powi(nx, c);
+      int   rf = (int)(((float)r) / f);
+      int   xindex = rf % nx;
+      _yFeatureArray[r][nc-c-1] = _yAlphabet->get(xindex, 0);
+    }
+  }
 }
+
 // #endif // MEMORY_EFFICIENT
