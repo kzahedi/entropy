@@ -408,5 +408,45 @@ void containerTest::testFillMode()
       index++;
     }
   }
+}
 
+
+void containerTest::testUnique1()
+{
+  ULContainer* container = new ULContainer(10,5);
+
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+
+  ULContainer *unique = container->unique();
+
+  CPPUNIT_ASSERT_EQUAL(1, unique->rows());
+}
+
+void containerTest::testUnique2()
+{
+  ULContainer* container = new ULContainer(10,5);
+
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 2 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 2 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 1 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 1 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 5 << 4 << 5;
+
+  ULContainer *unique = container->unique();
+
+  CPPUNIT_ASSERT_EQUAL(4, unique->rows());
 }

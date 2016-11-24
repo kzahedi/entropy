@@ -542,23 +542,34 @@ class Container
     Container<T>* unique()
     {
       // Container<T> *new = new Container<T>(this->rows(), 1);
-      vector<T> values;
-      for(int c = 0; c < this->columns(); c++)
+      vector<int> uniqueIndices;
+      for(int row1 = 0; row1 < this->rows(); row1++)
       {
-        for(int r = 0; r < this->rows(); r++)
+        bool found = false;
+        for(int row2 = row1 + 1; row2 < this->rows(); row2++)
         {
-          T value = this->get(r,c);
-          if(std::find(values.begin(), values.end(), value) == values.end())
-          //if(values.find(value) == values.end())
+          bool rowEqual = true;
+          for(int c = 0; c < this->columns(); c++)
           {
-            values.push_back(value);
+            rowEqual &= (this->get(row1, c) == this->get(row2, c));
+            if(rowEqual == false) break;
+          }
+          if(rowEqual == true)
+          {
+            found = true;
+            break;
           }
         }
+        if(found == false) uniqueIndices.push_back(row1);
       }
-      Container<T>* new_container = new Container<T>(values.size(), 1);
-      for(int i = 0; i < values.size(); i++)
+
+      Container<T>* new_container = new Container<T>(uniqueIndices.size(), this->columns());
+      for(int i = 0; i < uniqueIndices.size(); i++)
       {
-        *new_container << values[i];
+        for(int c = 0; c < this->columns(); c++)
+        {
+          *new_container << this->get(uniqueIndices[i], c);
+        }
       }
       return new_container;
     }
