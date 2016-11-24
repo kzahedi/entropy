@@ -17,7 +17,11 @@ class containerTest : public CppUnit::TestFixture
   CPPUNIT_TEST(testMerge);
   CPPUNIT_TEST(testFillMode);
   CPPUNIT_TEST(testUnique1);
-  CPPUNIT_TEST(testUnique2);
+  CPPUNIT_TEST(testUnique1);
+  CPPUNIT_TEST(testFind1);
+  CPPUNIT_TEST(testFind2);
+  CPPUNIT_TEST(testFindList1);
+  CPPUNIT_TEST(testFindList2);
   CPPUNIT_TEST_SUITE_END();
 
   public:
@@ -36,5 +40,9 @@ class containerTest : public CppUnit::TestFixture
     void testFillMode();
     void testUnique1();
     void testUnique2();
+    void testFind1();
+    void testFind2();
+    void testFindList1();
+    void testFindList2();
 
 };
