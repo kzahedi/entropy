@@ -95,7 +95,7 @@ double IterativeScalingBase::prop(int rowX, int indexY)
 
   for(int feat = 0; feat < _systX.size(); feat++)
   {
-    featexp += _imatrix->getFeatureArrayvalueAlphY(feat,rowX, indexY);
+    featexp += _imatrix->getValueAlphY(feat,rowX, indexY);
   }
 
   int YI = powi(_yAlphabet->rows(),_sizeColDataY);
@@ -103,7 +103,7 @@ double IterativeScalingBase::prop(int rowX, int indexY)
   {
     for(int feat = 0; feat < _systX.size(); feat++)
     {
-      featnorm += _imatrix->getFeatureArrayvalueAlphY(feat, rowX, yi);
+      featnorm += _imatrix->getValueAlphY(feat, rowX, yi);
     }
     norm     += exp(featnorm-featexp);
     featnorm  = 0;
@@ -122,14 +122,14 @@ double IterativeScalingBase::p_x_c_y(int indexX, int rowY)
   double exponent = 1;
   for(int feat = 0; feat < _systX.size(); feat++)
   {
-    featexp += _imatrix->getFeatureArrayvalueAlphYAlphX(feat, indexX, rowY);
+    featexp += _imatrix->getValueAlphYAlphX(feat, indexX, rowY);
   }
   int YI = powi(_yAlphabet->rows(),_sizeColDataY);
   for(int yi = 0; yi < YI; yi++)
   {
     for(int feat = 0; feat < _systX.size(); feat++)
     {
-      featnorm += _imatrix->getFeatureArrayvalueAlphYAlphX(feat, indexX, yi);
+      featnorm += _imatrix->getValueAlphYAlphX(feat, indexX, yi);
     }
     norm     += exp(featnorm-featexp);
     featnorm  = 0;
@@ -149,7 +149,7 @@ double IterativeScalingBase::propm(int rowX)
   {
     for(int feat = 0; feat < _systX.size(); feat++)
     {
-      curr = _imatrix->getFeatureArrayvalueAlphYAlphX(feat,rowX,y);
+      curr = _imatrix->getValueAlphYAlphX(feat,rowX,y);
       if(fabs(curr) > fabs(max)) max = curr; 
     }
   }
@@ -157,7 +157,7 @@ double IterativeScalingBase::propm(int rowX)
   {
     for(int feat = 0; feat < _systX.size(); feat++)
     {
-      exponent += _imatrix->getFeatureArrayvalueAlphYAlphX(feat,rowX,y);
+      exponent += _imatrix->getValueAlphYAlphX(feat,rowX,y);
     }
     z        += exp(exponent - max);  // = 0 fuer grosse lambda
     exponent  = 0;
@@ -171,7 +171,7 @@ double IterativeScalingBase::propm(int rowX)
     {
       for(int feat = 0; feat < _systX.size(); feat++)
       {
-        exponent += _imatrix->getFeatureArrayvalueAlphYAlphX(feat,x,y);
+        exponent += _imatrix->getValueAlphYAlphX(feat,x,y);
       }
       nexp     += exp(exponent-max);
       exponent  = 0;
@@ -186,7 +186,7 @@ double IterativeScalingBase::getFeatureArraylambda(int Feati, int ilambdaX, int 
 {
   // kontrolle der Parameter ilambdaX und ilambdaY findet in Feature statt
   assert(Feati<_systX.size());
-  return _imatrix->getFeatureArraylambda(Feati, ilambdaX, ilambdaY);
+  return _imatrix->getLambda(Feati, ilambdaX, ilambdaY);
 }
 
 // get observed
@@ -220,7 +220,7 @@ double*** IterativeScalingBase::__getobs()
       {
         for(int deltj=0; deltj < DJ; deltj++)
         {
-          if(_imatrix->getFeatureArraydelta(feat, delti, deltj, i, i) == 1)
+          if(_imatrix->getDelta(feat, delti, deltj, i, i) == 1)
           {
             _observed[feat][delti][deltj]++;
           }
@@ -257,7 +257,7 @@ IterativeScalingBase::~IterativeScalingBase()
 void IterativeScalingBase::setFeatureArraylambda(int feati, int ilambdaX, int ilambdaY,double valuelambda)
 {
   assert(feati<_systX.size());
-  _imatrix->setFeatureArraylambda(feati, ilambdaX, ilambdaY, valuelambda);
+  _imatrix->setLambda(feati, ilambdaX, ilambdaY, valuelambda);
 }
 
 // Berechnung der Alphabetreihe aus dem Index

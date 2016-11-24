@@ -30,14 +30,14 @@ namespace entropy
                  ivvector systY,
                  double lambdavalue);
         virtual ~ITMatrix();
-        double  getFeatureArraylambda(int i,int ilambdaX, int ilambdaY);
-        double  getFeatureArrayvalue(int i,int rowX, int rowY);
-        double  getFeatureArrayvalueAlphY(int feat,int rowX,int indexY);
-        double  getFeatureArrayvalueAlphYAlphX(int feat,int indexX,int indexY);
-        int     getFeatureArraydelta(int i,int indexX, int indexY, int rowDataX, int rowDataY);
-        int     getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowDataX, int indexDataY);
-        int     getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int indexDataX, int indexDataY);
-        void    setFeatureArraylambda(int i, int ilambdaX, int ilambdaY,double valuelambda);
+        double  getLambda(int i,int ilambdaX, int ilambdaY);
+        double  getValue(int i,int rowX, int rowY);
+        double  getValueAlphY(int feat,int rowX,int indexY);
+        double  getValueAlphYAlphX(int feat,int indexX,int indexY);
+        int     getDelta(int i,int indexX, int indexY, int rowDataX, int rowDataY);
+        int     getDeltaAlphY(int i,int indexX, int indexY,int rowDataX, int indexDataY);
+        int     getDeltaAlphYAlphX(int i,int indexX, int indexY,int indexDataX, int indexDataY);
+        void    setLambda(int i, int ilambdaX, int ilambdaY,double valuelambda);
 
 #ifdef MEMORY_EFFICIENT
         void index(int* array, int index, bool x, int sizeCol);
@@ -55,8 +55,8 @@ namespace entropy
         int          _sizeY;
         ivvector     _systX;
         ivvector     _systY;
-        ULContainer* _valX;
-        ULContainer* _valY;
+        ULContainer* _DataX;
+        ULContainer* _DataY;
         ULContainer* _xAlphabet;
         ULContainer* _yAlphabet;
         Feature*     _featureArray;

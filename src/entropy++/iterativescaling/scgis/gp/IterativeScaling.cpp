@@ -130,7 +130,7 @@ double IterativeScaling::__calculateIteration(bool test, double sigma)
           }
         }
         double newl = 0.0;
-        double oldl = _im->getFeatureArraylambda(feat,delti,deltj);
+        double oldl = _im->getLambda(feat,delti,deltj);
         double zOld = 2;
         double z    = 1;
         while(fabs(z-zOld) > 0.0001)
@@ -141,11 +141,11 @@ double IterativeScaling::__calculateIteration(bool test, double sigma)
           double n = 1.0/(powi(sigma,2)) + expected*exp(_delta[feat][delti][deltj]);
           _delta[feat][delti][deltj] = _delta[feat][delti][deltj] - (z/n);
         }
-        newl  = _im->getFeatureArraylambda(feat,delti,deltj)+_delta[feat][delti][deltj];
+        newl  = _im->getLambda(feat,delti,deltj)+_delta[feat][delti][deltj];
         l    += fabs((oldl+_delta[feat][delti][deltj])/powi(sigma,2)
                      + expected*exp(_delta[feat][delti][deltj])
                      - _observed[feat][delti][deltj]);
-        _im->setFeatureArraylambda(feat,delti,deltj,newl);
+        _im->setLambda(feat,delti,deltj,newl);
         for(int y = 0; y < powi(_yAlphabet->rows(),_sizeColDataY); y++)
         {
           for(int k = 0; k < _im->getInstanceMatrixX(feat,delti,deltj).size(); k++)

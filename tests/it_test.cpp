@@ -19,13 +19,13 @@ void itTest::ValueTest()
       *zX << 0 << 1;
    DContainer *zY = new DContainer(2,1); // alphabet
       *zY << 0 << 1;
-   vector<vector<int > > alphX(1,vector<int>(0));
-      alphX[0].push_back(0);
-   vector<vector<int > > alphY(1,vector<int>(0));
-      alphY[0].push_back(0);
+   vector<vector<int > > systX(1,vector<int>(0));
+      systX[0].push_back(0);
+   vector<vector<int > > systY(1,vector<int>(0));
+      systY[0].push_back(0);
    vector<double> lambda(1);
        lambda[0] = 1;
-   Test *test_1 = new Test(1,1,100,lambda, *zX,*zY,alphX, alphY);
+   Test *test_1 = new Test(1,1,100,lambda, *zX,*zY,systX, systY);
    for(int i=0; i<2;i++){
 	   for(int j=0; j<2;j++){
           CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, test_1->getProp(i,j), 0.1);
@@ -35,7 +35,7 @@ void itTest::ValueTest()
    (*indizes) << 0 << 0 << 0;
    DContainer *values  = new DContainer(1,1);
    (*values) << 5;
-   Test *test_2 = new Test(1,1,100,*indizes,*values, *zX,*zY,alphX, alphY);
+   Test *test_2 = new Test(1,1,100,*indizes,*values, *zX,*zY,systX, systY);
    CPPUNIT_ASSERT( test_2->getProp(0,0)> test_2->getProp(0,1));
    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, test_2->getProp(1,1),0.01);
    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, test_2->getProp(1,0),0.01);
@@ -54,11 +54,11 @@ void itTest::OneXOneY()
   lambda[1] = 1;
   lambda[2] = 5;
 
-  vector<vector<int > > alphX(1,vector<int>(0));
-  alphX[0].push_back(0);
+  vector<vector<int > > systX(1,vector<int>(0));
+  systX[0].push_back(0);
 
-  vector<vector<int > > alphY(1,vector<int>(0));
-  alphY[0].push_back(0);
+  vector<vector<int > > systY(1,vector<int>(0));
+  systY[0].push_back(0);
 
   IsParameter param;
   param.lambdavalue    = 1.0;
@@ -81,11 +81,11 @@ void itTest::OneXOneY()
   paramgp.test           = true;
   paramgp.seconds        = 60; */
 
-  Test *testval = new Test(1,1,10000,lambda, *zX,*zY,alphX, alphY); //get data
+  Test *testval = new Test(1,1,10000,lambda, *zX,*zY,systX, systY); //get data
 
-  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zY,alphX,alphY,param);
+  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zY,systX,systY,param);
 //  GISgp *testgp     = new GISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,paramgp);
-  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zX,*zY,alphX,alphY,param);
+  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zX,*zY,systX,systY,param);
 //  SCGISgp *testscgp = new SCGISgp(testval->getvalX(),testval->getvalY(),*zY,*zY,alphX,alphY,paramgp);
 
   // p(y_0 = 0 | x_0 = 0) + p(y_0 = 1 | x_0 = 0) = 1.0
@@ -157,11 +157,11 @@ void itTest:: OneXOneYFour(){
 	  lambda[1] = 1;
 	  lambda[2] = 5;
 
-	  vector<vector<int > > alphX(1,vector<int>(0));
-	  alphX[0].push_back(0);
+	  vector<vector<int > > systX(1,vector<int>(0));
+	  systX[0].push_back(0);
 
-	  vector<vector<int > > alphY(1,vector<int>(0));
-	  alphY[0].push_back(0);
+	  vector<vector<int > > systY(1,vector<int>(0));
+	  systY[0].push_back(0);
 
 	  IsParameter param;
 	  param.lambdavalue    = 1.0;
@@ -175,10 +175,10 @@ void itTest:: OneXOneYFour(){
 	  param.seconds        = 72000;
 
 
-	  Test *testval = new Test(1,1,10000,lambda, *zX,*zX,alphX, alphY); //get data
+	  Test *testval = new Test(1,1,10000,lambda, *zX,*zX,systX, systY); //get data
 
-	  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zX,alphX,alphY,param);
-	  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zX,*zX,alphX,alphY,param);
+	  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zX,systX,systY,param);
+	  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zX,*zX,systX,systY,param);
 
 	  CPPUNIT_ASSERT_DOUBLES_EQUAL(1, test->propAlphX( 0, 0)+test->propAlphX( 0, 1)+test->propAlphX( 0, 2)+test->propAlphX( 0, 3), 0.1);
 	  CPPUNIT_ASSERT_DOUBLES_EQUAL(1, test->propAlphX( 1, 0)+test->propAlphX( 1, 1)+test->propAlphX( 1, 2)+test->propAlphX( 1, 3), 0.1);
@@ -233,11 +233,11 @@ void itTest::OneXOneYEight(){
 	  lambda[1] = 1;
 	  lambda[2] = 5;
 
-	  vector<vector<int > > alphX(1,vector<int>(0));
-	  alphX[0].push_back(0);
+	  vector<vector<int > > systX(1,vector<int>(0));
+	  systX[0].push_back(0);
 
-	  vector<vector<int > > alphY(1,vector<int>(0));
-	  alphY[0].push_back(0);
+	  vector<vector<int > > systY(1,vector<int>(0));
+	  systY[0].push_back(0);
 
 	  IsParameter param;
 	  param.lambdavalue    = 1.0;
@@ -251,10 +251,10 @@ void itTest::OneXOneYEight(){
 	  param.seconds        = 72000;
 
 
-	  Test *testval = new Test(1,1,10000,lambda, *zX,*zX,alphX, alphY); //get data
+	  Test *testval = new Test(1,1,10000,lambda, *zX,*zX,systX, systY); //get data
 
-	  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zX,alphX,alphY,param);
-	  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zX,*zX,alphX,alphY,param);
+	  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zX,systX,systY,param);
+	  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zX,*zX,systX,systY,param);
 
 	  double sum1 = 0.0;
 	  double sum2 = 0.0;
@@ -315,11 +315,11 @@ void itTest::OneXOneYTwenty(){
 	  lambda[1] = 1;
 	  lambda[2] = 2;
 
-	  vector<vector<int > > alphX(1,vector<int>(0));
-	  alphX[0].push_back(0);
+	  vector<vector<int > > systX(1,vector<int>(0));
+	  systX[0].push_back(0);
 
-	  vector<vector<int > > alphY(1,vector<int>(0));
-	  alphY[0].push_back(0);
+	  vector<vector<int > > systY(1,vector<int>(0));
+	  systY[0].push_back(0);
 
 	  IsParameter param;
 	  param.lambdavalue    = 1.0;
@@ -333,10 +333,10 @@ void itTest::OneXOneYTwenty(){
 	  param.seconds        = 72000;
 
 
-	  Test *testval = new Test(1,1,10000,lambda, *zX, *zX, alphX, alphY); //get data
+	  Test *testval = new Test(1,1,10000,lambda, *zX, *zX, systX, systY); //get data
 
-	  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zX,alphX,alphY,param);
-	  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zX,*zX,alphX,alphY,param);
+	  GIS *test         = new GIS(testval->getvalX(),testval->getvalY(),*zX,*zX,systX,systY,param);
+	  SCGIS *testsc     = new SCGIS(testval->getvalX(),testval->getvalY(),*zX,*zX,systX,systY,param);
 
 	  double sum1 = 0.0;
 	  double sum2 = 0.0;

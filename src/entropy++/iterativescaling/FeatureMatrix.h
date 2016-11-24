@@ -38,7 +38,7 @@ namespace entropy
       private:
         void __getMatrix(double valuelambda);
         ivvector **_mat;
-        int  _sizeAlphY;
+        int  _sizeMatrixAlphabetY;
     };
   }
 }

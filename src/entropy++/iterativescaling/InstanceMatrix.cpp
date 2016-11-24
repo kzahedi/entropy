@@ -88,7 +88,7 @@ void InstanceMatrix::__getMatrix(double valuelambda)
         {
           for(int y = 0; y < Y; y++)
           {
-            if(getFeatureArraydeltaAlphY(feat,delti,deltj,xi,y)==1)
+            if(getDeltaAlphY(feat,delti,deltj,xi,y)==1)
             {
               _mat[feat][delti][deltj][0].push_back(xi);
               _mat[feat][delti][deltj][1].push_back(y);

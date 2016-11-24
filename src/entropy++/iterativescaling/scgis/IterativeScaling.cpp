@@ -168,8 +168,8 @@ double IterativeScaling::__calculateIteration(bool test)
         if(fabs(_observed[feat][delti][deltj]) > EPSILON)
         {
           _delta = log(_observed[feat][delti][deltj]/expected);
-          newl   = _im->getFeatureArraylambda(feat,delti,deltj) + _delta;
-          _im->setFeatureArraylambda(feat,delti,deltj,newl);
+          newl   = _im->getLambda(feat,delti,deltj) + _delta;
+          _im->setLambda(feat,delti,deltj,newl);
         }
         else
         {

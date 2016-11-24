@@ -14,16 +14,16 @@ ITMatrix::ITMatrix(ULContainer *xData,
                    vector<vector<int> > systY,
                    double lambdavalue)
 {
-  _valX         = xData;
-  _valY         = yData;
+  _DataX         = xData;
+  _DataY         = yData;
   _xAlphabet    = xAlphabet;
   _yAlphabet    = yAlphabet;
   _systX        = systX;
   _systY        = systY;
-  _sizeColDataY = _valY->columns();
-  _sizeColDataX = _valX->columns();
-  _sizeRowDataX = _valX->rows();
-  _sizeRowDataY = _valY->rows();
+  _sizeColDataY = _DataY->columns();
+  _sizeColDataX = _DataX->columns();
+  _sizeRowDataX = _DataX->rows();
+  _sizeRowDataY = _DataY->rows();
   _sizeX        = _xAlphabet->rows();
   _sizeY        = _yAlphabet->rows();
   __featureArray(lambdavalue);
@@ -36,8 +36,8 @@ ITMatrix::ITMatrix(ULContainer *xData,
 
 ITMatrix::ITMatrix()
 {
-  _valX         = new ULContainer(0,0);
-  _valY         = new ULContainer(0,0);
+  _DataX        = new ULContainer(0,0);
+  _DataY        = new ULContainer(0,0);
   _xAlphabet    = new ULContainer(0,0);
   _yAlphabet    = new ULContainer(0,0);
   _sizeColDataY = 0;
@@ -59,13 +59,13 @@ ITMatrix::~ITMatrix()
   _systY.clear();
 }
 
-double ITMatrix::getFeatureArraylambda(int i,int ilambdaX, int ilambdaY)
+double ITMatrix::getLambda(int i,int ilambdaX, int ilambdaY)
 {
   double lambda = _featureArray[i].getLambda(ilambdaX,ilambdaY);
   return lambda;
 }
 
-double ITMatrix::getFeatureArrayvalue(int feat,int rowX,int rowY)
+double ITMatrix::getValue(int feat,int rowX,int rowY)
 {
   double val=0.0;
   int I = powi(_xAlphabet->rows(),_systX[feat].size());
@@ -74,14 +74,14 @@ double ITMatrix::getFeatureArrayvalue(int feat,int rowX,int rowY)
   {
     for(int j = 0; j < J; j++)
     {
-      val += getFeatureArraydelta(feat,i,j,rowX,rowY)
+      val += getDelta(feat,i,j,rowX,rowY)
         * _featureArray[feat].getLambda(i,j);
     }
   }
   return val;
 }
 
-double ITMatrix::getFeatureArrayvalueAlphY(int feat,int rowX,int indexY)
+double ITMatrix::getValueAlphY(int feat,int rowX,int indexY)
 {
   double val = 0.0;
   int I = powi(_xAlphabet->rows(),_systX[feat].size());
@@ -90,14 +90,14 @@ double ITMatrix::getFeatureArrayvalueAlphY(int feat,int rowX,int indexY)
   {
     for(int j = 0; j < J; j++)
     {
-      val += getFeatureArraydeltaAlphY(feat,i,j,rowX,indexY)
+      val += getDeltaAlphY(feat,i,j,rowX,indexY)
           * _featureArray[feat].getLambda(i,j);
     }
   }
   return val;
 }
 
-double ITMatrix::getFeatureArrayvalueAlphYAlphX(int feat,int indexX,int indexY)
+double ITMatrix::getValueAlphYAlphX(int feat,int indexX,int indexY)
 {
   double val = 0.0;
   int I = powi(_xAlphabet->rows(), _systX[feat].size());
@@ -106,19 +106,19 @@ double ITMatrix::getFeatureArrayvalueAlphYAlphX(int feat,int indexX,int indexY)
   {
     for(int j = 0; j < J; j++)
     {
-      val += getFeatureArraydeltaAlphYAlphX(feat,i,j,indexX,indexY)
+      val += getDeltaAlphYAlphX(feat,i,j,indexX,indexY)
           * _featureArray[feat].getLambda(i,j);
     }
   }
   return val;
 }
 
-void ITMatrix::setFeatureArraylambda(int i, int ilambdaX, int ilambdaY,double valuelambda)
+void ITMatrix::setLambda(int i, int ilambdaX, int ilambdaY,double valuelambda)
 {
   _featureArray[i].setLambda(ilambdaX,ilambdaY,valuelambda);
 }
 
-int ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowDataX, int rowDataY)
+int ITMatrix::getDelta(int i,int indexX, int indexY,int rowDataX, int rowDataY)
 {
 #ifdef MEMORY_EFFICIENT
   int* x = new int[_systX[i].size()];
@@ -131,9 +131,9 @@ int ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowDataX, in
   for(int j = 0; j < _systX[i].size(); j++)
   {
 #ifdef MEMORY_EFFICIENT
-    if((*_valX)(rowDataX,_systX[i][j]) != x[j])
+    if((*_DataX)(rowDataX,_systX[i][j]) != x[j])
 #else
-    if((*_valX)(rowDataX,_systX[i][j]) != _xFeatureArray[indexX][_systX[i][j]])
+    if((*_DataX)(rowDataX,_systX[i][j]) != _xFeatureArray[indexX][_systX[i][j]])
 #endif
     {
       equ = false;
@@ -146,9 +146,9 @@ int ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowDataX, in
     for(int j = 0; j < _systY[i].size(); j++)
     {
 #ifdef MEMORY_EFFICIENT
-      if((*_valY)(rowDataY,_systY[i][j]) != y[j]) // _yFeatureArray[indexY][j]
+      if((*_DataY)(rowDataY,_systY[i][j]) != y[j]) // _yFeatureArray[indexY][j]
 #else
-      if((*_valY)(rowDataY,_systY[i][j]) != _yFeatureArray[indexY][_systY[i][j]])
+      if((*_DataY)(rowDataY,_systY[i][j]) != _yFeatureArray[indexY][_systY[i][j]])
 #endif
       {
         equ = false;
@@ -172,7 +172,7 @@ int ITMatrix::getFeatureArraydelta(int i,int indexX, int indexY,int rowDataX, in
   }
 }
 
-int ITMatrix::getFeatureArraydeltaAlphY(int i, int indexX, int indexY, int rowDataX, int indexDataY)
+int ITMatrix::getDeltaAlphY(int i, int indexX, int indexY, int rowDataX, int indexDataY)
 {
 #ifdef MEMORY_EFFICIENT
   int* x = new int[_systX[i].size()];
@@ -187,9 +187,9 @@ int ITMatrix::getFeatureArraydeltaAlphY(int i, int indexX, int indexY, int rowDa
   for(int j = 0; j < _systX[i].size(); j++)
   {
 #ifdef MEMORY_EFFICIENT
-    if((*_valX)(rowDataX,_systX[i][j]) != x[j])
+    if((*_DataX)(rowDataX,_systX[i][j]) != x[j])
 #else
-    if((*_valX)(rowDataX,_systX[i][j]) != _xFeatureArray[indexX][_systX[i][j]])
+    if((*_DataX)(rowDataX,_systX[i][j]) != _xFeatureArray[indexX][_systX[i][j]])
 #endif
     {
       equ = false;
@@ -228,7 +228,7 @@ int ITMatrix::getFeatureArraydeltaAlphY(int i, int indexX, int indexY, int rowDa
   }
 }
 
-int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i, int indexX, int indexY, int indexDataX, int indexDataY)
+int ITMatrix::getDeltaAlphYAlphX(int i, int indexX, int indexY, int indexDataX, int indexDataY)
 {
 #ifdef MEMORY_EFFICIENT
   int* x    = new int[_systX[i].size()];
@@ -345,9 +345,9 @@ void ITMatrix::__featureArray(double valuelambda)
 
 void ITMatrix::__fillX()
 {
-  int nr = powi(_xAlphabet->rows(), _valX->columns());
-  int nc = _valX->columns();
-  int nx = _xAlphabet->rows();
+  int nr = powi(_xAlphabet->rows(),_sizeColDataX);
+  int nc = _DataX->columns();
+  int nx = _sizeColDataX;
 
   _xFeatureArray = new int*[nr];
   for(int r = 0; r < nr; r++)
@@ -369,8 +369,8 @@ void ITMatrix::__fillX()
 
 void ITMatrix::__fillY()
 {
-  int nr = powi(_yAlphabet->rows(), _valY->columns());
-  int nc = _valY->columns();
+  int nr = powi(_yAlphabet->rows(), _sizeColDataY);
+  int nc = _sizeColDataY;
   int nx = _yAlphabet->rows();
 
   _yFeatureArray = new int*[nr];

@@ -123,7 +123,7 @@ void IterativeScaling::__getExpected()
       for(int k = 0; k < _fm->getMatrixIndexFeat(xi,yj).size(); k++)
       {
         int index = _fm->getMatrixIndexFeat(xi,yj)[k];
-        _exponent[index][yj] = _fm->getFeatureArrayvalueAlphY(index,xi,yj);
+        _exponent[index][yj] = _fm->getValueAlphY(index,xi,yj);
         _normaliser[index]  +=  exp(_exponent[index][yj]);
       }
     }
@@ -233,7 +233,7 @@ double IterativeScaling::__calculateIteration(double featconst, bool test)
     {
       for(int deltaj = 0; deltaj < DJ; deltaj++)
       {
-        double oldl = _fm->getFeatureArraylambda(feat, deltai, deltaj);
+        double oldl = _fm->getLambda(feat, deltai, deltaj);
         double newl = 0.0;
         if(fabs(_expected[feat][deltai][deltaj]) < EPSILON &&
            fabs(_observed[feat][deltai][deltaj]) > EPSILON)
@@ -246,7 +246,7 @@ double IterativeScaling::__calculateIteration(double featconst, bool test)
           newl = oldl
             + 0.1*(1.0/featconst)
             * log(_observed[feat][deltai][deltaj]/_expected[feat][deltai][deltaj]);
-          _fm->setFeatureArraylambda(feat,deltai,deltaj,newl);
+          _fm->setLambda(feat,deltai,deltaj,newl);
         }
         l += fabs(_observed[feat][deltai][deltaj] - _expected[feat][deltai][deltaj]);
       }
