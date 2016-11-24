@@ -586,3 +586,127 @@ void containerTest::testFindList2()
   CPPUNIT_ASSERT_EQUAL(1, (int)r.size());
   CPPUNIT_ASSERT_EQUAL(9, r[0]);
 }
+
+
+void containerTest::testFind1ByContainer()
+{
+  ULContainer* container = new ULContainer(10,5);
+
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+
+  ULContainer* unique = new ULContainer(1,5);
+  *unique << 1 << 2 << 3 << 4 << 5;
+
+  int r = container->find(unique, 0);
+
+  CPPUNIT_ASSERT_EQUAL(0, r);
+}
+
+void containerTest::testFind2ByContainer()
+{
+  ULContainer* container = new ULContainer(10,5);
+
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 2 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 2 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 1 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 1 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 5 << 4 << 5;
+
+  ULContainer *unique = container->unique();
+  int r = -1;
+
+  r = container->find(unique, 0);
+  CPPUNIT_ASSERT_EQUAL(1, r);
+
+  r = container->find(unique, 1);
+  CPPUNIT_ASSERT_EQUAL(5, r);
+
+  r = container->find(unique, 2);
+  CPPUNIT_ASSERT_EQUAL(0, r);
+
+  r = container->find(unique, 3);
+  CPPUNIT_ASSERT_EQUAL(9, r);
+
+}
+
+void containerTest::testFindList1ByContainer()
+{
+  ULContainer* container = new ULContainer(10,5);
+
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+
+  ULContainer *unique = container->unique();
+
+  vector<int> r = container->findlist(unique, 0);
+
+  CPPUNIT_ASSERT_EQUAL(10, (int)r.size());
+  for(int i = 0; i < 10; i++)
+  {
+    CPPUNIT_ASSERT_EQUAL(i, r[i]);
+  }
+}
+
+void containerTest::testFindList2ByContainer()
+{
+  ULContainer* container = new ULContainer(10,5);
+
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 2 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 2 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 1 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 1 << 4 << 5;
+  *container << 1 << 2 << 3 << 4 << 5;
+  *container << 1 << 2 << 5 << 4 << 5;
+
+  ULContainer* unique = container->unique();
+
+  vector<int> r;
+
+  r = container->findlist(unique, 0);
+  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(1, r[0]);
+  CPPUNIT_ASSERT_EQUAL(3, r[1]);
+
+  r = container->findlist(unique, 1);
+  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(5, r[0]);
+  CPPUNIT_ASSERT_EQUAL(7, r[1]);
+
+  r = container->findlist(unique, 2);
+  CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(0, r[0]);
+  CPPUNIT_ASSERT_EQUAL(2, r[1]);
+  CPPUNIT_ASSERT_EQUAL(4, r[2]);
+  CPPUNIT_ASSERT_EQUAL(6, r[3]);
+  CPPUNIT_ASSERT_EQUAL(8, r[4]);
+
+  r = container->findlist(unique, 3);
+  CPPUNIT_ASSERT_EQUAL(1, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(9, r[0]);
+}

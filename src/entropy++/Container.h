@@ -590,6 +590,22 @@ class Container
       return -1;
     }
 
+    int find(Container<T>* other, int row)
+    {
+      bool found = false;
+      for(int r = 0; r < this->rows(); r++)
+      {
+        found = true;
+        for(int c = 0; c < this->columns(); c++)
+        {
+          found &= (this->get(r,c) == other->get(row,c));
+          if(found == false) break;
+        }
+        if(found == true) return r;
+      }
+      return -1;
+    }
+
     vector<int> findlist(T* values)
     {
       vector<int> indices;
@@ -600,6 +616,23 @@ class Container
         for(int c = 0; c < this->columns(); c++)
         {
           found &= (this->get(r,c) == values[c]);
+          if(found == false) break;
+        }
+        if(found == true) indices.push_back(r);
+      }
+      return indices;
+    }
+
+    vector<int> findlist(Container<T>* other, int row)
+    {
+      vector<int> indices;
+      bool found = false;
+      for(int r = 0; r < this->rows(); r++)
+      {
+        found = true;
+        for(int c = 0; c < this->columns(); c++)
+        {
+          found &= (this->get(r,c) == other->get(row,c));
           if(found == false) break;
         }
         if(found == true) indices.push_back(r);
