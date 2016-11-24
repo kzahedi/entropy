@@ -539,6 +539,32 @@ class Container
       return new_container;
     }
 
+    Container<T>* unique()
+    {
+      // Container<T> *new = new Container<T>(this->rows(), 1);
+      vector<T> values;
+      for(int c = 0; c < this->columns(); c++)
+      {
+        for(int r = 0; r < this->rows(); r++)
+        {
+          T value = this->get(r,c);
+          if(std::find(values.begin(), values.end(), value) == values.end())
+          //if(values.find(value) == values.end())
+          {
+            values.push_back(value);
+          }
+        }
+      }
+      Container<T>* new_container = new Container<T>(values.size(), 1);
+      for(int i = 0; i < values.size(); i++)
+      {
+        *new_container << values[i];
+      }
+      return new_container;
+    }
+
+
+
   private:
     Container<unsigned long>* __uniformDiscretisationByColumn()
     {

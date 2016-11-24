@@ -65,6 +65,7 @@ namespace entropy
         int**  _yFeatureArray; // all possible features for X
         void __fillX();
         void __fillY();
+        // double*** _featureArrayvalueAlphY;
 #endif
     };
   }

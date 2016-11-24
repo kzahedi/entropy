@@ -4,32 +4,25 @@ using namespace entropy::iterativescaling;
 
 Feature::Feature()
 {
-  _lambda     = new SparseMatrix();
-  _sizeX = 0;
-  _sizeY = 0;
+  _lambda = new SparseMatrix();
+  _sizeX  = 0;
+  _sizeY  = 0;
 }
 
 //(Eingabealphabet, Anzahl der X und Y Werte, Anzahl der Testwerte, ein Startwert fuer alle  lambda)
 Feature::Feature(int sizeX, int sizeY, double valuelambda) // systXsize, int systYsize, double valuelambda)
 {
-  // TODO other asserts
-  // assert(xAlphabet.columns() == 1);
-  // assert(yAlphabet.columns() == 1);
-  _sizeX = sizeX;
-  _sizeY = sizeY;
-  _lambda     = new SparseMatrix(valuelambda);
+  _sizeX  = sizeX;
+  _sizeY  = sizeY;
+  _lambda = new SparseMatrix(valuelambda);
 }
 
 //alle lambda explizit ueber die Matrix setzen
 Feature::Feature(int sizeX, int sizeY, SparseMatrix &lambda) // int systXsize, int systYsize, SparseMatrix &lambda)
 {
-  // TODO other asserts
-  // assert(xAlphabet.columns()==1);
-  // assert(yAlphabet.columns()==1);
-
-  _sizeX = sizeX; // pow(xAlphabet.rows(),systXsize);
-  _sizeY = sizeY; // pow(yAlphabet.rows(),systYsize);
-  _lambda     = &lambda;
+  _sizeX  = sizeX; // pow(xAlphabet.rows(),systXsize);
+  _sizeY  = sizeY; // pow(yAlphabet.rows(),systYsize);
+  _lambda = &lambda;
 }
 
 Feature::~Feature()

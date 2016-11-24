@@ -89,7 +89,7 @@ double IterativeScaling::__getFeatconst()
   {
     for(int j = 0; j < N; j++) // y-alphabet
     {
-      int v = _fm->getMatrixIndexFeat(i,j).size(); // the number of matching deltas
+      int v = _fm->getMatrixIndexFeatSize(i,j); // the number of matching deltas
       if(v > r) r = v;
     }
   }
@@ -120,21 +120,26 @@ void IterativeScaling::__getExpected()
     int YJ = powi(_yAlphabet->rows(), _sizeColDataY);
     for(int yj = 0; yj < YJ; yj++)
     {
-      for(int k = 0; k < _fm->getMatrixIndexFeat(xi,yj).size(); k++)
+      for(int k = 0; k < _fm->getMatrixIndexFeatSize(xi,yj); k++)
       {
+<<<<<<< Updated upstream
         int index = _fm->getMatrixIndexFeat(xi,yj)[k];
         _exponent[index][yj] = _fm->getValueAlphY(index,xi,yj);
+=======
+        int index = _fm->getMatrixIndexFeatValue(xi,yj,k);
+        _exponent[index][yj] = _fm->getFeatureArrayvalueAlphY(index,xi,yj);
+>>>>>>> Stashed changes
         _normaliser[index]  +=  exp(_exponent[index][yj]);
       }
     }
     for(int yj = 0; yj < YJ; yj++)
     {
-      for(int k = 0; k < _fm->getMatrixIndexFeat(xi, yj).size();k++)
+      for(int k = 0; k < _fm->getMatrixIndexFeatSize(xi, yj);k++)
       {
-        int index = _fm->getMatrixIndexFeat(xi, yj)[k];
+        int index = _fm->getMatrixIndexFeatValue(xi, yj, k);
         _expected[index]
-          [_fm->getMatrixIndexdX(xi,yj)[k]]
-          [_fm->getMatrixIndexdY(xi,yj)[k]] += exp(_exponent[index][yj])/_normaliser[index];
+          [_fm->getMatrixIndexdXValue(xi,yj,k)]
+          [_fm->getMatrixIndexdYValue(xi,yj,k)] += exp(_exponent[index][yj])/_normaliser[index];
       }
     }
   }
@@ -217,6 +222,7 @@ void IterativeScaling::__gis(int maxit, double konv,bool test)
   while(_iterations < maxit && fabs(l) >= konv)
   {
     l = __calculateIteration(featconst, test);
+    cout << l << endl;
   }
 } 
 

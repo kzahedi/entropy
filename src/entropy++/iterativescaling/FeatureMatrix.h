@@ -31,9 +31,18 @@ namespace entropy
         FeatureMatrix();
         ~FeatureMatrix();
 
-        ivector getMatrixIndexFeat(int i,int j);
-        ivector getMatrixIndexdX(int i,int j);
-        ivector getMatrixIndexdY(int i,int j);
+        // ivector getMatrixIndexFeat(int i,int j);
+        // ivector getMatrixIndexdX(int i,int j);
+        // ivector getMatrixIndexdY(int i,int j);
+
+        void getMatrixIndexFeat(ivector& r, int i,int j);
+        int  getMatrixIndexFeatSize(int i, int j);
+        int  getMatrixIndexFeatValue(int i, int j, int k);
+
+        void getMatrixIndexdX(ivector& r, int i, int j);
+        int  getMatrixIndexdXValue(int i, int j, int k);
+        void getMatrixIndexdY(ivector& r, int i, int j);
+        int  getMatrixIndexdYValue(int i, int j, int k);
 
       private:
         void __getMatrix(double valuelambda);
