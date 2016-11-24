@@ -58,9 +58,9 @@ option(ENTROPY_COMPILE_IT       "Compile IT example"                   OFF)
 option(ENTROPY_ENTROPY_TESTS    "Compile test cases"                   OFF)
 option(ENTROPY_MEMORY_EFFICIENT "Compile with memory efficiency. Code will be very slow if this is set to ON." ON)
 
-if(NOT ENTROPY_MEMORY_EFFICIENT)
-  add_definitions(-DSPEED_OVER_MERMORY)
-endif(NOT ENTROPY_MEMORY_EFFICIENT)
+if(ENTROPY_MEMORY_EFFICIENT)
+  add_definitions(-DMEMORY_EFFICIENT)
+endif(ENTROPY_MEMORY_EFFICIENT)
 
 if(ENTROPY_COMPILE_HOPPING)
   add_subdirectory(experiments/hopping)

@@ -295,6 +295,7 @@ int ITMatrix::getFeatureArraydeltaAlphYAlphX(int i, int indexX, int indexY, int 
 
 // Berechnung der Alphabetreihe aus dem Index
 // vector<int> ITMatrix::index(int index, bool x, int sizeCol)
+// #ifdef MEMORY_EFFICIENT
 void ITMatrix::index(int* array, int index, bool x, int sizeCol)
 {
   int sizeAlph;
@@ -327,6 +328,7 @@ void ITMatrix::index(int* array, int index, bool x, int sizeCol)
   }
   // return row;
 }
+// #endif // MEMORY_EFFICIENT
 
 //ein Array mit den benoetigten Features fuellen
 void ITMatrix::__featureArray(double valuelambda)
@@ -346,3 +348,34 @@ void ITMatrix::__featureArray(double valuelambda)
 }
 
 
+// #ifndef MEMORY_EFFICIENT
+
+void ITMatrix::fillX()
+{
+  int nr = powi(_xAlphabet->rows(), _valX->columns());
+  int nc = _valX->columns();
+  int nx = _xAlphabet->rows();
+
+  _xFeatureArray = new int*[nr];
+  for(int r = 0; r < nr; r++)
+  {
+    _xFeatureArray[r] = new int[nc];
+  }
+
+  for(int r = 0; r < nr; r++)
+  {
+    for(int c = 0; c < nc; c++)
+    {
+      float f  = powi(nx, c);
+      int   rf = (int)(((float)r) / f);
+      int   xindex = rf % nx;
+      _xFeatureArray[r][c] = _xAlphabet->get(xindex, 0);
+    }
+  }
+}
+
+int ITMatrix::getFillX(int i, int j)
+{
+  return _xFeatureArray[i][j];
+}
+// #endif // MEMORY_EFFICIENT

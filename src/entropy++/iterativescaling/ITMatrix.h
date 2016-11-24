@@ -34,12 +34,19 @@ namespace entropy
         double  getFeatureArrayvalue(int i,int rowX, int rowY);
         double  getFeatureArrayvalueAlphY(int feat,int rowX,int indexY);
         double  getFeatureArrayvalueAlphYAlphX(int feat,int indexX,int indexY);
-        int 	  getFeatureArraydelta(int i,int indexX, int indexY, int rowDataX, int rowDataY);
+        int     getFeatureArraydelta(int i,int indexX, int indexY, int rowDataX, int rowDataY);
         int     getFeatureArraydeltaAlphY(int i,int indexX, int indexY,int rowDataX, int indexDataY);
         int     getFeatureArraydeltaAlphYAlphX(int i,int indexX, int indexY,int indexDataX, int indexDataY);
         void    setFeatureArraylambda(int i, int ilambdaX, int ilambdaY,double valuelambda);
         // vector<int> index(int index,bool x, int sizeCol);
         void index(int* array, int index, bool x, int sizeCol);
+// #ifdef MEMORY_EFFICIENT
+// #else
+        // void index(int* array, int index);
+        void fillX();
+        int  getFillX(int i, int j);
+// #endif
+
 
       protected:
         void         __featureArray(double valuelambda);
@@ -58,9 +65,12 @@ namespace entropy
         ULContainer* _xAlphabet;
         ULContainer* _yAlphabet;
         Feature*     _featureArray;
-#if SPEED_OVER_MERMORY
+// #ifndef MEMORY_EFFICIENT
+        int**  _xFeatureArray; // all possible features for X
+// #else
 
-#endif
+
+// #endif
     };
   }
 }
