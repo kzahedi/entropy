@@ -122,13 +122,8 @@ void IterativeScaling::__getExpected()
     {
       for(int k = 0; k < _fm->getMatrixIndexFeatSize(xi,yj); k++)
       {
-<<<<<<< Updated upstream
-        int index = _fm->getMatrixIndexFeat(xi,yj)[k];
-        _exponent[index][yj] = _fm->getValueAlphY(index,xi,yj);
-=======
         int index = _fm->getMatrixIndexFeatValue(xi,yj,k);
-        _exponent[index][yj] = _fm->getFeatureArrayvalueAlphY(index,xi,yj);
->>>>>>> Stashed changes
+        _exponent[index][yj] = _fm->getValueAlphY(index,xi,yj);
         _normaliser[index]  +=  exp(_exponent[index][yj]);
       }
     }

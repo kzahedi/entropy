@@ -78,35 +78,17 @@ void FeatureMatrix::getMatrixIndexdX(ivector &r, int i, int j)
 
 int FeatureMatrix::getMatrixIndexdXValue(int i, int j, int k)
 {
-<<<<<<< Updated upstream
-  assert(i < _sizeRowDataX && j < _sizeMatrixAlphabetY);
-  ivector indX = _mat[i][j][0]; // TODO copying a vector can be expensive
-  return indX;
-=======
   return _mat[i][j][1][k]; // TODO copying a vector can be expensive
->>>>>>> Stashed changes
 }
 
 void FeatureMatrix::getMatrixIndexdY(ivector &r, int i, int j)
 {
-<<<<<<< Updated upstream
-  assert(i < _sizeRowDataX  && j< _sizeMatrixAlphabetY);
-  ivector dindX = _mat[i][j][1]; // TODO copying a vector can be expensive
-  return dindX;
-=======
   r = _mat[i][j][2]; // TODO copying a vector can be expensive
->>>>>>> Stashed changes
 }
 
 int FeatureMatrix::getMatrixIndexdYValue(int i, int j, int k)
 {
-<<<<<<< Updated upstream
-  assert(i < _sizeRowDataX  && j < _sizeMatrixAlphabetY);
-  ivector dindY = _mat[i][j][2]; // TODO copying a vector can be expensive
-  return dindY;
-=======
   return _mat[i][j][2][k]; // TODO copying a vector can be expensive
->>>>>>> Stashed changes
 }
 
 void FeatureMatrix::__getMatrix(double valuelambda)
@@ -132,7 +114,7 @@ void FeatureMatrix::__getMatrix(double valuelambda)
       {
         int DI = powi(_xAlphabet->rows(), _systX[feat].size());
         int DJ = powi(_yAlphabet->rows(), _systY[feat].size());
-        cout << "  " << _sizeRowDataX * _sizeAlphY * _systX.size() * DI * DJ << endl;
+        // cout << "  " << _sizeRowDataX * _sizeAlphY * _systX.size() * DI * DJ << endl;
         for(int deltai = 0; deltai < DI; deltai++)
         {
           for(int deltaj = 0; deltaj < DJ; deltaj++)
