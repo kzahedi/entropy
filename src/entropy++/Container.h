@@ -264,6 +264,26 @@ namespace entropy
           _fillMode = f;
         }
 
+        T rowSum(int r)
+        {
+          T sum = (T)0;
+          for(int c = 0; c < _columns; c++)
+          {
+            sum += _data[r][c];
+          }
+          return sum;
+        }
+
+        T colSum(int c)
+        {
+          T sum = (T)0;
+          for(int r = 0; r < _rows; r++)
+          {
+            sum += _data[r][c];
+          }
+          return sum;
+        }
+
         double max()
         {
           double m = max(0);
@@ -372,6 +392,15 @@ namespace entropy
           return copy();
         }
 
+        void setBinSizes(int bins)
+        {
+          for(int c = 0; c < _columns; c++)
+          {
+            _bins[c] = bins;
+          }
+          _binsGiven = true;
+        }
+
         void setBinSizes(int *bins)
         {
           for(int c = 0; c < _columns; c++)
@@ -387,6 +416,16 @@ namespace entropy
           {
             _domains[c][0] = domains[c][0];
             _domains[c][1] = domains[c][1];
+          }
+          _domainsGiven = true;
+        }
+
+        void setDomains(double min, double max)
+        {
+          for(int c = 0; c < _columns; c++)
+          {
+            _domains[c][0] = min;
+            _domains[c][1] = max;
           }
           _domainsGiven = true;
         }

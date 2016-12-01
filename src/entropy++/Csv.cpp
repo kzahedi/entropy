@@ -164,3 +164,18 @@ void Csv::write(string filename, ULContainer* container)
   }
   out.close();
 }
+
+void Csv::write(string filename, IContainer* container)
+{
+  ofstream out(filename.c_str());
+  for(int r = 0; r < container->rows(); r++)
+  {
+    out << (*container)(r,0);
+    for(int c = 1; c < container->columns(); c++)
+    { 
+      out << "," << (*container)(r,c);
+    }
+    out << endl;
+  }
+  out.close();
+}
