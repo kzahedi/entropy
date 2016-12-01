@@ -6,6 +6,7 @@
 #include <math.h>
 
 using namespace std;
+using namespace entropy;
 using namespace entropy::sparse;
 
 

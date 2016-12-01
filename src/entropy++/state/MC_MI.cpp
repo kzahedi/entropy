@@ -2,6 +2,7 @@
 
 #include <entropy++/state/MI.h>
 
+using namespace entropy;
 using namespace entropy::state;
 
 DContainer* entropy::state::MC_MI(ULContainer* W2, ULContainer* W1, ULContainer* S1, ULContainer* A1, int mode)

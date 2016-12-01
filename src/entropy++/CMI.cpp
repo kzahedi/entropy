@@ -5,6 +5,7 @@
 #include <math.h>
 
 using namespace std;
+using namespace entropy;
 
 double __empericalCMI(ULContainer* X, ULContainer* Y, ULContainer* Z)
 {

@@ -7,6 +7,7 @@
 #include <math.h>
 
 using namespace std;
+using namespace entropy;
 using namespace entropy::sparse::state;
 
 DContainer* __empericalCMIssd(ULContainer* X, ULContainer* Y, ULContainer* Z)

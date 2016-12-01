@@ -2,6 +2,7 @@
 
 #include <entropy++/sparse/state/MI.h>
 
+using namespace entropy;
 using namespace entropy::sparse::state;
 
 DContainer* entropy::sparse::state::MC_CW(ULContainer* W2, ULContainer* W1, ULContainer* A1, int mode)

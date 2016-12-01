@@ -7,6 +7,7 @@
 #include <math.h>
 
 using namespace std;
+using namespace entropy;
 
 double __empericalHs(ULContainer* X, ULContainer* Y)
 {

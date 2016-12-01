@@ -5,6 +5,7 @@
 #include <math.h>
 
 using namespace std;
+using namespace entropy;
 using namespace entropy::state;
 
 DContainer* __empericalMIsd(ULContainer* X, ULContainer* Y)
