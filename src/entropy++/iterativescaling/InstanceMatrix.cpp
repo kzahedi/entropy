@@ -36,22 +36,29 @@ InstanceMatrix::~InstanceMatrix()
   delete[] _mat;
 }
 
-ivector InstanceMatrix::getInstanceMatrixX(int feat, int deltai, int deltaj)
+int InstanceMatrix::getInstanceMatrixX(int feat, int deltai, int deltaj, int k)
 {
   assert(feat < _systX.size());
   assert(deltai < powi(_sizeX,_systX[feat].size()));
   assert(deltaj< powi(_sizeY,_systY[feat].size()));
-  return _mat[feat][deltai][deltaj][0];
+  return _mat[feat][deltai][deltaj][0][k];
 }
 
-ivector InstanceMatrix::getInstanceMatrixY(int feat, int deltai, int deltaj)
+int InstanceMatrix::getInstanceMatrixY(int feat, int deltai, int deltaj, int k)
 {
   assert(feat < _systX.size());
   assert(deltai < powi(_sizeX,_systX[feat].size()));
   assert(deltaj < powi(_sizeY,_systY[feat].size()));
-  return _mat[feat][deltai][deltaj][1];
+  return _mat[feat][deltai][deltaj][1][k];
 }
+int InstanceMatrix::getInstanceMatrixSize(int feat, int deltai, int deltaj)
+{
+  assert(feat < _systX.size());
+  assert(deltai < powi(_sizeX,_systX[feat].size()));
+  assert(deltaj < powi(_sizeY,_systY[feat].size()));
+  return _mat[feat][deltai][deltaj][0].size();
 
+}
 // Anzahl der deltas varriert
 void InstanceMatrix::__getMatrix(double valuelambda)
 {

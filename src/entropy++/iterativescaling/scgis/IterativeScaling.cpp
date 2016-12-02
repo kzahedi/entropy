@@ -16,43 +16,42 @@ IterativeScaling::IterativeScaling(ULContainer *xData,
   : IterativeScalingBase(xData, yData, xAlphabet, yAlphabet, systX, systY, param, false)
 {
   _im       = (InstanceMatrix*)_imatrix;
-  _param    = param;
-  _exponent = new double**[_sizeSystX];
-  int Y     = (int)powi(_yAlphabet->rows(),_sizeColDataY);
-  for(int i = 0; i < _sizeSystX; i++)
-  {
-    _exponent[i] = new double*[_sizeRowDataX];
-    for(int xi = 0; xi < _sizeRowDataX; xi++)
+    _param    = param;
+    _exponent = new double**[_sizeSystX];
+    int Y     = (int)powi(_yAlphabet->rows(),_sizeColDataY);
+    for(int i = 0; i < _sizeSystX; i++)
     {
-      _exponent[i][xi] = new double[Y];
-      for(int y = 0; y < Y; y++)
+      _exponent[i] = new double*[_sizeRowDataX];
+      for(int xi = 0; xi < _sizeRowDataX; xi++)
       {
-        _exponent[i][xi][y]=0;
+        _exponent[i][xi] = new double[Y];
+        for(int y = 0; y < Y; y++)
+        {
+          _exponent[i][xi][y]=0;
+        }
       }
     }
-  }
 
-  _normaliser = new double*[_sizeSystX];
-  for(int i = 0; i < _sizeSystX; i++)
-  {
-    _normaliser[i] = new double[_sizeRowDataX];
-    for(int k = 0; k < _sizeRowDataX; k++)
+    _normaliser = new double*[_sizeSystX];
+    for(int i = 0; i < _sizeSystX; i++)
     {
-      _normaliser[i][k] = Y;
+      _normaliser[i] = new double[_sizeRowDataX];
+      for(int k = 0; k < _sizeRowDataX; k++)
+      {
+        _normaliser[i][k] = Y;
+      }
+    }
+
+    _delta=0.0;
+    if(param.konvtime)
+    {
+      __scgis(param.konv, param.seconds, param.test); // TODO rename functions
+    }
+    else{
+      if(param.time) __scgis(param.seconds, param.test);
+      else           __scgis(param.maxit, param.konv, param.test);
     }
   }
-
-  _delta=0.0;
-  if(param.konvtime)
-  {
-    __scgis(param.konv, param.seconds, param.test); // TODO rename functions
-  }
-  else{
-    if(param.time) __scgis(param.seconds, param.test);
-    else           __scgis(param.maxit, param.konv, param.test);
-  }
-}
-
 
 double IterativeScaling::getconv(int i)
 {
@@ -144,11 +143,12 @@ double IterativeScaling::__calculateIteration(bool test)
         double expected = 0.0;
         for(int y = 0; y < Y; y++)
         {
-          for(int k = 0; k < _im->getInstanceMatrixX(feat,delti,deltj).size(); k++) //
+          int featsize = _im->getInstanceMatrixSize(feat,delti,deltj);
+          for(int k = 0; k < featsize ; k++) //
           {
-            if(_im->getInstanceMatrixY(feat,delti,deltj)[k] == y)
+            if(_im->getInstanceMatrixY(feat,delti,deltj,k) == y)
             {
-              int x = _im->getInstanceMatrixX(feat,delti,deltj)[k];
+              int x = _im->getInstanceMatrixX(feat,delti,deltj,k);
               if(fabs(_normaliser[feat][x]) > EPSILON )
               {
                 // f_i(\bar{x}_j, y) is given by the 2 for and 1 if above
@@ -179,11 +179,11 @@ double IterativeScaling::__calculateIteration(bool test)
         l += fabs(_observed[feat][delti][deltj] - expected);
         for(int y = 0; y < Y; y++)
         {
-          for(int k = 0; k < _im->getInstanceMatrixX(feat,delti,deltj).size(); k++)
+          for(int k = 0; k < _im->getInstanceMatrixSize(feat,delti,deltj); k++)
           {
-            if(_im->getInstanceMatrixY(feat,delti,deltj)[k] == y)
+            if(_im->getInstanceMatrixY(feat,delti,deltj,k) == y)
             {
-              int x = _im->getInstanceMatrixX(feat,delti,deltj)[k];
+              int x = _im->getInstanceMatrixX(feat,delti,deltj,k);
               _normaliser[feat][x]  -= exp(_exponent[feat][x][y]);
               _exponent[feat][x][y] += _delta;
               _normaliser[feat][x]  += exp(_exponent[feat][x][y]);

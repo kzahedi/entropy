@@ -44,6 +44,7 @@ namespace entropy
 
           double         _delta;
           int            _iterations;
+          int            _sizeUniqueX;
           double***      _exponent;
           double**       _normaliser;
 

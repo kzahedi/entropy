@@ -31,8 +31,9 @@ namespace entropy
         ~InstanceMatrix();
         // TODO copying vectors can be expensive
 
-        ivector getInstanceMatrixX(int feat, int deltai, int deltaj);
-        ivector getInstanceMatrixY(int feat, int deltai, int deltaj);
+        int     getInstanceMatrixX(int feat, int deltai, int deltaj, int k);
+        int     getInstanceMatrixY(int feat, int deltai, int deltaj, int k);
+        int     getInstanceMatrixSize(int feat, int deltai, int deltj);
 
       private:
         void __getMatrix(double valuelambda);
