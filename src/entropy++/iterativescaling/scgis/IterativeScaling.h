@@ -1,7 +1,6 @@
 #ifndef __IterativeScaling_H__
 #define __IterativeScaling_H__
 
-#include <entropy++/Container.h>
 #include <entropy++/defs.h>
 #include <entropy++/Matrix.h>
 #include <entropy++/iterativescaling/Feature.h>

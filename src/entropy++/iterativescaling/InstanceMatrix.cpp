@@ -15,7 +15,6 @@ InstanceMatrix::InstanceMatrix(ULContainer *xData,
 {
   __getMatrix(valuelambda);
 }
-
 InstanceMatrix::~InstanceMatrix()
 {
   delete[] _featureArray;
@@ -53,7 +52,7 @@ ivector InstanceMatrix::getInstanceMatrixY(int feat, int deltai, int deltaj)
   return _mat[feat][deltai][deltaj][1];
 }
 
-// Anyahl der deltas varriert
+// Anzahl der deltas varriert
 void InstanceMatrix::__getMatrix(double valuelambda)
 {
   //Matrix erstellen

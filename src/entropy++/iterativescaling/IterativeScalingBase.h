@@ -8,6 +8,7 @@
 #include <entropy++/sparse/state/MC_MI.h>
 #include <entropy++/Matrix.h>
 #include <entropy++/SparseMatrix.h>
+#include <entropy++/Container.h>
 
 #include <entropy++/iterativescaling/Feature.h>
 #include <entropy++/iterativescaling/ITMatrix.h>

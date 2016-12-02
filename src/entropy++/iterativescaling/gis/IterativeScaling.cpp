@@ -85,7 +85,8 @@ double IterativeScaling::__getFeatconst()
 {
   double r = 0.0;
   int N = powi(_yAlphabet->rows(), _sizeColDataY);
-  for(int i = 0; i < _sizeRowDataX; i++) // i-th data row
+  int sizeUniqueX= _fm->getSizeUnique();
+  for(int i = 0; i < sizeUniqueX; i++) // i-th data row
   {
     for(int j = 0; j < N; j++) // y-alphabet
     {
@@ -110,9 +111,12 @@ void IterativeScaling::__getExpected()
       }
     }
   }
-
-  for(int xi = 0; xi < _sizeRowDataX; xi++)
+  int featsize;
+  int indexUniqueX;
+  int sizeUnique = _fm->getSizeUnique();
+  for(int xi = 0; xi < sizeUnique; xi++)
   {
+    indexUniqueX = _fm->getUniqueIndex(xi);
     for(int i = 0;i < _sizeSystX; i++)
     {
       _normaliser[i] = 0.0;
@@ -120,16 +124,18 @@ void IterativeScaling::__getExpected()
     int YJ = powi(_yAlphabet->rows(), _sizeColDataY);
     for(int yj = 0; yj < YJ; yj++)
     {
-      for(int k = 0; k < _fm->getMatrixIndexFeatSize(xi,yj); k++)
+      featsize = _fm->getMatrixIndexFeatSize(xi,yj);
+      for(int k = 0; k < featsize ; k++)
       {
         int index = _fm->getMatrixIndexFeatValue(xi,yj,k);
-        _exponent[index][yj] = _fm->getValueAlphY(index,xi,yj);
+        _exponent[index][yj] = _fm->getValueAlphY(index,indexUniqueX,yj);
         _normaliser[index]  +=  exp(_exponent[index][yj]);
       }
     }
     for(int yj = 0; yj < YJ; yj++)
     {
-      for(int k = 0; k < _fm->getMatrixIndexFeatSize(xi, yj);k++)
+      featsize = _fm->getMatrixIndexFeatSize(xi, yj);
+      for(int k = 0; k < featsize ;k++)
       {
         int index = _fm->getMatrixIndexFeatValue(xi, yj, k);
         _expected[index]
@@ -224,6 +230,8 @@ void IterativeScaling::__gis(int maxit, double konv,bool test)
 double IterativeScaling::__calculateIteration(double featconst, bool test)
 {
   double l = 0;
+  double oldl = 0.0;
+  double newl = 0.0;
   __getExpected();
   for(int feat = 0; feat < _sizeSystX; feat++)
   {
@@ -234,8 +242,7 @@ double IterativeScaling::__calculateIteration(double featconst, bool test)
     {
       for(int deltaj = 0; deltaj < DJ; deltaj++)
       {
-        double oldl = _fm->getLambda(feat, deltai, deltaj);
-        double newl = 0.0;
+        newl = 0.0;
         if(fabs(_expected[feat][deltai][deltaj]) < EPSILON &&
            fabs(_observed[feat][deltai][deltaj]) > EPSILON)
         {
@@ -244,6 +251,7 @@ double IterativeScaling::__calculateIteration(double featconst, bool test)
         if(fabs(_observed[feat][deltai][deltaj]) > EPSILON)
         {
           // TODO 0.1 as learning rate parameter
+          oldl = _fm->getLambda(feat, deltai, deltaj);
           newl = oldl
             + 0.1*(1.0/featconst)
             * log(_observed[feat][deltai][deltaj]/_expected[feat][deltai][deltaj]);

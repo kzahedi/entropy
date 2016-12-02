@@ -2,6 +2,7 @@
 #define __FEATUREMATRIX_H__
 
 #include <entropy++/defs.h>
+#include <entropy++/Container.h>
 
 #include <entropy++/iterativescaling/Feature.h>
 #include <entropy++/iterativescaling/ITMatrix.h>
@@ -44,10 +45,14 @@ namespace entropy
         void getMatrixIndexdY(ivector& r, int i, int j);
         int  getMatrixIndexdYValue(int i, int j, int k);
 
+        int  getUniqueIndex(int i);
+        int  getSizeUnique();
+
       private:
         void __getMatrix(double valuelambda);
-        ivvector **_mat;
-        int  _sizeMatrixAlphabetY;
+        ivvector **  _mat;
+        int          _sizeMatrixAlphabetY;
+        ULContainer* _UniqueXData;
     };
   }
 }

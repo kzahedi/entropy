@@ -5,6 +5,7 @@
 #include <entropy++/defs.h>
 
 #include <entropy++/iterativescaling/Feature.h>
+#include <entropy++/Container.h>
 
 #include <assert.h>
 #include <cstdlib>

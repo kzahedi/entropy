@@ -4,14 +4,12 @@
 
 using namespace entropy::iterativescaling;
 
-
-
 ITMatrix::ITMatrix(ULContainer *xData,
                    ULContainer *yData,
                    ULContainer *xAlphabet,
                    ULContainer *yAlphabet,
-                   vector<vector<int> > systX,
-                   vector<vector<int> > systY,
+                   ivvector    systX,
+                   ivvector    systY,
                    double lambdavalue)
 {
   _DataX         = xData;
@@ -341,7 +339,7 @@ void ITMatrix::__featureArray(double valuelambda)
 }
 
 
-// #ifndef MEMORY_EFFICIENT
+ #ifndef MEMORY_EFFICIENT
 
 void ITMatrix::__fillX()
 {
@@ -391,4 +389,4 @@ void ITMatrix::__fillY()
   }
 }
 
-// #endif // MEMORY_EFFICIENT
+ #endif // MEMORY_EFFICIENT

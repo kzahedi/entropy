@@ -5,6 +5,7 @@
 #include <entropy++/iterativescaling/FeatureMatrix.h>
 #include <entropy++/iterativescaling/IterativeScalingBase.h>
 #include <entropy++/iterativescaling/IsParameter.h>
+#include <entropy++/Container.h>
 
 #include <string>
 #include <iostream>

@@ -144,7 +144,7 @@ double IterativeScaling::__calculateIteration(bool test)
         double expected = 0.0;
         for(int y = 0; y < Y; y++)
         {
-          for(int k = 0; k < _im->getInstanceMatrixX(feat,delti,deltj).size(); k++)
+          for(int k = 0; k < _im->getInstanceMatrixX(feat,delti,deltj).size(); k++) //
           {
             if(_im->getInstanceMatrixY(feat,delti,deltj)[k] == y)
             {
