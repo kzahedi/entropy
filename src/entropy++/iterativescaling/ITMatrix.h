@@ -38,7 +38,10 @@ namespace entropy
         int     getDelta(int i,int indexX, int indexY, int rowDataX, int rowDataY);
         int     getDeltaAlphY(int i,int indexX, int indexY,int rowDataX, int indexDataY);
         int     getDeltaAlphYAlphX(int i,int indexX, int indexY,int indexDataX, int indexDataY);
+        int     getUniqueIndex(int i);
+        int     getSizeUnique();
         void    setLambda(int i, int ilambdaX, int ilambdaY,double valuelambda);
+
 
 #ifdef MEMORY_EFFICIENT
         void index(int* array, int index, bool x, int sizeCol);
@@ -61,6 +64,7 @@ namespace entropy
         ULContainer* _xAlphabet;
         ULContainer* _yAlphabet;
         Feature*     _featureArray;
+        ULContainer* _UniqueXData;
 #ifndef MEMORY_EFFICIENT
         int**  _xFeatureArray; // all possible features for X
         int**  _yFeatureArray; // all possible features for X

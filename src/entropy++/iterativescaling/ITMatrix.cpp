@@ -12,12 +12,13 @@ ITMatrix::ITMatrix(ULContainer *xData,
                    ivvector    systY,
                    double lambdavalue)
 {
-  _DataX         = xData;
-  _DataY         = yData;
+  _DataX        = xData;
+  _DataY        = yData;
   _xAlphabet    = xAlphabet;
   _yAlphabet    = yAlphabet;
   _systX        = systX;
   _systY        = systY;
+  _UniqueXData  = xData->unique();
   _sizeColDataY = _DataY->columns();
   _sizeColDataX = _DataX->columns();
   _sizeRowDataX = _DataX->rows();
@@ -109,6 +110,14 @@ double ITMatrix::getValueAlphYAlphX(int feat,int indexX,int indexY)
     }
   }
   return val;
+}
+
+int ITMatrix::  getUniqueIndex(int i){
+  return _UniqueXData->find(_DataX,i);
+}
+
+int ITMatrix::  getSizeUnique(){
+  return _UniqueXData->rows();
 }
 
 void ITMatrix::setLambda(int i, int ilambdaX, int ilambdaY,double valuelambda)

@@ -13,7 +13,6 @@ FeatureMatrix::FeatureMatrix(ULContainer *xData,
                              double lambdavalue)
   : ITMatrix(xData,yData,xAlphabet,yAlphabet,systX,systY,lambdavalue)
 {
-  _UniqueXData = xData->unique();
   _sizeMatrixAlphabetY = powi(_yAlphabet->rows(),_sizeColDataY);
   __getMatrix(lambdavalue);
 }
@@ -90,14 +89,6 @@ void FeatureMatrix::getMatrixIndexdY(ivector &r, int i, int j)
 int FeatureMatrix::getMatrixIndexdYValue(int i, int j, int k)
 {
   return _mat[i][j][2][k]; // TODO copying a vector can be expensive
-}
-
-int FeatureMatrix::  getUniqueIndex(int i){
-  return _DataX->find(_UniqueXData,i);
-}
-
-int FeatureMatrix::  getSizeUnique(){
-  return _UniqueXData->rows();
 }
 
 void FeatureMatrix::__getMatrix(double valuelambda)

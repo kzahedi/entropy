@@ -113,39 +113,37 @@ void IterativeScaling::__getExpected()
   }
   int featsize;
   int indexUniqueX;
-  int sizeUnique = _fm->getSizeUnique();
-  for(int xi = 0; xi < sizeUnique; xi++)
+  for(int xi = 0; xi < _sizeRowDataX; xi++)
   {
-    indexUniqueX = _fm->getUniqueIndex(xi);
-    for(int i = 0;i < _sizeSystX; i++)
+    indexUniqueX= _fm->getUniqueIndex(xi);
+    for(int i = 0; i < _sizeSystX; i++)
     {
       _normaliser[i] = 0.0;
     }
     int YJ = powi(_yAlphabet->rows(), _sizeColDataY);
     for(int yj = 0; yj < YJ; yj++)
     {
-      featsize = _fm->getMatrixIndexFeatSize(xi,yj);
-      for(int k = 0; k < featsize ; k++)
+      featsize = _fm->getMatrixIndexFeatSize(indexUniqueX,yj);
+      for(int k = 0; k < featsize; k++)
       {
-        int index = _fm->getMatrixIndexFeatValue(xi,yj,k);
-        _exponent[index][yj] = _fm->getValueAlphY(index,indexUniqueX,yj);
+        int index = _fm->getMatrixIndexFeatValue(indexUniqueX,yj,k);
+        _exponent[index][yj] = _fm->getValueAlphY(index,xi,yj);
         _normaliser[index]  +=  exp(_exponent[index][yj]);
       }
     }
     for(int yj = 0; yj < YJ; yj++)
     {
-      featsize = _fm->getMatrixIndexFeatSize(xi, yj);
+      featsize =  _fm->getMatrixIndexFeatSize(indexUniqueX, yj);
       for(int k = 0; k < featsize ;k++)
       {
-        int index = _fm->getMatrixIndexFeatValue(xi, yj, k);
+        int index = _fm->getMatrixIndexFeatValue(indexUniqueX, yj, k);
         _expected[index]
-          [_fm->getMatrixIndexdXValue(xi,yj,k)]
-          [_fm->getMatrixIndexdYValue(xi,yj,k)] += exp(_exponent[index][yj])/_normaliser[index];
+          [_fm->getMatrixIndexdXValue(indexUniqueX,yj,k)]
+          [_fm->getMatrixIndexdYValue(indexUniqueX,yj,k)] += exp(_exponent[index][yj])/_normaliser[index];
       }
     }
   }
 }
-
 // auf zeit
 void IterativeScaling::__gis(int seconds, bool test) // TODO remove test
 {
