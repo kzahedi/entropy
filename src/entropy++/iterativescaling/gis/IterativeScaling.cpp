@@ -96,6 +96,7 @@ double IterativeScaling::__getFeatconst()
   }
   return r;
 }
+// Mit den derzeitigen Parametern lambda berechnete Anzahl der Vorkommen von feature(deltai,deltaj)
 void IterativeScaling::__getExpected()
 {
   for(int i = 0; i < _sizeSystX; i++)
@@ -112,9 +113,10 @@ void IterativeScaling::__getExpected()
   }
   int featsize;
   int indexUniqueX;
+
   for(int xi = 0; xi < _sizeRowDataX; xi++)
   {
-    indexUniqueX= _fm->getUniqueIndex(xi);
+    indexUniqueX= _fm->getUniqueIndex(xi); // index der Reihe aus UniqueX, die mit xi aus DataX uebereinstimmt
     for(int i = 0; i < _sizeSystX; i++)
     {
       _normaliser[i] = 0.0;
