@@ -80,7 +80,7 @@ IterativeScaling::~IterativeScaling()
   }
   delete[] _normaliser;
 }
-
+//konstante zur Verringerung der Schrittgroesse
 double IterativeScaling::__getFeatconst()
 {
   double r = 0.0;
@@ -96,7 +96,6 @@ double IterativeScaling::__getFeatconst()
   }
   return r;
 }
-
 void IterativeScaling::__getExpected()
 {
   for(int i = 0; i < _sizeSystX; i++)

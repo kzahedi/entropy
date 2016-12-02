@@ -13,7 +13,7 @@ FeatureMatrix::FeatureMatrix(ULContainer *xData,
                              double lambdavalue)
   : ITMatrix(xData,yData,xAlphabet,yAlphabet,systX,systY,lambdavalue)
 {
-  _sizeMatrixAlphabetY = powi(_yAlphabet->rows(),_sizeColDataY);
+  _sizeMatrixAlphabetY = powi(_yAlphabet->rows(),_sizeColDataY); // anz. aller moeglichen Werte fuer y
   __getMatrix(lambdavalue);
 }
 
@@ -91,10 +91,13 @@ int FeatureMatrix::getMatrixIndexdYValue(int i, int j, int k)
   return _mat[i][j][2][k]; // TODO copying a vector can be expensive
 }
 
+//_mat speichert fuer xi aus DataX und yj aus den moeglichen y welche feature, deltai und deltaj gleich 1 sind
 void FeatureMatrix::__getMatrix(double valuelambda)
 {
+  // drei Vektoren fure feature, deltai und deltaj
   ivvector V(3,ivector(0));
   int sizeUniqueX = _UniqueXData->rows();
+
   _mat = new ivvector*[sizeUniqueX];
   for(int i = 0; i < sizeUniqueX; i++)
   {
@@ -104,11 +107,10 @@ void FeatureMatrix::__getMatrix(double valuelambda)
       _mat[i][j] = V;
     }
   }
-
   int indexXData;
   for(int i = 0; i < sizeUniqueX; i++)
   {
-    indexXData = _DataX->find(_UniqueXData,i);
+    indexXData = _DataX->find(_UniqueXData,i);       // index der gleichen Reihe in DataX
     for(int j = 0; j < _sizeMatrixAlphabetY; j++)
     {
       for(int feat = 0; feat < _systX.size(); feat++)

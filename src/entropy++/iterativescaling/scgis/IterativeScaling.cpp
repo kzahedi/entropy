@@ -15,7 +15,7 @@ IterativeScaling::IterativeScaling(ULContainer *xData,
              IsParameter param)
   : IterativeScalingBase(xData, yData, xAlphabet, yAlphabet, systX, systY, param, false)
 {
-  _im       = (InstanceMatrix*)_imatrix;
+    _im       = (InstanceMatrix*)_imatrix;
     _param    = param;
     _exponent = new double**[_sizeSystX];
     int Y     = (int)powi(_yAlphabet->rows(),_sizeColDataY);

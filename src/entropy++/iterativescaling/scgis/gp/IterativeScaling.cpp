@@ -17,6 +17,7 @@ IterativeScaling::IterativeScaling(ULContainer *xData,
   : IterativeScalingBase(xData, yData, xAlphabet, yAlphabet, systX, systY, param, false)
 {
   _im       = (InstanceMatrix*)_imatrix;
+  //exponent und normaliser werden fuer die Berechnung von expected benoetigt
   _exponent = new double**[_sizeSystX];
   int Y     = powi(_yAlphabet->rows(),_sizeColDataY);
   for(int i = 0; i < _sizeSystX; i++)
@@ -40,6 +41,7 @@ IterativeScaling::IterativeScaling(ULContainer *xData,
       _normaliser[i][k] = Y;
     }
   }
+  //speichert den unterschied zwischen den Parametern lambda waehrend der Iterationen
   _delta = new double**[_sizeSystX];
   for(int i = 0; i < _sizeSystX; i++)
   {
@@ -117,11 +119,11 @@ double IterativeScaling::__calculateIteration(bool test, double sigma)
         double expected=0;
         for(int y = 0; y < Y; y++)
         {
-          for(int k = 0; k < _im->getInstanceMatrixX(feat,delti,deltj).size(); k++)
+          for(int k = 0; k < _im->getInstanceMatrixSize(feat,delti,deltj); k++)
           {
-            if(_im->getInstanceMatrixY(feat,delti,deltj)[k] == y)
+            if(_im->getInstanceMatrixY(feat,delti,deltj,k) == y)
             {
-              int x = _im->getInstanceMatrixX(feat,delti,deltj)[k];
+              int x = _im->getInstanceMatrixX(feat,delti,deltj,k);
               if(fabs(_normaliser[feat][x]) > EPSILON)
               {
                 expected += exp(_exponent[feat][x][y])/_normaliser[feat][x];
@@ -148,11 +150,11 @@ double IterativeScaling::__calculateIteration(bool test, double sigma)
         _im->setLambda(feat,delti,deltj,newl);
         for(int y = 0; y < powi(_yAlphabet->rows(),_sizeColDataY); y++)
         {
-          for(int k = 0; k < _im->getInstanceMatrixX(feat,delti,deltj).size(); k++)
+          for(int k = 0; k < _im->getInstanceMatrixSize(feat,delti,deltj); k++)
           {
-            if(_im->getInstanceMatrixY(feat,delti,deltj)[k] == y)
+            if(_im->getInstanceMatrixY(feat,delti,deltj,k) == y)
             {
-              int x = _im->getInstanceMatrixX(feat,delti,deltj)[k];
+              int x = _im->getInstanceMatrixX(feat,delti,deltj,k);
               _normaliser[feat][x]  -= exp(_exponent[feat][x][y]);
               _exponent[feat][x][y] += _delta[feat][delti][deltj];
               _normaliser[feat][x]  += exp(_exponent[feat][x][y]);
