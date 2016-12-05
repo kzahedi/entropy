@@ -63,7 +63,7 @@ double ITMatrix::getLambda(int i,int ilambdaX, int ilambdaY)
   double lambda = _featureArray[i].getLambda(ilambdaX,ilambdaY);
   return lambda;
 }
-
+// Wert des Features feat fuer x und y aus DataX und DataY
 double ITMatrix::getValue(int feat,int rowX,int rowY)
 {
   double val=0.0;
@@ -79,7 +79,7 @@ double ITMatrix::getValue(int feat,int rowX,int rowY)
   }
   return val;
 }
-
+// Wert des Features feat fuer x aus DataX und ein y aus yAlphabet
 double ITMatrix::getValueAlphY(int feat,int rowX,int indexY)
 {
   double val = 0.0;
@@ -95,7 +95,7 @@ double ITMatrix::getValueAlphY(int feat,int rowX,int indexY)
   }
   return val;
 }
-
+// Wert des Features feat fuer x aus xAlphabet und y aus yAlphabet
 double ITMatrix::getValueAlphYAlphX(int feat,int indexX,int indexY)
 {
   double val = 0.0;
@@ -124,7 +124,8 @@ void ITMatrix::setLambda(int i, int ilambdaX, int ilambdaY,double valuelambda)
 {
   _featureArray[i].setLambda(ilambdaX,ilambdaY,valuelambda);
 }
-
+// liefert 1, wenn xData(indexX) an den Stellen aus _systX[i] mit xData(rowDataX) uebereinstimmt
+// und dasselbe fuer indexY und rowDataY gilt, ansonsten -1
 int ITMatrix::getDelta(int i,int indexX, int indexY,int rowDataX, int rowDataY)
 {
 #ifdef MEMORY_EFFICIENT
@@ -178,7 +179,7 @@ int ITMatrix::getDelta(int i,int indexX, int indexY,int rowDataX, int rowDataY)
     return -1;
   }
 }
-
+// TODO evtl schnellerer Abbruch bei zwei Werten aus dem Alphabet
 int ITMatrix::getDeltaAlphY(int i, int indexX, int indexY, int rowDataX, int indexDataY)
 {
 #ifdef MEMORY_EFFICIENT
@@ -234,7 +235,7 @@ int ITMatrix::getDeltaAlphY(int i, int indexX, int indexY, int rowDataX, int ind
     return -1;
   }
 }
-
+// TODO evtl schnellerer Abbruch bei zwei Werten aus dem Alphabet
 int ITMatrix::getDeltaAlphYAlphX(int i, int indexX, int indexY, int indexDataX, int indexDataY)
 {
 #ifdef MEMORY_EFFICIENT
