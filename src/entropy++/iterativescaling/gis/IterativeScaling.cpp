@@ -112,6 +112,7 @@ void IterativeScaling::__getExpected()
   }
   int featsize;
   int indexUniqueX;
+  int YJ = powi(_yAlphabet->rows(), _sizeColDataY);
   for(int xi = 0; xi < _sizeRowDataX; xi++)
   {
     indexUniqueX= _fm->getUniqueIndex(xi);
@@ -119,7 +120,6 @@ void IterativeScaling::__getExpected()
     {
       _normaliser[i] = 0.0;
     }
-    int YJ = powi(_yAlphabet->rows(), _sizeColDataY);
     for(int yj = 0; yj < YJ; yj++)
     {
       featsize = _fm->getMatrixIndexFeatSize(indexUniqueX,yj);
@@ -219,6 +219,7 @@ void IterativeScaling::__gis(int maxit, double konv,bool test)
   _iterations = 0;
   while(_iterations < maxit && fabs(l) >= konv)
   {
+    cout << "iteration " << _iterations << endl;
     l = __calculateIteration(featconst, test);
     cout << l << endl;
   }
@@ -229,7 +230,9 @@ double IterativeScaling::__calculateIteration(double featconst, bool test)
   double l = 0;
   double oldl = 0.0;
   double newl = 0.0;
+  cout << "hier 0" << endl;
   __getExpected();
+  cout << "hier 1" << endl;
   for(int feat = 0; feat < _sizeSystX; feat++)
   {
     // jedes delta hat ein x_i und ein y_j

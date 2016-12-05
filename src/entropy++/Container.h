@@ -347,6 +347,23 @@ namespace entropy
           }
           va_end(ap);
 
+          // Container<T> *extracted = new Container<T>(this->rows(), n);
+
+          // for(int r = 0; r < _rows; r++)
+          // {
+            // for(int i = 0; i < (int)indices.size(); i++)
+            // {
+              // (*extracted) << get(r, indices[i]);
+            // }
+          // }
+
+          return columns(indices);
+        }
+
+        Container<T>* columns(vector<int> indices)
+        {
+          int n = indices.size();
+
           Container<T> *extracted = new Container<T>(this->rows(), n);
 
           for(int r = 0; r < _rows; r++)

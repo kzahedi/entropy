@@ -52,15 +52,20 @@ INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/src/entropy++/
   PATTERN "*.txt" EXCLUDE 
   )
 
-option(ENTROPY_COMPILE_HOPPING  "Compile MC example with hopping data" OFF)
-option(ENTROPY_COMPILE_RBO      "Compile MC example for RBOHand data"  OFF)
-option(ENTROPY_COMPILE_IT       "Compile IT example"                   OFF)
-option(ENTROPY_ENTROPY_TESTS    "Compile test cases"                   OFF)
+option(ENTROPY_COMPILE_HOPPING "Compile MC example with hopping data" OFF)
+option(ENTROPY_COMPILE_RBO     "Compile MC example for RBOHand data"  OFF)
+option(ENTROPY_COMPILE_IT      "Compile IT example"                   OFF)
+option(ENTROPY_TESTS           "Compile test cases"                   OFF)
+option(ENTROPY_PROGRESS_BAR    "Use progress bar"                     OFF)
 option(ENTROPY_MEMORY_EFFICIENT "Compile with memory efficiency. Code will be very slow if this is set to ON." ON)
 
 if(ENTROPY_MEMORY_EFFICIENT)
   add_definitions(-DMEMORY_EFFICIENT)
 endif(ENTROPY_MEMORY_EFFICIENT)
+
+if(ENTROPY_PROGRESS_BAR)
+  add_definitions(-DUSE_PROGRESS_BAR)
+endif(ENTROPY_PROGRESS_BAR)
 
 if(ENTROPY_COMPILE_HOPPING)
   add_subdirectory(experiments/hopping)
@@ -74,9 +79,9 @@ if(ENTROPY_COMPILE_IT)
   add_subdirectory(experiments/it)
 endif(ENTROPY_COMPILE_IT)
 
-if(ENTROPY_ENTROPY_TESTS)
+if(ENTROPY_TESTS)
   add_subdirectory(tests)
-endif(ENTROPY_ENTROPY_TESTS)
+endif(ENTROPY_TESTS)
  
 
 find_package(Doxygen)

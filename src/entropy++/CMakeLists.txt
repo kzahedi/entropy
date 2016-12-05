@@ -33,6 +33,7 @@ set(SRC sparse/CMI.cpp
   sparse/state/MC_W.cpp
   sparse/state/MI.cpp
 
+  iterativescaling/Model.cpp
   iterativescaling/IterativeScalingBase.cpp
   iterativescaling/Feature.cpp
   iterativescaling/FeatureMatrix.cpp
@@ -52,6 +53,10 @@ set(SRC sparse/CMI.cpp
   powi.cpp
 )
 
+if(ENTROPY_PROGRESS_BAR)
+  set(SRC ${SRC} ext/progressbar.c)
+endif(ENTROPY_PROGRESS_BAR)
+
 if(APPLE)
   add_library(Entropy++ SHARED ${SRC})
   install(TARGETS Entropy++ LIBRARY DESTINATION lib)
@@ -60,4 +65,7 @@ else(APPLE)
 endif(APPLE)
 
 target_link_libraries(Entropy++ ${Boost_LIBRARIES})
+if(ENTROPY_PROGRESS_BAR)
+  target_link_libraries(Entropy++ ncurses)
+endif(ENTROPY_PROGRESS_BAR)
 

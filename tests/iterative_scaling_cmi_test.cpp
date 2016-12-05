@@ -98,7 +98,7 @@ void itCmiTest::testITvsCMI()
   double ac_min = dcmotA->min(0);
   double ac_max = dcmotA->max(0);
 
-  int bins   = 10;
+  int bins = 5;
   cout << "Domains:" << endl;
   cout << "  Position:          " << p_min  << " " << p_max  << endl;
   cout << "  Velocity:          " << v_min  << " " << v_max  << endl;

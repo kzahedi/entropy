@@ -65,18 +65,18 @@ double entropy::SparseMatrix::__get(const int f, const int s, const int t) const
     entropy::MatrixIndex mi = _indices[i];
     if(mi.first == f && mi.second == s && mi.third == t)
     {
-      if(mi.first == 0 && mi.second == 0 && mi.third == 1)
-      {
-      }
-      if(f == 0 && s == 0 && t == 1)
-      {
-      }
+      // if(mi.first == 0 && mi.second == 0 && mi.third == 1)
+      // {
+      // }
+      // if(f == 0 && s == 0 && t == 1)
+      // {
+      // }
       return _values[i];
     }
   }
-  if(f == 0 && s == 0 && t == 1)
-  {
-  }
+  // if(f == 0 && s == 0 && t == 1)
+  // {
+  // }
   return _default;
 }
 

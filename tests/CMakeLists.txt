@@ -20,6 +20,9 @@ add_definitions(-DPARENT="${CMAKE_SOURCE_DIR}/experiments/hopping/data/")
 # add_executable(it-cmi-tests           main.cpp  it_cmi_test.cpp)
 # target_link_libraries(it-cmi-tests    Entropy++ cppunit dl eit)
 
+if(ENTROPY_PROGRESS_BAR)
+  add_definitions(-DUSE_PROGRESS_BAR)
+endif(ENTROPY_PROGRESS_BAR)
 add_executable(iterative-scaling-cmi-tests        main.cpp  iterative_scaling_cmi_test.cpp)
 target_link_libraries(iterative-scaling-cmi-tests Entropy++ cppunit dl)
 
@@ -39,6 +42,9 @@ add_definitions(-DTEST_CSV="${PROJECT_SOURCE_DIR}/tests/test.csv")
 add_executable(csv-tests              main.cpp  csv_test.cpp)
 target_link_libraries(csv-tests       Entropy++ cppunit dl)
 
+add_executable(model-tests            main.cpp  model_test.cpp)
+target_link_libraries(model-tests     Entropy++ cppunit dl)
+
 ADD_TEST(container "${PROJECT_BINARY_DIR}/bin/container-tests")
 ADD_TEST(matrix    "${PROJECT_BINARY_DIR}/bin/matrix-tests")
 ADD_TEST(mi        "${PROJECT_BINARY_DIR}/bin/mi-tests")
@@ -51,3 +57,4 @@ ADD_TEST(iterativescaling-cmi
 # ADD_TEST(itcmi     "${PROJECT_BINARY_DIR}/bin/it-cmi-tests")
 ADD_TEST(cmi       "${PROJECT_BINARY_DIR}/bin/cmi-tests")
 ADD_TEST(csv       "${PROJECT_BINARY_DIR}/bin/csv-tests")
+ADD_TEST(model     "${PROJECT_BINARY_DIR}/bin/model-tests")
