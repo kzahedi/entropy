@@ -28,7 +28,7 @@ Model::~Model()
 
 void Model::setRelations(vector<vector<int> > Xindices,
                          vector<vector<int> > Yindices,
-                         vector<relation>     relations)
+                         vector<Relation>     relations)
 {
   _Xindices  = Xindices;
   _Yindices  = Yindices;
@@ -50,4 +50,43 @@ void Model::createUniqueContainer()
     _uniqueY[i] = _Y->columns(_Yindices[i]);
     _uniqueY[i] = _uniqueY[i]->unique();
   }
+}
+
+void Model::countObservedFeatures()
+{
+  for(int d = 0; d < _X->rows(); d++)
+  {
+    for(int r = 0; r < (int)_relations.size(); r++)
+    {
+      int i = _relations[r].first;
+      int k = _relations[r].second;
+
+      int j = _uniqueX[i]->find(_X, d);
+      int l = _uniqueY[k]->find(_Y, d);
+
+      bool found = false;
+      for(vector<MFeature*>::iterator f = _features.begin();
+          f != _features.end();
+          f++)
+      {
+        if((*f)->match(i,j,k,l))
+        {
+          (*f)->incObserved();
+          found = true;
+          break;
+        }
+      }
+      if(found == false)
+      {
+        MFeature *f = new MFeature(i,j,k,l);
+        f->incObserved();
+        _features.push_back(f);
+      }
+    }
+  }
+}
+
+int Model::nrOfFeatures()
+{
+  return _features.size();
 }

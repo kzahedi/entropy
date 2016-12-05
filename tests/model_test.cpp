@@ -188,8 +188,8 @@ void modelTest::testUnique()
   bb.push_back(0);
   b.push_back(bb);
 
-  vector<relation> r;
-  r.push_back(relation(0,0));
+  vector<Relation> r;
+  r.push_back(Relation(0,0));
 
   // a.Xindices.push_back(0);
   // a.Xindices.push_back(1);
@@ -207,6 +207,7 @@ void modelTest::testUnique()
   dcmodel->setData(dcXY, dcZ);
   dcmodel->setRelations(a,b,r);
   dcmodel->createUniqueContainer();
+  dcmodel->countObservedFeatures();
 
   CPPUNIT_ASSERT(dcmodel->X()->rows() > 0);
   CPPUNIT_ASSERT(dcmodel->X()->rows() == dcXY->rows());
@@ -226,6 +227,13 @@ void modelTest::testUnique()
     cout << "Y unique: " << i << endl << *(dcmodel->uniqueY(i)) << endl;
   }
 
+  cout << "Nr of features: " << dcmodel->nrOfFeatures() << endl;
+
+  for(int i = 0; i < dcmodel->nrOfFeatures(); i++)
+  {
+    cout << (*dcmodel->feature(i)) << endl;
+  }
+
   ////////////////////////////////////////////////////////////////////////////////
   // MusFib MOTOR
   ////////////////////////////////////////////////////////////////////////////////
@@ -236,6 +244,7 @@ void modelTest::testUnique()
   mfmodel->setData(mfXY, mfZ);
   mfmodel->setRelations(a,b,r);
   mfmodel->createUniqueContainer();
+  mfmodel->countObservedFeatures();
 
   CPPUNIT_ASSERT(mfmodel->X()->rows() > 0);
   CPPUNIT_ASSERT(mfmodel->X()->rows() == mfXY->rows());
@@ -255,6 +264,13 @@ void modelTest::testUnique()
     cout << "Y unique: " << i << endl << *(mfmodel->uniqueY(i)) << endl;
   }
 
+  cout << "Nr of features: " << mfmodel->nrOfFeatures() << endl;
+
+  for(int i = 0; i < mfmodel->nrOfFeatures(); i++)
+  {
+    cout << (*mfmodel->feature(i)) << endl;
+  }
+
   ////////////////////////////////////////////////////////////////////////////////
   // MusLin MOTOR
   ////////////////////////////////////////////////////////////////////////////////
@@ -265,6 +281,7 @@ void modelTest::testUnique()
   mlmodel->setData(mlXY, mlZ);
   mlmodel->setRelations(a,b,r);
   mlmodel->createUniqueContainer();
+  mlmodel->countObservedFeatures();
 
   CPPUNIT_ASSERT(mlmodel->X()->rows() > 0);
   CPPUNIT_ASSERT(mlmodel->X()->rows() == mlXY->rows());
@@ -282,6 +299,13 @@ void modelTest::testUnique()
   for(int i = 0; i < b.size(); i++)
   {
     cout << "Y unique: " << i << endl << *(mlmodel->uniqueY(i)) << endl;
+  }
+
+  cout << "Nr of features: " << mlmodel->nrOfFeatures() << endl;
+
+  for(int i = 0; i < mlmodel->nrOfFeatures(); i++)
+  {
+    cout << (*mlmodel->feature(i)) << endl;
   }
 
 }
@@ -438,8 +462,10 @@ void modelTest::testUnique2()
   bb.push_back(0);
   b.push_back(bb);
 
-  vector<relation> r;
-  r.push_back(relation(0,0));
+  vector<Relation> r;
+  r.push_back(Relation(0,0));
+  r.push_back(Relation(1,0));
+  r.push_back(Relation(2,0));
 
   ////////////////////////////////////////////////////////////////////////////////
   // DC MOTOR
@@ -451,6 +477,7 @@ void modelTest::testUnique2()
   dcmodel->setData(dcXY, dcZ);
   dcmodel->setRelations(a,b,r);
   dcmodel->createUniqueContainer();
+  dcmodel->countObservedFeatures();
 
   CPPUNIT_ASSERT(dcmodel->X()->rows() > 0);
   CPPUNIT_ASSERT(dcmodel->X()->rows() == dcXY->rows());
@@ -470,6 +497,13 @@ void modelTest::testUnique2()
     cout << "Y unique: " << i << endl << *(dcmodel->uniqueY(i)) << endl;
   }
 
+  cout << "Nr of features: " << dcmodel->nrOfFeatures() << endl;
+
+  for(int i = 0; i < dcmodel->nrOfFeatures(); i++)
+  {
+    cout << (*dcmodel->feature(i)) << endl;
+  }
+
   ////////////////////////////////////////////////////////////////////////////////
   // MusFib MOTOR
   ////////////////////////////////////////////////////////////////////////////////
@@ -480,6 +514,7 @@ void modelTest::testUnique2()
   mfmodel->setData(mfXY, mfZ);
   mfmodel->setRelations(a,b,r);
   mfmodel->createUniqueContainer();
+  mfmodel->countObservedFeatures();
 
   CPPUNIT_ASSERT(mfmodel->X()->rows() > 0);
   CPPUNIT_ASSERT(mfmodel->X()->rows() == mfXY->rows());
@@ -499,6 +534,13 @@ void modelTest::testUnique2()
     cout << "Y unique: " << i << endl << *(mfmodel->uniqueY(i)) << endl;
   }
 
+  cout << "Nr of features: " << mfmodel->nrOfFeatures() << endl;
+
+  for(int i = 0; i < mfmodel->nrOfFeatures(); i++)
+  {
+    cout << (*mfmodel->feature(i)) << endl;
+  }
+
   ////////////////////////////////////////////////////////////////////////////////
   // MusLin MOTOR
   ////////////////////////////////////////////////////////////////////////////////
@@ -509,6 +551,7 @@ void modelTest::testUnique2()
   mlmodel->setData(mlXY, mlZ);
   mlmodel->setRelations(a,b,r);
   mlmodel->createUniqueContainer();
+  mlmodel->countObservedFeatures();
 
   CPPUNIT_ASSERT(mlmodel->X()->rows() > 0);
   CPPUNIT_ASSERT(mlmodel->X()->rows() == mlXY->rows());
@@ -528,6 +571,11 @@ void modelTest::testUnique2()
     cout << "Y unique: " << i << endl << *(mlmodel->uniqueY(i)) << endl;
   }
 
+  cout << "Nr of features: " << mlmodel->nrOfFeatures() << endl;
 
+  for(int i = 0; i < mlmodel->nrOfFeatures(); i++)
+  {
+    cout << (*mlmodel->feature(i)) << endl;
+  }
 
 }
