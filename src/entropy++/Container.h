@@ -173,6 +173,11 @@ namespace entropy
           return *this;
         }
 
+        int getBinSize(int column)
+        {
+          return _bins[column];
+        }
+
         // merge
         Container<T>& operator+=(const Container<T>& c)
         {
@@ -719,6 +724,10 @@ namespace entropy
           }
           copy->relabel();
           copy->isDiscretised(true);
+          if(_binsGiven == true && copy->columns() == _columns)
+          {
+            copy->setBinSizes(_bins);
+          }
           return copy;
         }
 

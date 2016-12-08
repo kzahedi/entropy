@@ -15,35 +15,51 @@ void GIS::iterate()
 {
   generateExpected();
 
+  int index = 0;
+  cout << "GIS: Nach generateExpected: "<< endl;
+  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+  {
+    cout << "Feature " << index++ << endl;
+    int mfindex = 0;
+    for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
+    {
+      cout << "MF " << mfindex++ << " obs: " << (*mf)->observed() << " exp: " << (*mf)->expected() << " lamda: " << (*mf)->lambda() << endl;
+    }
+  }
+
   _error = 0.0;
 
   double max = 0.0;
   double n   = 0.0;
   double o   = 0.0;
 
-  for(vector<MFeature*>::iterator f = features.begin();
-      f != features.end(); f++)
+
+  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
   {
-    if((*f)->lambda() > max) max = (*f)->lambda();
+    for(vector<MFeature*>::iterator mf = (*f)->begin();
+        mf != (*f)->end(); mf++)
+    {
+      if((*mf)->lambda() > max) max = (*mf)->lambda();
+    }
   }
 
-  // ueber relations iterieren
-  for(vector<MFeature*>::iterator f = features.begin();
-      f != features.end(); f++)
+  cout << "Max: " << max << endl;
+
+  cout << "Nach update: "<< endl;
+  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
   {
-    double o = (*f)->lambda(); // old
-    double n = o + 0.1 * (1.0/max)
-      * log((*f)->observed() / (*f)->expected());
-    // cout << o << " -> " << n << endl;
-    (*f)->setLambda(n);
-    _error += fabs((*f)->observed() - (*f)->expected());
+    for(vector<MFeature*>::iterator mf = (*f)->begin();
+        mf != (*f)->end(); mf++)
+    {
+      // ueber relations iterieren
+      double o = (*mf)->lambda(); // old
+      double n = o + 0.1 * (1.0/max)
+        * log((*mf)->observed() / (*mf)->expected());
+      cout << "o: " << o << " n: " << n << " obs: " << (*mf)->observed() << " exp: " << (*mf)->expected() << endl;
+      (*mf)->setLambda(n);
+      _error += fabs((*mf)->observed() - (*mf)->expected());
+    }
   }
-
-  // cout << "1: " << features[0]->observed() << " - " << features[0]->expected() << " -> " << features[0]->observed() - features[0]->expected() << endl;
-
-
-  // cout << "2: " << features[0]->observed() << " - " << features[0]->expected() << " -> " << features[0]->observed() - features[0]->expected() << endl;
-
 }
 
 double GIS::error()

@@ -28,7 +28,7 @@ namespace entropy
           _yUniqueIndex = yUniqueIndex;
           _observed = 0.0;
           _expected = 0.0;
-          _lambda   = 0.1;
+          _lambda   = 1.0;
         }
 
         bool match(int xUniqueIndex, int yUniqueIndex)
@@ -93,7 +93,7 @@ namespace entropy
     class Feature : public vector<MFeature*>
     {
       public:
-        Feature(int xListIndex, int yListIndex) {_xListIndex = xListIndex; _yListIndex = yListIndex;};
+        Feature(int xListIndex, int yListIndex) {_xListIndex = xListIndex; _yListIndex = yListIndex; _alphabetSize = 0.0;};
 
         int xListIndex() { return _xListIndex;};
         int yListIndex() { return _yListIndex;};
@@ -102,10 +102,23 @@ namespace entropy
 
         int getUniqueXCount(int index) {return _uniqueXCount[index];};
 
+        void setRemainingAlphabetSize(double s) {_alphabetSize = s;};
+        double getRemainingAlphabetSize() { return _alphabetSize;};
+
+        friend std::ostream& operator<<(std::ostream& str, const Feature& m)
+        {
+          for(vector<MFeature*>::const_iterator mf = m.begin(); mf != m.end(); mf++)
+          str << *mf << endl;
+          return str;
+        };
+
       private:
         int _xListIndex; // uniqueX index
         int _yListIndex; // uniqueY index
+        double _alphabetSize;
         vector<int> _uniqueXCount;
+        vector<double> _xAlphabetSizes;
+        vector<double> _yAlphabetSizes;
     };
 
     class Model
@@ -139,11 +152,11 @@ namespace entropy
 
         void generateExpected();
 
-        // MFeature* feature(int i) {return features[i];};
+        Feature* feature(int i) {return features[i];};
 
 
       protected:
-        vector<MFeature*> features;
+        vector<Feature*>  features;
 
       private:
 
@@ -158,7 +171,6 @@ namespace entropy
 
         vector<vector<int> > _Xindices;
         vector<vector<int> > _Yindices;
-        vector<Feature*>     _features;
     };
   }
 }
