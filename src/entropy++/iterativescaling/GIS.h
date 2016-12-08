@@ -11,13 +11,9 @@ namespace entropy
     { 
       public:
         GIS();
-        // ~GIS : public Model();
 
-        //GIS : public Model(const GIS : public Model);
-        //GIS : public Model operator=(const GIS : public Model);
-
-        void init();
-        void iterate();
+        void   init();
+        void   iterate();
         double error();
 
       private:

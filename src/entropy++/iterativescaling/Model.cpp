@@ -1,16 +1,7 @@
 #include <entropy++/iterativescaling/Model.h>
 
+using namespace entropy;
 using namespace entropy::iterativescaling;
-
-// obs(x)
-void Feature::setUniqueXCount(int index, int count)
-{
-  if(_uniqueXCount.size() < index + 1)
-  {
-    _uniqueXCount.resize(index+1);
-  }
-  _uniqueXCount[index] = count;
-}
 
 Model::Model()
 {
@@ -30,8 +21,19 @@ Model::~Model()
 {
   delete _X;
   delete _Y;
-  // delete _uniqueX;
-  // delete _uniqueY;
+
+  for(int i = 0; i < _Xindices.size(); i++)
+  {
+    delete _uniqueX[i];
+  }
+
+  for(int i = 0; i < _Yindices.size(); i++)
+  {
+    delete _uniqueY[i];
+  }
+
+  delete _uniqueX;
+  delete _uniqueY;
 }
 
 
@@ -76,7 +78,7 @@ void Model::countObservedFeatures()
       int l = _uniqueY[k]->find(yMatchColumns,d);
 
       bool found = false;
-      for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
+      for(vector<Delta*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
       {
         if((*mf)->match(j,l))
         {
@@ -87,7 +89,7 @@ void Model::countObservedFeatures()
       }
       if(found == false)
       {
-        MFeature *mf = new MFeature(j,l);
+        Delta *mf = new Delta(j,l);
         mf->incObserved();
         (*f)->push_back(mf);
       }
@@ -120,7 +122,7 @@ void Model::countObservedFeatures()
       // cout << "  " << x << " x count: " << (*f)->getUniqueXCount(x) << endl;
     // }
     // int mfindex = 0;
-    // for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
+    // for(vector<Delta*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
     // {
       // cout << "MF " << mfindex++ << " obs: " << (*mf)->observed() << " exp: " << (*mf)->expected() << " lamda: " << (*mf)->lambda() << endl;
     // }
@@ -159,7 +161,7 @@ void Model::generateExpected()
   double sum = 0.0;
   for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
   {
-    for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
+    for(vector<Delta*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
     {
       sum += (*mf)->lambda();
     }
@@ -167,7 +169,7 @@ void Model::generateExpected()
 
   for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
   {
-    for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
+    for(vector<Delta*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
     {
       double e       = (*mf)->lambda();
       double zaehler = exp(e);
@@ -176,25 +178,29 @@ void Model::generateExpected()
       (*mf)->setExpected( count * zaehler / sum ); // zaehler / sum
     }
   }
+}
 
-  // for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
-  // {
-    // for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
-    // {
-      // cout << "Z: " << (*mf)->expected() << " / " << sum << endl;
-    // }
-  // }
+ULContainer* Model::X()
+{
+  return _X;
+}
 
-  // int index = 0;
-  // cout << "In generateExpected: "<< endl;
-  // for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
-  // {
-    // cout << "Feature " << index++ << endl;
-    // int mfindex = 0;
-    // for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
-    // {
-      // cout << "MF " << mfindex++ << " obs: " << (*mf)->observed() << " exp: " << (*mf)->expected() << " lamda: " << (*mf)->lambda() << endl;
-    // }
-  // }
+ULContainer* Model::Y()
+{
+  return _Y;
+}
 
+ULContainer* Model::uniqueX(int i)
+{
+  return _uniqueX[i];
+}
+
+ULContainer* Model::uniqueY(int i)
+{
+  return _uniqueY[i];
+}
+
+Feature* Model::feature(int i)
+{
+  return features[i];
 }

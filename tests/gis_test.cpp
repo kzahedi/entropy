@@ -1,4 +1,4 @@
-#include "model_test.h"
+#include "gis_test.h"
 
 #include <entropy++/Container.h>
 #include <entropy++/Csv.h>
@@ -204,51 +204,29 @@ void modelTest::testUnique()
   ULContainer *dcZ  = dcW2;
   ULContainer *dcXY = dcW1;
 
-  GIS* dcmodel = new GIS();
-  dcmodel->setData(dcXY, dcZ);
-  dcmodel->setFeatures(a,b,features);
-  dcmodel->createUniqueContainer();
-  dcmodel->countObservedFeatures();
+  GIS* dcgis = new GIS();
+  dcgis->setData(dcXY, dcZ);
+  dcgis->setFeatures(a,b,features);
+  dcgis->init();
 
-  CPPUNIT_ASSERT(dcmodel->X()->rows() > 0);
-  CPPUNIT_ASSERT(dcmodel->X()->rows() == dcXY->rows());
-  CPPUNIT_ASSERT(dcmodel->Y()->rows() > 0);
-  CPPUNIT_ASSERT(dcmodel->Y()->rows() == dcZ->rows());
+  CPPUNIT_ASSERT(dcgis->X()->rows() > 0);
+  CPPUNIT_ASSERT(dcgis->X()->rows() == dcXY->rows());
+  CPPUNIT_ASSERT(dcgis->Y()->rows() > 0);
+  CPPUNIT_ASSERT(dcgis->Y()->rows() == dcZ->rows());
 
-  CPPUNIT_ASSERT(dcmodel->uniqueX(0)->rows() < dcmodel->X()->rows());
-  CPPUNIT_ASSERT(dcmodel->uniqueY(0)->rows() < dcmodel->Y()->rows());
-
-  // for(int i = 0; i < a.size(); i++)
-  // {
-    // cout << "X unique: " << i << endl << *(dcmodel->uniqueX(i)) << endl;
-  // }
-
-  // for(int i = 0; i < b.size(); i++)
-  // {
-    // cout << "Y unique: " << i << endl << *(dcmodel->uniqueY(i)) << endl;
-  // }
-
-  cout << "Nr of features: " << dcmodel->nrOfFeatures() << endl;
-    // for(int i = 0; i < dcmodel->nrOfFeatures(); i++)
-    // {
-      // Feature *f = (dcmodel->feature(i));
-      // cout << "Feature " << i << ":" << endl << *f << endl;
-    // }
+  CPPUNIT_ASSERT(dcgis->uniqueX(0)->rows() < dcgis->X()->rows());
+  CPPUNIT_ASSERT(dcgis->uniqueY(0)->rows() < dcgis->Y()->rows());
 
   for(int i = 0; i < 500; i++)
   {
-    dcmodel->iterate();
-    if(dcmodel->error() < 0.00000001)
+    dcgis->iterate();
+    if(dcgis->error() < 0.00000001)
     {
-      cout << "Error: " << dcmodel->error() << " with " << i << " iterations" << endl;
+      cout << "Error: " << dcgis->error() << " with " << i << " iterations" << endl;
       break;
     }
   }
 
-  // for(int i = 0; i < dcmodel->nrOfFeatures(); i++)
-  // {
-    // cout << (*dcmodel->feature(i)) << endl;
-  // }
 
   ////////////////////////////////////////////////////////////////////////////////
   // MusFib MOTOR
@@ -256,36 +234,28 @@ void modelTest::testUnique()
   ULContainer *mfZ  = mfW2;
   ULContainer *mfXY = mfW1;
 
-  GIS* mfmodel = new GIS();
-  mfmodel->setData(mfXY, mfZ);
-  mfmodel->setFeatures(a,b,features);
-  mfmodel->createUniqueContainer();
-  mfmodel->countObservedFeatures();
+  GIS* mfgis = new GIS();
+  mfgis->setData(mfXY, mfZ);
+  mfgis->setFeatures(a,b,features);
+  mfgis->init();
 
-  CPPUNIT_ASSERT(mfmodel->X()->rows() > 0);
-  CPPUNIT_ASSERT(mfmodel->X()->rows() == mfXY->rows());
-  CPPUNIT_ASSERT(mfmodel->Y()->rows() > 0);
-  CPPUNIT_ASSERT(mfmodel->Y()->rows() == mfZ->rows());
+  CPPUNIT_ASSERT(mfgis->X()->rows() > 0);
+  CPPUNIT_ASSERT(mfgis->X()->rows() == mfXY->rows());
+  CPPUNIT_ASSERT(mfgis->Y()->rows() > 0);
+  CPPUNIT_ASSERT(mfgis->Y()->rows() == mfZ->rows());
 
-  CPPUNIT_ASSERT(mfmodel->uniqueX(0)->rows() < mfmodel->X()->rows());
-  CPPUNIT_ASSERT(mfmodel->uniqueY(0)->rows() < mfmodel->Y()->rows());
+  CPPUNIT_ASSERT(mfgis->uniqueX(0)->rows() < mfgis->X()->rows());
+  CPPUNIT_ASSERT(mfgis->uniqueY(0)->rows() < mfgis->Y()->rows());
 
   for(int i = 0; i < 500; i++)
   {
-    mfmodel->iterate();
-    if(mfmodel->error() < 0.00000001)
+    mfgis->iterate();
+    if(mfgis->error() < 0.00000001)
     {
-      cout << "Error: " << mfmodel->error() << " with " << i << " iterations" << endl;
+      cout << "Error: " << mfgis->error() << " with " << i << " iterations" << endl;
       break;
     }
   }
-
-  // cout << "Nr of features: " << mfmodel->nrOfFeatures() << endl;
-
-  // for(int i = 0; i < mfmodel->nrOfFeatures(); i++)
-  // {
-    // cout << (*mfmodel->feature(i)) << endl;
-  // }
 
   ////////////////////////////////////////////////////////////////////////////////
   // MusLin MOTOR
@@ -293,32 +263,29 @@ void modelTest::testUnique()
   ULContainer *mlZ  = mlW2;
   ULContainer *mlXY = mlW1;
 
-  GIS* mlmodel = new GIS();
-  mlmodel->setData(mlXY, mlZ);
-  mlmodel->setFeatures(a,b,features);
-  mlmodel->createUniqueContainer();
-  mlmodel->countObservedFeatures();
+  GIS* mlgis = new GIS();
+  mlgis->setData(mlXY, mlZ);
+  mlgis->setFeatures(a,b,features);
+  mlgis->init();
 
-  CPPUNIT_ASSERT(mlmodel->X()->rows() > 0);
-  CPPUNIT_ASSERT(mlmodel->X()->rows() == mlXY->rows());
-  CPPUNIT_ASSERT(mlmodel->Y()->rows() > 0);
-  CPPUNIT_ASSERT(mlmodel->Y()->rows() == mlZ->rows());
+  CPPUNIT_ASSERT(mlgis->X()->rows() > 0);
+  CPPUNIT_ASSERT(mlgis->X()->rows() == mlXY->rows());
+  CPPUNIT_ASSERT(mlgis->Y()->rows() > 0);
+  CPPUNIT_ASSERT(mlgis->Y()->rows() == mlZ->rows());
 
-  CPPUNIT_ASSERT(mlmodel->uniqueX(0)->rows() < mlmodel->X()->rows());
-  CPPUNIT_ASSERT(mlmodel->uniqueY(0)->rows() < mlmodel->Y()->rows());
+  CPPUNIT_ASSERT(mlgis->uniqueX(0)->rows() < mlgis->X()->rows());
+  CPPUNIT_ASSERT(mlgis->uniqueY(0)->rows() < mlgis->Y()->rows());
 
-  cout << "Nr of features: " << mlmodel->nrOfFeatures() << endl;
 
   for(int i = 0; i < 500; i++)
   {
-    mlmodel->iterate();
-    if(mlmodel->error() < 0.00000001)
+    mlgis->iterate();
+    if(mlgis->error() < 0.00000001)
     {
-      cout << "Error: " << mlmodel->error() << " with " << i << " iterations" << endl;
+      cout << "Error: " << mlgis->error() << " with " << i << " iterations" << endl;
       break;
     }
   }
-
 }
 
 void modelTest::testUnique2()
@@ -484,28 +451,25 @@ void modelTest::testUnique2()
   ULContainer *dcZ  = dcW2;
   ULContainer *dcXY = dcW1;
 
-  GIS* dcmodel = new GIS();
-  dcmodel->setData(dcXY, dcZ);
-  dcmodel->setFeatures(a,b,features);
-  dcmodel->createUniqueContainer();
-  dcmodel->countObservedFeatures();
+  GIS* dcgis = new GIS();
+  dcgis->setData(dcXY, dcZ);
+  dcgis->setFeatures(a,b,features);
+  dcgis->init();
 
-  CPPUNIT_ASSERT(dcmodel->X()->rows() > 0);
-  CPPUNIT_ASSERT(dcmodel->X()->rows() == dcXY->rows());
-  CPPUNIT_ASSERT(dcmodel->Y()->rows() > 0);
-  CPPUNIT_ASSERT(dcmodel->Y()->rows() == dcZ->rows());
+  CPPUNIT_ASSERT(dcgis->X()->rows() > 0);
+  CPPUNIT_ASSERT(dcgis->X()->rows() == dcXY->rows());
+  CPPUNIT_ASSERT(dcgis->Y()->rows() > 0);
+  CPPUNIT_ASSERT(dcgis->Y()->rows() == dcZ->rows());
 
-  CPPUNIT_ASSERT(dcmodel->uniqueX(0)->rows() < dcmodel->X()->rows());
-  CPPUNIT_ASSERT(dcmodel->uniqueY(0)->rows() < dcmodel->Y()->rows());
-
-  cout << "Nr of features: " << dcmodel->nrOfFeatures() << endl;
+  CPPUNIT_ASSERT(dcgis->uniqueX(0)->rows() < dcgis->X()->rows());
+  CPPUNIT_ASSERT(dcgis->uniqueY(0)->rows() < dcgis->Y()->rows());
 
   for(int i = 0; i < 500; i++)
   {
-    dcmodel->iterate();
-    if(dcmodel->error() < 0.00000001)
+    dcgis->iterate();
+    if(dcgis->error() < 0.00000001)
     {
-      cout << "Error: " << dcmodel->error() << " with " << i << " iterations" << endl;
+      cout << "Error: " << dcgis->error() << " with " << i << " iterations" << endl;
       break;
     }
   }
@@ -517,28 +481,25 @@ void modelTest::testUnique2()
   ULContainer *mfZ  = mfW2;
   ULContainer *mfXY = mfW1;
 
-  GIS* mfmodel = new GIS();
-  mfmodel->setData(mfXY, mfZ);
-  mfmodel->setFeatures(a,b,features);
-  mfmodel->createUniqueContainer();
-  mfmodel->countObservedFeatures();
+  GIS* mfgis = new GIS();
+  mfgis->setData(mfXY, mfZ);
+  mfgis->setFeatures(a,b,features);
+  mfgis->init();
 
-  CPPUNIT_ASSERT(mfmodel->X()->rows() > 0);
-  CPPUNIT_ASSERT(mfmodel->X()->rows() == mfXY->rows());
-  CPPUNIT_ASSERT(mfmodel->Y()->rows() > 0);
-  CPPUNIT_ASSERT(mfmodel->Y()->rows() == mfZ->rows());
+  CPPUNIT_ASSERT(mfgis->X()->rows() > 0);
+  CPPUNIT_ASSERT(mfgis->X()->rows() == mfXY->rows());
+  CPPUNIT_ASSERT(mfgis->Y()->rows() > 0);
+  CPPUNIT_ASSERT(mfgis->Y()->rows() == mfZ->rows());
 
-  CPPUNIT_ASSERT(mfmodel->uniqueX(0)->rows() < mfmodel->X()->rows());
-  CPPUNIT_ASSERT(mfmodel->uniqueY(0)->rows() < mfmodel->Y()->rows());
-
-  cout << "Nr of features: " << mfmodel->nrOfFeatures() << endl;
+  CPPUNIT_ASSERT(mfgis->uniqueX(0)->rows() < mfgis->X()->rows());
+  CPPUNIT_ASSERT(mfgis->uniqueY(0)->rows() < mfgis->Y()->rows());
 
   for(int i = 0; i < 500; i++)
   {
-    mfmodel->iterate();
-    if(mfmodel->error() < 0.00000001)
+    mfgis->iterate();
+    if(mfgis->error() < 0.00000001)
     {
-      cout << "Error: " << mfmodel->error() << " with " << i << " iterations" << endl;
+      cout << "Error: " << mfgis->error() << " with " << i << " iterations" << endl;
       break;
     }
   }
@@ -550,31 +511,26 @@ void modelTest::testUnique2()
   ULContainer *mlZ  = mlW2;
   ULContainer *mlXY = mlW1;
 
-  GIS* mlmodel = new GIS();
-  mlmodel->setData(mlXY, mlZ);
-  mlmodel->setFeatures(a,b,features);
-  mlmodel->createUniqueContainer();
-  mlmodel->countObservedFeatures();
-  mlmodel->generateExpected();
+  GIS* mlgis = new GIS();
+  mlgis->setData(mlXY, mlZ);
+  mlgis->setFeatures(a,b,features);
+  mlgis->init();
 
-  CPPUNIT_ASSERT(mlmodel->X()->rows() > 0);
-  CPPUNIT_ASSERT(mlmodel->X()->rows() == mlXY->rows());
-  CPPUNIT_ASSERT(mlmodel->Y()->rows() > 0);
-  CPPUNIT_ASSERT(mlmodel->Y()->rows() == mlZ->rows());
+  CPPUNIT_ASSERT(mlgis->X()->rows() > 0);
+  CPPUNIT_ASSERT(mlgis->X()->rows() == mlXY->rows());
+  CPPUNIT_ASSERT(mlgis->Y()->rows() > 0);
+  CPPUNIT_ASSERT(mlgis->Y()->rows() == mlZ->rows());
 
-  CPPUNIT_ASSERT(mlmodel->uniqueX(0)->rows() < mlmodel->X()->rows());
-  CPPUNIT_ASSERT(mlmodel->uniqueY(0)->rows() < mlmodel->Y()->rows());
-
-  cout << "Nr of features: " << mlmodel->nrOfFeatures() << endl;
+  CPPUNIT_ASSERT(mlgis->uniqueX(0)->rows() < mlgis->X()->rows());
+  CPPUNIT_ASSERT(mlgis->uniqueY(0)->rows() < mlgis->Y()->rows());
 
   for(int i = 0; i < 500; i++)
   {
-    mlmodel->iterate();
-    if(mlmodel->error() < 0.00000001)
+    mlgis->iterate();
+    if(mlgis->error() < 0.00000001)
     {
-      cout << "Error: " << mlmodel->error() << " with " << i << " iterations" << endl;
+      cout << "Error: " << mlgis->error() << " with " << i << " iterations" << endl;
       break;
     }
   }
-
 }

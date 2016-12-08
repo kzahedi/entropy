@@ -1,61 +1,58 @@
-#include "Feature.h"
+#include <entropy++/iterativescaling/Feature.h>
 
+using namespace entropy;
 using namespace entropy::iterativescaling;
 
-Feature::Feature()
+
+Feature::Feature(int xListIndex, int yListIndex)
 {
-  _lambda = new SparseMatrix();
-  _sizeX  = 0;
-  _sizeY  = 0;
+  _xListIndex = xListIndex;
+  _yListIndex = yListIndex;
+  _alphabetSize = 0.0;
 }
 
-//(Eingabealphabet, Anzahl der X und Y Werte, Anzahl der Testwerte, ein Startwert fuer alle  lambda)
-Feature::Feature(int sizeX, int sizeY, double valuelambda) // systXsize, int systYsize, double valuelambda)
+int Feature::xListIndex()
 {
-  _sizeX  = sizeX;
-  _sizeY  = sizeY;
-  _lambda = new SparseMatrix(valuelambda);
+  return _xListIndex;
 }
 
-//alle lambda explizit ueber die Matrix setzen
-Feature::Feature(int sizeX, int sizeY, SparseMatrix &lambda) // int systXsize, int systYsize, SparseMatrix &lambda)
+int Feature::yListIndex()
 {
-  _sizeX  = sizeX; // pow(xAlphabet.rows(),systXsize);
-  _sizeY  = sizeY; // pow(yAlphabet.rows(),systYsize);
-  _lambda = &lambda;
+  return _yListIndex;
 }
 
-Feature::~Feature()
+// obs(x)
+void Feature::setUniqueXCount(int index, int count)
 {
-  delete _lambda;
+  if(_uniqueXCount.size() < index + 1)
+  {
+    _uniqueXCount.resize(index+1);
+  }
+  _uniqueXCount[index] = count;
 }
 
-int Feature::getLambdaSize()
+
+int Feature::getUniqueXCount(int index)
 {
-  int j = _lambda->size();
-  return j;
+  return _uniqueXCount[index];
 }
 
-double Feature::getLambda(int i, int j)
+void Feature::setRemainingAlphabetSize(double s)
 {
-  assert(i < _sizeX && j < _sizeY);
-  return (*_lambda)(i,j);
+  _alphabetSize = s;
 }
 
-void Feature::setLambda(int i, int j, double newvalue)
+double Feature::getRemainingAlphabetSize()
 {
-  assert(i < _sizeX && j < _sizeY);
-  (*_lambda)(i,j) = newvalue;
+  return _alphabetSize;
 }
 
-Feature& Feature::operator=(const Feature& c)
+void Feature::setYAlphabetSize(double y)
 {
-  _sizeX = c._sizeX;
-  _sizeY = c._sizeY;
-
-  _lambda     = new SparseMatrix();
-  _lambda     = c._lambda;
-
-  return *this;
+  _yAlphabetSize = y;
 }
 
+double Feature::yAlphabetSize()
+{
+  return _yAlphabetSize;
+}

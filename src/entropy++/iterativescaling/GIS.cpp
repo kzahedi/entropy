@@ -3,7 +3,8 @@
 using namespace entropy::iterativescaling;
 
 GIS::GIS() : Model()
-{ }
+{
+}
 
 void GIS::init()
 {
@@ -21,7 +22,7 @@ void GIS::iterate()
   // {
     // cout << "Feature " << index++ << endl;
     // int mfindex = 0;
-    // for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
+    // for(vector<Delta*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
     // {
       // cout << "MF " << mfindex++ << " obs: " << (*mf)->observed() << " exp: " << (*mf)->expected() << " lamda: " << (*mf)->lambda() << endl;
     // }
@@ -36,7 +37,7 @@ void GIS::iterate()
 
   for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
   {
-    for(vector<MFeature*>::iterator mf = (*f)->begin();
+    for(vector<Delta*>::iterator mf = (*f)->begin();
         mf != (*f)->end(); mf++)
     {
       if((*mf)->lambda() > max) max = (*mf)->lambda();
@@ -48,7 +49,7 @@ void GIS::iterate()
   // cout << "Nach update: "<< endl;
   for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
   {
-    for(vector<MFeature*>::iterator mf = (*f)->begin();
+    for(vector<Delta*>::iterator mf = (*f)->begin();
         mf != (*f)->end(); mf++)
     {
       // ueber relations iterieren
