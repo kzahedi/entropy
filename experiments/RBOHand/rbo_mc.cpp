@@ -26,6 +26,8 @@
 
 using namespace std;
 using namespace boost;
+using namespace entropy;
+using namespace entropy::sparse;
 
 double x_min;
 double x_max;

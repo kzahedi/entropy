@@ -16,5 +16,8 @@ set(CMAKE_INSTALL_PREFIX         "..")
 
 add_executable(rbo_mc rbo_mc.cpp)
 target_link_libraries(rbo_mc Entropy++ boost_filesystem boost_system m glog gflags)
+
+add_executable(dr dr.cpp)
+target_link_libraries(dr Entropy++ boost_filesystem boost_system m glog gflags)
  
 # install(TARGETS hopping_mc RUNTIME DESTINATION bin)

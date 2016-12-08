@@ -2,6 +2,15 @@
 
 using namespace entropy::iterativescaling;
 
+void Feature::setUniqueXCount(int index, int count)
+{
+  if(_uniqueXCount.size() < index)
+  {
+    _uniqueXCount.resize(index);
+  }
+  _uniqueXCount[index] = count;
+}
+
 Model::Model()
 {
 }
@@ -26,13 +35,13 @@ Model::~Model()
 
 
 
-void Model::setRelations(vector<vector<int> > Xindices,
-                         vector<vector<int> > Yindices,
-                         vector<Relation>     relations)
+void Model::setFeatures(vector<vector<int> > Xindices,
+                        vector<vector<int> > Yindices,
+                        vector<Feature*>     features)
 {
-  _Xindices  = Xindices;
-  _Yindices  = Yindices;
-  _relations = relations;
+  _Xindices = Xindices;
+  _Yindices = Yindices;
+  _features = features;
 }
 
 void Model::createUniqueContainer()
@@ -54,39 +63,75 @@ void Model::createUniqueContainer()
 
 void Model::countObservedFeatures()
 {
-  for(int d = 0; d < _X->rows(); d++)
+  for(vector<Feature*>::iterator f = _features.begin(); f != _features.end(); f++)
   {
-    for(int r = 0; r < (int)_relations.size(); r++)
+    int i = (*f)->xListIndex();
+    int k = (*f)->yListIndex();
+    ULContainer* xMatchColumns = _X->columns(_Xindices[i]);
+    ULContainer* yMatchColumns = _Y->columns(_Yindices[k]);
+    for(int d = 0; d < _X->rows(); d++)
     {
-      int i = _relations[r].first;
-      int k = _relations[r].second;
-
-      int j = _uniqueX[i]->find(_X, d);
-      int l = _uniqueY[k]->find(_Y, d);
+      int j = _uniqueX[i]->find(xMatchColumns,d);
+      int l = _uniqueY[k]->find(yMatchColumns,d);
 
       bool found = false;
-      for(vector<MFeature*>::iterator f = _features.begin();
-          f != _features.end();
-          f++)
+      for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
       {
-        if((*f)->match(i,j,k,l))
+        if((*mf)->match(j,l))
         {
-          (*f)->incObserved();
+          (*mf)->incObserved();
           found = true;
           break;
         }
       }
       if(found == false)
       {
-        MFeature *f = new MFeature(i,j,k,l);
-        f->incObserved();
-        _features.push_back(f);
+        MFeature *mf = new MFeature(j,l);
+        mf->incObserved();
+        (*f)->push_back(mf);
       }
     }
+    delete xMatchColumns;
+    delete yMatchColumns;
   }
+
+  // obs(x)
+  for(vector<Feature*>::iterator f = _features.begin(); f != _features.end(); f++)
+  {
+    int i = (*f)->xListIndex(); // list of columns that define X
+    ULContainer* xUniqueForThisFeature = _uniqueX[i];
+    ULContainer* xMatchColumns         = _X->columns(_Xindices[i]);
+    int count = xMatchColumns->findlist(xUniqueForThisFeature,0).size();
+    (*f)->setUniqueXCount(i, count);
+  }
+
 }
 
 int Model::nrOfFeatures()
 {
-  return _features.size();
+  return features.size();
+}
+
+void Model::generateExpected()
+{
+  double sum = 0.0;
+  for(vector<Feature*>::iterator f = _features.begin(); f != _features.end(); f++)
+  {
+    double sum_of_lambdas = 0.0;
+    for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
+    {
+      int xBar     = (*mf)->getUniqueXIndex();
+      double count = (*f)->getUniqueXCount(xBar);
+      sum_of_lambdas += count * (*mf)->lambda();
+      double zaehler = exp(sum_of_lambdas);
+      (*mf)->setExpected(zaehler);
+      sum += zaehler;
+    }
+
+    for(vector<MFeature*>::iterator f = features.begin();
+        f != features.end(); f++)
+    {
+      (*f)->setExpected( (*f)->expected() / sum ); // zaehler / sum
+    }
+  }
 }

@@ -3,6 +3,7 @@
 #include <entropy++/Container.h>
 #include <entropy++/Csv.h>
 #include <entropy++/iterativescaling/Model.h>
+#include <entropy++/iterativescaling/GIS.h>
 
 #include <fstream>
 #include <iostream>
@@ -188,8 +189,8 @@ void modelTest::testUnique()
   bb.push_back(0);
   b.push_back(bb);
 
-  vector<Relation> r;
-  r.push_back(Relation(0,0));
+  vector<Feature*> features;
+  features.push_back(new Feature(0,0));
 
   // a.Xindices.push_back(0);
   // a.Xindices.push_back(1);
@@ -205,7 +206,7 @@ void modelTest::testUnique()
 
   Model* dcmodel = new Model();
   dcmodel->setData(dcXY, dcZ);
-  dcmodel->setRelations(a,b,r);
+  dcmodel->setFeatures(a,b,features);
   dcmodel->createUniqueContainer();
   dcmodel->countObservedFeatures();
 
@@ -217,22 +218,22 @@ void modelTest::testUnique()
   CPPUNIT_ASSERT(dcmodel->uniqueX(0)->rows() < dcmodel->X()->rows());
   CPPUNIT_ASSERT(dcmodel->uniqueY(0)->rows() < dcmodel->Y()->rows());
 
-  for(int i = 0; i < a.size(); i++)
-  {
-    cout << "X unique: " << i << endl << *(dcmodel->uniqueX(i)) << endl;
-  }
+  // for(int i = 0; i < a.size(); i++)
+  // {
+    // cout << "X unique: " << i << endl << *(dcmodel->uniqueX(i)) << endl;
+  // }
 
-  for(int i = 0; i < b.size(); i++)
-  {
-    cout << "Y unique: " << i << endl << *(dcmodel->uniqueY(i)) << endl;
-  }
+  // for(int i = 0; i < b.size(); i++)
+  // {
+    // cout << "Y unique: " << i << endl << *(dcmodel->uniqueY(i)) << endl;
+  // }
 
   cout << "Nr of features: " << dcmodel->nrOfFeatures() << endl;
 
-  for(int i = 0; i < dcmodel->nrOfFeatures(); i++)
-  {
-    cout << (*dcmodel->feature(i)) << endl;
-  }
+  // for(int i = 0; i < dcmodel->nrOfFeatures(); i++)
+  // {
+    // cout << (*dcmodel->feature(i)) << endl;
+  // }
 
   ////////////////////////////////////////////////////////////////////////////////
   // MusFib MOTOR
@@ -242,7 +243,7 @@ void modelTest::testUnique()
 
   Model* mfmodel = new Model();
   mfmodel->setData(mfXY, mfZ);
-  mfmodel->setRelations(a,b,r);
+  mfmodel->setFeatures(a,b,features);
   mfmodel->createUniqueContainer();
   mfmodel->countObservedFeatures();
 
@@ -254,22 +255,22 @@ void modelTest::testUnique()
   CPPUNIT_ASSERT(mfmodel->uniqueX(0)->rows() < mfmodel->X()->rows());
   CPPUNIT_ASSERT(mfmodel->uniqueY(0)->rows() < mfmodel->Y()->rows());
 
-  for(int i = 0; i < a.size(); i++)
-  {
-    cout << "X unique: " << i << endl << *(mfmodel->uniqueX(i)) << endl;
-  }
+  // for(int i = 0; i < a.size(); i++)
+  // {
+    // cout << "X unique: " << i << endl << *(mfmodel->uniqueX(i)) << endl;
+  // }
 
-  for(int i = 0; i < b.size(); i++)
-  {
-    cout << "Y unique: " << i << endl << *(mfmodel->uniqueY(i)) << endl;
-  }
+  // for(int i = 0; i < b.size(); i++)
+  // {
+    // cout << "Y unique: " << i << endl << *(mfmodel->uniqueY(i)) << endl;
+  // }
 
   cout << "Nr of features: " << mfmodel->nrOfFeatures() << endl;
 
-  for(int i = 0; i < mfmodel->nrOfFeatures(); i++)
-  {
-    cout << (*mfmodel->feature(i)) << endl;
-  }
+  // for(int i = 0; i < mfmodel->nrOfFeatures(); i++)
+  // {
+    // cout << (*mfmodel->feature(i)) << endl;
+  // }
 
   ////////////////////////////////////////////////////////////////////////////////
   // MusLin MOTOR
@@ -277,9 +278,9 @@ void modelTest::testUnique()
   ULContainer *mlZ  = mlW2;
   ULContainer *mlXY = mlW1;
 
-  Model* mlmodel = new Model();
+  GIS* mlmodel = new GIS();
   mlmodel->setData(mlXY, mlZ);
-  mlmodel->setRelations(a,b,r);
+  mlmodel->setFeatures(a,b,features);
   mlmodel->createUniqueContainer();
   mlmodel->countObservedFeatures();
 
@@ -291,21 +292,27 @@ void modelTest::testUnique()
   CPPUNIT_ASSERT(mlmodel->uniqueX(0)->rows() < mlmodel->X()->rows());
   CPPUNIT_ASSERT(mlmodel->uniqueY(0)->rows() < mlmodel->Y()->rows());
 
-  for(int i = 0; i < a.size(); i++)
-  {
-    cout << "X unique: " << i << endl << *(mlmodel->uniqueX(i)) << endl;
-  }
+  // for(int i = 0; i < a.size(); i++)
+  // {
+    // cout << "X unique: " << i << endl << *(mlmodel->uniqueX(i)) << endl;
+  // }
 
-  for(int i = 0; i < b.size(); i++)
-  {
-    cout << "Y unique: " << i << endl << *(mlmodel->uniqueY(i)) << endl;
-  }
+  // for(int i = 0; i < b.size(); i++)
+  // {
+    // cout << "Y unique: " << i << endl << *(mlmodel->uniqueY(i)) << endl;
+  // }
 
   cout << "Nr of features: " << mlmodel->nrOfFeatures() << endl;
 
-  for(int i = 0; i < mlmodel->nrOfFeatures(); i++)
+  // for(int i = 0; i < mlmodel->nrOfFeatures(); i++)
+  // {
+    // cout << (*mlmodel->feature(i)) << endl;
+  // }
+
+  for(int i = 0; i < 2; i++)
   {
-    cout << (*mlmodel->feature(i)) << endl;
+    mlmodel->iterate();
+    cout << "Error: " << mlmodel->error() << endl;
   }
 
 }
@@ -462,10 +469,10 @@ void modelTest::testUnique2()
   bb.push_back(0);
   b.push_back(bb);
 
-  vector<Relation> r;
-  r.push_back(Relation(0,0));
-  r.push_back(Relation(1,0));
-  r.push_back(Relation(2,0));
+  vector<Feature*> features;
+  features.push_back(new Feature(0,0));
+  features.push_back(new Feature(1,0));
+  features.push_back(new Feature(2,0));
 
   ////////////////////////////////////////////////////////////////////////////////
   // DC MOTOR
@@ -475,7 +482,7 @@ void modelTest::testUnique2()
 
   Model* dcmodel = new Model();
   dcmodel->setData(dcXY, dcZ);
-  dcmodel->setRelations(a,b,r);
+  dcmodel->setFeatures(a,b,features);
   dcmodel->createUniqueContainer();
   dcmodel->countObservedFeatures();
 
@@ -487,22 +494,22 @@ void modelTest::testUnique2()
   CPPUNIT_ASSERT(dcmodel->uniqueX(0)->rows() < dcmodel->X()->rows());
   CPPUNIT_ASSERT(dcmodel->uniqueY(0)->rows() < dcmodel->Y()->rows());
 
-  for(int i = 0; i < a.size(); i++)
-  {
-    cout << "X unique: " << i << endl << *(dcmodel->uniqueX(i)) << endl;
-  }
+  // for(int i = 0; i < a.size(); i++)
+  // {
+    // cout << "X unique: " << i << endl << *(dcmodel->uniqueX(i)) << endl;
+  // }
 
-  for(int i = 0; i < b.size(); i++)
-  {
-    cout << "Y unique: " << i << endl << *(dcmodel->uniqueY(i)) << endl;
-  }
+  // for(int i = 0; i < b.size(); i++)
+  // {
+    // cout << "Y unique: " << i << endl << *(dcmodel->uniqueY(i)) << endl;
+  // }
 
   cout << "Nr of features: " << dcmodel->nrOfFeatures() << endl;
 
-  for(int i = 0; i < dcmodel->nrOfFeatures(); i++)
-  {
-    cout << (*dcmodel->feature(i)) << endl;
-  }
+  // for(int i = 0; i < dcmodel->nrOfFeatures(); i++)
+  // {
+    // cout << (*dcmodel->feature(i)) << endl;
+  // }
 
   ////////////////////////////////////////////////////////////////////////////////
   // MusFib MOTOR
@@ -512,7 +519,7 @@ void modelTest::testUnique2()
 
   Model* mfmodel = new Model();
   mfmodel->setData(mfXY, mfZ);
-  mfmodel->setRelations(a,b,r);
+  mfmodel->setFeatures(a,b,features);
   mfmodel->createUniqueContainer();
   mfmodel->countObservedFeatures();
 
@@ -524,22 +531,22 @@ void modelTest::testUnique2()
   CPPUNIT_ASSERT(mfmodel->uniqueX(0)->rows() < mfmodel->X()->rows());
   CPPUNIT_ASSERT(mfmodel->uniqueY(0)->rows() < mfmodel->Y()->rows());
 
-  for(int i = 0; i < a.size(); i++)
-  {
-    cout << "X unique: " << i << endl << *(mfmodel->uniqueX(i)) << endl;
-  }
+  // for(int i = 0; i < a.size(); i++)
+  // {
+    // cout << "X unique: " << i << endl << *(mfmodel->uniqueX(i)) << endl;
+  // }
 
-  for(int i = 0; i < b.size(); i++)
-  {
-    cout << "Y unique: " << i << endl << *(mfmodel->uniqueY(i)) << endl;
-  }
+  // for(int i = 0; i < b.size(); i++)
+  // {
+    // cout << "Y unique: " << i << endl << *(mfmodel->uniqueY(i)) << endl;
+  // }
 
   cout << "Nr of features: " << mfmodel->nrOfFeatures() << endl;
 
-  for(int i = 0; i < mfmodel->nrOfFeatures(); i++)
-  {
-    cout << (*mfmodel->feature(i)) << endl;
-  }
+  // for(int i = 0; i < mfmodel->nrOfFeatures(); i++)
+  // {
+    // cout << (*mfmodel->feature(i)) << endl;
+  // }
 
   ////////////////////////////////////////////////////////////////////////////////
   // MusLin MOTOR
@@ -547,11 +554,12 @@ void modelTest::testUnique2()
   ULContainer *mlZ  = mlW2;
   ULContainer *mlXY = mlW1;
 
-  Model* mlmodel = new Model();
+  GIS* mlmodel = new GIS();
   mlmodel->setData(mlXY, mlZ);
-  mlmodel->setRelations(a,b,r);
+  mlmodel->setFeatures(a,b,features);
   mlmodel->createUniqueContainer();
   mlmodel->countObservedFeatures();
+  mlmodel->generateExpected();
 
   CPPUNIT_ASSERT(mlmodel->X()->rows() > 0);
   CPPUNIT_ASSERT(mlmodel->X()->rows() == mlXY->rows());
@@ -561,21 +569,33 @@ void modelTest::testUnique2()
   CPPUNIT_ASSERT(mlmodel->uniqueX(0)->rows() < mlmodel->X()->rows());
   CPPUNIT_ASSERT(mlmodel->uniqueY(0)->rows() < mlmodel->Y()->rows());
 
-  for(int i = 0; i < a.size(); i++)
-  {
-    cout << "X unique: " << i << endl << *(mlmodel->uniqueX(i)) << endl;
-  }
+  // for(int i = 0; i < a.size(); i++)
+  // {
+    // cout << "X unique: " << i << endl << *(mlmodel->uniqueX(i)) << endl;
+  // }
 
-  for(int i = 0; i < b.size(); i++)
-  {
-    cout << "Y unique: " << i << endl << *(mlmodel->uniqueY(i)) << endl;
-  }
+  // for(int i = 0; i < b.size(); i++)
+  // {
+    // cout << "Y unique: " << i << endl << *(mlmodel->uniqueY(i)) << endl;
+  // }
 
   cout << "Nr of features: " << mlmodel->nrOfFeatures() << endl;
 
-  for(int i = 0; i < mlmodel->nrOfFeatures(); i++)
+  // for(int i = 0; i < mlmodel->nrOfFeatures(); i++)
+  // {
+    // cout << (*mlmodel->feature(i)) << endl;
+  // }
+
+  for(int i = 0; i < 1000000; i++)
   {
-    cout << (*mlmodel->feature(i)) << endl;
+    mlmodel->iterate();
+    cout << "Error: " << mlmodel->error() << endl;
   }
 
+  cout << ">>>>>>>>>>>>>>>>>>>>>>>" << endl;
+
+  // for(int i = 0; i < mlmodel->nrOfFeatures(); i++)
+  // {
+    // cout << (*mlmodel->feature(i)) << endl;
+  // }
 }

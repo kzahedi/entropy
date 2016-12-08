@@ -231,9 +231,7 @@ double IterativeScaling::__calculateIteration(double featconst, bool test)
   double l = 0;
   double oldl = 0.0;
   double newl = 0.0;
-  cout << "hier 0" << endl;
   __getExpected();
-  cout << "hier 1" << endl;
   for(int feat = 0; feat < _sizeSystX; feat++)
   {
     // jedes delta hat ein x_i und ein y_j

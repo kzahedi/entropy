@@ -34,6 +34,8 @@ set(SRC sparse/CMI.cpp
   sparse/state/MI.cpp
 
   iterativescaling/Model.cpp
+  iterativescaling/GIS.cpp
+
   iterativescaling/IterativeScalingBase.cpp
   iterativescaling/Feature.cpp
   iterativescaling/FeatureMatrix.cpp

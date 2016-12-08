@@ -3,7 +3,7 @@
 
 #include <entropy++/defs.h>
 
-#include <entropy++/iterativescaling/Feature.h>
+// #include <entropy++/iterativescaling/Feature.h>
 #include <entropy++/Container.h>
 
 #include <assert.h>
@@ -19,61 +19,93 @@ namespace entropy
 {
   namespace iterativescaling
   {
-
-    typedef std::pair<int,int> Relation;
-
     struct MFeature
     {
       public:
-        MFeature(int i, int j, int k, int l)
+        MFeature(int xUniqueIndex, int yUniqueIndex)
         {
-          _i        = i;
-          _j        = j;
-          _k        = k;
-          _l        = l;
-          _observed = 0;
-          _lambda   = 0.0;
+          _xUniqueIndex = xUniqueIndex;
+          _yUniqueIndex = yUniqueIndex;
+          _observed = 0.0;
+          _expected = 0.0;
+          _lambda   = 0.1;
         }
 
-        bool match(int i, int j, int k, int l)
+        bool match(int xUniqueIndex, int yUniqueIndex)
         {
-          return (_i == i && _j == j &&
-                  _k == k && _l == l);
+          return (_xUniqueIndex == xUniqueIndex &&
+                  _yUniqueIndex == yUniqueIndex);
         };
+
+        int getUniqueXIndex() {return _xUniqueIndex;};
+        int getUniqueYIndex() {return _yUniqueIndex;};
 
         void incObserved()
         {
-          _observed++;
+          _observed += 1.0;
         };
 
-        int observed()
+        void setObserved(double v)
+        {
+          _observed = v;
+        }
+
+        double observed()
         {
           return _observed;
         };
+
+        double expected()
+        {
+          return _expected;
+        };
+
+        void setExpected(double v)
+        {
+          _expected = v;
+        }
 
         void setLambda(double v)
         {
           _lambda = v;
         };
 
-        double getLambda()
+        double lambda()
         {
           return _lambda;
         };
 
         friend std::ostream& operator<<(std::ostream& str, const MFeature& m)
         {
-          str << m._i << " " << m._j << " " << m._k << " " << m._l << " " << m._observed;
+          str << m._xUniqueIndex << " " << m._yUniqueIndex << " " << m._observed << " " << m._expected;
           return str;
         };
 
       private:
-        int _i;
-        int _j;
-        int _k;
-        int _l;
-        int _observed;
+        int    _xUniqueIndex;
+        int    _yUniqueIndex;
+        double _observed;
+        double _expected;
         double _lambda;
+    };
+
+
+    class Feature : public vector<MFeature*>
+    {
+      public:
+        Feature(int xListIndex, int yListIndex) {_xListIndex = xListIndex; _yListIndex = yListIndex;};
+
+        int xListIndex() { return _xListIndex;};
+        int yListIndex() { return _yListIndex;};
+
+        void setUniqueXCount(int index, int count);
+
+        int getUniqueXCount(int index) {return _uniqueXCount[index];};
+
+      private:
+        int _xListIndex; // uniqueX index
+        int _yListIndex; // uniqueY index
+        vector<int> _uniqueXCount;
     };
 
     class Model
@@ -99,30 +131,34 @@ namespace entropy
 
         void countObservedFeatures();
 
-        void setRelations(vector<vector<int> > Xindices,
-                          vector<vector<int> > Yindices,
-                          vector<Relation>     relations);
+        void setFeatures(vector<vector<int> > Xindices,
+                         vector<vector<int> > Yindices,
+                         vector<Feature*>     features);
 
         int nrOfFeatures();
-        MFeature* feature(int i) {return _features[i];};
 
+        void generateExpected();
+
+        // MFeature* feature(int i) {return features[i];};
+
+
+      protected:
+        vector<MFeature*> features;
 
       private:
 
-        int          _nrX;
-        int          _nrY;
+        int           _nrX;
+        int           _nrY;
 
-        ULContainer* _X;
-        ULContainer* _Y;
+        ULContainer*  _X;
+        ULContainer*  _Y;
 
         ULContainer** _uniqueX;
         ULContainer** _uniqueY;
 
         vector<vector<int> > _Xindices;
         vector<vector<int> > _Yindices;
-        vector<Relation>     _relations;
-
-        vector<MFeature*>    _features;
+        vector<Feature*>     _features;
     };
   }
 }

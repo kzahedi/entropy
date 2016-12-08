@@ -373,7 +373,7 @@ namespace entropy
               (*extracted) << get(r, indices[i]);
             }
           }
-
+          __copyProperties(extracted);
           return extracted;
         }
 
