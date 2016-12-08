@@ -105,6 +105,9 @@ namespace entropy
         void setRemainingAlphabetSize(double s) {_alphabetSize = s;};
         double getRemainingAlphabetSize() { return _alphabetSize;};
 
+        void setYAlphabetSize(double y){ _yAlphabetSize = y;};
+        double yAlphabetSize(){ return _yAlphabetSize;};
+
         friend std::ostream& operator<<(std::ostream& str, const Feature& m)
         {
           for(vector<MFeature*>::const_iterator mf = m.begin(); mf != m.end(); mf++)
@@ -116,9 +119,8 @@ namespace entropy
         int _xListIndex; // uniqueX index
         int _yListIndex; // uniqueY index
         double _alphabetSize;
+        double _yAlphabetSize;
         vector<int> _uniqueXCount;
-        vector<double> _xAlphabetSizes;
-        vector<double> _yAlphabetSizes;
     };
 
     class Model

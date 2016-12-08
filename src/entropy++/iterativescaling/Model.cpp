@@ -109,22 +109,22 @@ void Model::countObservedFeatures()
     }
   }
 
-  int index = 0;
-  cout << "In countObservedFeatures: "<< endl;
-  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
-  {
-    cout << "Feature " << index++ << endl;
-    int i = (*f)->xListIndex(); // list of columns that define X
-    for(int x = 0; x < _uniqueX[i]->rows(); x++)
-    {
-      cout << "  " << x << " x count: " << (*f)->getUniqueXCount(x) << endl;
-    }
-    int mfindex = 0;
-    for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
-    {
-      cout << "MF " << mfindex++ << " obs: " << (*mf)->observed() << " exp: " << (*mf)->expected() << " lamda: " << (*mf)->lambda() << endl;
-    }
-  }
+  // int index = 0;
+  // cout << "In countObservedFeatures: "<< endl;
+  // for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+  // {
+    // cout << "Feature " << index++ << endl;
+    // int i = (*f)->xListIndex(); // list of columns that define X
+    // for(int x = 0; x < _uniqueX[i]->rows(); x++)
+    // {
+      // cout << "  " << x << " x count: " << (*f)->getUniqueXCount(x) << endl;
+    // }
+    // int mfindex = 0;
+    // for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
+    // {
+      // cout << "MF " << mfindex++ << " obs: " << (*mf)->observed() << " exp: " << (*mf)->expected() << " lamda: " << (*mf)->lambda() << endl;
+    // }
+  // }
 
   for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
   {
@@ -143,7 +143,8 @@ void Model::countObservedFeatures()
       ySize *= _Y->getBinSize(*y);
     }
 
-    (*f)->setRemainingAlphabetSize(xSize * ySize - _uniqueX[(*f)->xListIndex()]->rows());
+    (*f)->setRemainingAlphabetSize(xSize * ySize - 1.0);
+    (*f)->setYAlphabetSize(ySize);
   }
 
 }
@@ -160,36 +161,40 @@ void Model::generateExpected()
   {
     for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
     {
-      double e       = (*mf)->lambda() - (*f)->getRemainingAlphabetSize();
-      double zaehler = exp(e);
-      (*mf)->setExpected(zaehler);
-      sum += zaehler;
+      sum += (*mf)->lambda();
     }
   }
 
-  cout << "Sum: " << sum << endl;
-
   for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
   {
-    for(vector<MFeature*>::iterator mf = (*f)->begin();
-        mf != (*f)->end(); mf++)
-    {
-      int    xBar  = (*mf)->getUniqueXIndex();
-      double count = (*f)->getUniqueXCount(xBar);
-      (*mf)->setExpected( count * (*mf)->expected() / sum ); // zaehler / sum
-    }
-  }
-
-  int index = 0;
-  cout << "In generateExpected: "<< endl;
-  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
-  {
-    cout << "Feature " << index++ << endl;
-    int mfindex = 0;
     for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
     {
-      cout << "MF " << mfindex++ << " obs: " << (*mf)->observed() << " exp: " << (*mf)->expected() << " lamda: " << (*mf)->lambda() << endl;
+      double e       = (*mf)->lambda();
+      double zaehler = exp(e);
+      int    xBar    = (*mf)->getUniqueXIndex();
+      double count   = (*f)->getUniqueXCount(xBar);
+      (*mf)->setExpected( count * zaehler / sum ); // zaehler / sum
     }
   }
+
+  // for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+  // {
+    // for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
+    // {
+      // cout << "Z: " << (*mf)->expected() << " / " << sum << endl;
+    // }
+  // }
+
+  // int index = 0;
+  // cout << "In generateExpected: "<< endl;
+  // for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+  // {
+    // cout << "Feature " << index++ << endl;
+    // int mfindex = 0;
+    // for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
+    // {
+      // cout << "MF " << mfindex++ << " obs: " << (*mf)->observed() << " exp: " << (*mf)->expected() << " lamda: " << (*mf)->lambda() << endl;
+    // }
+  // }
 
 }

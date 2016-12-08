@@ -16,16 +16,16 @@ void GIS::iterate()
   generateExpected();
 
   int index = 0;
-  cout << "GIS: Nach generateExpected: "<< endl;
-  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
-  {
-    cout << "Feature " << index++ << endl;
-    int mfindex = 0;
-    for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
-    {
-      cout << "MF " << mfindex++ << " obs: " << (*mf)->observed() << " exp: " << (*mf)->expected() << " lamda: " << (*mf)->lambda() << endl;
-    }
-  }
+  // cout << "GIS: Nach generateExpected: "<< endl;
+  // for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+  // {
+    // cout << "Feature " << index++ << endl;
+    // int mfindex = 0;
+    // for(vector<MFeature*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
+    // {
+      // cout << "MF " << mfindex++ << " obs: " << (*mf)->observed() << " exp: " << (*mf)->expected() << " lamda: " << (*mf)->lambda() << endl;
+    // }
+  // }
 
   _error = 0.0;
 
@@ -43,9 +43,9 @@ void GIS::iterate()
     }
   }
 
-  cout << "Max: " << max << endl;
+  // cout << "Max: " << max << endl;
 
-  cout << "Nach update: "<< endl;
+  // cout << "Nach update: "<< endl;
   for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
   {
     for(vector<MFeature*>::iterator mf = (*f)->begin();
@@ -53,9 +53,8 @@ void GIS::iterate()
     {
       // ueber relations iterieren
       double o = (*mf)->lambda(); // old
-      double n = o + 0.1 * (1.0/max)
+      double n = o + (1.0/max)
         * log((*mf)->observed() / (*mf)->expected());
-      cout << "o: " << o << " n: " << n << " obs: " << (*mf)->observed() << " exp: " << (*mf)->expected() << endl;
       (*mf)->setLambda(n);
       _error += fabs((*mf)->observed() - (*mf)->expected());
     }
