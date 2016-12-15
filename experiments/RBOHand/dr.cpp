@@ -27,7 +27,7 @@ using namespace entropy;
 DEFINE_string(i, "",    "input file");
 DEFINE_string(o, "",    "output file prefix");
 DEFINE_double(m, 500.0, "max value for grasp distance");
-DEFINE_int64(b,  30,   "nr. of bins");
+DEFINE_int64(b,  30,    "nr. of bins");
 
 
 int main(int argc, char** argv)
@@ -52,7 +52,7 @@ int main(int argc, char** argv)
   VLOG(10) << "Data's new dimensions: " << data->rows() << ", " << data->columns();
   delete data;
 
-  ndata->setDomains(data->min(), data->max());
+  ndata->setDomains(ndata->min(), ndata->max());
   ndata->setBinSizes(FLAGS_b);
 
   ULContainer* dd = ndata->discretiseByColumn();
@@ -86,10 +86,9 @@ int main(int argc, char** argv)
     (*r_grasp) << entropy::MI(d, dgrasp);
   }
 
-  string out_mc    = FLAGS_o + string("mi_mc_w.csv");
-  string out_grasp = FLAGS_o + string("mi_grasp.csv");
+  string out_mc    = FLAGS_o + string(".mi_mc_w.csv");
+  string out_grasp = FLAGS_o + string(".mi_grasp.csv");
   Csv::write(out_mc,    r_mc);
   Csv::write(out_grasp, r_grasp);
-
 }
 

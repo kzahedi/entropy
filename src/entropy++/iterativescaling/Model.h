@@ -48,6 +48,11 @@ namespace entropy
 
         Feature* feature(int i);
 
+        void calculateProbabilities();
+
+        double p_y_c_x(int xUniqueIndex, int yUniqueIndex);
+        double p_x(int xUniqueIndex);
+
 
       protected:
         vector<Feature*>  features;

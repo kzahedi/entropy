@@ -39,10 +39,10 @@ namespace entropy
         };
 
       private:
-        int _xListIndex; // uniqueX index
-        int _yListIndex; // uniqueY index
-        double _alphabetSize;
-        double _yAlphabetSize;
+        int         _xListIndex; // uniqueX index
+        int         _yListIndex; // uniqueY index
+        double      _alphabetSize;
+        double      _yAlphabetSize;
         vector<int> _uniqueXCount;
     };
   }

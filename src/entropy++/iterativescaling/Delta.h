@@ -20,16 +20,19 @@ namespace entropy
         void incObserved();
 
         void setObserved(double v);
-
         double observed();
 
+        void setExpected(double v);
         double expected();
 
-        void setExpected(double v);
-
         void setLambda(double v);
-
         double lambda();
+
+        void setConditionalProbability(double value);
+        double conditionalProbability();
+
+        void setMarginalProbability(double value);
+        double marginalProbability();
 
         friend std::ostream& operator<<(std::ostream& str, const Delta& m)
         {
@@ -43,6 +46,8 @@ namespace entropy
         double _observed;
         double _expected;
         double _lambda;
+        double _conditionalProbability;
+        double _marginalProbability;
     };
   }
 }

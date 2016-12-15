@@ -6,9 +6,9 @@ using namespace entropy::iterativescaling;
 
 Feature::Feature(int xListIndex, int yListIndex)
 {
-  _xListIndex = xListIndex;
-  _yListIndex = yListIndex;
-  _alphabetSize = 0.0;
+  _xListIndex             = xListIndex;
+  _yListIndex             = yListIndex;
+  _alphabetSize           = 0.0;
 }
 
 int Feature::xListIndex()
@@ -56,3 +56,5 @@ double Feature::yAlphabetSize()
 {
   return _yAlphabetSize;
 }
+
+

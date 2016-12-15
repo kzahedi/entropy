@@ -171,11 +171,9 @@ void Model::generateExpected()
   {
     for(vector<Delta*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
     {
-      double e       = (*mf)->lambda();
-      double zaehler = exp(e);
       int    xBar    = (*mf)->getUniqueXIndex();
       double count   = (*f)->getUniqueXCount(xBar);
-      (*mf)->setExpected( count * zaehler / sum ); // zaehler / sum
+      (*mf)->setExpected( count * exp((*mf)->lambda()) / sum ); // zaehler / sum
     }
   }
 }
@@ -204,3 +202,62 @@ Feature* Model::feature(int i)
 {
   return features[i];
 }
+
+void Model::calculateProbabilities()
+{
+  double nenner = 0.0;
+  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+  {
+    for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
+    {
+      // sum over all y: \sum_y exp delta_i(x,y)
+      double sum = 0;
+      for(vector<Delta*>::iterator d2 = (*f)->begin(); d2 != (*f)->end(); d2++)
+      {
+        if((*d)->getUniqueXIndex() == (*d2)->getUniqueXIndex())
+        {
+          sum += exp((*d2)->lambda());
+        }
+        nenner += sum;
+      }
+      (*d)->setConditionalProbability( exp((*d)->lambda()) / sum ); // zaehler / sum
+      (*d)->setMarginalProbability(sum); // not done yet
+    }
+  }
+
+  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+  {
+    for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
+    {
+      (*d)->setMarginalProbability( (*d)->marginalProbability() / nenner);
+    }
+  }
+}
+
+double Model::p_y_c_x(int xUniqueIndex, int yUniqueIndex)
+{
+  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+  {
+    for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
+    {
+      if((*d)->getUniqueXIndex() == xUniqueIndex &&
+         (*d)->getUniqueYIndex() == yUniqueIndex)
+        return (*d)->conditionalProbability();
+    }
+  }
+  return -1.0;
+}
+
+double Model::p_x(int xUniqueIndex)
+{
+  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+  {
+    for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
+    {
+      if((*d)->getUniqueXIndex() == xUniqueIndex)
+        return (*d)->marginalProbability();
+    }
+  }
+  return -1.0;
+}
+
