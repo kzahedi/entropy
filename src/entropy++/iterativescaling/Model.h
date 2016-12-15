@@ -6,6 +6,7 @@
 #include <entropy++/iterativescaling/Feature.h>
 #include <entropy++/iterativescaling/Delta.h>
 #include <entropy++/Container.h>
+#include <entropy++/Matrix.h>
 
 #include <assert.h>
 #include <cstdlib>
@@ -50,8 +51,11 @@ namespace entropy
 
         void calculateProbabilities();
 
-        double p_y_c_x(int xUniqueIndex, int yUniqueIndex);
+        double p_y_c_x(int yUniqueIndex, int xUniqueIndex);
         double p_x(int xUniqueIndex);
+
+        int getNrOfUniqueX();
+        int getNrOfUniqueY();
 
 
       protected:
@@ -65,11 +69,20 @@ namespace entropy
         ULContainer*  _X;
         ULContainer*  _Y;
 
+        ULContainer*  _uniqueXFromData;
+        ULContainer*  _uniqueYFromData;
+
+        ULContainer** _uniqueXFromDataPerFeature;
+        ULContainer** _uniqueYFromDataPerFeature;
+
         ULContainer** _uniqueX;
         ULContainer** _uniqueY;
 
         vector<vector<int> > _Xindices;
         vector<vector<int> > _Yindices;
+
+        Matrix* _conditionals;
+        Matrix* _marginals;
     };
   }
 }

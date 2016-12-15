@@ -62,6 +62,22 @@ void Model::createUniqueContainer()
     _uniqueY[i] = _Y->columns(_Yindices[i]);
     _uniqueY[i] = _uniqueY[i]->unique();
   }
+
+
+  _uniqueXFromData = _X->unique();
+  _uniqueYFromData = _Y->unique();
+
+  _uniqueXFromDataPerFeature = new ULContainer*[_Xindices.size()];
+  _uniqueYFromDataPerFeature = new ULContainer*[_Yindices.size()];
+
+  for(int i = 0; i < _Xindices.size(); i++)
+  {
+    _uniqueXFromDataPerFeature[i] = _uniqueXFromData->columns(_Xindices[i]);
+  }
+  for(int i = 0; i < _Yindices.size(); i++)
+  {
+    _uniqueYFromDataPerFeature[i] = _uniqueYFromData->columns(_Yindices[i]);
+  }
 }
 
 void Model::countObservedFeatures()
@@ -205,59 +221,77 @@ Feature* Model::feature(int i)
 
 void Model::calculateProbabilities()
 {
+  _conditionals = new Matrix(_uniqueXFromData->rows(), _uniqueYFromData->rows()); // TODO: clean up in destructor
+  _marginals    = new Matrix(_uniqueXFromData->rows(), 1);
+
   double nenner = 0.0;
-  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+
+  cout << _uniqueXFromData->rows() * _uniqueYFromData->rows() * features.size() << endl;
+  for(int x = 0; x < _uniqueXFromData->rows(); x++)
   {
-    for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
+    for(int y = 0; y < _uniqueYFromData->rows(); y++)
     {
-      // sum over all y: \sum_y exp delta_i(x,y)
-      double sum = 0;
-      for(vector<Delta*>::iterator d2 = (*f)->begin(); d2 != (*f)->end(); d2++)
+      double sum = 0.0;
+      for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
       {
-        if((*d)->getUniqueXIndex() == (*d2)->getUniqueXIndex())
+        int xListIndex = (*f)->xListIndex();
+        int yListIndex = (*f)->yListIndex();
+
+        vector<int> fx = _uniqueX[xListIndex]->findlist(_uniqueXFromDataPerFeature[xListIndex], x);
+        vector<int> fy = _uniqueY[yListIndex]->findlist(_uniqueYFromDataPerFeature[yListIndex], y);
+
+        for(vector<int>::iterator i = fx.begin(); i != fx.end(); i++)
         {
-          sum += exp((*d2)->lambda());
+          for(vector<int>::iterator j = fy.begin(); j != fy.end(); j++)
+          {
+            for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
+            {
+              if((*d)->match(*i, *j))
+              {
+                sum += (*d)->lambda();
+              }
+            }
+          }
         }
-        nenner += sum;
       }
-      (*d)->setConditionalProbability( exp((*d)->lambda()) / sum ); // zaehler / sum
-      (*d)->setMarginalProbability(sum); // not done yet
+      (*_conditionals)(x,y) = exp(sum);
     }
   }
 
-  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+  double sum = 0.0;
+  for(int x = 0; x < _conditionals->rows(); x++)
   {
-    for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
+    (*_marginals)(x,0) = _conditionals->rowSum(x);
+    sum += (*_marginals)(x,0);
+    for(int y = 0; y < _conditionals->cols(); y++)
     {
-      (*d)->setMarginalProbability( (*d)->marginalProbability() / nenner);
+      (*_conditionals)(x,y) = (*_conditionals)(x,y) / (*_marginals)(x,0);
     }
+  }
+
+  for(int x = 0; x < _marginals->rows(); x++)
+  {
+    (*_marginals)(x,0) = (*_marginals)(x,0) / sum;
   }
 }
 
-double Model::p_y_c_x(int xUniqueIndex, int yUniqueIndex)
+double Model::p_y_c_x(int yUniqueIndex, int xUniqueIndex)
 {
-  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
-  {
-    for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
-    {
-      if((*d)->getUniqueXIndex() == xUniqueIndex &&
-         (*d)->getUniqueYIndex() == yUniqueIndex)
-        return (*d)->conditionalProbability();
-    }
-  }
-  return -1.0;
+  return (*_conditionals)(xUniqueIndex, yUniqueIndex);
 }
 
 double Model::p_x(int xUniqueIndex)
 {
-  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
-  {
-    for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
-    {
-      if((*d)->getUniqueXIndex() == xUniqueIndex)
-        return (*d)->marginalProbability();
-    }
-  }
-  return -1.0;
+  return (*_marginals)(xUniqueIndex,0);
+}
+
+int Model::getNrOfUniqueX()
+{
+  return _uniqueXFromData->rows();
+}
+
+int Model::getNrOfUniqueY()
+{
+  return _uniqueYFromData->rows();
 }
 

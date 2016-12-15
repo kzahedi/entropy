@@ -1,17 +1,25 @@
 #ifndef __KL_H__
 #define __KL_H__
 
-class KL
+#include <entropy++/iterativescaling/Model.h>
+
+
+namespace entropy
 {
-  public:
-    static
-    // KL();
-    // ~KL();
+  namespace iterativescaling
+  {
+    class KL
+    {
+      public:
+        KL(Model* p, Model *q);
 
-    //KL(const KL);
-    //KL operator=(const KL);
+        double divergence();
 
-  private:
-};
+      private:
+        Model* _p;
+        Model* _q;
+    };
+  }
+}
 
 #endif // __KL_H__
