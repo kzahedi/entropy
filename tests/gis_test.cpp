@@ -13,6 +13,8 @@
 
 #include <math.h>
 
+# define EPSILON 0.00001
+
 
 #ifndef PARENT
 #define PARENT "/Users/zahedi/projects/entropy/experiments/hopping/data/"
@@ -101,20 +103,20 @@ void gisTest::testAND()
   ipx(0,2) = 1.0/4.0;
   ipx(0,3) = 1.0/4.0;
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,0), ipycx(0,0), 0.1);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,1), ipycx(0,1), 0.1);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,2), ipycx(0,2), 0.1);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,3), ipycx(0,3), 0.1);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,0), ipycx(0,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,1), ipycx(0,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,2), ipycx(0,2), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,3), ipycx(0,3), EPSILON);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,1), ipycx(0,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(1,1), ipycx(1,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(2,1), ipycx(2,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(3,1), ipycx(3,1), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,1), ipycx(0,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(1,1), ipycx(1,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(2,1), ipycx(2,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(3,1), ipycx(3,1), EPSILON);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(0), ipx(0,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(1), ipx(0,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(2), ipx(0,2), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(3), ipx(0,3), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(0), ipx(0,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(1), ipx(0,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(2), ipx(0,2), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(3), ipx(0,3), EPSILON);
 
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -160,27 +162,27 @@ void gisTest::testAND()
   dpx(2,0) = 1.0/4.0;
   dpx(3,0) = 1.0/4.0;
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,0), dpycx(0,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,1), dpycx(1,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,2), dpycx(2,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,3), dpycx(3,0), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,0), dpycx(0,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,1), dpycx(1,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,2), dpycx(2,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,3), dpycx(3,0), EPSILON);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,0), dpycx(1,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,1), dpycx(1,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,2), dpycx(1,2), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,3), dpycx(1,3), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,0), dpycx(1,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,1), dpycx(1,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,2), dpycx(1,2), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,3), dpycx(1,3), EPSILON);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(0), dpx(0,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(1), dpx(1,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(2), dpx(2,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(3), dpx(3,0), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(0), dpx(0,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(1), dpx(1,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(2), dpx(2,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(3), dpx(3,0), EPSILON);
 
   ////////////////////////////////////////////////////////////////////////////////
   // Synergy
   ////////////////////////////////////////////////////////////////////////////////
 
   KL* kl = new KL(dependentModel, independentModel);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.001, kl->divergence(), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.001, kl->divergence(), EPSILON);
 }
 
 void gisTest::testOR()
@@ -242,20 +244,20 @@ void gisTest::testOR()
   ipx(0,2) = 1.0/4.0;
   ipx(0,3) = 1.0/4.0;
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,0), ipycx(0,0), 0.1);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,1), ipycx(0,1), 0.1);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,2), ipycx(0,2), 0.1);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,3), ipycx(0,3), 0.1);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,0), ipycx(0,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,1), ipycx(0,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,2), ipycx(0,2), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,3), ipycx(0,3), EPSILON);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,1), ipycx(0,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(1,1), ipycx(1,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(2,1), ipycx(2,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(3,1), ipycx(3,1), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,1), ipycx(0,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(1,1), ipycx(1,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(2,1), ipycx(2,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(3,1), ipycx(3,1), EPSILON);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(0), ipx(0,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(1), ipx(0,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(2), ipx(0,2), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(3), ipx(0,3), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(0), ipx(0,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(1), ipx(0,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(2), ipx(0,2), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(3), ipx(0,3), EPSILON);
 
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -301,27 +303,27 @@ void gisTest::testOR()
   dpx(2,0) = 1.0/4.0;
   dpx(3,0) = 1.0/4.0;
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,0), dpycx(0,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,1), dpycx(1,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,2), dpycx(2,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,3), dpycx(3,0), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,0), dpycx(0,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,1), dpycx(1,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,2), dpycx(2,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,3), dpycx(3,0), EPSILON);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,0), dpycx(1,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,1), dpycx(1,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,2), dpycx(1,2), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,3), dpycx(1,3), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,0), dpycx(1,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,1), dpycx(1,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,2), dpycx(1,2), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,3), dpycx(1,3), EPSILON);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(0), dpx(0,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(1), dpx(1,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(2), dpx(2,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(3), dpx(3,0), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(0), dpx(0,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(1), dpx(1,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(2), dpx(2,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(3), dpx(3,0), EPSILON);
 
   ////////////////////////////////////////////////////////////////////////////////
   // Synergy
   ////////////////////////////////////////////////////////////////////////////////
 
   KL* kl = new KL(dependentModel, independentModel);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.001, kl->divergence(), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.001, kl->divergence(), EPSILON);
 }
 
 void gisTest::testXOR()
@@ -383,20 +385,20 @@ void gisTest::testXOR()
   ipx(0,2) = 1.0/4.0;
   ipx(0,3) = 1.0/4.0;
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,0), ipycx(0,0), 0.1);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,1), ipycx(0,1), 0.1);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,2), ipycx(0,2), 0.1);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,3), ipycx(0,3), 0.1);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,0), ipycx(0,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,1), ipycx(0,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,2), ipycx(0,2), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,3), ipycx(0,3), EPSILON);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,1), ipycx(0,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(1,1), ipycx(1,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(2,1), ipycx(2,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(3,1), ipycx(3,1), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(0,1), ipycx(0,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(1,1), ipycx(1,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(2,1), ipycx(2,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_y_c_x(3,1), ipycx(3,1), EPSILON);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(0), ipx(0,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(1), ipx(0,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(2), ipx(0,2), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(3), ipx(0,3), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(0), ipx(0,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(1), ipx(0,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(2), ipx(0,2), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(independentModel->p_x(3), ipx(0,3), EPSILON);
 
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -442,27 +444,27 @@ void gisTest::testXOR()
   dpx(2,0) = 1.0/4.0;
   dpx(3,0) = 1.0/4.0;
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,0), dpycx(0,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,1), dpycx(1,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,2), dpycx(2,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,3), dpycx(3,0), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,0), dpycx(0,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,1), dpycx(1,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,2), dpycx(2,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(0,3), dpycx(3,0), EPSILON);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,0), dpycx(1,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,1), dpycx(1,1), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,2), dpycx(1,2), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,3), dpycx(1,3), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,0), dpycx(1,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,1), dpycx(1,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,2), dpycx(1,2), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_y_c_x(1,3), dpycx(1,3), EPSILON);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(0), dpx(0,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(1), dpx(1,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(2), dpx(2,0), 0.0000001);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(3), dpx(3,0), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(0), dpx(0,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(1), dpx(1,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(2), dpx(2,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(dependentModel->p_x(3), dpx(3,0), EPSILON);
 
   ////////////////////////////////////////////////////////////////////////////////
   // Synergy
   ////////////////////////////////////////////////////////////////////////////////
 
   KL* kl = new KL(dependentModel, independentModel);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.001, kl->divergence(), 0.0000001);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.001, kl->divergence(), EPSILON);
 }
 
 
