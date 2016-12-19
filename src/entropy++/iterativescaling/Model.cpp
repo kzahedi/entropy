@@ -73,6 +73,9 @@ void Model::createUniqueContainer()
   _uniqueXFromDataPerFeature = new ULContainer*[_Xindices.size()];
   _uniqueYFromDataPerFeature = new ULContainer*[_Yindices.size()];
 
+  _xFromDataPerFeature = new ULContainer*[_Xindices.size()];
+  _yFromDataPerFeature = new ULContainer*[_Yindices.size()];
+
   for(int i = 0; i < _Xindices.size(); i++)
   {
     _uniqueXFromDataPerFeature[i] = _uniqueXFromData->columns(_Xindices[i]);
@@ -81,6 +84,16 @@ void Model::createUniqueContainer()
   {
     _uniqueYFromDataPerFeature[i] = _uniqueYFromData->columns(_Yindices[i]);
   }
+
+  for(int i = 0; i < _Xindices.size(); i++)
+  {
+    _xFromDataPerFeature[i] = _X->columns(_Xindices[i]);
+  }
+  for(int i = 0; i < _Yindices.size(); i++)
+  {
+    _yFromDataPerFeature[i] = _Y->columns(_Yindices[i]);
+  }
+
 }
 
 void Model::countObservedFeatures()
@@ -185,9 +198,10 @@ void Model::generateExpected()
 {
   for(int j = 0; j < _uniqueXFromData->rows(); j++)
   {
-    double s = 0.0;
+    double z = 0.0;
     double y_count = 0.0;
     vector<int> row_indices = _X->findlist(_uniqueXFromData, j); // TODO do this only once
+
     for(vector<int>::iterator i = row_indices.begin(); i != row_indices.end(); i++)
     {
       for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
@@ -195,18 +209,18 @@ void Model::generateExpected()
         int xListIndex = (*f)->xListIndex();
         int yListIndex = (*f)->yListIndex();
 
-        vector<int> fx = _uniqueX[xListIndex]->findlist(_uniqueXFromDataPerFeature[xListIndex],  j);
-        vector<int> fy = _uniqueY[yListIndex]->findlist(_uniqueYFromDataPerFeature[yListIndex], *i);
+        vector<int> fx = _uniqueX[xListIndex]->findlist(_xFromDataPerFeature[xListIndex],  j);
+        vector<int> fy = _uniqueY[yListIndex]->findlist(_yFromDataPerFeature[yListIndex], *i);
 
-        for(vector<int>::iterator i = fx.begin(); i != fx.end(); i++)
+        for(vector<int>::iterator fi = fx.begin(); fi != fx.end(); fi++)
         {
-          for(vector<int>::iterator j = fy.begin(); j != fy.end(); j++)
+          for(vector<int>::iterator fj = fy.begin(); fj != fy.end(); fj++)
           {
             for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
             {
-              if((*d)->match(*i, *j))
+              if((*d)->match(*fi, *fj))
               {
-                s += (*d)->lambda();
+                z += (*d)->lambda();
                 y_count++;
               }
             }
@@ -214,7 +228,8 @@ void Model::generateExpected()
         }
       }
     }
-    s = exp(s) + (_yAlphabetSize - y_count);
+
+    z = exp(z) + (_yAlphabetSize - y_count);
 
     for(vector<int>::iterator i = row_indices.begin(); i != row_indices.end(); i++)
     {
@@ -223,19 +238,21 @@ void Model::generateExpected()
         int xListIndex = (*f)->xListIndex();
         int yListIndex = (*f)->yListIndex();
 
-        vector<int> fx = _uniqueX[xListIndex]->findlist(_uniqueXFromDataPerFeature[xListIndex],  j);
-        vector<int> fy = _uniqueY[yListIndex]->findlist(_uniqueYFromDataPerFeature[yListIndex], *i);
+        vector<int> fx = _uniqueX[xListIndex]->findlist(_xFromDataPerFeature[xListIndex],  j);
+        vector<int> fy = _uniqueY[yListIndex]->findlist(_yFromDataPerFeature[yListIndex], *i);
 
-        for(vector<int>::iterator i = fx.begin(); i != fx.end(); i++)
+        for(vector<int>::iterator fi = fx.begin(); fi != fx.end(); fi++)
         {
-          for(vector<int>::iterator j = fy.begin(); j != fy.end(); j++)
+          for(vector<int>::iterator fj = fy.begin(); fj != fy.end(); fj++)
           {
             for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
             {
-              if((*d)->match(*i, *j))
+              if((*d)->match(*fi, *fj))
               {
-                double e = (*d)->expected();
-                e += exp((*d)->lambda()) / s;
+                int    xBar  = (*d)->getUniqueXIndex();
+                double count = (*f)->getUniqueXCount(xBar);
+                double e     = (*d)->expected();
+                e += exp((*d)->lambda()) / z;
                 (*d)->setExpected(e);
               }
             }

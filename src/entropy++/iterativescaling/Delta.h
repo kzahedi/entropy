@@ -36,11 +36,11 @@ namespace entropy
 
         friend std::ostream& operator<<(std::ostream& str, const Delta& m)
         {
-          str << "Delta:" << std::endl;
-          str << "  X-index:  " << m._xUniqueIndex << std::endl;
-          str << "  Y-index:  " << m._yUniqueIndex << std::endl;
-          str << "  Observed: " << m._observed << std::endl;
-          str << "  Expected: " << m._expected << std::endl;
+          str << "[";
+          str << "X: " << m._xUniqueIndex;
+          str << ", Y: " << m._yUniqueIndex;
+          str << ", Obs: " << m._observed;
+          str << ", Exp: " << m._expected << "]";
           return str;
         };
 

@@ -711,3 +711,42 @@ void containerTest::testFindList2ByContainer()
   CPPUNIT_ASSERT_EQUAL(1, (int)r.size());
   CPPUNIT_ASSERT_EQUAL(9, r[0]);
 }
+
+void containerTest::testFindList3ByContainer()
+{
+  ULContainer* container = new ULContainer(10,5);
+
+  *container << 1 << 2 << 1  << 11 << 21;
+  *container << 1 << 2 << 2  << 12 << 22;
+  *container << 1 << 2 << 3  << 13 << 23;
+  *container << 1 << 2 << 4  << 14 << 24;
+  *container << 1 << 2 << 5  << 15 << 25;
+  *container << 1 << 3 << 10 << 16 << 26;
+  *container << 1 << 3 << 7  << 17 << 27;
+  *container << 1 << 3 << 8  << 18 << 28;
+  *container << 1 << 3 << 9  << 19 << 29;
+  *container << 1 << 3 << 10 << 20 << 30;
+
+  vector<int> r;
+  vector<int> indices;
+  indices.push_back(0);
+  indices.push_back(1);
+
+  r = container->findlist(container, 0, indices);
+  CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(0, r[0]);
+  CPPUNIT_ASSERT_EQUAL(1, r[1]);
+  CPPUNIT_ASSERT_EQUAL(2, r[2]);
+  CPPUNIT_ASSERT_EQUAL(3, r[3]);
+  CPPUNIT_ASSERT_EQUAL(4, r[4]);
+
+  indices.clear();
+  indices.push_back(0);
+  indices.push_back(2);
+
+  r = container->findlist(container, 5, indices);
+  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(5, r[0]);
+  CPPUNIT_ASSERT_EQUAL(9, r[1]);
+
+}

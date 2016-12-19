@@ -59,16 +59,19 @@ namespace entropy
 
         friend std::ostream& operator<<(std::ostream& str, const Model& m)
         {
+          int index = 0;
           for(vector<Feature*>::const_iterator f = m.features.begin(); f != m.features.end(); f++)
           {
-            str << "Feature: " << std::endl;
-            str << **f << endl;
+            index++;
+            str << "Feature " << index << ": " << endl;
+            cout << **f;
           }
           return str;
         };
 
       protected:
-        vector<Feature*>  features;
+        vector<Feature*> features;
+        vector<Delta*>   deltas;
 
       private:
 
@@ -83,6 +86,9 @@ namespace entropy
 
         ULContainer** _uniqueXFromDataPerFeature;
         ULContainer** _uniqueYFromDataPerFeature;
+
+        ULContainer** _xFromDataPerFeature;
+        ULContainer** _yFromDataPerFeature;
 
         ULContainer** _uniqueX;
         ULContainer** _uniqueY;

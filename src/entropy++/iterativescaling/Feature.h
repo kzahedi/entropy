@@ -33,8 +33,7 @@ namespace entropy
 
         friend std::ostream& operator<<(std::ostream& str, const Feature& m)
         {
-          for(vector<Delta*>::const_iterator mf = m.begin(); mf != m.end(); mf++)
-          str << **mf << endl;
+          for(vector<Delta*>::const_iterator d = m.begin(); d != m.end(); d++) str << **d << endl;
           return str;
         };
 

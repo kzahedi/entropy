@@ -54,7 +54,7 @@ void GIS::iterate()
     {
       // ueber relations iterieren
       double o = (*mf)->lambda(); // old
-      double n = o + (1.0/max)
+      double n = o + (1.0/max)    // new
         * log((*mf)->observed() / (*mf)->expected());
       (*mf)->setLambda(n);
       _error += fabs((*mf)->observed() - (*mf)->expected());

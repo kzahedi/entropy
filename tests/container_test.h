@@ -26,6 +26,7 @@ class containerTest : public CppUnit::TestFixture
   CPPUNIT_TEST(testFind2ByContainer);
   CPPUNIT_TEST(testFindList1ByContainer);
   CPPUNIT_TEST(testFindList2ByContainer);
+  CPPUNIT_TEST(testFindList3ByContainer);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -53,5 +54,6 @@ class containerTest : public CppUnit::TestFixture
     void testFind2ByContainer();
     void testFindList1ByContainer();
     void testFindList2ByContainer();
+    void testFindList3ByContainer();
 
 };
