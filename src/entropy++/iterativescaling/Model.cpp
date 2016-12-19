@@ -3,6 +3,8 @@
 using namespace entropy;
 using namespace entropy::iterativescaling;
 
+# define EPSILON 0.00000001
+
 Model::Model()
 {
 }
@@ -161,7 +163,7 @@ void Model::countObservedFeatures()
       ySize *= _Y->getBinSize(*y);
     }
 
-    (*f)->setRemainingAlphabetSize(xSize * ySize - 1.0);
+    (*f)->setXAlphabetSize(xSize);
     (*f)->setYAlphabetSize(ySize);
   }
 
@@ -174,14 +176,16 @@ int Model::nrOfFeatures()
 
 void Model::generateExpected()
 {
-  double sum = 0.0;
+  double z = 0.0;
   for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
   {
-    for(vector<Delta*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
+    for(vector<Delta*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++) // sum_i
     {
-      sum += (*mf)->lambda();
+      z += (*mf)->lambda(); // sum must be done for each y \in Alphabet accordingly to the y in the delta
     }
   }
+
+  // z += exp(0.0);
 
   for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
   {
@@ -189,7 +193,7 @@ void Model::generateExpected()
     {
       int    xBar    = (*mf)->getUniqueXIndex();
       double count   = (*f)->getUniqueXCount(xBar);
-      (*mf)->setExpected( count * exp((*mf)->lambda()) / sum ); // zaehler / sum
+      (*mf)->setExpected( count * exp((*mf)->lambda()) / z );
     }
   }
 }
@@ -226,7 +230,6 @@ void Model::calculateProbabilities()
 
   double nenner = 0.0;
 
-  cout << _uniqueXFromData->rows() * _uniqueYFromData->rows() * features.size() << endl;
   for(int x = 0; x < _uniqueXFromData->rows(); x++)
   {
     for(int y = 0; y < _uniqueYFromData->rows(); y++)
@@ -254,7 +257,14 @@ void Model::calculateProbabilities()
           }
         }
       }
-      (*_conditionals)(x,y) = exp(sum);
+      if(fabs(sum) <= EPSILON)
+      {
+        (*_conditionals)(x,y) = 0.0; // TODO check
+      }
+      else
+      {
+        (*_conditionals)(x,y) = exp(sum);
+      }
     }
   }
 

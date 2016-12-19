@@ -8,7 +8,8 @@ Feature::Feature(int xListIndex, int yListIndex)
 {
   _xListIndex             = xListIndex;
   _yListIndex             = yListIndex;
-  _alphabetSize           = 0.0;
+  _xAlphabetSize          = 0.0;
+  _yAlphabetSize          = 0.0;
 }
 
 int Feature::xListIndex()
@@ -37,14 +38,14 @@ int Feature::getUniqueXCount(int index)
   return _uniqueXCount[index];
 }
 
-void Feature::setRemainingAlphabetSize(double s)
+void Feature::setXAlphabetSize(double x)
 {
-  _alphabetSize = s;
+  _xAlphabetSize = x;
 }
 
-double Feature::getRemainingAlphabetSize()
+double Feature::getXAlphabetSize()
 {
-  return _alphabetSize;
+  return _xAlphabetSize;
 }
 
 void Feature::setYAlphabetSize(double y)
@@ -52,7 +53,7 @@ void Feature::setYAlphabetSize(double y)
   _yAlphabetSize = y;
 }
 
-double Feature::yAlphabetSize()
+double Feature::getYAlphabetSize()
 {
   return _yAlphabetSize;
 }

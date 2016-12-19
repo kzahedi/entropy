@@ -29,7 +29,10 @@ double KL::divergence()
       double p_y_c_x = _p->p_y_c_x(y,x);
       double p_x     = _p->p_x(x);
       double q_y_c_x = _q->p_y_c_x(y,x);
-      sum += p_y_c_x * p_x * (log2(p_y_c_x) - log2(q_y_c_x));
+      if(p_y_c_x > 0.0 && p_x > 0.0 && q_y_c_x > 0.0)
+      {
+        sum += p_y_c_x * p_x * (log2(p_y_c_x) - log2(q_y_c_x));
+      }
     }
   }
   return sum;

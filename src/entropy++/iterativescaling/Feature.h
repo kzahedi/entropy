@@ -25,23 +25,23 @@ namespace entropy
 
         int getUniqueXCount(int index);
 
-        void setRemainingAlphabetSize(double s);
-        double getRemainingAlphabetSize();
+        void setXAlphabetSize(double x);
+        double getXAlphabetSize();
 
         void setYAlphabetSize(double y);
-        double yAlphabetSize();
+        double getYAlphabetSize();
 
         friend std::ostream& operator<<(std::ostream& str, const Feature& m)
         {
           for(vector<Delta*>::const_iterator mf = m.begin(); mf != m.end(); mf++)
-          str << *mf << endl;
+          str << **mf << endl;
           return str;
         };
 
       private:
         int         _xListIndex; // uniqueX index
         int         _yListIndex; // uniqueY index
-        double      _alphabetSize;
+        double      _xAlphabetSize;
         double      _yAlphabetSize;
         vector<int> _uniqueXCount;
     };

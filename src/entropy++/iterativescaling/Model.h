@@ -57,6 +57,15 @@ namespace entropy
         int getNrOfUniqueX();
         int getNrOfUniqueY();
 
+        friend std::ostream& operator<<(std::ostream& str, const Model& m)
+        {
+          for(vector<Feature*>::const_iterator f = m.features.begin(); f != m.features.end(); f++)
+          {
+            str << "Feature: " << std::endl;
+            str << **f << endl;
+          }
+          return str;
+        };
 
       protected:
         vector<Feature*>  features;
