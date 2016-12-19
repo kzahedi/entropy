@@ -176,7 +176,7 @@ void gisTest::testAND()
   ////////////////////////////////////////////////////////////////////////////////
 
   KL* kl = new KL(dependentModel, independentModel);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.001, kl->divergence(), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(EPSILON, kl->divergence(), EPSILON);
   // cout << "AND: " << kl->divergence() << endl;
 }
 
@@ -448,7 +448,7 @@ void gisTest::testXOR()
   ////////////////////////////////////////////////////////////////////////////////
 
   KL* kl = new KL(dependentModel, independentModel);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.001, kl->divergence(), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, kl->divergence(), EPSILON);
   // cout << "XOR: " << kl->divergence() << endl;
 }
 
