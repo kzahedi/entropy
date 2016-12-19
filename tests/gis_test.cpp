@@ -122,14 +122,14 @@ void gisTest::testAND()
   for(int i = 0; i < 500; i++)
   {
     dependentModel->iterate();
-    // cout << dependentModel->error() << endl;
+    cout << dependentModel->error() << endl;
     if(dependentModel->error() < 0.0000000001) break;
   }
 
   dependentModel->calculateProbabilities();
 
-  // cout << "Error: " << dependentModel->error() << endl;
-  // cout << "AND: Dependent model: " << endl << *dependentModel << endl;
+  cout << "Error: " << dependentModel->error() << endl;
+  cout << "AND: Dependent model: " << endl << *dependentModel << endl;
 
   Matrix ipycx(2,4);
   ipycx(0,0) = 1.0;

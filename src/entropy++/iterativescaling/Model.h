@@ -92,6 +92,7 @@ namespace entropy
 
         Matrix* _conditionals;
         Matrix* _marginals;
+        int     _yAlphabetSize;
     };
   }
 }

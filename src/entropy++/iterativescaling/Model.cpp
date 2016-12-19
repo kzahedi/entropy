@@ -7,6 +7,7 @@ using namespace entropy::iterativescaling;
 
 Model::Model()
 {
+  _yAlphabetSize = 0;
 }
 
 void Model::setData(ULContainer *X, ULContainer *Y)
@@ -167,6 +168,12 @@ void Model::countObservedFeatures()
     (*f)->setYAlphabetSize(ySize);
   }
 
+  _yAlphabetSize = 1;
+  for(int c = 0; c < _Y->columns(); c++)
+  {
+    _yAlphabetSize *= _Y->getBinSize(c);
+  }
+
 }
 
 int Model::nrOfFeatures()
@@ -176,24 +183,65 @@ int Model::nrOfFeatures()
 
 void Model::generateExpected()
 {
-  double z = 0.0;
-  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+  for(int j = 0; j < _uniqueXFromData->rows(); j++)
   {
-    for(vector<Delta*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++) // sum_i
+    double s = 0.0;
+    double y_count = 0.0;
+    vector<int> row_indices = _X->findlist(_uniqueXFromData, j); // TODO do this only once
+    for(vector<int>::iterator i = row_indices.begin(); i != row_indices.end(); i++)
     {
-      z += (*mf)->lambda(); // sum must be done for each y \in Alphabet accordingly to the y in the delta
+      for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+      {
+        int xListIndex = (*f)->xListIndex();
+        int yListIndex = (*f)->yListIndex();
+
+        vector<int> fx = _uniqueX[xListIndex]->findlist(_uniqueXFromDataPerFeature[xListIndex],  j);
+        vector<int> fy = _uniqueY[yListIndex]->findlist(_uniqueYFromDataPerFeature[yListIndex], *i);
+
+        for(vector<int>::iterator i = fx.begin(); i != fx.end(); i++)
+        {
+          for(vector<int>::iterator j = fy.begin(); j != fy.end(); j++)
+          {
+            for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
+            {
+              if((*d)->match(*i, *j))
+              {
+                s += (*d)->lambda();
+                y_count++;
+              }
+            }
+          }
+        }
+      }
     }
-  }
+    s = exp(s) + (_yAlphabetSize - y_count);
 
-  // z += exp(0.0);
-
-  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
-  {
-    for(vector<Delta*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
+    for(vector<int>::iterator i = row_indices.begin(); i != row_indices.end(); i++)
     {
-      int    xBar    = (*mf)->getUniqueXIndex();
-      double count   = (*f)->getUniqueXCount(xBar);
-      (*mf)->setExpected( count * exp((*mf)->lambda()) / z );
+      for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+      {
+        int xListIndex = (*f)->xListIndex();
+        int yListIndex = (*f)->yListIndex();
+
+        vector<int> fx = _uniqueX[xListIndex]->findlist(_uniqueXFromDataPerFeature[xListIndex],  j);
+        vector<int> fy = _uniqueY[yListIndex]->findlist(_uniqueYFromDataPerFeature[yListIndex], *i);
+
+        for(vector<int>::iterator i = fx.begin(); i != fx.end(); i++)
+        {
+          for(vector<int>::iterator j = fy.begin(); j != fy.end(); j++)
+          {
+            for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
+            {
+              if((*d)->match(*i, *j))
+              {
+                double e = (*d)->expected();
+                e += exp((*d)->lambda()) / s;
+                (*d)->setExpected(e);
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
