@@ -21,16 +21,6 @@ namespace entropy
         int xListIndex();
         int yListIndex();
 
-        void setUniqueXCount(int index, int count);
-
-        int getUniqueXCount(int index);
-
-        void setXAlphabetSize(double x);
-        double getXAlphabetSize();
-
-        void setYAlphabetSize(double y);
-        double getYAlphabetSize();
-
         friend std::ostream& operator<<(std::ostream& str, const Feature& m)
         {
           for(vector<Delta*>::const_iterator d = m.begin(); d != m.end(); d++) str << **d << endl;
@@ -40,9 +30,6 @@ namespace entropy
       private:
         int         _xListIndex; // uniqueX index
         int         _yListIndex; // uniqueY index
-        double      _xAlphabetSize;
-        double      _yAlphabetSize;
-        vector<int> _uniqueXCount;
     };
   }
 }

@@ -17,16 +17,6 @@ void GIS::iterate()
   generateExpected();
 
   int index = 0;
-  // cout << "GIS: Nach generateExpected: "<< endl;
-  // for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
-  // {
-    // cout << "Feature " << index++ << endl;
-    // int mfindex = 0;
-    // for(vector<Delta*>::iterator mf = (*f)->begin(); mf != (*f)->end(); mf++)
-    // {
-      // cout << "MF " << mfindex++ << " obs: " << (*mf)->observed() << " exp: " << (*mf)->expected() << " lamda: " << (*mf)->lambda() << endl;
-    // }
-  // }
 
   _error = 0.0;
 
@@ -35,29 +25,32 @@ void GIS::iterate()
   double o   = 0.0;
 
 
-  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+  // get f^#
+  for(int j = 0; j < Xdata->rows(); j++)
   {
-    for(vector<Delta*>::iterator mf = (*f)->begin();
-        mf != (*f)->end(); mf++)
+    vector<unsigned long> x_row = Xdata->row(j);
+    for(int y = 0; y < Yalphabet->rows(); y++)
     {
-      if((*mf)->lambda() > max) max = (*mf)->lambda();
-    }
+      vector<unsigned long> Y = Yalphabet->row(y);
+
+      double f = 0.9;
+
+      for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+      {
+        if((*d)->matchXY(x_row, Y))
+        {
+          f += (*d)->lambda();
+        }
+      }
+      if(f > max) max = f;
   }
 
-  // cout << "Max: " << max << endl;
-
-  // cout << "Nach update: "<< endl;
-  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
-  {
-    for(vector<Delta*>::iterator mf = (*f)->begin();
-        mf != (*f)->end(); mf++)
+    for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
     {
-      // ueber relations iterieren
-      double o = (*mf)->lambda(); // old
-      double n = o + (1.0/max)    // new
-        * log((*mf)->observed() / (*mf)->expected());
-      (*mf)->setLambda(n);
-      _error += fabs((*mf)->observed() - (*mf)->expected());
+      // double o = (*d)->lambda(); // old
+      double n = (*d)->lambda() + (1.0/max) * log((*d)->observed() / (*d)->expected());
+      (*d)->setLambda(n);
+      _error += fabs((*d)->observed() - (*d)->expected());
     }
   }
 }

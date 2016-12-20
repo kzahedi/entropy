@@ -16,8 +16,9 @@ class containerTest : public CppUnit::TestFixture
   CPPUNIT_TEST(testNormaliseColumn);
   CPPUNIT_TEST(testMerge);
   CPPUNIT_TEST(testFillMode);
+  CPPUNIT_TEST(testEqual);
   CPPUNIT_TEST(testUnique1);
-  CPPUNIT_TEST(testUnique1);
+  CPPUNIT_TEST(testUnique2);
   CPPUNIT_TEST(testFind1);
   CPPUNIT_TEST(testFind2);
   CPPUNIT_TEST(testFindList1);
@@ -27,6 +28,9 @@ class containerTest : public CppUnit::TestFixture
   CPPUNIT_TEST(testFindList1ByContainer);
   CPPUNIT_TEST(testFindList2ByContainer);
   CPPUNIT_TEST(testFindList3ByContainer);
+  CPPUNIT_TEST(testFindList4ByContainer);
+  CPPUNIT_TEST(testGetRow1);
+  CPPUNIT_TEST(testGetRow2);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -55,5 +59,9 @@ class containerTest : public CppUnit::TestFixture
     void testFindList1ByContainer();
     void testFindList2ByContainer();
     void testFindList3ByContainer();
+    void testFindList4ByContainer();
+    void testGetRow1();
+    void testGetRow2();
+    void testEqual();
 
 };

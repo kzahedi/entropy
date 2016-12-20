@@ -30,9 +30,6 @@ namespace entropy
         ULContainer* X();
         ULContainer* Y();
 
-        ULContainer* uniqueX(int i);
-        ULContainer* uniqueY(int i);
-
         void createUniqueContainer();
 
         void setData(ULContainer* X, ULContainer* Y);
@@ -73,25 +70,15 @@ namespace entropy
         vector<Feature*> features;
         vector<Delta*>   deltas;
 
+        ULContainer*  Xdata;
+        ULContainer*  Ydata;
+        ULContainer*  Xalphabet;
+        ULContainer*  Yalphabet;
+
       private:
 
         int           _nrX;
         int           _nrY;
-
-        ULContainer*  _X;
-        ULContainer*  _Y;
-
-        ULContainer*  _uniqueXFromData;
-        ULContainer*  _uniqueYFromData;
-
-        ULContainer** _uniqueXFromDataPerFeature;
-        ULContainer** _uniqueYFromDataPerFeature;
-
-        ULContainer** _xFromDataPerFeature;
-        ULContainer** _yFromDataPerFeature;
-
-        ULContainer** _uniqueX;
-        ULContainer** _uniqueY;
 
         vector<vector<int> > _Xindices;
         vector<vector<int> > _Yindices;

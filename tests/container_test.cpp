@@ -414,7 +414,8 @@ void containerTest::testFillMode()
 
 void containerTest::testUnique1()
 {
-  ULContainer* container = new ULContainer(10,5);
+  IContainer* container  = new IContainer(10,5);
+  IContainer* uniqueTest = new IContainer(1,5);
 
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 3 << 4 << 5;
@@ -427,14 +428,18 @@ void containerTest::testUnique1()
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 3 << 4 << 5;
 
-  ULContainer *unique = container->unique();
+  *uniqueTest << 1 << 2 << 3 << 4 << 5;
+
+  IContainer *unique = container->unique();
 
   CPPUNIT_ASSERT_EQUAL(1, unique->rows());
+  CPPUNIT_ASSERT(uniqueTest->equals(unique));
 }
 
 void containerTest::testUnique2()
 {
-  ULContainer* container = new ULContainer(10,5);
+  IContainer* container  = new IContainer(10,5);
+  IContainer* uniqueTest = new IContainer(4,5);
 
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 2 << 2 << 3 << 4 << 5;
@@ -447,14 +452,20 @@ void containerTest::testUnique2()
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 5 << 4 << 5;
 
-  ULContainer *unique = container->unique();
+  *uniqueTest << 1 << 2 << 3 << 4 << 5;
+  *uniqueTest << 2 << 2 << 3 << 4 << 5;
+  *uniqueTest << 1 << 2 << 1 << 4 << 5;
+  *uniqueTest << 1 << 2 << 5 << 4 << 5;
 
+  IContainer *unique = container->unique();
+
+  CPPUNIT_ASSERT(uniqueTest->equals(unique));
   CPPUNIT_ASSERT_EQUAL(4, unique->rows());
 }
 
 void containerTest::testFind1()
 {
-  ULContainer* container = new ULContainer(10,5);
+  IContainer* container = new IContainer(10,5);
 
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 3 << 4 << 5;
@@ -467,7 +478,7 @@ void containerTest::testFind1()
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 3 << 4 << 5;
 
-  unsigned long *v = new unsigned long[5];
+  int *v = new int[5];
   v[0] = 1;
   v[1] = 2;
   v[2] = 3;
@@ -480,7 +491,7 @@ void containerTest::testFind1()
 
 void containerTest::testFind2()
 {
-  ULContainer* container = new ULContainer(10,5);
+  IContainer* container = new IContainer(10,5);
 
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 2 << 2 << 3 << 4 << 5;
@@ -493,7 +504,7 @@ void containerTest::testFind2()
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 5 << 4 << 5;
 
-  unsigned long *v = new unsigned long[5];
+  int *v = new int[5];
   int r = -1;
 
   v[0] = 1; v[1] = 2; v[2] = 3; v[3] = 4; v[4] = 5;
@@ -515,7 +526,7 @@ void containerTest::testFind2()
 
 void containerTest::testFindList1()
 {
-  ULContainer* container = new ULContainer(10,5);
+  IContainer* container = new IContainer(10,5);
 
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 3 << 4 << 5;
@@ -528,7 +539,7 @@ void containerTest::testFindList1()
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 3 << 4 << 5;
 
-  unsigned long *v = new unsigned long[5];
+  int *v = new int[5];
   v[0] = 1;
   v[1] = 2;
   v[2] = 3;
@@ -545,7 +556,7 @@ void containerTest::testFindList1()
 
 void containerTest::testFindList2()
 {
-  ULContainer* container = new ULContainer(10,5);
+  IContainer* container = new IContainer(10,5);
 
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 2 << 2 << 3 << 4 << 5;
@@ -558,7 +569,7 @@ void containerTest::testFindList2()
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 5 << 4 << 5;
 
-  unsigned long *v = new unsigned long[5];
+  int *v = new int[5];
   vector<int> r;
 
   v[0] = 1; v[1] = 2; v[2] = 3; v[3] = 4; v[4] = 5;
@@ -591,7 +602,7 @@ void containerTest::testFindList2()
 
 void containerTest::testFind1ByContainer()
 {
-  ULContainer* container = new ULContainer(10,5);
+  IContainer* container = new IContainer(10,5);
 
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 3 << 4 << 5;
@@ -604,7 +615,7 @@ void containerTest::testFind1ByContainer()
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 3 << 4 << 5;
 
-  ULContainer* unique = new ULContainer(1,5);
+  IContainer* unique = new IContainer(1,5);
   *unique << 1 << 2 << 3 << 4 << 5;
 
   int r = container->find(unique, 0);
@@ -614,7 +625,8 @@ void containerTest::testFind1ByContainer()
 
 void containerTest::testFind2ByContainer()
 {
-  ULContainer* container = new ULContainer(10,5);
+  IContainer* container  = new IContainer(10,5);
+  IContainer* uniqueTest = new IContainer(4,5);
 
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 2 << 2 << 3 << 4 << 5;
@@ -627,17 +639,24 @@ void containerTest::testFind2ByContainer()
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 5 << 4 << 5;
 
-  ULContainer *unique = container->unique();
+  *uniqueTest << 1 << 2 << 3 << 4 << 5;
+  *uniqueTest << 2 << 2 << 3 << 4 << 5;
+  *uniqueTest << 1 << 2 << 1 << 4 << 5;
+  *uniqueTest << 1 << 2 << 5 << 4 << 5;
+
+  IContainer *unique = container->unique();
   int r = -1;
 
+  CPPUNIT_ASSERT(uniqueTest->equals(unique));
+
   r = container->find(unique, 0);
-  CPPUNIT_ASSERT_EQUAL(1, r);
+  CPPUNIT_ASSERT_EQUAL(0, r);
 
   r = container->find(unique, 1);
-  CPPUNIT_ASSERT_EQUAL(5, r);
+  CPPUNIT_ASSERT_EQUAL(1, r);
 
   r = container->find(unique, 2);
-  CPPUNIT_ASSERT_EQUAL(0, r);
+  CPPUNIT_ASSERT_EQUAL(5, r);
 
   r = container->find(unique, 3);
   CPPUNIT_ASSERT_EQUAL(9, r);
@@ -646,7 +665,7 @@ void containerTest::testFind2ByContainer()
 
 void containerTest::testFindList1ByContainer()
 {
-  ULContainer* container = new ULContainer(10,5);
+  IContainer* container = new IContainer(10,5);
 
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 3 << 4 << 5;
@@ -659,7 +678,7 @@ void containerTest::testFindList1ByContainer()
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 3 << 4 << 5;
 
-  ULContainer *unique = container->unique();
+  IContainer *unique = container->unique();
 
   vector<int> r = container->findlist(unique, 0);
 
@@ -672,7 +691,8 @@ void containerTest::testFindList1ByContainer()
 
 void containerTest::testFindList2ByContainer()
 {
-  ULContainer* container = new ULContainer(10,5);
+  IContainer* container  = new IContainer(10,5);
+  IContainer* uniqueTest = new IContainer(4,5);
 
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 2 << 2 << 3 << 4 << 5;
@@ -685,27 +705,34 @@ void containerTest::testFindList2ByContainer()
   *container << 1 << 2 << 3 << 4 << 5;
   *container << 1 << 2 << 5 << 4 << 5;
 
-  ULContainer* unique = container->unique();
+  *uniqueTest << 1 << 2 << 3 << 4 << 5;
+  *uniqueTest << 2 << 2 << 3 << 4 << 5;
+  *uniqueTest << 1 << 2 << 1 << 4 << 5;
+  *uniqueTest << 1 << 2 << 5 << 4 << 5;
+
+  IContainer* unique = container->unique();
+
+  CPPUNIT_ASSERT(unique->equals(uniqueTest));
 
   vector<int> r;
 
   r = container->findlist(unique, 0);
-  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(1, r[0]);
-  CPPUNIT_ASSERT_EQUAL(3, r[1]);
-
-  r = container->findlist(unique, 1);
-  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(5, r[0]);
-  CPPUNIT_ASSERT_EQUAL(7, r[1]);
-
-  r = container->findlist(unique, 2);
   CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
   CPPUNIT_ASSERT_EQUAL(0, r[0]);
   CPPUNIT_ASSERT_EQUAL(2, r[1]);
   CPPUNIT_ASSERT_EQUAL(4, r[2]);
   CPPUNIT_ASSERT_EQUAL(6, r[3]);
   CPPUNIT_ASSERT_EQUAL(8, r[4]);
+
+  r = container->findlist(unique, 1);
+  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(1, r[0]);
+  CPPUNIT_ASSERT_EQUAL(3, r[1]);
+
+  r = container->findlist(unique, 2);
+  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(5, r[0]);
+  CPPUNIT_ASSERT_EQUAL(7, r[1]);
 
   r = container->findlist(unique, 3);
   CPPUNIT_ASSERT_EQUAL(1, (int)r.size());
@@ -714,7 +741,7 @@ void containerTest::testFindList2ByContainer()
 
 void containerTest::testFindList3ByContainer()
 {
-  ULContainer* container = new ULContainer(10,5);
+  IContainer* container = new IContainer(10,5);
 
   *container << 1 << 2 << 1  << 11 << 21;
   *container << 1 << 2 << 2  << 12 << 22;
@@ -749,4 +776,145 @@ void containerTest::testFindList3ByContainer()
   CPPUNIT_ASSERT_EQUAL(5, r[0]);
   CPPUNIT_ASSERT_EQUAL(9, r[1]);
 
+}
+
+void containerTest::testFindList4ByContainer()
+{
+  IContainer* container = new IContainer(10,5);
+
+  *container << 1 << 2 << 1  << 11 << 21;
+  *container << 1 << 2 << 2  << 12 << 22;
+  *container << 1 << 2 << 3  << 13 << 23;
+  *container << 1 << 2 << 4  << 14 << 24;
+  *container << 1 << 2 << 5  << 15 << 25;
+  *container << 1 << 3 << 10 << 16 << 26;
+  *container << 1 << 3 << 7  << 17 << 27;
+  *container << 1 << 3 << 8  << 18 << 28;
+  *container << 1 << 3 << 9  << 19 << 29;
+  *container << 1 << 3 << 10 << 20 << 30;
+
+  vector<int> r;
+  vector<int> indices;
+  indices.push_back(0);
+  indices.push_back(1);
+  vector<int> values;
+  values.push_back(1);
+  values.push_back(2);
+
+  r = container->findlist(values, indices);
+  CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(0, r[0]);
+  CPPUNIT_ASSERT_EQUAL(1, r[1]);
+  CPPUNIT_ASSERT_EQUAL(2, r[2]);
+  CPPUNIT_ASSERT_EQUAL(3, r[3]);
+  CPPUNIT_ASSERT_EQUAL(4, r[4]);
+
+  indices.clear();
+  indices.push_back(0);
+  indices.push_back(2);
+  values.clear();
+  values.push_back(1);
+  values.push_back(10);
+
+  r = container->findlist(container, 5, indices);
+  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(5, r[0]);
+  CPPUNIT_ASSERT_EQUAL(9, r[1]);
+
+}
+
+void containerTest::testGetRow1()
+{
+  IContainer* container = new IContainer(10,5);
+
+  *container << 1 << 2 << 1  << 11 << 21;
+  *container << 1 << 2 << 2  << 12 << 22;
+  *container << 1 << 2 << 3  << 13 << 23;
+  *container << 1 << 2 << 4  << 14 << 24;
+  *container << 1 << 2 << 5  << 15 << 25;
+  *container << 1 << 3 << 10 << 16 << 26;
+  *container << 1 << 3 << 7  << 17 << 27;
+  *container << 1 << 3 << 8  << 18 << 28;
+  *container << 1 << 3 << 9  << 19 << 29;
+  *container << 1 << 3 << 10 << 20 << 30;
+
+  vector<int> r = container->row(0);
+
+  CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(1,  r[0]);
+  CPPUNIT_ASSERT_EQUAL(2,  r[1]);
+  CPPUNIT_ASSERT_EQUAL(1,  r[2]);
+  CPPUNIT_ASSERT_EQUAL(11, r[3]);
+  CPPUNIT_ASSERT_EQUAL(21, r[4]);
+
+  r = container->row(1);
+
+  CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(1,  r[0]);
+  CPPUNIT_ASSERT_EQUAL(2,  r[1]);
+  CPPUNIT_ASSERT_EQUAL(2,  r[2]);
+  CPPUNIT_ASSERT_EQUAL(12, r[3]);
+  CPPUNIT_ASSERT_EQUAL(22, r[4]);
+
+  r = container->row(2);
+
+  CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(1,  r[0]);
+  CPPUNIT_ASSERT_EQUAL(2,  r[1]);
+  CPPUNIT_ASSERT_EQUAL(3,  r[2]);
+  CPPUNIT_ASSERT_EQUAL(13, r[3]);
+  CPPUNIT_ASSERT_EQUAL(23, r[4]);
+
+}
+
+void containerTest::testGetRow2()
+{
+  IContainer* container = new IContainer(10,5);
+
+  *container << 1 << 2 << 1  << 11 << 21;
+  *container << 1 << 2 << 2  << 12 << 22;
+  *container << 1 << 2 << 3  << 13 << 23;
+  *container << 1 << 2 << 4  << 14 << 24;
+  *container << 1 << 2 << 5  << 15 << 25;
+  *container << 1 << 3 << 10 << 16 << 26;
+  *container << 1 << 3 << 7  << 17 << 27;
+  *container << 1 << 3 << 8  << 18 << 28;
+  *container << 1 << 3 << 9  << 19 << 29;
+  *container << 1 << 3 << 10 << 20 << 30;
+
+  vector<int> indices;
+  indices.push_back(3);
+  indices.push_back(4);
+  vector<int> r = container->row(0, indices);
+
+  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(11, r[0]);
+  CPPUNIT_ASSERT_EQUAL(21, r[1]);
+
+  r = container->row(1, indices);
+  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(12, r[0]);
+  CPPUNIT_ASSERT_EQUAL(22, r[1]);
+
+  r = container->row(2, indices);
+  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
+  CPPUNIT_ASSERT_EQUAL(13, r[0]);
+  CPPUNIT_ASSERT_EQUAL(23, r[1]);
+
+}
+
+void containerTest::testEqual()
+{
+  IContainer* A = new IContainer(10,5);
+  IContainer* B = new IContainer(10,5);
+
+  for(int r = 0; r < 10; r++)
+  {
+    for(int c = 0; c < 5; c++)
+    {
+      *A << (r + c);
+      *B << (r + c);
+    }
+  }
+  CPPUNIT_ASSERT(A->equals(B));
 }

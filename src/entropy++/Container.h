@@ -148,6 +148,20 @@ namespace entropy
           return *this;
         }
 
+        bool equals(Container<T>* other)
+        {
+          if(this->rows()    != other->rows())    return false;
+          if(this->columns() != other->columns()) return false;
+          for(int r = 0; r < this->rows(); r++)
+          {
+            for(int c = 0; c < this->columns(); c++)
+            {
+              if(this->get(r,c) != other->get(r,c)) return false;
+            }
+          }
+          return true;
+        }
+
         const Container& operator<<(const T& value) const
         {
           assert(_fillIndex < _rows * _columns);
@@ -582,7 +596,7 @@ namespace entropy
         {
           // Container<T> *new = new Container<T>(this->rows(), 1);
           vector<T> values;
-          for(int c = 0; c < this->columns(); c++)
+          for(int c = this->columns()-1; c >= 0; c--)
           {
             for(int r = 0; r < this->rows(); r++)
             {
@@ -595,7 +609,7 @@ namespace entropy
             }
           }
           Container<T>* new_container = new Container<T>(values.size(), 1);
-          for(int i = 0; i < values.size(); i++)
+          for(int i = values.size()-1; i >= 0; i++)
           {
             *new_container << values[i];
           }
@@ -604,37 +618,39 @@ namespace entropy
 
         Container<T>* unique()
         {
-          // Container<T> *new = new Container<T>(this->rows(), 1);
-          vector<int> uniqueIndices;
-          for(int row1 = 0; row1 < this->rows(); row1++)
+          vector<vector<T> > new_container;
+          for(int r = 0; r < this->rows(); r++)
           {
+            vector<T> row = this->row(r);
             bool found = false;
-            for(int row2 = row1 + 1; row2 < this->rows(); row2++)
+            for(typename vector<vector<T> >::iterator w = new_container.begin(); w != new_container.end(); w++)
             {
               bool rowEqual = true;
-              for(int c = 0; c < this->columns(); c++)
+              for(int i = 0; i < (int)row.size(); i++)
               {
-                rowEqual &= (this->get(row1, c) == this->get(row2, c));
+                rowEqual &= ((*w)[i] == row[i]);
                 if(rowEqual == false) break;
               }
-              if(rowEqual == true)
-              {
-                found = true;
-                break;
-              }
+              found |= rowEqual;
+              if(found == true) break;
             }
-            if(found == false) uniqueIndices.push_back(row1);
+            if(found == false)
+            {
+              new_container.push_back(row);
+            }
           }
 
-          Container<T>* new_container = new Container<T>(uniqueIndices.size(), this->columns());
-          for(int i = 0; i < uniqueIndices.size(); i++)
+          Container<T> *nc = new Container<T>((int)new_container.size(), this->columns());
+
+          for(typename vector<vector<T> >::iterator r = new_container.begin(); r != new_container.end(); r++)
           {
-            for(int c = 0; c < this->columns(); c++)
+            for(typename vector<T>::iterator i = (*r).begin(); i != (*r).end(); i++)
             {
-              *new_container << this->get(uniqueIndices[i], c);
+              *nc << *i;
             }
           }
-          return new_container;
+
+          return nc;
         }
 
         int find(T* values)
@@ -718,6 +734,43 @@ namespace entropy
             if(found == true) indices.push_back(r);
           }
           return indices;
+        }
+
+        vector<int> findlist(std::vector<int>& values, std::vector<int>& columns)
+        {
+          vector<int> indices;
+          bool found = false;
+          for(int r = 0; r < this->rows(); r++)
+          {
+            found = true;
+            for(int c = 0; c < (int)columns.size(); c++)
+            {
+              found &= (this->get(r,columns[c]) == values[c]);
+              if(found == false) break;
+            }
+            if(found == true) indices.push_back(r);
+          }
+          return indices;
+        }
+
+        vector<T> row(int row)
+        {
+          vector<T> r;
+          for(int c = 0; c < _columns; c++)
+          {
+            r.push_back(_data[row][c]);
+          }
+          return r;
+        }
+
+        vector<int> row(int row, vector<int>& columns)
+        {
+          vector<int> r;
+          for(int c = 0; c < (int)columns.size(); c++)
+          {
+            r.push_back(_data[row][columns[c]]);
+          }
+          return r;
         }
 
       private:
