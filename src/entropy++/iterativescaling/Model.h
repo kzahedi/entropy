@@ -57,11 +57,10 @@ namespace entropy
         friend std::ostream& operator<<(std::ostream& str, const Model& m)
         {
           int index = 0;
-          for(vector<Feature*>::const_iterator f = m.features.begin(); f != m.features.end(); f++)
+          for(vector<Delta*>::const_iterator d = m.deltas.begin(); d != m.deltas.end(); d++)
           {
             index++;
-            str << "Feature " << index << ": " << endl;
-            cout << **f;
+            str << "Delta " << index << ": " << **d << endl;
           }
           return str;
         };

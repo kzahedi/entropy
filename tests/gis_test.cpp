@@ -61,35 +61,35 @@ void gisTest::testAND()
   ////////////////////////////////////////////////////////////////////////////////
   // dependent model
   ////////////////////////////////////////////////////////////////////////////////
-  vector<vector<int> > ia;
-  vector<vector<int> > ib;
+  // vector<vector<int> > ia;
+  // vector<vector<int> > ib;
 
-  vector<int> iaa;
-  iaa.push_back(0);
-  ia.push_back(iaa);
-  vector<int> iab;
-  iab.push_back(1);
-  ia.push_back(iab);
+  // vector<int> iaa;
+  // iaa.push_back(0);
+  // ia.push_back(iaa);
+  // vector<int> iab;
+  // iab.push_back(1);
+  // ia.push_back(iab);
 
-  vector<int> ibb;
-  ibb.push_back(0);
-  ib.push_back(ibb);
+  // vector<int> ibb;
+  // ibb.push_back(0);
+  // ib.push_back(ibb);
 
-  vector<Feature*> features;
-  features.push_back(new Feature(0,0));
-  features.push_back(new Feature(1,0));
+  // vector<Feature*> features;
+  // features.push_back(new Feature(0,0));
+  // features.push_back(new Feature(1,0));
 
-  GIS* independentModel = new GIS();
-  independentModel->setData(xData, yData);
-  independentModel->setFeatures(ia,ib,features);
-  independentModel->init();
+  // GIS* independentModel = new GIS();
+  // independentModel->setData(xData, yData);
+  // independentModel->setFeatures(ia,ib,features);
+  // independentModel->init();
 
-  for(int i = 0; i < 20; i++)
-  {
-    independentModel->iterate();
-    cout << endl << "Error independent model (" << i << "): " << independentModel->error() << endl;
-    cout << *independentModel;
-  }
+  // for(int i = 0; i < 5; i++)
+  // {
+    // independentModel->iterate();
+    // cout << endl << "Error independent model (" << i << "): " << independentModel->error() << endl;
+    // cout << *independentModel;
+  // }
 
   // independentModel->calculateProbabilities();
 
@@ -100,33 +100,34 @@ void gisTest::testAND()
   ////////////////////////////////////////////////////////////////////////////////
   // dependent model
   ////////////////////////////////////////////////////////////////////////////////
-  // vector<vector<int> > da;
-  // vector<vector<int> > db;
+  vector<vector<int> > da;
+  vector<vector<int> > db;
 
-  // vector<int> daa;
-  // daa.push_back(0);
-  // daa.push_back(1);
-  // da.push_back(daa);
+  vector<int> daa;
+  daa.push_back(0);
+  daa.push_back(1);
+  da.push_back(daa);
 
-  // vector<int> dbb;
-  // dbb.push_back(0);
-  // db.push_back(dbb);
+  vector<int> dbb;
+  dbb.push_back(0);
+  db.push_back(dbb);
 
-  // vector<Feature*> dfeatures;
-  // dfeatures.push_back(new Feature(0,0));
+  vector<Feature*> dfeatures;
+  dfeatures.push_back(new Feature(0,0));
 
-  // GIS* dependentModel = new GIS();
-  // dependentModel->setData(xData, yData);
-  // dependentModel->setFeatures(da,db,dfeatures);
-  // dependentModel->init();
+  GIS* dependentModel = new GIS();
+  dependentModel->setData(xData, yData);
+  dependentModel->setFeatures(da,db,dfeatures);
+  dependentModel->init();
 
 
-  // for(int i = 0; i < 500; i++)
-  // {
-    // dependentModel->iterate();
-    // cout << "Error dependent model (" << i << "): " << dependentModel->error() << endl;
-    // if(dependentModel->error() < 0.0000000001) break;
-  // }
+  for(int i = 0; i < 15; i++)
+  {
+    dependentModel->iterate();
+    cout << "Error dependent model (" << i << "): " << dependentModel->error() << endl;
+    cout << *dependentModel;
+    if(dependentModel->error() < 0.0000000001) break;
+  }
 
   // dependentModel->calculateProbabilities();
 

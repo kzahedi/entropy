@@ -49,13 +49,13 @@ namespace entropy
           {
             cout << m._xValues[i] << ",";
           }
-          cout << m._xValues[m._xValues.size() - 1] << ") ";
+          cout << m._xValues[m._xValues.size() - 1] << ")";
           str << ", Y: (";
           for(int i = 0; i < (int)m._yValues.size()-1; i++)
           {
             cout << m._yValues[i] << ",";
           }
-          cout << m._yValues[m._yValues.size() - 1] << ") ";
+          cout << m._yValues[m._yValues.size() - 1] << ")";
           str << ", Obs: " << m._observed;
           str << ", Exp: " << m._expected << "]";
           return str;

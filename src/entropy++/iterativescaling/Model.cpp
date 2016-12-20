@@ -95,30 +95,42 @@ int Model::nrOfFeatures()
 
 void Model::generateExpected()
 {
+  vector<double> d(deltas.size());
+
+  double sum = 0.0;
   for(int j = 0; j < Xdata->rows(); j++)
   {
     double z = 0.0;
-
     vector<unsigned long> x_row = Xdata->row(j);
-
-    for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+    for(int y = 0; y < Yalphabet->rows(); y++)
     {
-      if((*d)->matchX(x_row))
+      double s = 0.0;
+      vector<unsigned long> y_row = Yalphabet->row(y);
+      for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
       {
-        z += (*d)->lambda();
+        if((*d)->matchXY(x_row, y_row))
+        {
+          s += (*d)->lambda();
+        }
+      }
+      z += exp(s);
+      for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+      {
+        if((*d)->matchXY(x_row, y_row))
+        {
+          (*d)->setExpected((*d)->expected() + exp(s));
+        }
       }
     }
-
-    z = exp(z);
-    for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+    for(int y = 0; y < Yalphabet->rows(); y++)
     {
-      if((*d)->matchX(x_row))
+      vector<unsigned long> y_row = Yalphabet->row(y);
+      for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
       {
-        double e = (*d)->expected();
-        // cout << "1. e: " << e << endl;
-        e += (*d)->lambda() / z;
-        // cout << "2. e: " << e << endl;
-        (*d)->setExpected(e);
+        if((*d)->matchXY(x_row, y_row))
+        {
+          (*d)->setExpected((*d)->expected() / z);
+        }
       }
     }
   }
