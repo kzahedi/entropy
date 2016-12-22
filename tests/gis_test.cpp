@@ -59,43 +59,40 @@ void gisTest::testAND()
   *yData << 1;
 
   ////////////////////////////////////////////////////////////////////////////////
-  // dependent model
+  // independent model
   ////////////////////////////////////////////////////////////////////////////////
-  // vector<vector<int> > ia;
-  // vector<vector<int> > ib;
+  vector<vector<int> > ia;
+  vector<vector<int> > ib;
 
-  // vector<int> iaa;
-  // iaa.push_back(0);
-  // ia.push_back(iaa);
-  // vector<int> iab;
-  // iab.push_back(1);
-  // ia.push_back(iab);
+  vector<int> iaa;
+  iaa.push_back(0);
+  ia.push_back(iaa);
+  vector<int> iab;
+  iab.push_back(1);
+  ia.push_back(iab);
 
-  // vector<int> ibb;
-  // ibb.push_back(0);
-  // ib.push_back(ibb);
+  vector<int> ibb;
+  ibb.push_back(0);
+  ib.push_back(ibb);
 
-  // vector<Feature*> features;
-  // features.push_back(new Feature(0,0));
-  // features.push_back(new Feature(1,0));
+  vector<Feature*> features;
+  features.push_back(new Feature(0,0));
+  features.push_back(new Feature(1,0));
 
-  // GIS* independentModel = new GIS();
-  // independentModel->setData(xData, yData);
-  // independentModel->setFeatures(ia,ib,features);
-  // independentModel->init();
+  GIS* independentModel = new GIS();
+  independentModel->setData(xData, yData);
+  independentModel->setFeatures(ia,ib,features);
+  independentModel->init();
 
-  // for(int i = 0; i < 5; i++)
-  // {
-    // independentModel->iterate();
-    // cout << endl << "Error independent model (" << i << "): " << independentModel->error() << endl;
-    // cout << *independentModel;
-  // }
+  for(int i = 0; i < 10000; i++)
+  {
+    independentModel->iterate();
+    if(independentModel->error() < EPSILON) break;
+  }
 
-  // independentModel->calculateProbabilities();
+  independentModel->calculateProbabilities();
 
-
-  // cout << "AND: Independent model: " << endl << *independentModel << endl;
-
+  cout << "AND: Independent model: " << endl << *independentModel << endl;
 
   ////////////////////////////////////////////////////////////////////////////////
   // dependent model
@@ -120,53 +117,52 @@ void gisTest::testAND()
   dependentModel->setFeatures(da,db,dfeatures);
   dependentModel->init();
 
-
-  for(int i = 0; i < 15; i++)
+  for(int i = 0; i < 1000; i++)
   {
     dependentModel->iterate();
-    cout << "Error dependent model (" << i << "): " << dependentModel->error() << endl;
-    cout << *dependentModel;
-    if(dependentModel->error() < 0.0000000001) break;
+    // cout << "Error: " << dependentModel->error() << endl;
+    // cout << *dependentModel << endl;
+    if(dependentModel->error() < EPSILON) break;
   }
 
-  // dependentModel->calculateProbabilities();
+  dependentModel->calculateProbabilities();
 
-  // cout << "Final Error: " << dependentModel->error() << endl;
-  // cout << "AND: Dependent model: " << endl << *dependentModel << endl;
+  cout << "Final Error: " << dependentModel->error() << endl;
+  cout << "AND: Dependent model: " << endl << *dependentModel << endl;
 
-  // Matrix ipycx(2,4);
-  // ipycx(0,0) = 1.0;
-  // ipycx(0,1) = 1.0;
-  // ipycx(0,2) = 1.0;
-  // ipycx(1,3) = 1.0;
+  Matrix ipycx(2,4);
+  ipycx(0,0) = 1.0;
+  ipycx(0,1) = 1.0;
+  ipycx(0,2) = 1.0;
+  ipycx(1,3) = 1.0;
 
-  // Matrix ipx(1,4);
-  // ipx(0,0) = 1.0/4.0;
-  // ipx(0,1) = 1.0/4.0;
-  // ipx(0,2) = 1.0/4.0;
-  // ipx(0,3) = 1.0/4.0;
+  Matrix ipx(1,4);
+  ipx(0,0) = 1.0/4.0;
+  ipx(0,1) = 1.0/4.0;
+  ipx(0,2) = 1.0/4.0;
+  ipx(0,3) = 1.0/4.0;
 
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,0), dependentModel->p_y_c_x(0,0), EPSILON);
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,1), dependentModel->p_y_c_x(0,1), EPSILON);
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,2), dependentModel->p_y_c_x(0,2), EPSILON);
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,3), dependentModel->p_y_c_x(0,3), EPSILON);
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,0), dependentModel->p_y_c_x(1,0), EPSILON);
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,1), dependentModel->p_y_c_x(1,1), EPSILON);
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,2), dependentModel->p_y_c_x(1,2), EPSILON);
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,3), dependentModel->p_y_c_x(1,3), EPSILON);
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,0), dependentModel->p_x(0), EPSILON);
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,1), dependentModel->p_x(1), EPSILON);
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,2), dependentModel->p_x(2), EPSILON);
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,3), dependentModel->p_x(3), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,0), dependentModel->p_y_c_x(0,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,1), dependentModel->p_y_c_x(0,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,2), dependentModel->p_y_c_x(0,2), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,3), dependentModel->p_y_c_x(0,3), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,0), dependentModel->p_y_c_x(1,0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,1), dependentModel->p_y_c_x(1,1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,2), dependentModel->p_y_c_x(1,2), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,3), dependentModel->p_y_c_x(1,3), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,0), dependentModel->p_x(0), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,1), dependentModel->p_x(1), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,2), dependentModel->p_x(2), EPSILON);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,3), dependentModel->p_x(3), EPSILON);
  
 
   ////////////////////////////////////////////////////////////////////////////////
   // Synergy
   ////////////////////////////////////////////////////////////////////////////////
 
-  // KL* kl = new KL(dependentModel, independentModel);
+  KL* kl = new KL(dependentModel, independentModel);
   // CPPUNIT_ASSERT_DOUBLES_EQUAL(EPSILON, kl->divergence(), EPSILON);
-  // cout << "AND: " << kl->divergence() << endl;
+  cout << "AND: " << kl->divergence() << endl;
 }
 
 void gisTest::testOR()

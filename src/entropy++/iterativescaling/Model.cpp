@@ -44,28 +44,39 @@ void Model::createUniqueContainer()
 {
   Xalphabet = Xdata->unique();
   Yalphabet = Ydata->unique();
+  _s.resize(Yalphabet->rows());
+
+  _yAlphabetSize = 1.0;
+  for(int c = 0; c < Yalphabet->columns(); c++)
+  {
+    _yAlphabetSize *= Yalphabet->getBinSize(c);
+  }
 }
 
 void Model::countObservedFeatures()
 {
-  for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
+  for(int d = 0; d < Xdata->rows(); d++)
   {
-    int i = (*f)->xListIndex();
-    int k = (*f)->yListIndex();
+    vector<unsigned long> xrow = Xdata->row(d);
+    vector<unsigned long> yrow = Ydata->row(d);
 
-    vector<int> xIndices = _Xindices[i];
-    vector<int> yIndices = _Yindices[k];
+    // cout << "X: ";
+    // for(int i = 0; i < xrow.size() - 1; i++)
+    // {
+      // cout << xrow[i] << ", ";
+    // }
+    // cout << xrow[xrow.size()-1];
+    // cout << "  --  Y: ";
+    // for(int i = 0; i < yrow.size() - 1; i++)
+    // {
+      // cout << yrow[i] << ", ";
+    // }
+    // cout << yrow[yrow.size()-1];
+    // cout << endl;
 
-    for(vector<int>::iterator xx = xIndices.begin(); xx != xIndices.end(); xx++)
+
+    for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
     {
-      cout << *xx << " ";
-    }
-    cout << endl;
-
-    for(int d = 0; d < Xdata->rows(); d++)
-    {
-      vector<unsigned long> xrow = Xdata->row(d);
-      vector<unsigned long> yrow = Ydata->row(d);
 
       bool found = false;
       for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
@@ -73,19 +84,27 @@ void Model::countObservedFeatures()
         if((*d)->matchXY(xrow,yrow))
         {
           (*d)->incObserved();
+          // cout << "found: " << **d << endl;
           found = true;
-          break;
         }
       }
       if(found == false)
       {
+        vector<int> xIndices = _Xindices[(*f)->xListIndex()];
+        vector<int> yIndices = _Yindices[(*f)->yListIndex()];
         Delta *d = new Delta(xrow, xIndices, yrow, yIndices);
         d->incObserved();
-        (*f)->push_back(d);
+        // cout << "adding: " << *d << endl;
         deltas.push_back(d);
+        (*f)->push_back(d);
       }
     }
   }
+
+  // for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+  // {
+    // (*d)->setObserved((*d)->observed() / (double)Xdata->rows());
+  // }
 }
 
 int Model::nrOfFeatures()
@@ -95,33 +114,33 @@ int Model::nrOfFeatures()
 
 void Model::generateExpected()
 {
-  vector<double> d(deltas.size());
 
-  double sum = 0.0;
+  for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+  {
+    (*d)->setExpected(0.0);
+  }
+
   for(int j = 0; j < Xdata->rows(); j++)
   {
-    double z = 0.0;
     vector<unsigned long> x_row = Xdata->row(j);
+
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
-      double s = 0.0;
+      _s[y] = 0.0;
       vector<unsigned long> y_row = Yalphabet->row(y);
       for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
       {
         if((*d)->matchXY(x_row, y_row))
         {
-          s += (*d)->lambda();
+          _s[y] += (*d)->lambda();
         }
       }
-      z += exp(s);
-      for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-      {
-        if((*d)->matchXY(x_row, y_row))
-        {
-          (*d)->setExpected((*d)->expected() + exp(s));
-        }
-      }
-    }
+    } // for each output y
+
+    // double z = _yAlphabetSize - (int)_s.size();
+    double z = 0.0;
+    for(vector<double>::iterator i = _s.begin(); i != _s.end(); i++) z += exp(*i);
+
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       vector<unsigned long> y_row = Yalphabet->row(y);
@@ -129,11 +148,11 @@ void Model::generateExpected()
       {
         if((*d)->matchXY(x_row, y_row))
         {
-          (*d)->setExpected((*d)->expected() / z);
+          (*d)->setExpected((*d)->expected() + exp(_s[y]) / z);
         }
       }
     }
-  }
+  } // j
 }
 
 

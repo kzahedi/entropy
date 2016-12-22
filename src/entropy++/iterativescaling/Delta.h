@@ -13,7 +13,7 @@ namespace entropy
     class Delta
     {
       public:
-        Delta(vector<unsigned long> xValues, vector<int> xColumns, vector<unsigned long> yValues, vector<int> yColumns);
+        Delta(vector<unsigned long> xValues, vector<int> xIndices, vector<unsigned long> yValues, vector<int> yIndices);
 
         // match piece-wise
         bool matchP(vector<unsigned long>& xValues, vector<unsigned long>& yValues);
@@ -43,21 +43,32 @@ namespace entropy
 
         friend std::ostream& operator<<(std::ostream& str, const Delta& m)
         {
-          str << "[";
           str << "X: (";
           for(int i = 0; i < (int)m._xValues.size()-1; i++)
           {
-            cout << m._xValues[i] << ",";
+            str << m._xValues[i] << ",";
           }
-          cout << m._xValues[m._xValues.size() - 1] << ")";
-          str << ", Y: (";
+          str << m._xValues[m._xValues.size() - 1] << ") [";
+          for(int i = 0; i < (int)m._xIndices.size()-1; i++)
+          {
+            str << m._xIndices[i] << ",";
+          }
+          str << m._xIndices[m._xIndices.size() - 1];
+          str << "], Y: (";
           for(int i = 0; i < (int)m._yValues.size()-1; i++)
           {
-            cout << m._yValues[i] << ",";
+            str << m._yValues[i] << ",";
           }
-          cout << m._yValues[m._yValues.size() - 1] << ")";
+          str << m._yValues[m._yValues.size() - 1] << ") [";
+          for(int i = 0; i < (int)m._yIndices.size()-1; i++)
+          {
+            str << m._yIndices[i] << ",";
+          }
+          str << m._yIndices[m._yIndices.size() - 1];
+          str << "]";
           str << ", Obs: " << m._observed;
-          str << ", Exp: " << m._expected << "]";
+          str << ", Exp: " << m._expected;
+          str << ", Lambda: " << m._lambda;
           return str;
         };
 
@@ -65,8 +76,8 @@ namespace entropy
         vector<unsigned long> _xValues;
         vector<unsigned long> _yValues;
 
-        vector<int> _xColumns;
-        vector<int> _yColumns;
+        vector<int> _xIndices;
+        vector<int> _yIndices;
 
         double _observed;
         double _expected;

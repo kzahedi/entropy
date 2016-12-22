@@ -16,14 +16,9 @@ void GIS::iterate()
 {
   generateExpected();
 
-  int index = 0;
-
   _error = 0.0;
 
-  double max = 0.0;
-  double n   = 0.0;
-  double o   = 0.0;
-
+  double max = 1.0;
 
   // get f^#
   for(int j = 0; j < Xdata->rows(); j++)
@@ -32,26 +27,20 @@ void GIS::iterate()
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       vector<unsigned long> Y = Yalphabet->row(y);
-
-      double f = 0.9;
-
+      double f = 0.0;
       for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
       {
-        if((*d)->matchXY(x_row, Y))
-        {
-          f += (*d)->lambda();
-        }
+        if((*d)->matchXY(x_row, Y)) f += 1.0;
       }
       if(f > max) max = f;
+    }
   }
 
-    for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-    {
-      // double o = (*d)->lambda(); // old
-      double n = (*d)->lambda() + (1.0/max) * log((*d)->observed() / (*d)->expected());
-      (*d)->setLambda(n);
-      _error += fabs((*d)->observed() - (*d)->expected());
-    }
+  for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+  {
+    double n = (*d)->lambda() + fabs(1.0/max) * log((*d)->observed() / (*d)->expected());
+    (*d)->setLambda(n);
+    _error += fabs((*d)->observed() - (*d)->expected());
   }
 }
 
