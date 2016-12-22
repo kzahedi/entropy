@@ -38,6 +38,7 @@ set(SRC
   iterativescaling/Feature.cpp
   iterativescaling/Model.cpp
   iterativescaling/GIS.cpp
+  iterativescaling/SCGIS.cpp
   iterativescaling/KL.cpp
 
   SparseMatrix.cpp

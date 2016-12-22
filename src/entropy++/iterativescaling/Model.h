@@ -42,8 +42,6 @@ namespace entropy
 
         int nrOfFeatures();
 
-        void generateExpected();
-
         Feature* feature(int i);
 
         void calculateProbabilities();
@@ -81,7 +79,6 @@ namespace entropy
 
         vector<vector<int> > _Xindices;
         vector<vector<int> > _Yindices;
-        vector<double>       _s;
 
         Matrix* _conditionals;
         Matrix* _marginals;

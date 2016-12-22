@@ -49,7 +49,6 @@ void Model::createUniqueContainer()
 {
   Xalphabet = Xdata->unique();
   Yalphabet = Ydata->unique();
-  _s.resize(Yalphabet->rows());
 
   _yAlphabetSize = 1.0;
   for(int c = 0; c < Yalphabet->columns(); c++)
@@ -115,49 +114,6 @@ void Model::countObservedFeatures()
 int Model::nrOfFeatures()
 {
   return features.size();
-}
-
-void Model::generateExpected()
-{
-
-  for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-  {
-    (*d)->setExpected(0.0);
-  }
-
-  for(int j = 0; j < Xdata->rows(); j++)
-  {
-    vector<unsigned long> x_row = Xdata->row(j);
-
-    for(int y = 0; y < Yalphabet->rows(); y++)
-    {
-      _s[y] = 0.0;
-      vector<unsigned long> y_row = Yalphabet->row(y);
-      for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-      {
-        if((*d)->matchXY(x_row, y_row))
-        {
-          _s[y] += (*d)->lambda();
-        }
-      }
-    } // for each output y
-
-    // double z = _yAlphabetSize - (int)_s.size();
-    double z = 0.0;
-    for(vector<double>::iterator i = _s.begin(); i != _s.end(); i++) z += exp(*i);
-
-    for(int y = 0; y < Yalphabet->rows(); y++)
-    {
-      vector<unsigned long> y_row = Yalphabet->row(y);
-      for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-      {
-        if((*d)->matchXY(x_row, y_row))
-        {
-          (*d)->setExpected((*d)->expected() + exp(_s[y]) / z);
-        }
-      }
-    }
-  } // j
 }
 
 

@@ -1,5 +1,5 @@
-#ifndef __GIS_H__
-#define __GIS_H__
+#ifndef __SCGIS_H__
+#define __SCGIS_H__
 
 #include <entropy++/iterativescaling/Model.h>
 
@@ -7,23 +7,23 @@ namespace entropy
 {
   namespace iterativescaling
   {
-    class GIS : public Model
+    class SCGIS : public Model
     { 
       public:
-        GIS();
+        SCGIS();
+        ~SCGIS();
 
         void   init();
         void   iterate();
         double error();
 
       private:
-        void   __generateExpected();
-        double         _error;
-        vector<double> _s;
-
+        double _error;
+        Matrix* _z;
+        Matrix* _s;
     };
   }
 }
 
 
-#endif // __GIS_H__
+#endif // __SCGIS_H__
