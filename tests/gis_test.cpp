@@ -1075,16 +1075,19 @@ void gisTest::testMC_W()
   GIS* p = new GIS();
   p->setData(dcXY, dcZ);
   p->setFeatures(px,py,pfeatures);
+  cout << "p init" << endl;
   p->init();
 
   GIS* q = new GIS();
   q->setData(dcXY, dcZ);
   q->setFeatures(qx,qy,qfeatures);
+  cout << "q init" << endl;
   q->init();
 
   for(int i = 0; i < 50000; i++)
   {
     p->iterate();
+    if(i % 10 == 0) cout << "p error (" << i << "): " << p->error() << endl;
     if(p->error() < EPSILON) break;
   }
   cout << "p converged" << endl;
@@ -1092,6 +1095,7 @@ void gisTest::testMC_W()
   for(int i = 0; i < 50000; i++)
   {
     q->iterate();
+    if(i % 10 == 0) cout << "q error (" << i << "): " << q->error() << endl;
     if(q->error() < EPSILON) break;
   }
   cout << "q converged" << endl;
