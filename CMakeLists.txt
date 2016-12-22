@@ -54,7 +54,7 @@ INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/src/entropy++/
 
 option(ENTROPY_COMPILE_HOPPING "Compile MC example with hopping data" OFF)
 option(ENTROPY_COMPILE_RBO     "Compile MC example for RBOHand data"  OFF)
-option(ENTROPY_COMPILE_IT      "Compile IT example"                   OFF)
+option(ENTROPY_COMPILE_ITSC    "Compile Iterative Scaling examples"   OFF)
 option(ENTROPY_TESTS           "Compile test cases"                   OFF)
 option(ENTROPY_MEMORY_EFFICIENT "Compile with memory efficiency. Code will be very slow if this is set to ON." ON)
 
@@ -70,9 +70,9 @@ if(ENTROPY_COMPILE_RBO)
   add_subdirectory(experiments/RBOHand)
 endif(ENTROPY_COMPILE_RBO)
 
-if(ENTROPY_COMPILE_IT)
-  add_subdirectory(experiments/it)
-endif(ENTROPY_COMPILE_IT)
+if(ENTROPY_COMPILE_ITSC)
+  add_subdirectory(experiments/itsc)
+endif(ENTROPY_COMPILE_ITSC)
 
 if(ENTROPY_TESTS)
   add_subdirectory(tests)

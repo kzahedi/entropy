@@ -693,3 +693,11 @@ void Matrix::__add(const int row, const int col, const double value)
 {
   _cell[row][col] += value;
 }
+
+const Matrix Matrix::operator*(const Matrix &m)
+{
+  Matrix r = *this;
+  r *= m;
+  return r;
+}
+

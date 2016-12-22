@@ -8,11 +8,11 @@ KL::KL(Model* p, Model *q)
   _p = p;
   _q = q;
 
-  cout << "calculate probs p" << endl;
+  // cout << "calculate probs p" << endl;
   _p->calculateProbabilities();
-  cout << "calculate probs q" << endl;
+  // cout << "calculate probs q" << endl;
   _q->calculateProbabilities();
-  cout << "done." << endl;
+  // cout << "done." << endl;
 }
 
 double KL::divergence()

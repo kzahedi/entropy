@@ -11,6 +11,11 @@ set(SRC
   MI.cpp
   PI.cpp
   ConditionalEntropy.cpp
+  SparseMatrix.cpp
+  Matrix.cpp
+  Csv.cpp
+  powi.cpp
+  Random.cpp
 
   state/CMI.cpp
   state/MC_CW.cpp
@@ -41,11 +46,6 @@ set(SRC
   iterativescaling/SCGIS.cpp
   iterativescaling/KL.cpp
 
-  SparseMatrix.cpp
-  Matrix.cpp
-  Csv.cpp
-
-  powi.cpp
 )
 
 if(APPLE)

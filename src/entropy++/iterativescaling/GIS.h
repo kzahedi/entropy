@@ -17,7 +17,6 @@ namespace entropy
         double error();
 
       private:
-        void   __generateExpected();
         double         _error;
         vector<double> _s;
 

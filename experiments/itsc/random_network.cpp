@@ -1,0 +1,163 @@
+#include <iostream>
+#include <fstream>
+
+#include <stdlib.h>
+#include <math.h>
+
+#include <entropy++/Container.h>
+#include <entropy++/Matrix.h>
+#include <entropy++/Random.h>
+#include <entropy++/iterativescaling/SCGIS.h>
+#include <entropy++/iterativescaling/KL.h>
+
+#include <gflags/gflags.h>
+#include <glog/logging.h>
+
+#include <string>
+#include <fstream>
+
+#include <boost/filesystem.hpp>
+#include <boost/tokenizer.hpp>
+
+using namespace std;
+using namespace boost;
+using namespace entropy;
+using namespace entropy::iterativescaling;
+
+DEFINE_int64(i,  1000, "nr. of iterations for each experiment");
+DEFINE_int64(e,  100,  "nr. of experiments with random weight matrix");
+DEFINE_int64(n,  5,    "nr. of neurones");
+DEFINE_double(b, 0.1,  "beta");
+DEFINE_string(o, "results.csv",  "output file");
+
+# define SIGM(x) (1.0 / (1.0 + exp(-x)))
+
+void updateNetwork(Matrix& X, Matrix& W, double beta)
+{
+  Matrix Y = X * W;
+  Y *= (-2.0 * beta);
+
+  for(int i = 0; i < FLAGS_b; i++) Y(i,0) = SIGM(Y(i,0));
+  for(int i = 0; i < FLAGS_b; i++) Y(i,0) = (Random::unit() <= Y(i,0))?1:0;
+  for(int i = 0; i < FLAGS_b; i++) X(i,0) = Y(i,0);
+
+}
+
+int main(int argc, char** argv)
+{
+  google::ParseCommandLineFlags(&argc, &argv, true);
+  google::InitGoogleLogging(argv[0]);
+  FLAGS_log_dir = ".";
+  Random::initialise();
+
+  // data
+  VLOG(10) << "Starting an experiment with: ";
+  VLOG(10) << "  " << FLAGS_i << " iterations.";
+  VLOG(10) << "  " << FLAGS_e << " random initial conditions.";
+  VLOG(10) << "  " << FLAGS_b << " temperature.";
+
+  cout << "Starting an experiment with: " << endl;
+  cout << "  " << FLAGS_i << " iterations." << endl;
+  cout << "  " << FLAGS_e << " random initial conditions." << endl;
+  cout << "  " << FLAGS_b << " temperature." << endl;
+
+  vector<double> results;
+
+  for(int e = 0; e < FLAGS_e; e++)
+  {
+    Matrix X(FLAGS_n, 1);
+    Matrix W(FLAGS_n, FLAGS_n);
+
+    ULContainer data(FLAGS_i+1, FLAGS_n); 
+    ULContainer first(1, FLAGS_n); 
+
+    for(int i = 0; i < FLAGS_n; i++)
+    {
+      X(i,0) = (Random::unit() < 0.5)?0:1;
+      data << X(i,0);
+      first << X(i,0);
+      for(int j = 0; j < FLAGS_n; j++)
+      {
+        W(i,j) = Random::unit();
+      }
+    }
+
+    for(int i = 0; i < FLAGS_i; i++)
+    {
+      updateNetwork(X, W, FLAGS_b);
+      for(int j = 0; j < FLAGS_n; j++)
+      {
+        data << X(j,0);
+      }
+    }
+
+    // cout << data << endl;
+    cout << first << endl;
+
+    vector<vector<int> > px;
+    vector<vector<int> > py;
+
+    vector<int> pa;
+    vector<int> pb;
+    for(int i = 0; i < FLAGS_n; i++)
+    {
+      pa.push_back(i);
+      pb.push_back(i);
+    }
+    px.push_back(pa);
+    py.push_back(pb);
+
+    vector<vector<int> > qx;
+    vector<vector<int> > qy;
+    for(int i = 0; i < FLAGS_n; i++)
+    {
+      vector<int> qa;
+      qa.push_back(i);
+      qx.push_back(qa);
+
+      vector<int> qb;
+      qb.push_back(i);
+      qy.push_back(qb);
+    }
+
+    ULContainer *Xt1 = data.drop(-1);
+    ULContainer *Xt2 = data.drop(1);
+
+    vector<Feature*> pfeatures;
+    pfeatures.push_back(new Feature(0,0));
+
+    vector<Feature*> qfeatures;
+    for(int i = 0; i < FLAGS_n; i++)
+    {
+      qfeatures.push_back(new Feature(i, i));
+    }
+
+    SCGIS* independentModel = new SCGIS();
+    independentModel->setData(Xt1, Xt2);
+    independentModel->setFeatures(qx,qy,qfeatures);
+    independentModel->init();
+
+    SCGIS* dependentModel = new SCGIS();
+    dependentModel->setData(Xt1, Xt2);
+    dependentModel->setFeatures(px,py,pfeatures);
+    dependentModel->init();
+
+    KL* kl = new KL(dependentModel, independentModel);
+
+    results.push_back(kl->divergence());
+  }
+
+  cout << "Results:";
+  for(int i = 0; i < results.size(); i++) cout << " " << results[i];
+  cout << endl;
+
+  ofstream out(FLAGS_o);
+  out << FLAGS_b << ",";
+  for(int e = 0; e < FLAGS_e - 1; e++)
+  {
+    out << results[e] << ",";
+  }
+  out << results[results.size() - 1];
+  out << endl;
+  out.close();
+}

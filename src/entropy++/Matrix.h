@@ -50,6 +50,7 @@ namespace entropy
 
       const Matrix operator-(const Matrix &m);
       const Matrix operator+(const Matrix &m);
+      const Matrix operator*(const Matrix &m);
 
       double L2();
 
