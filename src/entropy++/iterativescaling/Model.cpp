@@ -8,6 +8,8 @@ using namespace entropy::iterativescaling;
 Model::Model()
 {
   _yAlphabetSize = 0;
+  _conditionals  = NULL;
+  _marginals     = NULL;
 }
 
 void Model::setData(ULContainer *X, ULContainer *Y)
@@ -27,6 +29,9 @@ Model::~Model()
 
   delete Xalphabet;
   delete Yalphabet;
+
+  delete _conditionals;
+  delete _marginals;
 }
 
 
@@ -173,64 +178,54 @@ Feature* Model::feature(int i)
 
 void Model::calculateProbabilities()
 {
-  // _conditionals = new Matrix(XalphabetFromData->rows(), YalphabetFromData->rows()); // TODO: clean up in destructor
-  // _marginals    = new Matrix(XalphabetFromData->rows(), 1);
+  if(_conditionals != NULL) delete _conditionals;
+  if(_marginals    != NULL) delete _marginals;
+  
+  _conditionals = new Matrix(Xalphabet->rows(), Yalphabet->rows());
+  _marginals    = new Matrix(Xalphabet->rows(), 1);
 
-  // double nenner = 0.0;
+  double nenner = 0.0;
 
-  // for(int x = 0; x < XalphabetFromData->rows(); x++)
-  // {
-    // for(int y = 0; y < YalphabetFromData->rows(); y++)
-    // {
-      // double sum = 0.0;
-      // for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
-      // {
-        // int xListIndex = (*f)->xListIndex();
-        // int yListIndex = (*f)->yListIndex();
+  for(int x = 0; x < Xalphabet->rows(); x++)
+  {
+    vector<unsigned long> x_row = Xalphabet->row(x);
+    for(int y = 0; y < Yalphabet->rows(); y++)
+    {
+      vector<unsigned long> y_row = Yalphabet->row(y);
+      double sum = 0.0;
+      for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+      {
+        if((*d)->matchXY(x_row, y_row))
+        {
+          sum += (*d)->lambda();
+        }
+      }
+      if(fabs(sum) <= EPSILON)
+      {
+        (*_conditionals)(x,y) = 0.0; // TODO check
+      }
+      else
+      {
+        (*_conditionals)(x,y) = exp(sum);
+      }
+    }
+  }
 
-        // vector<int> fx = Xalphabet[xListIndex]->findlist(XalphabetFromDataPerFeature[xListIndex], x);
-        // vector<int> fy = Yalphabet[yListIndex]->findlist(YalphabetFromDataPerFeature[yListIndex], y);
+  double sum = 0.0;
+  for(int x = 0; x < _conditionals->rows(); x++)
+  {
+    (*_marginals)(x,0) = _conditionals->rowSum(x);
+    sum += (*_marginals)(x,0);
+    for(int y = 0; y < _conditionals->cols(); y++)
+    {
+      (*_conditionals)(x,y) = (*_conditionals)(x,y) / (*_marginals)(x,0);
+    }
+  }
 
-        // for(vector<int>::iterator i = fx.begin(); i != fx.end(); i++)
-        // {
-          // for(vector<int>::iterator j = fy.begin(); j != fy.end(); j++)
-          // {
-            // for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
-            // {
-              // if((*d)->match(*i, *j))
-              // {
-                // sum += (*d)->lambda();
-              // }
-            // }
-          // }
-        // }
-      // }
-      // if(fabs(sum) <= EPSILON)
-      // {
-        // (*_conditionals)(x,y) = 0.0; // TODO check
-      // }
-      // else
-      // {
-        // (*_conditionals)(x,y) = exp(sum);
-      // }
-    // }
-  // }
-
-  // double sum = 0.0;
-  // for(int x = 0; x < _conditionals->rows(); x++)
-  // {
-    // (*_marginals)(x,0) = _conditionals->rowSum(x);
-    // sum += (*_marginals)(x,0);
-    // for(int y = 0; y < _conditionals->cols(); y++)
-    // {
-      // (*_conditionals)(x,y) = (*_conditionals)(x,y) / (*_marginals)(x,0);
-    // }
-  // }
-
-  // for(int x = 0; x < _marginals->rows(); x++)
-  // {
-    // (*_marginals)(x,0) = (*_marginals)(x,0) / sum;
-  // }
+  for(int x = 0; x < _marginals->rows(); x++)
+  {
+    (*_marginals)(x,0) = (*_marginals)(x,0) / sum;
+  }
 }
 
 double Model::p_y_c_x(int yUniqueIndex, int xUniqueIndex)
