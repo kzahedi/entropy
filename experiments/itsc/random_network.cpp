@@ -26,12 +26,12 @@ using namespace boost;
 using namespace entropy;
 using namespace entropy::iterativescaling;
 
-DEFINE_int64(i,  1000, "nr. of iterations for each experiment");
-DEFINE_int64(l,  100,  "nr. of last iterations to keep for the analysis");
-DEFINE_int64(e,  100,  "nr. of experiments with random weight matrix");
-DEFINE_int64(n,  5,    "nr. of neurones");
-DEFINE_double(b, 0.1,  "beta");
-DEFINE_string(o, "results.csv",  "output file");
+DEFINE_int64(i,  1000,          "nr. of iterations for each experiment");
+DEFINE_int64(l,  100,           "nr. of last iterations to keep for the analysis");
+DEFINE_int64(e,  100,           "nr. of experiments with random weight matrix");
+DEFINE_int64(n,  5,             "nr. of neurones");
+DEFINE_double(b, 0.1,           "beta");
+DEFINE_string(o, "results.csv", "output file");
 
 # define SIGM(x) (1.0 / (1.0 + exp(-x)))
 
