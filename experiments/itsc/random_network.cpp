@@ -19,12 +19,15 @@
 #include <boost/filesystem.hpp>
 #include <boost/tokenizer.hpp>
 
+# define EPSILON 0.0001
+
 using namespace std;
 using namespace boost;
 using namespace entropy;
 using namespace entropy::iterativescaling;
 
 DEFINE_int64(i,  1000, "nr. of iterations for each experiment");
+DEFINE_int64(l,  100,  "nr. of last iterations to keep for the analysis");
 DEFINE_int64(e,  100,  "nr. of experiments with random weight matrix");
 DEFINE_int64(n,  5,    "nr. of neurones");
 DEFINE_double(b, 0.1,  "beta");
@@ -57,18 +60,14 @@ int main(int argc, char** argv)
   google::ParseCommandLineFlags(&argc, &argv, true);
   google::InitGoogleLogging(argv[0]);
   FLAGS_log_dir = ".";
+  FLAGS_logtostderr = true;
   Random::initialise();
 
-  // data
-  VLOG(10) << "Starting an experiment with: ";
-  VLOG(10) << "  " << FLAGS_i << " iterations.";
-  VLOG(10) << "  " << FLAGS_e << " random initial conditions.";
-  VLOG(10) << "  " << FLAGS_b << " temperature.";
-
-  cout << "Starting an experiment with: " << endl;
-  cout << "  " << FLAGS_i << " iterations." << endl;
-  cout << "  " << FLAGS_e << " random initial conditions." << endl;
-  cout << "  " << FLAGS_b << " temperature." << endl;
+  VLOG(0) << "Starting an experiment with: ";
+  VLOG(0) << "  " << FLAGS_i << " iterations.";
+  VLOG(0) << "  " << FLAGS_l << " last iterations will be used for the analysis.";
+  VLOG(0) << "  " << FLAGS_e << " random initial conditions.";
+  VLOG(0) << "  " << FLAGS_b << " temperature.";
 
   vector<double> results;
 
@@ -83,7 +82,7 @@ int main(int argc, char** argv)
     for(int i = 0; i < FLAGS_n; i++)
     {
       X(i,0) = (Random::unit() < 0.5)?0:1;
-      data << X(i,0);
+      data  << X(i,0);
       first << X(i,0);
       for(int j = 0; j < FLAGS_n; j++)
       {
@@ -99,6 +98,19 @@ int main(int argc, char** argv)
         data << X(j,0);
       }
     }
+
+    VLOG(10) << "Initial X:";
+    VLOG(10) << X;
+    VLOG(10) << "Weight Matrix:";
+    VLOG(10) << W;
+
+    VLOG(20) << "Original Data";
+    VLOG(20) << data;
+
+    ULContainer* input = data.drop(FLAGS_i - 100);
+
+    VLOG(10) << "Data for Analysis";
+    VLOG(10) << *input;
 
     // cout << data << endl;
 
@@ -128,8 +140,8 @@ int main(int argc, char** argv)
       qy.push_back(qb);
     }
 
-    ULContainer *Xt1 = data.drop(-1);
-    ULContainer *Xt2 = data.drop(1);
+    ULContainer *Xt1 = input->drop(-1);
+    ULContainer *Xt2 = input->drop(1);
 
     vector<Feature*> pfeatures;
     pfeatures.push_back(new Feature(0,0));
@@ -156,7 +168,8 @@ int main(int argc, char** argv)
     for(int i = 0; i < 1000; i++)
     {
       dependentModel->iterate();
-      if(dependentModel->error() < 0.00000001)
+      VLOG(11) << "Dependent model error after " << i << " iterations: " << dependentModel->error();
+      if(dependentModel->error() < EPSILON)
       {
         dependent_iterations = i;
         break;
@@ -165,20 +178,17 @@ int main(int argc, char** argv)
     for(int i = 0; i < 1000; i++)
     {
       independentModel->iterate();
-      if(independentModel->error() < 0.00000001)
+      VLOG(11) << "Independent model error after " << i << " iterations: " << independentModel->error();
+      if(independentModel->error() < EPSILON)
       {
         independent_iterations = i;
         break;
       }
     }
 
-    cout << "Errors: D: " << dependentModel->error()   << " (" << dependent_iterations   << ")" << endl;
-    cout << "        I: " << independentModel->error() << " (" << independent_iterations << ")" << endl;
-
-
     KL* kl = new KL(dependentModel, independentModel);
     double r = kl->divergence();
-    cout << "Result: " << r << endl;
+    VLOG(0) << "Result: " << r;
 
     delete kl;
     delete dependentModel;
@@ -187,9 +197,10 @@ int main(int argc, char** argv)
     results.push_back(r);
   }
 
-  cout << "Results:";
-  for(int i = 0; i < results.size(); i++) cout << " " << results[i];
-  cout << endl;
+  stringstream sst;
+  sst << "Results:";
+  for(int i = 0; i < results.size(); i++) sst << " " << results[i];
+  VLOG(0) << sst.str();
 
   ofstream out(FLAGS_o);
   out << FLAGS_b << ",";
@@ -200,4 +211,5 @@ int main(int argc, char** argv)
   out << results[results.size() - 1];
   out << endl;
   out.close();
+  VLOG(0) << "done.";
 }

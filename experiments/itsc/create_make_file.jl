@@ -22,6 +22,20 @@ for beta in betas
 end
 close(fd)
 
+
+betas = collect(0:0.01:1.5)
+index = 1
+for beta in betas
+  fd = open("exp$(p(index))_$(beta).sh","w")
+  a = "#!/bin/bash\n"
+  b = "cd /usr/people/zahedi/experiments/random_network/\n"
+  c = "/usr/people/zahedi/src/entropy/build/experiments/itsc/bin/random_network -i 1000 -b $beta -o exp$(p(index))_$(beta).csv\n\n"
+  write(fd, "$a$b$c")
+  index = index + 1
+  close(fd)
+end
+
+
 files = readdir("/Users/zahedi/projects/builds/entropy-ninja/")
 files = filter(x->contains(x,".csv"), files)
 
