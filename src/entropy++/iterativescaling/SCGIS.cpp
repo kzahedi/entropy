@@ -30,7 +30,7 @@ void SCGIS::iterate()
 {
   double delta = 0.0;
   _error = 0.0;
-  cout << deltas.size() << " * " << Yalphabet->rows() << " * " << Xdata->rows() << endl;
+  // cout << deltas.size() << " * " << Yalphabet->rows() << " * " << Xdata->rows() << endl;
   cout << "Iterations: " << (deltas.size() * 2.0 * Yalphabet->rows() * Xdata->rows()) << endl;
   for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
   {

@@ -34,12 +34,21 @@ DEFINE_string(o, "results.csv",  "output file");
 
 void updateNetwork(Matrix& X, Matrix& W, double beta)
 {
-  Matrix Y = X * W;
+  Matrix Y(FLAGS_n, 1);
+
+  for(int i = 0; i < FLAGS_n; i++)
+  {
+    for(int j = 0; j < FLAGS_n; j++)
+    {
+      Y(i,0) += W(i,j) * X(j,0);
+    }
+  }
+
   Y *= (-2.0 * beta);
 
-  for(int i = 0; i < FLAGS_b; i++) Y(i,0) = SIGM(Y(i,0));
-  for(int i = 0; i < FLAGS_b; i++) Y(i,0) = (Random::unit() <= Y(i,0))?1:0;
-  for(int i = 0; i < FLAGS_b; i++) X(i,0) = Y(i,0);
+  for(int i = 0; i < FLAGS_n; i++) Y(i,0) = SIGM(Y(i,0));
+  for(int i = 0; i < FLAGS_n; i++) Y(i,0) = (Random::unit() <= Y(i,0))?1:0;
+  for(int i = 0; i < FLAGS_n; i++) X(i,0) = Y(i,0);
 
 }
 
@@ -92,7 +101,6 @@ int main(int argc, char** argv)
     }
 
     // cout << data << endl;
-    cout << first << endl;
 
     vector<vector<int> > px;
     vector<vector<int> > py;
@@ -142,9 +150,41 @@ int main(int argc, char** argv)
     dependentModel->setFeatures(px,py,pfeatures);
     dependentModel->init();
 
-    KL* kl = new KL(dependentModel, independentModel);
+    double error = 0.0;
+    int dependent_iterations = 0;
+    int independent_iterations = 0;
+    for(int i = 0; i < 1000; i++)
+    {
+      dependentModel->iterate();
+      if(dependentModel->error() < 0.00000001)
+      {
+        dependent_iterations = i;
+        break;
+      }
+    }
+    for(int i = 0; i < 1000; i++)
+    {
+      independentModel->iterate();
+      if(independentModel->error() < 0.00000001)
+      {
+        independent_iterations = i;
+        break;
+      }
+    }
 
-    results.push_back(kl->divergence());
+    cout << "Errors: D: " << dependentModel->error()   << " (" << dependent_iterations   << ")" << endl;
+    cout << "        I: " << independentModel->error() << " (" << independent_iterations << ")" << endl;
+
+
+    KL* kl = new KL(dependentModel, independentModel);
+    double r = kl->divergence();
+    cout << "Result: " << r << endl;
+
+    delete kl;
+    delete dependentModel;
+    delete independentModel;
+
+    results.push_back(r);
   }
 
   cout << "Results:";

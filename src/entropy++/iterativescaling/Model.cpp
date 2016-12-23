@@ -24,8 +24,8 @@ void Model::setData(ULContainer *X, ULContainer *Y)
 
 Model::~Model()
 {
-  delete Xdata;
-  delete Ydata;
+  // delete Xdata;
+  // delete Ydata;
 
   delete Xalphabet;
   delete Yalphabet;
