@@ -19,7 +19,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/tokenizer.hpp>
 
-# define EPSILON 0.0001
+# define EPSILON 0.01
 
 using namespace std;
 using namespace boost;

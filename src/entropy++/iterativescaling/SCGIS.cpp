@@ -29,6 +29,7 @@ void SCGIS::init()
 void SCGIS::iterate()
 {
   double delta = 0.0;
+  double e = 0.0;
   _error = 0.0;
   // cout << deltas.size() << " * " << Yalphabet->rows() << " * " << Xdata->rows() << endl;
   // cout << "Iterations: " << (deltas.size() * 2.0 * Yalphabet->rows() * Xdata->rows()) << endl;
@@ -48,7 +49,8 @@ void SCGIS::iterate()
       }
     }
     delta = log((*d)->observed() / (*d)->expected());
-    _error += fabs((*d)->observed() - (*d)->expected());
+    e = (*d)->observed() - (*d)->expected();
+    _error += e * e;
     (*d)->setLambda((*d)->lambda() + delta);
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
@@ -65,6 +67,7 @@ void SCGIS::iterate()
       }
     }
   }
+  _error = sqrt(_error);
 }
 
 double SCGIS::error()

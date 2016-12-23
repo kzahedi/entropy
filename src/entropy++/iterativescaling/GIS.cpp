@@ -57,6 +57,7 @@ void GIS::iterate()
   _error = 0.0;
 
   double max = 1.0;
+  double e = 0.0;
 
   // get f^#
   for(int j = 0; j < Xdata->rows(); j++)
@@ -78,8 +79,11 @@ void GIS::iterate()
   {
     double n = (*d)->lambda() + fabs(1.0/max) * log((*d)->observed() / (*d)->expected());
     (*d)->setLambda(n);
-    _error += fabs((*d)->observed() - (*d)->expected());
+    e = (*d)->observed() - (*d)->expected();
+    _error += e * e;
   }
+
+  _error = sqrt(_error);
 }
 
 double GIS::error()
