@@ -202,7 +202,7 @@ int main(int argc, char** argv)
   for(int i = 0; i < results.size(); i++) sst << " " << results[i];
   VLOG(0) << sst.str();
 
-  ofstream out(FLAGS_o);
+  ofstream out(FLAGS_o.c_str());
   out << FLAGS_b << ",";
   for(int e = 0; e < FLAGS_e - 1; e++)
   {
