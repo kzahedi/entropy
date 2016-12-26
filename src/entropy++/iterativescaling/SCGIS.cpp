@@ -8,7 +8,7 @@ using namespace std;
 
 using namespace entropy::iterativescaling;
 
-SCGIS::SCGIS() : Model()
+SCGIS::SCGIS() : IS()
 {
   _s = NULL;
   _z = NULL;
@@ -70,6 +70,14 @@ void SCGIS::iterate()
     }
   }
   _error = sqrt(_error);
+
+  if(VLOG_IS_ON(100))
+  {
+    for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+    {
+      VLOG(100) << **d;
+    }
+  }
 }
 
 double SCGIS::error()

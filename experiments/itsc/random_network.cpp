@@ -7,6 +7,7 @@
 #include <entropy++/Container.h>
 #include <entropy++/Matrix.h>
 #include <entropy++/Random.h>
+#include <entropy++/iterativescaling/GIS.h>
 #include <entropy++/iterativescaling/SCGIS.h>
 #include <entropy++/iterativescaling/KL.h>
 
@@ -19,25 +20,27 @@
 #include <boost/filesystem.hpp>
 #include <boost/tokenizer.hpp>
 
-# define EPSILON 0.01
 
 using namespace std;
 using namespace boost;
 using namespace entropy;
 using namespace entropy::iterativescaling;
 
-DEFINE_int64(i,  1000,          "nr. of iterations for each experiment");
-DEFINE_int64(l,  100,           "nr. of last iterations to keep for the analysis");
-DEFINE_int64(e,  100,           "nr. of experiments with random weight matrix");
-DEFINE_int64(n,  5,             "nr. of neurones");
-DEFINE_double(b, 0.1,           "beta");
+DEFINE_int64(i,  1000,  "nr. of iterations for each experiment");
+DEFINE_int64(l,  100,   "nr. of last iterations to keep for the analysis");
+DEFINE_int64(e,  100,   "nr. of experiments with random weight matrix");
+DEFINE_int64(c,  100,   "nr. of convergence iterations");
+DEFINE_double(t, 0.1,   "convergence abort threshold");
+DEFINE_int64(n,  5,     "nr. of neurones");
+DEFINE_double(b, 0.1,   "beta");
+DEFINE_bool(g,   false, "use GIS instead of SCGIS");
 DEFINE_string(o, "results.csv", "output file");
 
 # define SIGM(x) (1.0 / (1.0 + exp(-x)))
 
 void updateNetwork(Matrix& X, Matrix& W, double beta)
 {
-  Matrix Y(FLAGS_n, 1);
+  Matrix Y(FLAGS_n, 1, 0.0);
 
   for(int i = 0; i < FLAGS_n; i++)
   {
@@ -107,7 +110,7 @@ int main(int argc, char** argv)
     VLOG(20) << "Original Data";
     VLOG(20) << data;
 
-    ULContainer* input = data.drop(FLAGS_i - 100);
+    ULContainer* input = data.drop(FLAGS_i - FLAGS_l);
 
     VLOG(10) << "Data for Analysis";
     VLOG(10) << *input;
@@ -152,12 +155,30 @@ int main(int argc, char** argv)
       qfeatures.push_back(new Feature(i, i));
     }
 
-    SCGIS* independentModel = new SCGIS();
+    IS* independentModel = NULL;
+    if(FLAGS_g)
+    {
+      independentModel = new GIS();
+    }
+    else
+    {
+      independentModel = new SCGIS();
+    }
     independentModel->setData(Xt1, Xt2);
     independentModel->setFeatures(qx,qy,qfeatures);
     independentModel->init();
 
-    SCGIS* dependentModel = new SCGIS();
+    IS* dependentModel = NULL;
+    if(FLAGS_g)
+    {
+      cout << "using GIS" << endl;
+      dependentModel = new GIS();
+    }
+    else
+    {
+      cout << "using SCGIS" << endl;
+      dependentModel = new SCGIS();
+    }
     dependentModel->setData(Xt1, Xt2);
     dependentModel->setFeatures(px,py,pfeatures);
     dependentModel->init();
@@ -165,21 +186,21 @@ int main(int argc, char** argv)
     double error = 0.0;
     int dependent_iterations = 0;
     int independent_iterations = 0;
-    for(int i = 0; i < 1000; i++)
+    for(int i = 0; i < FLAGS_c; i++)
     {
       dependentModel->iterate();
       VLOG(11) << "Dependent model error after " << i << " iterations: " << dependentModel->error();
-      if(dependentModel->error() < EPSILON)
+      if(dependentModel->error() < FLAGS_t)
       {
         dependent_iterations = i;
         break;
       }
     }
-    for(int i = 0; i < 1000; i++)
+    for(int i = 0; i < FLAGS_c; i++)
     {
       independentModel->iterate();
       VLOG(11) << "Independent model error after " << i << " iterations: " << independentModel->error();
-      if(independentModel->error() < EPSILON)
+      if(independentModel->error() < FLAGS_t)
       {
         independent_iterations = i;
         break;
@@ -191,8 +212,16 @@ int main(int argc, char** argv)
     VLOG(0) << "Result: " << r;
 
     delete kl;
-    delete dependentModel;
-    delete independentModel;
+    if(FLAGS_g)
+    {
+      delete (GIS*)dependentModel;
+      delete (GIS*)independentModel;
+    }
+    else
+    {
+      delete (SCGIS*)dependentModel;
+      delete (SCGIS*)independentModel;
+    }
 
     results.push_back(r);
   }

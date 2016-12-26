@@ -1,13 +1,13 @@
 #ifndef __GIS_H__
 #define __GIS_H__
 
-#include <entropy++/iterativescaling/Model.h>
+#include <entropy++/iterativescaling/IS.h>
 
 namespace entropy
 {
   namespace iterativescaling
   {
-    class GIS : public Model
+    class GIS : public IS
     { 
       public:
         GIS();

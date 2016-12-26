@@ -1,5 +1,7 @@
 #include <entropy++/iterativescaling/Model.h>
 
+#include <glog/logging.h>
+
 using namespace entropy;
 using namespace entropy::iterativescaling;
 
@@ -64,21 +66,6 @@ void Model::countObservedFeatures()
     vector<unsigned long> xrow = Xdata->row(d);
     vector<unsigned long> yrow = Ydata->row(d);
 
-    // cout << "X: ";
-    // for(int i = 0; i < xrow.size() - 1; i++)
-    // {
-      // cout << xrow[i] << ", ";
-    // }
-    // cout << xrow[xrow.size()-1];
-    // cout << "  --  Y: ";
-    // for(int i = 0; i < yrow.size() - 1; i++)
-    // {
-      // cout << yrow[i] << ", ";
-    // }
-    // cout << yrow[yrow.size()-1];
-    // cout << endl;
-
-
     for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
     {
 
@@ -88,7 +75,6 @@ void Model::countObservedFeatures()
         if((*d)->matchXY(xrow,yrow))
         {
           (*d)->incObserved();
-          // cout << "found: " << **d << endl;
           found = true;
         }
       }
@@ -98,17 +84,19 @@ void Model::countObservedFeatures()
         vector<int> yIndices = _Yindices[(*f)->yListIndex()];
         Delta *d = new Delta(xrow, xIndices, yrow, yIndices);
         d->incObserved();
-        // cout << "adding: " << *d << endl;
         deltas.push_back(d);
         (*f)->push_back(d);
       }
     }
   }
-
-  // for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-  // {
-    // (*d)->setObserved((*d)->observed() / (double)Xdata->rows());
-  // }
+  if(VLOG_IS_ON(100))
+  {
+    VLOG(100) << "Counting done";
+    for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+    {
+      VLOG(100) << **d;
+    }
+  }
 }
 
 int Model::nrOfFeatures()

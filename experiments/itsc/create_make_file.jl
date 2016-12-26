@@ -35,6 +35,21 @@ for beta in betas
   close(fd)
 end
 
+betas = collect(0:0.01:1.5)
+index = 1
+for beta in betas
+  fd = open("exp$(p(index))_$(beta).sh","w")
+  write(fd, "#!/bin/sh\n")
+  write(fd, "#\$ -cwd\n")
+  write(fd, "#\$ -j y\n")
+  write(fd, "#\$ -o /afs/ipp/home/z/zahedi/experiments/random_network/$(index).out\n")
+  write(fd, "#\$ -l h_rt=36000,h_vmem=4G\n\n")
+  write(fd, "module load boost\n")
+  write(fd, "export LD_LIBRARY_PATH=/afs/ipp/home/z/zahedi/.local/lib\n")
+  write(fd, "./random_network -i 1000 -b $beta -o exp$(p(index))_$(beta).csv\n\n")
+  index = index + 1
+  close(fd)
+end
 
 files = readdir("/Users/zahedi/projects/builds/entropy-ninja/")
 files = filter(x->contains(x,".csv"), files)

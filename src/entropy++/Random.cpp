@@ -9,9 +9,7 @@ using namespace entropy;
 
 void Random::initialise()
 {
-  time_t t;
-  time(&t);
-  srand48(t);
+  srand48(time(NULL));
 
   cout << "random initialised:";
   for(int i = 0; i < 10; i++)

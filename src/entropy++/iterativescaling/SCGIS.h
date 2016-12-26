@@ -1,13 +1,13 @@
 #ifndef __SCGIS_H__
 #define __SCGIS_H__
 
-#include <entropy++/iterativescaling/Model.h>
+#include <entropy++/iterativescaling/IS.h>
 
 namespace entropy
 {
   namespace iterativescaling
   {
-    class SCGIS : public Model
+    class SCGIS : public IS
     { 
       public:
         SCGIS();
