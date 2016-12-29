@@ -5,7 +5,8 @@
 #include <iostream>
 
 #ifdef __linux__
-#include <linux/random.h>
+#include <unistd.h>
+#include <fcntl.h>
 #endif
 
 
@@ -16,9 +17,12 @@ void Random::initialise()
 {
 #ifdef __linux__
   int randomData = open("/dev/random", O_RDONLY);
-  int entropy;
-  int result = ioctl(randomData, RNDGETENTCNT, &entropy);
-  srand48(result);
+  int seed = 0;
+  read(randomData, &seed, 2);
+  cout << "seed: " << seed << endl;
+  seed += time(NULL);
+  cout << "seed: " << seed << endl;
+  srand48(seed);
 #else
   sranddev();
 #endif
