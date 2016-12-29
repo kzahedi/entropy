@@ -4,12 +4,24 @@
 
 #include <iostream>
 
+#ifdef __linux__
+#include <linux/random.h>
+#endif
+
+
 using namespace std;
 using namespace entropy;
 
 void Random::initialise()
 {
-  srand48(time(NULL));
+#ifdef __linux__
+  int randomData = open("/dev/random", O_RDONLY);
+  int entropy;
+  int result = ioctl(randomData, RNDGETENTCNT, &entropy);
+  srand48(result);
+#else
+  sranddev();
+#endif
 
   cout << "random initialised:";
   for(int i = 0; i < 10; i++)
