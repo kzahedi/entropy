@@ -44,6 +44,7 @@ void updateNetwork(Matrix& X, Matrix& W, double beta)
 
   for(int i = 0; i < FLAGS_n; i++)
   {
+    Y(i,0) = 0.0;
     for(int j = 0; j < FLAGS_n; j++)
     {
       Y(i,0) += W(i,j) * X(j,0);
@@ -53,7 +54,7 @@ void updateNetwork(Matrix& X, Matrix& W, double beta)
   Y *= (-2.0 * beta);
 
   for(int i = 0; i < FLAGS_n; i++) Y(i,0) = SIGM(Y(i,0));
-  for(int i = 0; i < FLAGS_n; i++) Y(i,0) = (Random::unit() <= Y(i,0))?1:0;
+  for(int i = 0; i < FLAGS_n; i++) Y(i,0) = (Random::unit() <= Y(i,0))?1:-1;
   for(int i = 0; i < FLAGS_n; i++) X(i,0) = Y(i,0);
 
 }

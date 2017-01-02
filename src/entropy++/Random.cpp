@@ -1,4 +1,4 @@
-#include "Random.h"
+#include <entropy++/Random.h>
 
 #include <stdlib.h>
 
