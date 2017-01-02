@@ -13,7 +13,8 @@
 
 #include <math.h>
 
-# define EPSILON 0.0001
+# define EPSILON         0.0001
+# define ERROR_THRESHOLD 1.0
 
 # define BINS 30
 
@@ -89,7 +90,7 @@ void gisTest::testAND()
   for(int i = 0; i < 10000; i++)
   {
     independentModel->iterate();
-    if(independentModel->error() < EPSILON) break;
+    if(independentModel->error() < ERROR_THRESHOLD) break;
   }
 
   independentModel->calculateProbabilities();
@@ -124,7 +125,7 @@ void gisTest::testAND()
     dependentModel->iterate();
     // cout << "Error: " << dependentModel->error() << endl;
     // cout << *dependentModel << endl;
-    if(dependentModel->error() < EPSILON) break;
+    if(dependentModel->error() < ERROR_THRESHOLD) break;
   }
 
   dependentModel->calculateProbabilities();
@@ -211,7 +212,7 @@ void gisTest::testOR()
   for(int i = 0; i < 10000; i++)
   {
     independentModel->iterate();
-    if(independentModel->error() < EPSILON) break;
+    if(independentModel->error() < ERROR_THRESHOLD) break;
   }
 
   independentModel->calculateProbabilities();
@@ -246,7 +247,7 @@ void gisTest::testOR()
     dependentModel->iterate();
     // cout << "Error: " << dependentModel->error() << endl;
     // cout << *dependentModel << endl;
-    if(dependentModel->error() < EPSILON) break;
+    if(dependentModel->error() < ERROR_THRESHOLD) break;
   }
 
   dependentModel->calculateProbabilities();
@@ -333,7 +334,7 @@ void gisTest::testXOR()
   for(int i = 0; i < 10000; i++)
   {
     independentModel->iterate();
-    if(independentModel->error() < EPSILON) break;
+    if(independentModel->error() < ERROR_THRESHOLD) break;
   }
 
   independentModel->calculateProbabilities();
@@ -368,7 +369,7 @@ void gisTest::testXOR()
     dependentModel->iterate();
     // cout << "Error: " << dependentModel->error() << endl;
     // cout << *dependentModel << endl;
-    if(dependentModel->error() < EPSILON) break;
+    if(dependentModel->error() < ERROR_THRESHOLD) break;
   }
 
   dependentModel->calculateProbabilities();
@@ -1090,7 +1091,7 @@ void gisTest::testMC_W()
   {
     p->iterate();
     if(i % 10 == 0) cout << "p error (" << i << "): " << p->error() << endl;
-    if(p->error() < EPSILON) break;
+    if(p->error() < ERROR_THRESHOLD) break;
   }
   cout << "p converged" << endl;
 
@@ -1098,7 +1099,7 @@ void gisTest::testMC_W()
   {
     q->iterate();
     if(i % 10 == 0) cout << "q error (" << i << "): " << q->error() << endl;
-    if(q->error() < EPSILON) break;
+    if(q->error() < ERROR_THRESHOLD) break;
   }
   cout << "q converged" << endl;
 

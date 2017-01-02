@@ -45,6 +45,7 @@ set(SRC
   iterativescaling/GIS.cpp
   iterativescaling/SCGIS.cpp
   iterativescaling/KL.cpp
+  iterativescaling/Original.cpp
 
 )
 
