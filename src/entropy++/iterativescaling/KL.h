@@ -13,7 +13,8 @@ namespace entropy
       public:
         KL(Model* p, Model *q);
 
-        double divergence();
+        double divergence2();
+        double divergenceN();
 
       private:
         Model* _p;

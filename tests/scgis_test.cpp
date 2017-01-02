@@ -162,7 +162,8 @@ void scgisTest::testAND()
 
   KL* kl = new KL(dependentModel, independentModel);
   // CPPUNIT_ASSERT_DOUBLES_EQUAL(EPSILON, kl->divergence(), EPSILON);
-  cout << "AND: " << kl->divergence() << endl;
+  cout << "AND (bits): " << kl->divergence2() << endl;
+  cout << "AND (nats): " << kl->divergenceN() << endl;
 }
 
 void scgisTest::testOR()
@@ -283,7 +284,8 @@ void scgisTest::testOR()
 
   KL* kl = new KL(dependentModel, independentModel);
   // CPPUNIT_ASSERT_DOUBLES_EQUAL(EPSILON, kl->divergence(), EPSILON);
-  cout << "OR: " << kl->divergence() << endl;
+  cout << "OR (bits): " << kl->divergence2() << endl;
+  cout << "OR (nats): " << kl->divergenceN() << endl;
 }
 
 void scgisTest::testXOR()
@@ -404,7 +406,8 @@ void scgisTest::testXOR()
 
   KL* kl = new KL(dependentModel, independentModel);
   // CPPUNIT_ASSERT_DOUBLES_EQUAL(EPSILON, kl->divergence(), EPSILON);
-  cout << "XOR: " << kl->divergence() << endl;
+  cout << "XOR (bits): " << kl->divergence2() << endl;
+  cout << "XOR (nats): " << kl->divergenceN() << endl;
 }
 
 
@@ -1103,7 +1106,7 @@ void scgisTest::testMC_W()
 
   KL* kl = new KL(p, q);
 
-  cout << kl->divergence() << endl;
+  cout << kl->divergence2() << endl;
 
 }
 

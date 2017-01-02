@@ -1,4 +1,4 @@
-#include <entropy++/Random.h>
+#include "Random.h"
 
 #include <stdlib.h>
 
@@ -31,12 +31,6 @@ void Random::initialise()
   for(int i = 0; i < 10; i++)
   {
     cout << " " << rand(0, 100);
-  }
-  cout << endl;
-  cout << "random initialised:";
-  for(int i = 0; i < 10; i++)
-  {
-    cout << " " << unit();
   }
   cout << endl;
 }

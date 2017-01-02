@@ -209,7 +209,7 @@ int main(int argc, char** argv)
     }
 
     KL* kl = new KL(dependentModel, independentModel);
-    double r = kl->divergence();
+    double r = kl->divergenceN();
     VLOG(0) << "Result: " << r;
 
     delete kl;

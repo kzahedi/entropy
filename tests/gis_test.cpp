@@ -15,6 +15,8 @@
 
 # define EPSILON 0.0001
 
+# define BINS 30
+
 
 #ifndef PARENT
 #define PARENT "/Users/zahedi/projects/entropy/experiments/hopping/data/"
@@ -162,7 +164,8 @@ void gisTest::testAND()
 
   KL* kl = new KL(dependentModel, independentModel);
   // CPPUNIT_ASSERT_DOUBLES_EQUAL(EPSILON, kl->divergence(), EPSILON);
-  cout << "AND: " << kl->divergence() << endl;
+  cout << "AND (bits): " << kl->divergence2() << endl;
+  cout << "AND (nats): " << kl->divergenceN() << endl;
 }
 
 void gisTest::testOR()
@@ -283,7 +286,8 @@ void gisTest::testOR()
 
   KL* kl = new KL(dependentModel, independentModel);
   // CPPUNIT_ASSERT_DOUBLES_EQUAL(EPSILON, kl->divergence(), EPSILON);
-  cout << "OR: " << kl->divergence() << endl;
+  cout << "OR (bits): " << kl->divergence2() << endl;
+  cout << "OR (nats): " << kl->divergenceN() << endl;
 }
 
 void gisTest::testXOR()
@@ -404,7 +408,8 @@ void gisTest::testXOR()
 
   KL* kl = new KL(dependentModel, independentModel);
   // CPPUNIT_ASSERT_DOUBLES_EQUAL(EPSILON, kl->divergence(), EPSILON);
-  cout << "XOR: " << kl->divergence() << endl;
+  cout << "XOR (bits): " << kl->divergence2() << endl;
+  cout << "XOR (nats): " << kl->divergenceN() << endl;
 }
 
 
@@ -469,13 +474,12 @@ void gisTest::testUnique()
   double ac_min = dcmotA->min(0);
   double ac_max = dcmotA->max(0);
 
-  int bins = 300;
   cout << "Domains:" << endl;
   cout << "  Position:          " << p_min  << " " << p_max  << endl;
   cout << "  Velocity:          " << v_min  << " " << v_max  << endl;
   cout << "  Acceleration:      " << a_min  << " " << a_max  << endl;
   cout << "  Action (DC Motor): " << ac_min << " " << ac_max << endl;
-  cout << "  Bins:              " << bins   << endl;
+  cout << "  Bins:              " << BINS   << endl;
 
   // normalising DCMot
   dcmotW->normaliseColumn(0, p_min,  p_max);
@@ -502,9 +506,9 @@ void gisTest::testUnique()
     wdomain[i][1] = 1.0;
   }
   int *wbins = new int[3];
-  wbins[0]   = bins;
-  wbins[1]   = bins;
-  wbins[2]   = bins;
+  wbins[0]   = BINS;
+  wbins[1]   = BINS;
+  wbins[2]   = BINS;
 
   double **adomain = new double*[1];
   for(int i = 0; i < 1; i++)
@@ -514,7 +518,7 @@ void gisTest::testUnique()
     adomain[i][1] = 1.0;
   }
   int *abins = new int[1];
-  abins[0]   = bins;
+  abins[0]   = BINS;
 
   dcmotW->setDomains(wdomain);
   dcmotW->setBinSizes(wbins);
@@ -717,13 +721,12 @@ void gisTest::testUnique2()
   double ac_min = dcmotA->min(0);
   double ac_max = dcmotA->max(0);
 
-  int bins = 5;
   cout << "Domains:" << endl;
   cout << "  Position:          " << p_min  << " " << p_max  << endl;
   cout << "  Velocity:          " << v_min  << " " << v_max  << endl;
   cout << "  Acceleration:      " << a_min  << " " << a_max  << endl;
   cout << "  Action (DC Motor): " << ac_min << " " << ac_max << endl;
-  cout << "  Bins:              " << bins   << endl;
+  cout << "  Bins:              " << BINS   << endl;
 
   // normalising DCMot
   dcmotW->normaliseColumn(0, p_min,  p_max);
@@ -750,9 +753,9 @@ void gisTest::testUnique2()
     wdomain[i][1] = 1.0;
   }
   int *wbins = new int[3];
-  wbins[0]   = bins;
-  wbins[1]   = bins;
-  wbins[2]   = bins;
+  wbins[0]   = BINS;
+  wbins[1]   = BINS;
+  wbins[2]   = BINS;
 
   double **adomain = new double*[1];
   for(int i = 0; i < 1; i++)
@@ -762,7 +765,7 @@ void gisTest::testUnique2()
     adomain[i][1] = 1.0;
   }
   int *abins = new int[1];
-  abins[0]   = bins;
+  abins[0]   = BINS;
 
   dcmotW->setDomains(wdomain);
   dcmotW->setBinSizes(wbins);
@@ -965,13 +968,12 @@ void gisTest::testMC_W()
   double ac_min = dcmotA->min(0);
   double ac_max = dcmotA->max(0);
 
-  int bins = 300;
   cout << "Domains:" << endl;
   cout << "  Position:          " << p_min  << " " << p_max  << endl;
   cout << "  Velocity:          " << v_min  << " " << v_max  << endl;
   cout << "  Acceleration:      " << a_min  << " " << a_max  << endl;
   cout << "  Action (DC Motor): " << ac_min << " " << ac_max << endl;
-  cout << "  Bins:              " << bins   << endl;
+  cout << "  Bins:              " << BINS   << endl;
 
   // normalising DCMot
   dcmotW->normaliseColumn(0, p_min,  p_max);
@@ -998,9 +1000,9 @@ void gisTest::testMC_W()
     wdomain[i][1] = 1.0;
   }
   int *wbins = new int[3];
-  wbins[0]   = bins;
-  wbins[1]   = bins;
-  wbins[2]   = bins;
+  wbins[0]   = BINS;
+  wbins[1]   = BINS;
+  wbins[2]   = BINS;
 
   double **adomain = new double*[1];
   for(int i = 0; i < 1; i++)
@@ -1010,7 +1012,7 @@ void gisTest::testMC_W()
     adomain[i][1] = 1.0;
   }
   int *abins = new int[1];
-  abins[0]   = bins;
+  abins[0]   = BINS;
 
   dcmotW->setDomains(wdomain);
   dcmotW->setBinSizes(wbins);
@@ -1102,7 +1104,7 @@ void gisTest::testMC_W()
 
   KL* kl = new KL(p, q);
 
-  cout << kl->divergence() << endl;
+  cout << kl->divergence2() << endl;
 
 }
 
