@@ -1087,21 +1087,41 @@ void gisTest::testMC_W()
   cout << "q init" << endl;
   q->init();
 
-  for(int i = 0; i < 50000; i++)
-  {
-    p->iterate();
-    if(i % 10 == 0) cout << "p error (" << i << "): " << p->error() << endl;
-    if(p->error() < ERROR_THRESHOLD) break;
-  }
-  cout << "p converged" << endl;
+  p->iterate();
+  q->iterate();
 
   for(int i = 0; i < 50000; i++)
   {
-    q->iterate();
-    if(i % 10 == 0) cout << "q error (" << i << "): " << q->error() << endl;
-    if(q->error() < ERROR_THRESHOLD) break;
+    if(p->error() > ERROR_THRESHOLD) p->iterate();
+    if(q->error() > ERROR_THRESHOLD) q->iterate();
+    if(i % 100 == 0)
+    {
+      cout << "p error (" << i << "): " << p->error() << endl;
+      cout << "q error (" << i << "): " << q->error() << endl;
+    }
+    if(i % 1000 == 0)
+    {
+      KL* kl = new KL(p, q);
+      cout << "after " << i << " iterations: " << kl->divergence2() << endl;
+      delete kl;
+    }
   }
-  cout << "q converged" << endl;
+
+  // for(int i = 0; i < 50000; i++)
+  // {
+    // p->iterate();
+    // if(i % 10 == 0) cout << "p error (" << i << "): " << p->error() << endl;
+    // if(p->error() < ERROR_THRESHOLD) break;
+  // }
+  // cout << "p converged" << endl;
+
+  // for(int i = 0; i < 50000; i++)
+  // {
+    // q->iterate();
+    // if(i % 10 == 0) cout << "q error (" << i << "): " << q->error() << endl;
+    // if(q->error() < ERROR_THRESHOLD) break;
+  // }
+  // cout << "q converged" << endl;
 
   KL* kl = new KL(p, q);
 
