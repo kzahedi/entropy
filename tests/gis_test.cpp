@@ -14,9 +14,9 @@
 #include <math.h>
 
 # define EPSILON         0.0001
-# define ERROR_THRESHOLD 1.0
+# define ERROR_THRESHOLD 0.1
 
-# define BINS 30
+# define BINS 10
 
 
 #ifndef PARENT
