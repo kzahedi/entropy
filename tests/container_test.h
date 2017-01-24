@@ -8,6 +8,7 @@ class containerTest : public CppUnit::TestFixture
   CPPUNIT_TEST(testDropping);
   CPPUNIT_TEST(testUniformDiscretisation);
   CPPUNIT_TEST(testUniformDiscretisationUnary);
+  CPPUNIT_TEST(testUniformDiscretisationUnary2);
   CPPUNIT_TEST(testCopy);
   CPPUNIT_TEST(testMax);
   CPPUNIT_TEST(testMin);
@@ -31,6 +32,7 @@ class containerTest : public CppUnit::TestFixture
   CPPUNIT_TEST(testFindList4ByContainer);
   CPPUNIT_TEST(testGetRow1);
   CPPUNIT_TEST(testGetRow2);
+  CPPUNIT_TEST(testUniformDiscretisationByColumn);
 
   CPPUNIT_TEST_SUITE_END();
 
@@ -41,6 +43,7 @@ class containerTest : public CppUnit::TestFixture
     void testCopy();
     void testUniformDiscretisation();
     void testUniformDiscretisationUnary();
+    void testUniformDiscretisationUnary2();
     void testMax();
     void testMin();
     void testExtractColumns();
@@ -63,5 +66,6 @@ class containerTest : public CppUnit::TestFixture
     void testGetRow1();
     void testGetRow2();
     void testEqual();
+    void testUniformDiscretisationByColumn();
 
 };

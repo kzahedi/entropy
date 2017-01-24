@@ -36,8 +36,6 @@ Model::~Model()
   delete _marginals;
 }
 
-
-
 void Model::setFeatures(vector<vector<int> > Xindices,
                         vector<vector<int> > Yindices,
                         vector<Feature*>     f)

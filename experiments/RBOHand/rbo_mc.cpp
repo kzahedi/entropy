@@ -57,9 +57,10 @@ DEFINE_bool(silent, false, "no output");
 
 void check_domains(string label, DContainer *domain)
 {
-  VLOG(100) << "checking domains";
+  VLOG(100) << "checking domains: (" << domain->columns();
   for(int i = 0; i < domain->columns(); i++)
   {
+    VLOG(100) << "Domain " << i << "[" << (*domain)(0,i) << "," << (*domain)(1,i) << "]";
     if(fabs((*domain)(0,i) - (*domain)(1,i)) < 0.00001)
     {
       // found = true;
@@ -148,10 +149,10 @@ int main(int argc, char** argv)
     w_indices = int_tokenizer(FLAGS_wi);
     VLOG(100) << "- Reading W domain file";
     w_domains = csv->read(w_domain_file, w_indices);
+    VLOG(100) << *w_domains;
     VLOG(100) << "- Reading W states file";
     W         = csv->read(w_states, w_indices);
-    VLOG(100) << "- W domain:";
-    VLOG(100) << *w_domains;
+    VLOG(100) << *W;
     VLOG(100) << "- W end";
     for(int i = 0; i < 3; i++)
     {
@@ -161,9 +162,10 @@ int main(int argc, char** argv)
     VLOG(100) << "- W";
     for(int i = 0; i < (int)w_indices.size(); i++)
     {
-    VLOG(100) << i << " - W";
+      VLOG(100) << i << " - W";
       // map the chosen indices to the x,y,z coordinates
       int index = w_indices[i] % 3;
+      // cout << index << " vs. " << i << " and " << w_indices[i] << " " << w_domains->rows() << " " << w_domains->columns() << endl;
       if(w_min[index] > (*w_domains)(0, i) || w_min[index] == VERY_SMALL)
         w_min[index] = (*w_domains)(0, i);
       if(w_max[index] < (*w_domains)(1, i) || w_max[index] == VERY_SMALL)
@@ -200,8 +202,8 @@ int main(int argc, char** argv)
         VLOG(50) << sst.str();
       }
     }
-
   }
+
   check_domains("W", w_domains);
   VLOG(1) << "W min/max:";
   for(int i = 0; i < 3; i++) VLOG(1) << w_min[i] << ", " << w_max[i];

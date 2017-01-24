@@ -497,12 +497,12 @@ namespace entropy
           return NULL;
         }
 
-        Container<unsigned long>* discretiseByColumn()
+        Container<unsigned long>* discretiseByColumn(bool relabel = true)
         {
           switch(_mode)
           {
             case UNIFORM:
-              return __uniformDiscretisationByColumn();
+              return __uniformDiscretisationByColumn(relabel);
               break;
             default:
               cerr << "Unknown discretisation mode given: " << _mode << endl;
@@ -774,25 +774,28 @@ namespace entropy
         }
 
       private:
-        Container<unsigned long>* __uniformDiscretisationByColumn()
+        Container<unsigned long>* __uniformDiscretisationByColumn(bool relabel)
         {
           Container<unsigned long> *copy = new Container<unsigned long>(_rows, _columns);
           // __copyProperties(copy);
           copy->isDiscretised(_discretised);
           for(int c = 0; c < _columns; c++)
           {
-            vector<int> values;
             for(int r = 0; r < _rows; r++)
             {
-              ASSERT(_domains[c][0] <= get(r,c) && get(r,c) <= _domains[c][1], "get(" << r << "," << c << ") = " << get(r,c) << endl << "Domain " << _domains[c][0] << ", " << _domains[c][1] << endl);
-              unsigned long mapped  = (unsigned long)(((get(r,c)       - _domains[c][0])
-                                                       / (_domains[c][1] - _domains[c][0]))
-                                                      * _bins[c]);
-              unsigned long cropped = (unsigned long)MIN(_bins[c]-1, mapped);
-              copy->set(r, c, cropped);
+              ASSERT(_domains[c][0] <= get(r,c) &&
+                     get(r,c) <= _domains[c][1],
+                     "get(" << r << "," << c << ") = " << get(r,c) << endl <<
+                     "Domain " << _domains[c][0] << ", " << _domains[c][1] << endl);
+
+              double A          = get(r,c) - _domains[c][0];
+              double B          = _domains[c][1] - _domains[c][0];
+              double C          = A / B * (float)_bins[c];
+              unsigned long val = (unsigned long)MIN(_bins[c]-1, C);
+              copy->set(r, c, val);
             }
           }
-          copy->relabel();
+          if(relabel) copy->relabel();
           copy->isDiscretised(true);
           if(_binsGiven == true && copy->columns() == _columns)
           {
@@ -800,7 +803,6 @@ namespace entropy
           }
           return copy;
         }
-
 
         void __copyProperties(Container* dst)
         {

@@ -14,7 +14,7 @@
 #include <math.h>
 
 # define EPSILON         0.0001
-# define ERROR_THRESHOLD 0.1
+# define ERROR_THRESHOLD 0.01
 
 # define BINS 10
 
@@ -90,7 +90,7 @@ void gisTest::testAND()
   for(int i = 0; i < 10000; i++)
   {
     independentModel->iterate();
-    if(independentModel->error() < ERROR_THRESHOLD) break;
+    if(independentModel->error() < 0.000000001) break;
   }
 
   independentModel->calculateProbabilities();
@@ -125,7 +125,7 @@ void gisTest::testAND()
     dependentModel->iterate();
     // cout << "Error: " << dependentModel->error() << endl;
     // cout << *dependentModel << endl;
-    if(dependentModel->error() < ERROR_THRESHOLD) break;
+    if(dependentModel->error() < 0.000000001) break;
   }
 
   dependentModel->calculateProbabilities();

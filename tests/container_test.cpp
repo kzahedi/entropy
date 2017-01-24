@@ -19,7 +19,7 @@ void containerTest::testFilling()
 
   CPPUNIT_ASSERT_EQUAL(2, container.rows());
   CPPUNIT_ASSERT_EQUAL(3, container.columns());
-  
+
   for(int r = 0; r < container.rows(); r++)
   {
     for(int c = 0; c < container.columns(); c++)
@@ -126,6 +126,95 @@ void containerTest::testUniformDiscretisationUnary()
   CPPUNIT_ASSERT_EQUAL(8, (int)d->get(8,  0));
   CPPUNIT_ASSERT_EQUAL(9, (int)d->get(9,  0));
   CPPUNIT_ASSERT_EQUAL(9, (int)d->get(10, 0));
+
+  delete   domain[0];
+  delete[] domain;
+  delete[] bins;
+}
+
+void containerTest::testUniformDiscretisationByColumn()
+{
+  int n = 10;
+  DContainer c(n,2);
+
+  for(int i = 0; i < n; i++)
+  {
+    double j = ((double)i)/((float)(n-1));
+    double k = ((float)((i+5)%n))/((float)(n-1));
+    c << 2.0 * j - 1.0;
+    c << 2.0 * k - 1.0;
+  }
+
+
+  double **domain = new double*[1];
+  domain[0]       = new double[2];
+  domain[0][0]    = -1.0;
+  domain[0][1]    =  1.0;
+
+  int *bins       = new int[1];
+  bins[0]         = 10;
+
+  c.setBinSizes(10);
+  c.setDomains(-1.0, 1.0);
+
+  ULContainer *d = c.discretiseByColumn(false);
+
+  CPPUNIT_ASSERT_EQUAL(0, (int)d->get(0, 0));
+  CPPUNIT_ASSERT_EQUAL(1, (int)d->get(1, 0));
+  CPPUNIT_ASSERT_EQUAL(2, (int)d->get(2, 0));
+  CPPUNIT_ASSERT_EQUAL(3, (int)d->get(3, 0));
+  CPPUNIT_ASSERT_EQUAL(4, (int)d->get(4, 0));
+  CPPUNIT_ASSERT_EQUAL(5, (int)d->get(5, 0));
+  CPPUNIT_ASSERT_EQUAL(6, (int)d->get(6, 0));
+  CPPUNIT_ASSERT_EQUAL(7, (int)d->get(7, 0));
+  CPPUNIT_ASSERT_EQUAL(8, (int)d->get(8, 0));
+  CPPUNIT_ASSERT_EQUAL(9, (int)d->get(9, 0));
+
+  CPPUNIT_ASSERT_EQUAL(5, (int)d->get(0, 1));
+  CPPUNIT_ASSERT_EQUAL(6, (int)d->get(1, 1));
+  CPPUNIT_ASSERT_EQUAL(7, (int)d->get(2, 1));
+  CPPUNIT_ASSERT_EQUAL(8, (int)d->get(3, 1));
+  CPPUNIT_ASSERT_EQUAL(9, (int)d->get(4, 1));
+  CPPUNIT_ASSERT_EQUAL(0, (int)d->get(5, 1));
+  CPPUNIT_ASSERT_EQUAL(1, (int)d->get(6, 1));
+  CPPUNIT_ASSERT_EQUAL(2, (int)d->get(7, 1));
+  CPPUNIT_ASSERT_EQUAL(3, (int)d->get(8, 1));
+  CPPUNIT_ASSERT_EQUAL(4, (int)d->get(9, 1));
+}
+
+void containerTest::testUniformDiscretisationUnary2()
+{
+  int n = 10;
+  DContainer c(n+1,1);
+
+  for(int i = 0; i < n+1; i++)
+  {
+    c << 2.0 * ((float)i)/((float)n) - 1.0;
+  }
+
+  double **domain = new double*[1];
+  domain[0]       = new double[2];
+  domain[0][0]    = -1.0;
+  domain[0][1]    =  1.0;
+
+  int *bins       = new int[1];
+  bins[0]         = 20;
+
+  c.setBinSizes(bins);
+  c.setDomains(domain);
+
+  ULContainer *d = c.discretise();
+
+  CPPUNIT_ASSERT_EQUAL(0,  (int)d->get(0,  0));
+  CPPUNIT_ASSERT_EQUAL(1,  (int)d->get(1,  0));
+  CPPUNIT_ASSERT_EQUAL(2,  (int)d->get(2,  0));
+  CPPUNIT_ASSERT_EQUAL(3,  (int)d->get(3,  0));
+  CPPUNIT_ASSERT_EQUAL(4,  (int)d->get(4,  0));
+  CPPUNIT_ASSERT_EQUAL(5,  (int)d->get(5,  0));
+  CPPUNIT_ASSERT_EQUAL(6,  (int)d->get(6,  0));
+  CPPUNIT_ASSERT_EQUAL(7,  (int)d->get(7,  0));
+  CPPUNIT_ASSERT_EQUAL(8,  (int)d->get(8,  0));
+  CPPUNIT_ASSERT_EQUAL(9,  (int)d->get(9,  0));
 
   delete   domain[0];
   delete[] domain;
@@ -360,7 +449,7 @@ void containerTest::testFillMode()
 
   CPPUNIT_ASSERT_EQUAL(2, container.rows());
   CPPUNIT_ASSERT_EQUAL(3, container.columns());
-  
+
   for(int r = 0; r < container.rows(); r++)
   {
     for(int c = 0; c < container.columns(); c++)
