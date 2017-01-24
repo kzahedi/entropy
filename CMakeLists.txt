@@ -48,9 +48,17 @@ ADD_CUSTOM_TARGET(uninstall
 INSTALL(DIRECTORY ${CMAKE_SOURCE_DIR}/src/entropy++/
   DESTINATION ${CMAKE_INSTALL_PREFIX}/include/entropy++
   CONFIGURATIONS Release Debug
-  PATTERN "*.cpp" EXCLUDE 
-  PATTERN "*.txt" EXCLUDE 
+  PATTERN "*.cpp" EXCLUDE
+  PATTERN "*.txt" EXCLUDE
   )
+
+INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib/
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+  CONFIGURATIONS Release Debug
+  PATTERN "*.cpp" EXCLUDE
+  PATTERN "*.txt" EXCLUDE
+  )
+
 
 option(ENTROPY_COMPILE_HOPPING "Compile MC example with hopping data" OFF)
 option(ENTROPY_COMPILE_RBO     "Compile MC example for RBOHand data"  OFF)
