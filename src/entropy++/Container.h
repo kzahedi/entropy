@@ -25,7 +25,7 @@ using namespace std;
 namespace entropy
 {
   template <class T>
-    class Container 
+    class Container
     {
       public:
 
@@ -543,7 +543,7 @@ namespace entropy
           str << "Container content:" << endl;
           for(int r = 0; r < container._rows; r++)
           {
-            str << "  " << container(r,0); 
+            str << "  " << container(r,0);
             for(int c = 1; c < container._columns; c++)
             {
               str << " " << container(r, c);
