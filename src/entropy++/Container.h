@@ -12,8 +12,8 @@
 #include <vector>
 #include <algorithm>
 
-# define MIN(a,b) (((a)<(b))?a:b)
-# define MAX(a,b) (((a)>(b))?a:b)
+# define ENTROPY_MIN(a,b) (((a)<(b))?a:b)
+# define ENTROPY_MAX(a,b) (((a)>(b))?a:b)
 
 using namespace std;
 
@@ -195,7 +195,7 @@ namespace entropy
         // merge
         Container<T>& operator+=(const Container<T>& c)
         {
-          int newrows    = MIN(this->_rows, c._rows);
+          int newrows    = ENTROPY_MIN(this->_rows, c._rows);
           int newcolumns = this->_columns + c._columns;
 
           T** tmp      = new T*[newrows];
@@ -529,7 +529,7 @@ namespace entropy
             unsigned long f = 1;
             for(int c = 0; c < _columns; c++)
             {
-              if(c > 0) f = f * MAX(maxBins[c-1],1);
+              if(c > 0) f = f * ENTROPY_MAX(maxBins[c-1],1);
               v += f * get(r,c);
             }
             *copy << v;
@@ -791,7 +791,7 @@ namespace entropy
               double A          = get(r,c) - _domains[c][0];
               double B          = _domains[c][1] - _domains[c][0];
               double C          = A / B * (float)_bins[c];
-              unsigned long val = (unsigned long)MIN(_bins[c]-1, C);
+              unsigned long val = (unsigned long)ENTROPY_MIN(_bins[c]-1, C);
               copy->set(r, c, val);
             }
           }

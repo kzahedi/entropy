@@ -20,8 +20,8 @@
 #define PARENT "/Users/zahedi/projects/entropy/experiments/hopping/data/"
 #endif
 
-# define MAX3(a,b,c) MAX(a,MAX(b,c))
-# define MIN3(a,b,c) MIN(a,MIN(b,c))
+# define MAX3(a,b,c) ENTROPY_MAX(a,ENTROPY_MAX(b,c))
+# define MIN3(a,b,c) ENTROPY_MIN(a,ENTROPY_MIN(b,c))
 
 # define POS 0
 # define VEL 1
