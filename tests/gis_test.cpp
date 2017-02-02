@@ -95,8 +95,8 @@ void gisTest::testAND()
 
   independentModel->calculateProbabilities();
 
-  cout << "Final Error: " << independentModel->error() << endl;
-  cout << "AND: Independent model: " << endl << *independentModel << endl;
+  // cout << "Final Error: " << independentModel->error() << endl;
+  // cout << "AND: Independent model: " << endl << *independentModel << endl;
 
   ////////////////////////////////////////////////////////////////////////////////
   // dependent model
@@ -214,8 +214,8 @@ void gisTest::testANDCMI()
 
   independentModel->calculateProbabilities();
 
-  cout << "Final Error: " << independentModel->error() << endl;
-  cout << "AND: Independent model: " << endl << *independentModel << endl;
+  // cout << "Final Error: " << independentModel->error() << endl;
+  // cout << "AND: Independent model: " << endl << *independentModel << endl;
 
   ////////////////////////////////////////////////////////////////////////////////
   // dependent model
@@ -251,7 +251,7 @@ void gisTest::testANDCMI()
   dependentModel->calculateProbabilities();
 
   // cout << "Final Error: " << dependentModel->error() << endl;
-  cout << "AND: Dependent model: " << endl << *dependentModel << endl;
+  // cout << "AND: Dependent model: " << endl << *dependentModel << endl;
 
   Matrix dpycx(2,4,0.0);
   dpycx(0,0) = 1.0;

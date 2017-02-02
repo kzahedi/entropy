@@ -123,35 +123,33 @@ void Model::calculateProbabilities()
   if(_marginals    != NULL) delete _marginals;
 
   // get all columns for X
-  vector<int> x_indices;
   for(vector<vector<int> >::iterator v = _Xindices.begin(); v != _Xindices.end(); v++)
   {
     for(vector<int>::iterator i = (*v).begin(); i != (*v).end(); i++)
     {
-      if(find(x_indices.begin(), x_indices.end(), *i) == x_indices.end())
+      if(find(_x_indices.begin(), _x_indices.end(), *i) == _x_indices.end())
       {
-        x_indices.push_back(*i);
+        _x_indices.push_back(*i);
       }
     }
   }
 
   // get all columns for Y
-  vector<int> y_indices;
   for(vector<vector<int> >::iterator v = _Yindices.begin(); v != _Yindices.end(); v++)
   {
     for(vector<int>::iterator i = (*v).begin(); i != (*v).end(); i++)
     {
-      if(find(y_indices.begin(), y_indices.end(), *i) == y_indices.end())
+      if(find(_y_indices.begin(), _y_indices.end(), *i) == _y_indices.end())
       {
-        y_indices.push_back(*i);
+        _y_indices.push_back(*i);
       }
     }
   }
 
-  ULContainer *x_alphabet_full = Xalphabet->columns(x_indices);
-  ULContainer *y_alphabet_full = Yalphabet->columns(y_indices);
-  ULContainer *x_alphabet = x_alphabet_full->unique();
-  ULContainer *y_alphabet = y_alphabet_full->unique();
+  ULContainer *x_alphabet_full = Xalphabet->columns(_x_indices);
+  ULContainer *y_alphabet_full = Yalphabet->columns(_y_indices);
+  _x_alphabet = x_alphabet_full->unique();
+  _y_alphabet = y_alphabet_full->unique();
 
   Matrix M(Xalphabet->rows(), Yalphabet->rows());
 
@@ -180,27 +178,15 @@ void Model::calculateProbabilities()
     }
   }
 
-  _conditionals = new Matrix(x_alphabet->rows(), y_alphabet->rows());
-  _marginals    = new Matrix(x_alphabet->rows(), 1);
+  _conditionals = new Matrix(_x_alphabet->rows(), _y_alphabet->rows());
+  _marginals    = new Matrix(_x_alphabet->rows(), 1);
 
   for(int x = 0; x < Xalphabet->rows(); x++)
   {
-    vector<unsigned long> x_row = Xalphabet->row(x);
-    vector<unsigned long> x_values;
-    for(vector<int>::iterator i = x_indices.begin(); i != x_indices.end(); i++)
-    {
-      x_values.push_back(x_row[*i]);
-    }
-    int x_row_index = x_alphabet->find(x_values);
+    int x_row_index = __convertAlphabetToMatrixX(x);
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
-      vector<unsigned long> y_row = Yalphabet->row(y);
-      vector<unsigned long> y_values;
-      for(vector<int>::iterator i = y_indices.begin(); i != y_indices.end(); i++)
-      {
-        y_values.push_back(y_row[*i]);
-      }
-      int y_row_index = y_alphabet->find(y_values);
+      int y_row_index = __convertAlphabetToMatrixY(y);
       (*_conditionals)(x_row_index, y_row_index) += M(x,y);
     }
   }
@@ -219,12 +205,10 @@ void Model::calculateProbabilities()
   double b = x_alphabet_full->rows();
   for(int x = 0; x < _marginals->rows(); x++)
   {
-    double a = x_alphabet_full->findlist(x_alphabet, x).size();
+    double a = x_alphabet_full->findlist(_x_alphabet, x).size();
     (*_marginals)(x,0) = a / b;
   }
 
-  delete x_alphabet;
-  delete y_alphabet;
   delete x_alphabet_full;
   delete y_alphabet_full;
 
@@ -240,6 +224,19 @@ double Model::p_x(int xUniqueIndex)
   return (*_marginals)(xUniqueIndex,0);
 }
 
+double Model::p_y_c_x_d(int yAlphabetIndex, int xAlphabetIndex)
+{
+  int x = __convertAlphabetToMatrixX(xAlphabetIndex);
+  int y = __convertAlphabetToMatrixY(yAlphabetIndex);
+  return (*_conditionals)(x, y);
+}
+
+double Model::p_x_d(int xAlphabetIndex)
+{
+  int x = __convertAlphabetToMatrixX(xAlphabetIndex);
+  return (*_marginals)(x,0);
+}
+
 int Model::getNrOfUniqueX()
 {
   return Xalphabet->rows();
@@ -250,3 +247,24 @@ int Model::getNrOfUniqueY()
   return Yalphabet->rows();
 }
 
+int Model::__convertAlphabetToMatrixX(int x)
+{
+  vector<unsigned long> x_row = Xalphabet->row(x);
+  vector<unsigned long> x_values;
+  for(vector<int>::iterator i = _x_indices.begin(); i != _x_indices.end(); i++)
+  {
+    x_values.push_back(x_row[*i]);
+  }
+  return _x_alphabet->find(x_values);
+}
+
+int Model::__convertAlphabetToMatrixY(int y)
+{
+  vector<unsigned long> y_row = Yalphabet->row(y);
+  vector<unsigned long> y_values;
+  for(vector<int>::iterator i = _y_indices.begin(); i != _y_indices.end(); i++)
+  {
+    y_values.push_back(y_row[*i]);
+  }
+  return _y_alphabet->find(y_values);
+}

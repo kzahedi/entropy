@@ -49,6 +49,9 @@ namespace entropy
         double p_y_c_x(int yUniqueIndex, int xUniqueIndex);
         double p_x(int xUniqueIndex);
 
+        double p_y_c_x_d(int yAlphabetIndex, int xAlphabetIndex);
+        double p_x_d(int xAlphabetIndex);
+
         Matrix* p_y_c_x() { return _conditionals;};
         Matrix* p_x()     { return _marginals;};
 
@@ -76,12 +79,20 @@ namespace entropy
         ULContainer*  Yalphabet;
 
       private:
+        int __convertAlphabetToMatrixX(int x);
+        int __convertAlphabetToMatrixY(int y);
 
         int           _nrX;
         int           _nrY;
 
         vector<vector<int> > _Xindices;
         vector<vector<int> > _Yindices;
+
+        // for p(y|x) and p(x)
+        ULContainer* _x_alphabet;
+        vector<int>  _x_indices;
+        ULContainer* _y_alphabet;
+        vector<int>  _y_indices;
 
         Matrix* _conditionals;
         Matrix* _marginals;
