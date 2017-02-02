@@ -49,6 +49,9 @@ namespace entropy
         double p_y_c_x(int yUniqueIndex, int xUniqueIndex);
         double p_x(int xUniqueIndex);
 
+        Matrix* p_y_c_x() { return _conditionals;};
+        Matrix* p_x()     { return _marginals;};
+
         int getNrOfUniqueX();
         int getNrOfUniqueY();
 

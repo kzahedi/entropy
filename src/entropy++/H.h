@@ -4,7 +4,7 @@
 #include <entropy++/Container.h>
 #include <entropy++/defs.h>
 
-namespace entropy 
+namespace entropy
 {
   double H(ULContainer* X, int mode = EMPERICAL);
 }

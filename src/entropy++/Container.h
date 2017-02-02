@@ -285,7 +285,7 @@ namespace entropy
 
         T rowSum(int r)
         {
-          T sum = (T)0;
+          T sum = (T)0.0;
           for(int c = 0; c < _columns; c++)
           {
             sum += _data[r][c];
@@ -654,6 +654,22 @@ namespace entropy
         }
 
         int find(T* values)
+        {
+          bool found = false;
+          for(int r = 0; r < this->rows(); r++)
+          {
+            found = true;
+            for(int c = 0; c < this->columns(); c++)
+            {
+              found &= (this->get(r,c) == values[c]);
+              if(found == false) break;
+            }
+            if(found == true) return r;
+          }
+          return -1;
+        }
+
+        int find(vector<T> values)
         {
           bool found = false;
           for(int r = 0; r < this->rows(); r++)

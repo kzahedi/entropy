@@ -5,6 +5,7 @@
 #include <math.h>
 
 using namespace std;
+using namespace entropy;
 
 double __empericalH(ULContainer* X)
 {

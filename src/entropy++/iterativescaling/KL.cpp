@@ -19,8 +19,8 @@ double KL::divergence2()
 {
   double sum = 0.0;
 
-  int nr_of_x = _p->getNrOfUniqueX();
-  int nr_of_y = _p->getNrOfUniqueY();
+  int nr_of_x   = _p->getNrOfUniqueX();
+  int nr_of_y   = _p->getNrOfUniqueY();
 
   for(int x = 0; x < nr_of_x; x++)
   {

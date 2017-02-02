@@ -66,7 +66,6 @@ void Model::countObservedFeatures()
 
     for(vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
     {
-
       bool found = false;
       for(vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
       {
@@ -122,11 +121,39 @@ void Model::calculateProbabilities()
 {
   if(_conditionals != NULL) delete _conditionals;
   if(_marginals    != NULL) delete _marginals;
-  
-  _conditionals = new Matrix(Xalphabet->rows(), Yalphabet->rows());
-  _marginals    = new Matrix(Xalphabet->rows(), 1);
 
-  double nenner = 0.0;
+  // get all columns for X
+  vector<int> x_indices;
+  for(vector<vector<int> >::iterator v = _Xindices.begin(); v != _Xindices.end(); v++)
+  {
+    for(vector<int>::iterator i = (*v).begin(); i != (*v).end(); i++)
+    {
+      if(find(x_indices.begin(), x_indices.end(), *i) == x_indices.end())
+      {
+        x_indices.push_back(*i);
+      }
+    }
+  }
+
+  // get all columns for Y
+  vector<int> y_indices;
+  for(vector<vector<int> >::iterator v = _Yindices.begin(); v != _Yindices.end(); v++)
+  {
+    for(vector<int>::iterator i = (*v).begin(); i != (*v).end(); i++)
+    {
+      if(find(y_indices.begin(), y_indices.end(), *i) == y_indices.end())
+      {
+        y_indices.push_back(*i);
+      }
+    }
+  }
+
+  ULContainer *x_alphabet_full = Xalphabet->columns(x_indices);
+  ULContainer *y_alphabet_full = Yalphabet->columns(y_indices);
+  ULContainer *x_alphabet = x_alphabet_full->unique();
+  ULContainer *y_alphabet = y_alphabet_full->unique();
+
+  Matrix M(Xalphabet->rows(), Yalphabet->rows());
 
   for(int x = 0; x < Xalphabet->rows(); x++)
   {
@@ -144,17 +171,42 @@ void Model::calculateProbabilities()
       }
       if(fabs(sum) <= EPSILON)
       {
-        (*_conditionals)(x,y) = 0.0; // TODO check
+        M(x,y) = 0.0; // TODO check
       }
       else
       {
-        (*_conditionals)(x,y) = exp(sum);
+        M(x,y) = exp(sum);
       }
     }
   }
 
+  _conditionals = new Matrix(x_alphabet->rows(), y_alphabet->rows());
+  _marginals    = new Matrix(x_alphabet->rows(), 1);
+
+  for(int x = 0; x < Xalphabet->rows(); x++)
+  {
+    vector<unsigned long> x_row = Xalphabet->row(x);
+    vector<unsigned long> x_values;
+    for(vector<int>::iterator i = x_indices.begin(); i != x_indices.end(); i++)
+    {
+      x_values.push_back(x_row[*i]);
+    }
+    int x_row_index = x_alphabet->find(x_values);
+    for(int y = 0; y < Yalphabet->rows(); y++)
+    {
+      vector<unsigned long> y_row = Yalphabet->row(y);
+      vector<unsigned long> y_values;
+      for(vector<int>::iterator i = y_indices.begin(); i != y_indices.end(); i++)
+      {
+        y_values.push_back(y_row[*i]);
+      }
+      int y_row_index = y_alphabet->find(y_values);
+      (*_conditionals)(x_row_index, y_row_index) += M(x,y);
+    }
+  }
+
   double sum = 0.0;
-  for(int x = 0; x < _conditionals->rows(); x++)
+  for(int x = 0; x < _marginals->rows(); x++)
   {
     (*_marginals)(x,0) = _conditionals->rowSum(x);
     sum += (*_marginals)(x,0);
@@ -164,10 +216,18 @@ void Model::calculateProbabilities()
     }
   }
 
+  double b = x_alphabet_full->rows();
   for(int x = 0; x < _marginals->rows(); x++)
   {
-    (*_marginals)(x,0) = (*_marginals)(x,0) / sum;
+    double a = x_alphabet_full->findlist(x_alphabet, x).size();
+    (*_marginals)(x,0) = a / b;
   }
+
+  delete x_alphabet;
+  delete y_alphabet;
+  delete x_alphabet_full;
+  delete y_alphabet_full;
+
 }
 
 double Model::p_y_c_x(int yUniqueIndex, int xUniqueIndex)

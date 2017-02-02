@@ -96,46 +96,12 @@ bool Delta::matchXY(vector<unsigned long>& xValues, vector<unsigned long>& yValu
 {
   for(int i = 0; i < (int)_xValues.size(); i++)
   {
-    // cout << "x: " << _xValues[i] << " vs. " << xValues[_xIndices[i]] << endl;
     if(_xValues[i] != xValues[_xIndices[i]]) return false;
   }
   for(int i = 0; i < (int)_yValues.size(); i++)
   {
-    // cout << "y: " << _yValues[i] << " vs. " << yValues[_yIndices[i]] << endl;
     if(_yValues[i] != yValues[_yIndices[i]]) return false;
   }
-
-  // cout << ">>> match found: " << endl;
-
-  // cout << "xValues: ";
-  // for(int i = 0; i < xValues.size() - 1; i++)
-  // {
-    // cout << xValues[i] << ", ";
-  // }
-  // cout << xValues[xValues.size() - 1] << endl;
-
-  // cout << "X: ";
-  // for(int i = 0; i < _xValues.size(); i++)
-  // {
-    // cout << " [" << _xValues[i] << " == " << xValues[_xIndices[i]] << "](" << _xIndices[i] << ") ";
-  // }
-  // cout << endl;
-
-  // cout << "yValues: ";
-  // for(int i = 0; i < yValues.size() - 1; i++)
-  // {
-    // cout << yValues[i] << ", ";
-  // }
-  // cout << yValues[yValues.size() - 1] << endl;
-
-  // cout << "Y: ";
-  // for(int i = 0; i < _yValues.size(); i++)
-  // {
-    // cout << " [" << _yValues[i] << " == " << yValues[_yIndices[i]] << "](" << _yIndices[i] << ") ";
-  // }
-  // cout << endl;
-
-
   return true;
 }
 
