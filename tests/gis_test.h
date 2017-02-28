@@ -3,10 +3,10 @@
 class gisTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(gisTest);
-  // CPPUNIT_TEST(testAND);
+  CPPUNIT_TEST(testAND);
   CPPUNIT_TEST(testANDCMI);
-  // CPPUNIT_TEST(testOR);
-  // CPPUNIT_TEST(testXOR);
+  CPPUNIT_TEST(testOR);
+  CPPUNIT_TEST(testXOR);
   // CPPUNIT_TEST(testUnique);
   // CPPUNIT_TEST(testUnique2);
   CPPUNIT_TEST(testMC_W);

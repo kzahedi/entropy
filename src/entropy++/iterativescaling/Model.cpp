@@ -12,6 +12,9 @@ Model::Model()
   _yAlphabetSize = 0;
   _conditionals  = NULL;
   _marginals     = NULL;
+  _x_alphabet    = NULL;
+  _y_alphabet    = NULL;
+
 }
 
 void Model::setData(ULContainer *X, ULContainer *Y)
@@ -121,6 +124,11 @@ void Model::calculateProbabilities()
 {
   if(_conditionals != NULL) delete _conditionals;
   if(_marginals    != NULL) delete _marginals;
+  if(_x_alphabet   != NULL) delete _x_alphabet;
+  if(_y_alphabet   != NULL) delete _y_alphabet;
+
+  _x_indices.clear();
+  _y_indices.clear();
 
   // get all columns for X
   for(vector<vector<int> >::iterator v = _Xindices.begin(); v != _Xindices.end(); v++)
@@ -147,8 +155,9 @@ void Model::calculateProbabilities()
   }
 
   ULContainer *x_alphabet_full = Xalphabet->columns(_x_indices);
-  ULContainer *y_alphabet_full = Yalphabet->columns(_y_indices);
   _x_alphabet = x_alphabet_full->unique();
+
+  ULContainer *y_alphabet_full = Yalphabet->columns(_y_indices);
   _y_alphabet = y_alphabet_full->unique();
 
   Matrix M(Xalphabet->rows(), Yalphabet->rows());
@@ -169,7 +178,7 @@ void Model::calculateProbabilities()
       }
       if(fabs(sum) <= EPSILON)
       {
-        M(x,y) = 0.0; // TODO check
+        M(x,y) = 0.0;
       }
       else
       {
@@ -191,6 +200,9 @@ void Model::calculateProbabilities()
     }
   }
 
+  cout << "C: " << endl;
+  cout << *_conditionals << endl;
+
   double sum = 0.0;
   for(int x = 0; x < _marginals->rows(); x++)
   {
@@ -211,7 +223,6 @@ void Model::calculateProbabilities()
 
   delete x_alphabet_full;
   delete y_alphabet_full;
-
 }
 
 double Model::p_y_c_x(int yUniqueIndex, int xUniqueIndex)

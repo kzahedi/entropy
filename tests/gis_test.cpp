@@ -16,7 +16,7 @@
 # define EPSILON         0.01
 # define ERROR_THRESHOLD 0.01
 
-# define BINS 10
+# define BINS 5
 
 
 #ifndef PARENT
@@ -206,7 +206,7 @@ void gisTest::testANDCMI()
   independentModel->setFeatures(ia,ib,features);
   independentModel->init();
 
-  for(int i = 0; i < 50000; i++)
+  for(int i = 0; i < 11; i++)
   {
     independentModel->iterate();
     if(independentModel->error() < 0.000000001) break;
@@ -240,7 +240,7 @@ void gisTest::testANDCMI()
   dependentModel->setFeatures(da,db,dfeatures);
   dependentModel->init();
 
-  for(int i = 0; i < 10000; i++)
+  for(int i = 0; i < 11; i++)
   {
     dependentModel->iterate();
     // cout << "Error: " << dependentModel->error() << endl;
@@ -306,8 +306,8 @@ void gisTest::testANDCMI()
 
   KL* kl = new KL(dependentModel, independentModel);
   // CPPUNIT_ASSERT_DOUBLES_EQUAL(EPSILON, kl->divergence(), EPSILON);
-  cout << "AND (bits): " << kl->divergence2() << endl;
-  cout << "AND (nats): " << kl->divergenceN() << endl;
+  cout << "AND CMI (bits): " << kl->divergence2() << endl;
+  cout << "AND CMI (nats): " << kl->divergenceN() << endl;
 }
 
 void gisTest::testOR()
@@ -1063,7 +1063,7 @@ void gisTest::testUnique2()
 
 void gisTest::testMC_W()
 {
-  cout << PARENT << "/dcmot.csv" << endl;
+  cout << PARENT << "/dcmot_small.csv" << endl;
 
   Csv *csv = new Csv();
   DContainer *dcmot  = Csv::read(string(PARENT) + string("/dcmot.csv"),  4,
@@ -1235,12 +1235,15 @@ void gisTest::testMC_W()
   {
     if(p->error() > ERROR_THRESHOLD) p->iterate();
     if(q->error() > ERROR_THRESHOLD) q->iterate();
-    if(i % 100 == 0)
+    // if(i % 100 == 0)
     {
       cout << "p error (" << i << "): " << p->error() << endl;
       cout << "q error (" << i << "): " << q->error() << endl;
+      // KL* kl = new KL(p, q);
+      // cout << "kl: "  << kl->divergence2() << endl;
+      // delete kl;
     }
-    if(i % 1000 == 0)
+    if(i % 100 == 0 && i > 0)
     {
       KL* kl = new KL(p, q);
       cout << "after " << i << " iterations: " << kl->divergence2() << endl;
