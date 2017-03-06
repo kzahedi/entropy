@@ -214,11 +214,13 @@ void Model::calculateProbabilities()
     }
   }
 
-  double b = x_alphabet_full->rows();
+  ULContainer *xdata = Xdata->columns(_x_indices);
+
+  double b = xdata->rows();
   for(int x = 0; x < _marginals->rows(); x++)
   {
-    double a = x_alphabet_full->findlist(_x_alphabet, x).size();
-    (*_marginals)(x,0) = a / b;
+    double a = xdata->findlist(_x_alphabet, x).size();
+    (*_marginals)(x,0) = ((double)a) / ((double)b);
   }
 
   delete x_alphabet_full;

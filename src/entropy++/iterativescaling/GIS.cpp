@@ -2,6 +2,8 @@
 
 #include <glog/logging.h>
 
+#define MIN_S 0.0000001
+
 using namespace entropy::iterativescaling;
 
 GIS::GIS() : IS()
@@ -38,6 +40,7 @@ void GIS::iterate()
           _s[y] += (*d)->lambda();
         }
       }
+      if(fabs(_s[y]) < MIN_S) _s[y] = -1.0;
     } // for each output y
 
     // double z = _yAlphabetSize - (int)_s.size();
