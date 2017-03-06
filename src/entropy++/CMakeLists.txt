@@ -56,4 +56,4 @@ else(APPLE)
   add_library(Entropy++ STATIC ${SRC})
 endif(APPLE)
 
-target_link_libraries(Entropy++ ${Boost_LIBRARIES} glog)
+target_link_libraries(Entropy++ ${Boost_LIBRARIES})

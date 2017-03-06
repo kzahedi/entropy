@@ -1,6 +1,6 @@
 #include <entropy++/iterativescaling/GIS.h>
 
-#include <glog/logging.h>
+// #include <glog/logging.h>
 
 #define MIN_S 0.0000001
 
@@ -15,7 +15,7 @@ void GIS::init()
   createUniqueContainer();
   countObservedFeatures();
   _s.resize(Yalphabet->rows());
-  VLOG(100) << "Each iteration will require " << (deltas.size() * Xdata->rows() * Yalphabet->rows()) << " calculations.";
+  // VLOG(100) << "Each iteration will require " << (deltas.size() * Xdata->rows() * Yalphabet->rows()) << " calculations.";
 }
 
 void GIS::iterate()
@@ -91,13 +91,13 @@ void GIS::iterate()
 
   _error = sqrt(_error);
 
-  if(VLOG_IS_ON(100))
-  {
-    for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-    {
-      VLOG(100) << **d;
-    }
-  }
+//  if(VLOG_IS_ON(100))
+//  {
+//    for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+//    {
+//      VLOG(100) << **d;
+//    }
+//  }
 }
 
 double GIS::error()

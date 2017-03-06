@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include <glog/logging.h>
+// #include <glog/logging.h>
 
 using namespace std;
 
@@ -27,7 +27,7 @@ void SCGIS::init()
   _z = new Matrix(Xdata->rows(), 1, Yalphabet->rows());
   _s = new Matrix(Xdata->rows(), Yalphabet->rows(), 0.0); 
 
-  VLOG(100) << "Each iteration requires " << (deltas.size() * 2.0 * Yalphabet->rows() * Xdata->rows()) << " loops";
+ // VLOG(100) << "Each iteration requires " << (deltas.size() * 2.0 * Yalphabet->rows() * Xdata->rows()) << " loops";
 }
 
 void SCGIS::iterate()
@@ -71,13 +71,13 @@ void SCGIS::iterate()
   }
   _error = sqrt(_error);
 
-  if(VLOG_IS_ON(100))
-  {
-    for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-    {
-      VLOG(100) << **d;
-    }
-  }
+//  if(VLOG_IS_ON(100))
+//  {
+//    for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+//    {
+//      VLOG(100) << **d;
+//    }
+//  }
 }
 
 double SCGIS::error()
