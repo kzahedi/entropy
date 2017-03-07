@@ -114,6 +114,14 @@ ULContainer* Model::Y()
   return Ydata;
 }
 
+ULContainer* Model::XAlphabet(){
+  return Xalphabet;
+}
+
+ULContainer* Model::YAlphabet(){
+  return Yalphabet;
+}
+
 Feature* Model::feature(int i)
 {
   return features[i];
@@ -257,6 +265,12 @@ int Model::getNrOfUniqueX()
 int Model::getNrOfUniqueY()
 {
   return Yalphabet->rows();
+}
+vector<int> Model::getAllColumnsForX(){
+  return _x_indices;
+}
+vector<int> Model::getAllColumnsForY(){
+  return _y_indices;
 }
 
 int Model::__convertAlphabetToMatrixX(int x)

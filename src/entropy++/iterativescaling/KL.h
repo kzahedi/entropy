@@ -19,6 +19,14 @@ namespace entropy
       private:
         Model* _p;
         Model* _q;
+        vector<int> _x_indices;
+        vector<int> _y_indices;
+        vector<int> _x_indices_inAlph_p;
+        vector<int> _y_indices_inAlph_p;
+        vector<int> _x_indices_inAlph_q;
+        vector<int> _y_indices_inAlph_q;
+        int         _xsize;
+        int         _ysize;
     };
   }
 }

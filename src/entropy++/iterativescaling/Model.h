@@ -30,6 +30,9 @@ namespace entropy
         ULContainer* X();
         ULContainer* Y();
 
+        ULContainer* XAlphabet();
+        ULContainer* YAlphabet();
+
         void createUniqueContainer();
 
         void setData(ULContainer* X, ULContainer* Y);
@@ -57,6 +60,8 @@ namespace entropy
 
         int getNrOfUniqueX();
         int getNrOfUniqueY();
+        vector<int> getAllColumnsForX();
+        vector<int> getAllColumnsForY();
 
         friend std::ostream& operator<<(std::ostream& str, const Model& m)
         {
