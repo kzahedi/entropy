@@ -16,7 +16,7 @@
 # define EPSILON         0.01
 # define ERROR_THRESHOLD 0.01
 
-# define BINS 7
+# define BINS 3
 
 
 #ifndef PARENT
@@ -52,11 +52,11 @@ void gisTest::testAND()
   ULContainer *xData = new ULContainer(8,3);
   *xData << 0 << 0 << 0;
   *xData << 0 << 1 << 0;
-  *xData << 1 << 0 << 0;
+  *xData << 1 << 0 << 2;
   *xData << 1 << 1 << 0;
-  *xData << 0 << 0 << 1;
-  *xData << 0 << 1 << 1;
-  *xData << 1 << 0 << 1;
+  *xData << 0 << 0 << 0;
+  *xData << 0 << 1 << 0;
+  *xData << 1 << 0 << 0;
   *xData << 1 << 1 << 1;
 
   ULContainer *yData = new ULContainer(8,2);
@@ -65,8 +65,8 @@ void gisTest::testAND()
   *yData << 0 << 0;
   *yData << 1 << 0;
   *yData << 0 << 1;
-  *yData << 0 << 1;
-  *yData << 0 << 1;
+  *yData << 0 << 0;
+  *yData << 0 << 0;
   *yData << 1 << 1;
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ void gisTest::testANDCMI()
   ULContainer *xData = new ULContainer(8,3);
     *xData << 0 << 0 << 0;
     *xData << 0 << 1 << 0;
-    *xData << 1 << 0 << 0;
+    *xData << 1 << 0 << 1;
     *xData << 1 << 1 << 0;
     *xData << 0 << 0 << 1;
     *xData << 0 << 1 << 1;
@@ -313,8 +313,8 @@ void gisTest::testANDCMI()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,1), independentModel->p_y_c_x(0,1), EPSILON);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,0), independentModel->p_y_c_x(1,0), EPSILON);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,1), independentModel->p_y_c_x(1,1), EPSILON);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,0),   independentModel->p_x(0),       EPSILON);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,1),   independentModel->p_x(1),       EPSILON);
+   // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,0),   independentModel->p_x(0),       EPSILON);
+   // CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,1),   independentModel->p_x(1),       EPSILON);
 
     ////////////////////////////////////////////////////////////////////////////////
     // Synergy
@@ -1266,11 +1266,11 @@ void gisTest::testMC_W()
   p->iterate();
   q->iterate();
 
-  for(int i = 0; i < 200; i++)
+  for(int i = 0; i < 500; i++)
   {
     if(p->error() > ERROR_THRESHOLD) p->iterate();
     if(q->error() > ERROR_THRESHOLD) q->iterate();
-     if(i % 100 == 0)
+     if(i % 20 == 0)
     {
       cout << "p error (" << i << "): " << p->error() << endl;
       cout << "p: " << *p << endl;
@@ -1280,7 +1280,7 @@ void gisTest::testMC_W()
       // cout << "kl: "  << kl->divergence2() << endl;
       // delete kl;
     }
-    if(i % 100 == 0 && i > 0)
+    if(i % 20 == 0 && i > 0)
     {
       KL* kl = new KL(p, q);
       cout << "after " << i << " iterations: " << kl->divergence2() << endl;

@@ -52,6 +52,7 @@ KL::KL(Model* p, Model *q)
 double KL::divergence2()
 {
   double sum = 0.0;
+  double m = 0.0;
 
   //int nr_of_x   = _x_indices.size(); // Xalphabet
   //int nr_of_y   = _y_indices.size(); // Yalphabet
@@ -65,7 +66,9 @@ double KL::divergence2()
       double q_y_c_x = _q->p_y_c_x(_y_indices_inAlph_q[y],_x_indices_inAlph_q[x]);
       if(p_y_c_x > 0.0 && p_x > 0.0 && q_y_c_x > 0.0)
       {
-        sum += p_y_c_x * p_x * (log2(p_y_c_x) - log2(q_y_c_x));
+        m = p_y_c_x * p_x * (log2(p_y_c_x) - log2(q_y_c_x));
+        cout << "m: "<< m << endl;
+        sum += m;
       }
     }
   }

@@ -163,10 +163,10 @@ void Model::calculateProbabilities()
     }
   }
 
-  ULContainer *x_alphabet_full = Xalphabet->columns(_x_indices);
+  ULContainer *x_alphabet_full = Xdata->columns(_x_indices);
   _x_alphabet = x_alphabet_full->unique();
 
-  ULContainer *y_alphabet_full = Yalphabet->columns(_y_indices);
+  ULContainer *y_alphabet_full = Ydata->columns(_y_indices);
   _y_alphabet = y_alphabet_full->unique();
 
   Matrix M(Xalphabet->rows(), Yalphabet->rows());
@@ -222,7 +222,6 @@ void Model::calculateProbabilities()
       (*_conditionals)(x, y) = (*_conditionals)(x, y) / (*_marginals)(x, 0);
     }
   }
-
   double b = x_alphabet_full->rows();
   for (int x = 0; x < _marginals->rows(); x++)
   {
@@ -230,6 +229,7 @@ void Model::calculateProbabilities()
     (*_marginals)(x, 0) = a / b;
   }
 
+  cout << "marginals:" << endl << (*_marginals) << endl;
   delete x_alphabet_full;
   delete y_alphabet_full;
 }
