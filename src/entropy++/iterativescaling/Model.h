@@ -82,10 +82,13 @@ namespace entropy
         ULContainer*  Ydata;
         ULContainer*  Xalphabet;
         ULContainer*  Yalphabet;
+        ULContainer* _x_alphabet;
+        ULContainer* _y_alphabet;
 
       private:
         int __convertAlphabetToMatrixX(int x);
         int __convertAlphabetToMatrixY(int y);
+        ULContainer* __uniqueRows(vector<int> rows, ULContainer* alphabet);
 
         int           _nrX;
         int           _nrY;
@@ -94,9 +97,7 @@ namespace entropy
         vector<vector<int> > _Yindices;
 
         // for p(y|x) and p(x)
-        ULContainer* _x_alphabet;
         vector<int>  _x_indices;
-        ULContainer* _y_alphabet;
         vector<int>  _y_indices;
 
         Matrix* _conditionals;

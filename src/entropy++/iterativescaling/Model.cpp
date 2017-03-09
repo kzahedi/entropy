@@ -49,14 +49,48 @@ void Model::setFeatures(vector<vector<int> > Xindices,
 
 void Model::createUniqueContainer()
 {
-  Xalphabet = Xdata->unique();
-  Yalphabet = Ydata->unique();
+ // Xalphabet = Xdata->unique();
+ // Yalphabet = Ydata->unique();
+  if (_x_alphabet != NULL) delete _x_alphabet;
+  if (_y_alphabet != NULL) delete _y_alphabet;
 
-  _yAlphabetSize = 1.0;
+  _x_indices.clear();
+  _y_indices.clear();
+
+  // get all columns for X
+  for (vector<vector<int> >::iterator v = _Xindices.begin();
+      v != _Xindices.end(); v++)
+  {
+    for (vector<int>::iterator i = (*v).begin(); i != (*v).end(); i++)
+    {
+      if (find(_x_indices.begin(), _x_indices.end(), *i) == _x_indices.end())
+      {
+        _x_indices.push_back(*i);
+      }
+    }
+  }
+
+  // get all columns for Y
+  for (vector<vector<int> >::iterator v = _Yindices.begin();
+      v != _Yindices.end(); v++)
+  {
+    for (vector<int>::iterator i = (*v).begin(); i != (*v).end(); i++)
+    {
+      if (find(_y_indices.begin(), _y_indices.end(), *i) == _y_indices.end())
+      {
+        _y_indices.push_back(*i);
+      }
+    }
+  }
+  Xalphabet= __uniqueRows(_x_indices,Xdata);
+  Yalphabet= __uniqueRows(_y_indices,Ydata);
+// cout << "Xalphabet" << endl << (*Xalphabet) << endl;
+// cout << "Yalphabet" << endl << (*Yalphabet) << endl;
+/*  _yAlphabetSize = 1.0;
   for (int c = 0; c < Yalphabet->columns(); c++)
   {
     _yAlphabetSize *= Yalphabet->getBinSize(c);
-  }
+  } */
 }
 
 void Model::countObservedFeatures()
@@ -131,37 +165,6 @@ void Model::calculateProbabilities()
 {
   if (_conditionals != NULL) delete _conditionals;
   if (_marginals != NULL) delete _marginals;
-  if (_x_alphabet != NULL) delete _x_alphabet;
-  if (_y_alphabet != NULL) delete _y_alphabet;
-
-  _x_indices.clear();
-  _y_indices.clear();
-
-  // get all columns for X
-  for (vector<vector<int> >::iterator v = _Xindices.begin();
-      v != _Xindices.end(); v++)
-  {
-    for (vector<int>::iterator i = (*v).begin(); i != (*v).end(); i++)
-    {
-      if (find(_x_indices.begin(), _x_indices.end(), *i) == _x_indices.end())
-      {
-        _x_indices.push_back(*i);
-      }
-    }
-  }
-
-  // get all columns for Y
-  for (vector<vector<int> >::iterator v = _Yindices.begin();
-      v != _Yindices.end(); v++)
-  {
-    for (vector<int>::iterator i = (*v).begin(); i != (*v).end(); i++)
-    {
-      if (find(_y_indices.begin(), _y_indices.end(), *i) == _y_indices.end())
-      {
-        _y_indices.push_back(*i);
-      }
-    }
-  }
 
   ULContainer *x_alphabet_full = Xdata->columns(_x_indices);
   _x_alphabet = x_alphabet_full->unique();
@@ -209,8 +212,8 @@ void Model::calculateProbabilities()
     }
   }
 
-  cout << "C: " << endl;
-  cout << *_conditionals << endl;
+ // cout << "C: " << endl;
+ // cout << *_conditionals << endl;
 
   double sum = 0.0;
   for (int x = 0; x < _marginals->rows(); x++)
@@ -229,7 +232,7 @@ void Model::calculateProbabilities()
     (*_marginals)(x, 0) = a / b;
   }
 
-  cout << "marginals:" << endl << (*_marginals) << endl;
+ // cout << "marginals:" << endl << (*_marginals) << endl;
   delete x_alphabet_full;
   delete y_alphabet_full;
 }
@@ -293,4 +296,39 @@ int Model::__convertAlphabetToMatrixY(int y)
     y_values.push_back(y_row[*i]);
   }
   return _y_alphabet->find(y_values);
+}
+ULContainer* Model::__uniqueRows(vector<int> columns, ULContainer* data)
+{
+  vector<vector<unsigned long> > new_container;
+  for(int r = 0; r < data->rows(); r++)
+  {
+    vector<unsigned long> row = data->row(r);
+    bool found = false;
+    for(vector<vector<unsigned long> >::iterator w = new_container.begin(); w != new_container.end(); w++)
+    {
+      bool rowEqual = true;
+      for(int i = 0; i < (int)columns.size(); i++)
+      {
+        rowEqual &= ((*w)[columns[i]] == row[columns[i]]);
+        if(rowEqual == false) break;
+      }
+      found |= rowEqual;
+      if(found == true) break;
+    }
+    if(found == false)
+    {
+      new_container.push_back(row);
+    }
+  }
+  ULContainer *nc = new ULContainer((int)new_container.size(), data->columns());
+
+  for( vector<vector<unsigned long> >::iterator r = new_container.begin(); r != new_container.end(); r++)
+  {
+    for(vector<unsigned long>::iterator i = (*r).begin(); i != (*r).end(); i++)
+    {
+      *nc << *i;
+    }
+  }
+
+  return nc;
 }
