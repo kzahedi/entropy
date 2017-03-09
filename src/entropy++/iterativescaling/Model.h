@@ -78,10 +78,10 @@ namespace entropy
         vector<Feature*> features;
         vector<Delta*>   deltas;
 
-        ULContainer*  Xdata;
-        ULContainer*  Ydata;
-        ULContainer*  Xalphabet;
-        ULContainer*  Yalphabet;
+        ULContainer* Xdata;
+        ULContainer* Ydata;
+        ULContainer* Xalphabet;
+        ULContainer* Yalphabet;
         ULContainer* _x_alphabet;
         ULContainer* _y_alphabet;
 

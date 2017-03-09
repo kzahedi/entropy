@@ -19,25 +19,6 @@ namespace entropy
         Original();
         ~Original();
 
-        void setData(ULContainer* X);
-        void addFeature(vector<int> f);
-        void init();
-        void iterate();
-
-      private:
-        Matrix* _joint;       // (n+1)
-        Matrix* _conditional; // (n)
-        Matrix* _emperical;   // from data
-
-        ULContainer* _X;
-        ULContainer* _Xalphabet;
-        Matrix** _marginal; // marginal for each feature
-
-
-        vector<vector<int> > _features;
-        int  _n;
-        bool _initCalled;
-
     };
   }
 }
