@@ -3,10 +3,10 @@
 class originalTest : public CppUnit::TestFixture
 {
   CPPUNIT_TEST_SUITE(originalTest);
-   CPPUNIT_TEST(testOriginal);
+   CPPUNIT_TEST(marginalFeatures);
   CPPUNIT_TEST_SUITE_END();
 
   public:
 
-    void testOriginal();
+    void marginalFeatures();
 };

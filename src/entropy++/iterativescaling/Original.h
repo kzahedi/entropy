@@ -20,9 +20,11 @@ namespace entropy
         Original(int n, vector<vector<int> > features, vector<double> p);
         ~Original();
 
-        void   iterate(int iterations);
+        void            iterate(int iterations);
        // void   iterate(int klmax);
-        double calculateKL(int iterations);
+        double          calculateKL(int iterations);
+        vector<double>  getp();
+        double          getMarginalProp(int ind,int feat, vector<double> p);
 
       private:
         void                _generateAlphabet(int n);
