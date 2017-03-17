@@ -51,6 +51,9 @@ target_link_libraries(iso-tests     Entropy++ cppunit dl)
 add_executable(scgis-tests            main.cpp  scgis_test.cpp)
 target_link_libraries(scgis-tests     Entropy++ cppunit dl)
 
+add_executable(original-tests            main.cpp  original_test.cpp)
+target_link_libraries(original-tests     Entropy++ cppunit dl)
+
 # ADD_TEST(feature   "${PROJECT_BINARY_DIR}/bin/feature-tests")
 # ADD_TEST(it        "${PROJECT_BINARY_DIR}/bin/it-tests")
 # ADD_TEST(iterativescaling "${PROJECT_BINARY_DIR}/bin/iterative-scaling-test")
@@ -64,5 +67,6 @@ ADD_TEST(csv            "${PROJECT_BINARY_DIR}/bin/csv-tests")
 ADD_TEST(GIS            "${PROJECT_BINARY_DIR}/bin/gis-tests")
 ADD_TEST(Original-It-Sc "${PROJECT_BINARY_DIR}/bin/iso-tests")
 ADD_TEST(SCGIS          "${PROJECT_BINARY_DIR}/bin/scgis-tests")
+ADD_TEST(Original       "${PROJECT_BINARY_DIR}/bin/original-tests")
 
-ADD_TEST(iterativescaling-cmi "${PROJECT_BINARY_DIR}/bin/iterative-scaling-cmi-tests")
+#ADD_TEST(iterativescaling-cmi "${PROJECT_BINARY_DIR}/bin/iterative-scaling-cmi-tests")
