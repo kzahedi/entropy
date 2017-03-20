@@ -30,13 +30,13 @@ void originalTest::marginalFeatures(){
   p[0]=0.5;
   p[4]=0.25;
   p[6]=0.25;
-  cout << "vor Original" << endl;
+
   Original* Test = new Original(3, features, p );
-  Test->iterate(6);
+  Test->iterate(0.001);
   vector<double> pconv = Test->getp();
-  for(int i=0;i<8;i++){
-    cout<< pconv[i] <<"  ";
-  }
+//  for(int i=0;i<8;i++){
+//    cout<< pconv[i] <<"  ";
+//  }
 ///  cout << endl;
   vector<int> m1;
   m1.push_back(0);
@@ -60,6 +60,7 @@ void originalTest::marginalFeatures(){
   CPPUNIT_ASSERT_DOUBLES_EQUAL(pconv[6], m0_1*m1_1*m2_0,0.0001);
   CPPUNIT_ASSERT_DOUBLES_EQUAL(pconv[7], m0_1*m1_1*m2_1,0.0001);
 // cout << m0_0 << " "<<  m0_1 << " " << m1_0 << " " << m1_1 << " "<< m2_0 << " " << m2_1 << " " << endl;
+//  cout << (*Test) << endl;
 }
 void originalTest:: neighbourhoodRelations(){
   vector<vector<int> > features;
@@ -81,11 +82,11 @@ void originalTest:: neighbourhoodRelations(){
     p[6]=0.25;
 
   Original* Test = new Original(3, features, p );
-  Test->iterate(10);
+  Test->iterate(0.001);
   vector<double> pconv = Test->getp();
-  for(int i=0;i<8;i++){
-    cout<< pconv[i] << endl;
-  }
+ // for(int i=0;i<8;i++){
+ //   cout<< pconv[i] << endl;
+ // }
   vector<int> m1;
   m1.push_back(0);
   vector<int> m2;
@@ -96,7 +97,8 @@ void originalTest:: neighbourhoodRelations(){
   for(int i=0;i<8;i++){
     prop = Test->getMarginalProp(i,m1,p)*Test->getConditionalProp(m2,m1,i,p)*Test->getConditionalProp(m3,m2,i,p);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(prop, pconv[i],0.0001);
-    cout <<Test->getMarginalProp(i,m1,p)<< " " << Test->getConditionalProp(m2,m1,i,p) << " " << Test->getConditionalProp(m3,m2,i,p)<< " " << prop << endl;
+ //   cout <<Test->getMarginalProp(i,m1,p)<< " " << Test->getConditionalProp(m2,m1,i,p) << " " << Test->getConditionalProp(m3,m2,i,p)<< " " << prop << endl;
   }
+ // cout << (*Test) << endl;
 
 }

@@ -21,21 +21,32 @@ namespace entropy
         ~Original();
 
         void            iterate(int iterations);
-       // void   iterate(int klmax);
+        void            iterate(double kl);
         double          calculateKL(int iterations);
         vector<double>  getp();
         double          getMarginalProp(int ind,vector<int> feat, vector<double> p);
         double          getConditionalProp(vector<int> featMarg, vector<int> featCond, int ind, vector<double> p);
 
+        friend std::ostream& operator<<(std::ostream& str, const Original& m)
+        {
+          int index = 0;
+          for(vector<double>::const_iterator p = m._p1.begin(); p != m._p1.end(); p++)
+          {
+            index++;
+            str << index << ": " << *p << endl;
+          }
+          return str;
+        };
+
       private:
-        void                _generateAlphabet(int n);
-        double              _getprop(vector<double> p, int feat, int ind);
+        void                 _generateAlphabet(int n);
+        double               _getprop(vector<double> p, int feat, int ind);
         vector<vector<int> > _features;
-        vector<double>      _targetp;
-        vector<double>      _p1;
-        vector<double>      _p2;
-        int                 _sizeAlphabet;
-        Matrix*             _alphabet;
+        vector<double>       _targetp;
+        vector<double>       _p1;
+        vector<double>       _p2;
+        int                  _sizeAlphabet;
+        Matrix*              _alphabet;
     };
   }
 }

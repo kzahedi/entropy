@@ -14,7 +14,6 @@ Original::Original()
 
 Original::Original(int n, vector<vector<int> > features, vector<double> p)
 {
-  cout << "Konstruktor" << endl;
   _sizeAlphabet = pow(2,n);
   _alphabet = new Matrix(_sizeAlphabet,n);
   _generateAlphabet(n);
@@ -35,18 +34,19 @@ Original::Original(int n, vector<vector<int> > features, vector<double> p)
 
 Original::~Original()
 {
+  delete _alphabet;
 }
 
 void Original::_generateAlphabet(int n){
-  cout << " alphabet " << endl;
+ // cout << " alphabet " << endl;
   for(int z=0; z< _sizeAlphabet; z++){
     for(int s=n; s> 0; s--){
       (*_alphabet)(z,n-s) = ((int)(z%(int)(pow(2,s))))/(int)(pow(2,s-1));
     }
-    for(int s=0; s<n;s++){
-      cout<< (*_alphabet)(z,s);
-    }
-    cout << endl;
+ //   for(int s=0; s<n;s++){
+ //     cout<< (*_alphabet)(z,s);
+ //   }
+ //   cout << endl;
   }
 
 }
@@ -98,11 +98,61 @@ double  Original::getMarginalProp(int ind,vector<int> feat, vector<double> p){
 //p(featMarg|featCond)
 double Original::getConditionalProp(vector<int> featMarg, vector<int> featCond, int ind, vector<double> p){
     double sum=0.0;
-    //getMargProp>0
     featMarg.insert(featMarg.end(), featCond.begin(), featCond.end());
     sum = getMarginalProp(ind, featMarg, p)/getMarginalProp(ind,featCond,p);
    // cout << " Cond: "<< getMarginalProp(ind, featMarg, p) << "/ " << getMarginalProp(ind,featCond,p) << "=" << sum << endl;
     return sum;
+}
+
+double Original::calculateKL(int iterations){
+  double sum = 0.0;
+  if(iterations==0){
+    for(int i=0;i< _sizeAlphabet;i++){
+      if(_p1[i]>0){
+        sum+= _p1[i]*(log2(_p1[i])-log2(_p2[i]));
+      }
+    }
+  }
+  else{
+    for(int i=0;i< _sizeAlphabet;i++){
+      if(_p2[i]>0){
+        sum+= _p2[i]*(log2(_p2[i])-log2(_p1[i]));
+      }
+    }
+  }
+  return sum;
+}
+void   Original::iterate(double KL){
+  int iterations = 0;
+  double kl      = 5;
+  while( kl > KL || iterations <=_features.size()){
+  //  cout << iterations << " " << kl << endl;
+    iterations++;
+    int featIndex = (iterations-1)%_features.size();
+    if((iterations%2)!=0){
+      for(int i=0;i<_sizeAlphabet;i++){
+ //        cout <<i << " " << _getprop(_targetp, featIndex,i) << "  " << _p1[i] << " " << _getprop(_p1,featIndex,i) << endl;
+        _p2[i]=_getprop(_targetp, featIndex,i)*_p1[i];
+        if(_p2[i]!=0){
+          _p2[i]=_p2[i]/_getprop(_p1,featIndex,i);
+        }
+      }
+    }
+    else{
+      for(int i=0;i<_sizeAlphabet;i++){
+//        cout <<i << " " << _getprop(_targetp, featIndex,i) << "  " << _p2[i] << " " << _getprop(_p2,featIndex,i) << endl;
+        _p1[i]=_getprop(_targetp, featIndex,i)*_p2[i];
+        if(_p1[i]!=0){
+          _p1[i]=_p1[i]/_getprop(_p2,featIndex,i);
+        }
+      }
+    }
+    kl= calculateKL(iterations%2);
+//    cout << " iteration: " << it << " p1,p2,p   featindex " << featIndex  << endl;
+    for(int i=0; i< _sizeAlphabet;i++){
+//      cout << _p1[i] << "  " << _p2[i] << "  " << _targetp[i] << endl;
+    }
+  }
 }
 void   Original::iterate(int iterations){
   for(int it=1;it<=iterations;it++){
