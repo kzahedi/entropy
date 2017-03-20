@@ -24,7 +24,8 @@ namespace entropy
        // void   iterate(int klmax);
         double          calculateKL(int iterations);
         vector<double>  getp();
-        double          getMarginalProp(int ind,int feat, vector<double> p);
+        double          getMarginalProp(int ind,vector<int> feat, vector<double> p);
+        double          getConditionalProp(vector<int> featMarg, vector<int> featCond, int ind, vector<double> p);
 
       private:
         void                _generateAlphabet(int n);

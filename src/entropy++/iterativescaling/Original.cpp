@@ -41,11 +41,14 @@ void Original::_generateAlphabet(int n){
   cout << " alphabet " << endl;
   for(int z=0; z< _sizeAlphabet; z++){
     for(int s=n; s> 0; s--){
-      (*_alphabet)(z,s-1) = ((int)(z%(int)(pow(2,s))))/(int)(pow(2,s-1));
-       cout << (*_alphabet)(z,s-1);
+      (*_alphabet)(z,n-s) = ((int)(z%(int)(pow(2,s))))/(int)(pow(2,s-1));
+    }
+    for(int s=0; s<n;s++){
+      cout<< (*_alphabet)(z,s);
     }
     cout << endl;
   }
+
 }
 vector<double> Original::getp(){
   return _p1;
@@ -53,36 +56,60 @@ vector<double> Original::getp(){
 double Original:: _getprop(vector<double> p, int feat, int ind){
   assert(ind<_sizeAlphabet);
   assert(feat < _features.size());
+//  cout << "getprop "<<feat << " " << ind << endl;
+  bool found = true;
   double sum = 0.0;
   int featuresize =0;
   for(int i=0; i< _sizeAlphabet; i++){
     featuresize = _features[feat].size();
     for(int j=0; j< featuresize; j++){
-      if((*_alphabet)(i,_features[feat][j])==(*_alphabet)(ind,_features[feat][j])){
-        sum+=p[i];
+      if((*_alphabet)(i,_features[feat][j])!=(*_alphabet)(ind,_features[feat][j])){
+        found = false;
       }
     }
+    if(found){
+      sum+=p[i];
+ //     cout<< p[i] <<endl;
+    }
+    found = true;
   }
+//  cout << "sum:  " << sum << endl;
   return sum;
 }
-double  Original::getMarginalProp(int ind,int feat, vector<double> p){
-  assert(feat<log2(_sizeAlphabet));
+double  Original::getMarginalProp(int ind,vector<int> feat, vector<double> p){
   double sum = 0.0;
+  bool found = true;
+ // cout << " featsize " << feat.size() << endl;
   for(int i=0;i<_sizeAlphabet;i++){
-    if((*_alphabet)(i,feat)==(*_alphabet)(ind,feat)){
-//      cout << i <<" aufsummieren " << p[i] <<" " << (*_alphabet)(ind,feat) << endl;
+    for(int j=0; j<feat.size();j++){
+      if((*_alphabet)(i,feat[j])!=(*_alphabet)(ind,feat[j])){
+        found = false;
+      }
+//      cout << i <<" aufsummieren " << p[i] <<" " << (*_alphabet)(ind,feat[j]) << endl;
+    }
+    if(found){
       sum+=p[i];
     }
+    found = true;
   }
-//  cout << "ende marg" << endl;
+//  cout << "ende marg; " << sum << endl;
   return sum;
+}
+//p(featMarg|featCond)
+double Original::getConditionalProp(vector<int> featMarg, vector<int> featCond, int ind, vector<double> p){
+    double sum=0.0;
+    //getMargProp>0
+    featMarg.insert(featMarg.end(), featCond.begin(), featCond.end());
+    sum = getMarginalProp(ind, featMarg, p)/getMarginalProp(ind,featCond,p);
+   // cout << " Cond: "<< getMarginalProp(ind, featMarg, p) << "/ " << getMarginalProp(ind,featCond,p) << "=" << sum << endl;
+    return sum;
 }
 void   Original::iterate(int iterations){
   for(int it=1;it<=iterations;it++){
     int featIndex = (it-1)%_features.size();
     if((it%2)!=0){
       for(int i=0;i<_sizeAlphabet;i++){
-    //    cout <<i << " " << _getprop(_targetp, featIndex,i) << "  " << _p1[i] << " " << _getprop(_p1,featIndex,i) << endl;
+ //        cout <<i << " " << _getprop(_targetp, featIndex,i) << "  " << _p1[i] << " " << _getprop(_p1,featIndex,i) << endl;
         _p2[i]=_getprop(_targetp, featIndex,i)*_p1[i];
         if(_p2[i]!=0){
           _p2[i]=_p2[i]/_getprop(_p1,featIndex,i);
@@ -91,16 +118,16 @@ void   Original::iterate(int iterations){
     }
     else{
       for(int i=0;i<_sizeAlphabet;i++){
-  //      cout <<i << " " << _getprop(_targetp, featIndex,i) << "  " << _p2[i] << " " << _getprop(_p2,featIndex,i) << endl;
+//        cout <<i << " " << _getprop(_targetp, featIndex,i) << "  " << _p2[i] << " " << _getprop(_p2,featIndex,i) << endl;
         _p1[i]=_getprop(_targetp, featIndex,i)*_p2[i];
         if(_p1[i]!=0){
           _p1[i]=_p1[i]/_getprop(_p2,featIndex,i);
         }
       }
     }
- //   cout << " iteration: " << it << " p1,p2,p   featindex " << featIndex  << endl;
+//    cout << " iteration: " << it << " p1,p2,p   featindex " << featIndex  << endl;
     for(int i=0; i< _sizeAlphabet;i++){
- //     cout << _p1[i] << "  " << _p2[i] << "  " << _targetp[i] << endl;
+//      cout << _p1[i] << "  " << _p2[i] << "  " << _targetp[i] << endl;
     }
   }
 
