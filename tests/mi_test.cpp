@@ -1,4 +1,6 @@
-#include "mi_test.h"
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE mi_test
+#include <boost/test/unit_test.hpp>
 
 #include <entropy++/Container.h>
 #include <entropy++/MI.h>
@@ -12,11 +14,8 @@
 using namespace std;
 using namespace entropy;
 
-// Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( miTest );
 
-
-void miTest::testSinus()
+BOOST_AUTO_TEST_CASE(Sinus)
 {
 
   DContainer X(1000,1);
@@ -46,14 +45,14 @@ void miTest::testSinus()
 
   double s = entropy::MI(dx, dy);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(4.17221, s, 0.00001); // recalcuate somewhere else
+  BOOST_CHECK_CLOSE(4.17221, s, 0.001); // recalcuate somewhere else
 
   delete dx;
   delete dy;
 }
 
 
-void miTest::testSparseVsNonSparse()
+BOOST_AUTO_TEST_CASE(SparseVsNonSparse)
 {
   DContainer X(1000,1);
   DContainer Y(1000,1);
@@ -82,7 +81,7 @@ void miTest::testSparseVsNonSparse()
 
   double s1 = entropy::MI(dx, dy);
   double s2 = entropy::sparse::MI(dx, dy);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(s1, s2, 0.00001);
+  BOOST_CHECK_CLOSE(s1, s2, 0.001);
 
   delete dx;
   delete dy;

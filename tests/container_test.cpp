@@ -1,4 +1,6 @@
-#include "container_test.h"
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE container_test
+#include <boost/test/unit_test.hpp>
 
 #include <entropy++/Container.h>
 
@@ -8,23 +10,20 @@
 using namespace std;
 using namespace entropy;
 
-// Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( containerTest );
+BOOST_AUTO_TEST_SUITE(First)
 
-
-void containerTest::testFilling()
+BOOST_AUTO_TEST_CASE(Filling)
 {
-
   DContainer container(2,3);
 
-  CPPUNIT_ASSERT_EQUAL(2, container.rows());
-  CPPUNIT_ASSERT_EQUAL(3, container.columns());
+  BOOST_TEST(2 == container.rows());
+  BOOST_TEST(3 == container.columns());
 
   for(int r = 0; r < container.rows(); r++)
   {
     for(int c = 0; c < container.columns(); c++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, container(r,c), 0.0001);
+      BOOST_CHECK_CLOSE(0.0, container(r,c), 0.001);
     }
   }
 
@@ -32,7 +31,7 @@ void containerTest::testFilling()
   {
     for(int c = 0; c < container.columns(); c++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, container.get(r,c), 0.0001);
+      BOOST_CHECK_CLOSE(0.0, container.get(r,c), 0.001);
     }
   }
 
@@ -46,14 +45,14 @@ void containerTest::testFilling()
   {
     for(int c = 0; c < container.columns(); c++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(index, container(r,c), 0.0001);
+      BOOST_CHECK_CLOSE(index, container(r,c), 0.001);
       index++;
     }
   }
 
 }
 
-void containerTest::testDropping()
+BOOST_AUTO_TEST_CASE(Dropping)
 {
   DContainer c(10,3);
 
@@ -64,8 +63,8 @@ void containerTest::testDropping()
 
   DContainer *d = c.drop(3);
 
-  CPPUNIT_ASSERT_EQUAL(7, d->rows());
-  CPPUNIT_ASSERT_EQUAL(3, d->columns());
+  BOOST_TEST(7 == d->rows());
+  BOOST_TEST(3 == d->columns());
 
   int v = 8;
   for(int i = 0; i < d->rows(); i++)
@@ -73,14 +72,14 @@ void containerTest::testDropping()
     for(int j = 0; j < d->columns(); j++)
     {
       v++;
-      CPPUNIT_ASSERT_EQUAL((int)v, (int)d->get(i,j));
+      BOOST_TEST((int)v == (int)d->get(i,j));
     }
   }
 
   DContainer *e = d->drop(-3);
 
-  CPPUNIT_ASSERT_EQUAL(4, e->rows());
-  CPPUNIT_ASSERT_EQUAL(3, e->columns());
+  BOOST_TEST(4 == e->rows());
+  BOOST_TEST(3 == e->columns());
 
   v = 8;
   for(int i = 0; i < e->rows(); i++)
@@ -88,12 +87,12 @@ void containerTest::testDropping()
     for(int j = 0; j < e->columns(); j++)
     {
       v++;
-      CPPUNIT_ASSERT_EQUAL((int)v, (int)e->get(i,j));
+      BOOST_TEST((int)v == (int)e->get(i,j));
     }
   }
 }
 
-void containerTest::testUniformDiscretisationUnary()
+BOOST_AUTO_TEST_CASE(UniformDiscretisationUnary)
 {
   DContainer c(11,1);
 
@@ -115,24 +114,24 @@ void containerTest::testUniformDiscretisationUnary()
 
   ULContainer *d = c.discretise();
 
-  CPPUNIT_ASSERT_EQUAL(0, (int)d->get(0,  0));
-  CPPUNIT_ASSERT_EQUAL(1, (int)d->get(1,  0));
-  CPPUNIT_ASSERT_EQUAL(2, (int)d->get(2,  0));
-  CPPUNIT_ASSERT_EQUAL(3, (int)d->get(3,  0));
-  CPPUNIT_ASSERT_EQUAL(4, (int)d->get(4,  0));
-  CPPUNIT_ASSERT_EQUAL(5, (int)d->get(5,  0));
-  CPPUNIT_ASSERT_EQUAL(6, (int)d->get(6,  0));
-  CPPUNIT_ASSERT_EQUAL(7, (int)d->get(7,  0));
-  CPPUNIT_ASSERT_EQUAL(8, (int)d->get(8,  0));
-  CPPUNIT_ASSERT_EQUAL(9, (int)d->get(9,  0));
-  CPPUNIT_ASSERT_EQUAL(9, (int)d->get(10, 0));
+  BOOST_TEST(0 == (int)d->get(0,  0));
+  BOOST_TEST(1 == (int)d->get(1,  0));
+  BOOST_TEST(2 == (int)d->get(2,  0));
+  BOOST_TEST(3 == (int)d->get(3,  0));
+  BOOST_TEST(4 == (int)d->get(4,  0));
+  BOOST_TEST(5 == (int)d->get(5,  0));
+  BOOST_TEST(6 == (int)d->get(6,  0));
+  BOOST_TEST(7 == (int)d->get(7,  0));
+  BOOST_TEST(8 == (int)d->get(8,  0));
+  BOOST_TEST(9 == (int)d->get(9,  0));
+  BOOST_TEST(9 == (int)d->get(10, 0));
 
   delete   domain[0];
   delete[] domain;
   delete[] bins;
 }
 
-void containerTest::testUniformDiscretisationByColumn()
+BOOST_AUTO_TEST_CASE(UniformDiscretisationByColumn)
 {
   int n = 10;
   DContainer c(n,2);
@@ -159,30 +158,30 @@ void containerTest::testUniformDiscretisationByColumn()
 
   ULContainer *d = c.discretiseByColumn(false);
 
-  CPPUNIT_ASSERT_EQUAL(0, (int)d->get(0, 0));
-  CPPUNIT_ASSERT_EQUAL(1, (int)d->get(1, 0));
-  CPPUNIT_ASSERT_EQUAL(2, (int)d->get(2, 0));
-  CPPUNIT_ASSERT_EQUAL(3, (int)d->get(3, 0));
-  CPPUNIT_ASSERT_EQUAL(4, (int)d->get(4, 0));
-  CPPUNIT_ASSERT_EQUAL(5, (int)d->get(5, 0));
-  CPPUNIT_ASSERT_EQUAL(6, (int)d->get(6, 0));
-  CPPUNIT_ASSERT_EQUAL(7, (int)d->get(7, 0));
-  CPPUNIT_ASSERT_EQUAL(8, (int)d->get(8, 0));
-  CPPUNIT_ASSERT_EQUAL(9, (int)d->get(9, 0));
+  BOOST_TEST(0 == (int)d->get(0, 0));
+  BOOST_TEST(1 == (int)d->get(1, 0));
+  BOOST_TEST(2 == (int)d->get(2, 0));
+  BOOST_TEST(3 == (int)d->get(3, 0));
+  BOOST_TEST(4 == (int)d->get(4, 0));
+  BOOST_TEST(5 == (int)d->get(5, 0));
+  BOOST_TEST(6 == (int)d->get(6, 0));
+  BOOST_TEST(7 == (int)d->get(7, 0));
+  BOOST_TEST(8 == (int)d->get(8, 0));
+  BOOST_TEST(9 == (int)d->get(9, 0));
 
-  CPPUNIT_ASSERT_EQUAL(5, (int)d->get(0, 1));
-  CPPUNIT_ASSERT_EQUAL(6, (int)d->get(1, 1));
-  CPPUNIT_ASSERT_EQUAL(7, (int)d->get(2, 1));
-  CPPUNIT_ASSERT_EQUAL(8, (int)d->get(3, 1));
-  CPPUNIT_ASSERT_EQUAL(9, (int)d->get(4, 1));
-  CPPUNIT_ASSERT_EQUAL(0, (int)d->get(5, 1));
-  CPPUNIT_ASSERT_EQUAL(1, (int)d->get(6, 1));
-  CPPUNIT_ASSERT_EQUAL(2, (int)d->get(7, 1));
-  CPPUNIT_ASSERT_EQUAL(3, (int)d->get(8, 1));
-  CPPUNIT_ASSERT_EQUAL(4, (int)d->get(9, 1));
+  BOOST_TEST(5 == (int)d->get(0, 1));
+  BOOST_TEST(6 == (int)d->get(1, 1));
+  BOOST_TEST(7 == (int)d->get(2, 1));
+  BOOST_TEST(8 == (int)d->get(3, 1));
+  BOOST_TEST(9 == (int)d->get(4, 1));
+  BOOST_TEST(0 == (int)d->get(5, 1));
+  BOOST_TEST(1 == (int)d->get(6, 1));
+  BOOST_TEST(2 == (int)d->get(7, 1));
+  BOOST_TEST(3 == (int)d->get(8, 1));
+  BOOST_TEST(4 == (int)d->get(9, 1));
 }
 
-void containerTest::testUniformDiscretisationUnary2()
+BOOST_AUTO_TEST_CASE(UniformDiscretisationUnary2)
 {
   int n = 10;
   DContainer c(n+1,1);
@@ -205,23 +204,23 @@ void containerTest::testUniformDiscretisationUnary2()
 
   ULContainer *d = c.discretise();
 
-  CPPUNIT_ASSERT_EQUAL(0,  (int)d->get(0,  0));
-  CPPUNIT_ASSERT_EQUAL(1,  (int)d->get(1,  0));
-  CPPUNIT_ASSERT_EQUAL(2,  (int)d->get(2,  0));
-  CPPUNIT_ASSERT_EQUAL(3,  (int)d->get(3,  0));
-  CPPUNIT_ASSERT_EQUAL(4,  (int)d->get(4,  0));
-  CPPUNIT_ASSERT_EQUAL(5,  (int)d->get(5,  0));
-  CPPUNIT_ASSERT_EQUAL(6,  (int)d->get(6,  0));
-  CPPUNIT_ASSERT_EQUAL(7,  (int)d->get(7,  0));
-  CPPUNIT_ASSERT_EQUAL(8,  (int)d->get(8,  0));
-  CPPUNIT_ASSERT_EQUAL(9,  (int)d->get(9,  0));
+  BOOST_TEST(0 == (int)d->get(0,  0));
+  BOOST_TEST(1 == (int)d->get(1,  0));
+  BOOST_TEST(2 == (int)d->get(2,  0));
+  BOOST_TEST(3 == (int)d->get(3,  0));
+  BOOST_TEST(4 == (int)d->get(4,  0));
+  BOOST_TEST(5 == (int)d->get(5,  0));
+  BOOST_TEST(6 == (int)d->get(6,  0));
+  BOOST_TEST(7 == (int)d->get(7,  0));
+  BOOST_TEST(8 == (int)d->get(8,  0));
+  BOOST_TEST(9 == (int)d->get(9,  0));
 
   delete   domain[0];
   delete[] domain;
   delete[] bins;
 }
 
-void containerTest::testUniformDiscretisation()
+BOOST_AUTO_TEST_CASE(UniformDiscretisation)
 {
   DContainer c(11,3);
 
@@ -256,17 +255,17 @@ void containerTest::testUniformDiscretisation()
 
   ULContainer *d = c.discretise();
 
-  CPPUNIT_ASSERT_EQUAL(0,  (int)d->get(0,  0)); // 210
-  CPPUNIT_ASSERT_EQUAL(1,  (int)d->get(1,  0)); // 321
-  CPPUNIT_ASSERT_EQUAL(2,  (int)d->get(2,  0)); // 432
-  CPPUNIT_ASSERT_EQUAL(3,  (int)d->get(3,  0)); // 543
-  CPPUNIT_ASSERT_EQUAL(4,  (int)d->get(4,  0)); // 654
-  CPPUNIT_ASSERT_EQUAL(5,  (int)d->get(5,  0)); // 765
-  CPPUNIT_ASSERT_EQUAL(6,  (int)d->get(6,  0)); // 876
-  CPPUNIT_ASSERT_EQUAL(7,  (int)d->get(7,  0)); // 987
-  CPPUNIT_ASSERT_EQUAL(8,  (int)d->get(8,  0)); // 98
-  CPPUNIT_ASSERT_EQUAL(9,  (int)d->get(9,  0)); // 109
-  CPPUNIT_ASSERT_EQUAL(10, (int)d->get(10, 0)); // 210
+  BOOST_TEST(0  == (int)d->get(0,  0)); // 210
+  BOOST_TEST(1  == (int)d->get(1,  0)); // 321
+  BOOST_TEST(2  == (int)d->get(2,  0)); // 432
+  BOOST_TEST(3  == (int)d->get(3,  0)); // 543
+  BOOST_TEST(4  == (int)d->get(4,  0)); // 654
+  BOOST_TEST(5  == (int)d->get(5,  0)); // 765
+  BOOST_TEST(6  == (int)d->get(6,  0)); // 876
+  BOOST_TEST(7  == (int)d->get(7,  0)); // 987
+  BOOST_TEST(8  == (int)d->get(8,  0)); // 98
+  BOOST_TEST(9  == (int)d->get(9,  0)); // 109
+  BOOST_TEST(10 == (int)d->get(10, 0)); // 210
 
   delete   domain[0];
   delete   domain[1];
@@ -275,7 +274,7 @@ void containerTest::testUniformDiscretisation()
   delete[] bins;
 }
 
-void containerTest::testCopy()
+BOOST_AUTO_TEST_CASE(Copy)
 {
   DContainer c(10,3);
   DContainer d(0,0);
@@ -284,23 +283,23 @@ void containerTest::testCopy()
 
   d = c;
 
-  CPPUNIT_ASSERT_EQUAL(c.rows(),    d.rows());
-  CPPUNIT_ASSERT_EQUAL(c.columns(), d.columns());
+  BOOST_TEST(c.rows()    == d.rows());
+  BOOST_TEST(c.columns() == d.columns());
 
   for(int i = 0; i < 10; i++)
   {
     for(int j = 0; j < 3; j++)
     {
-      CPPUNIT_ASSERT_EQUAL((int)c(i,j), (int)d(i,j));
+      BOOST_TEST((int)c(i,j) == (int)d(i,j));
     }
   }
 
   c(0, 0) =  10;
 
-  CPPUNIT_ASSERT((int)c(0,0) != (int)d(0,0));
+  BOOST_TEST((int)c(0,0) != (int)d(0,0));
 }
 
-void containerTest::testMax()
+BOOST_AUTO_TEST_CASE(Max)
 {
   DContainer c(10,3);
 
@@ -309,30 +308,27 @@ void containerTest::testMax()
     c << i;
   }
 
-  CPPUNIT_ASSERT_EQUAL(27, (int)c.max(0));
-  CPPUNIT_ASSERT_EQUAL(28, (int)c.max(1));
-  CPPUNIT_ASSERT_EQUAL(29, (int)c.max(2));
-  CPPUNIT_ASSERT_EQUAL(29, (int)c.max());
+  BOOST_TEST(27 == (int)c.max(0));
+  BOOST_TEST(28 == (int)c.max(1));
+  BOOST_TEST(29 == (int)c.max(2));
+  BOOST_TEST(29 == (int)c.max());
 
 }
 
-void containerTest::testMin()
+BOOST_AUTO_TEST_CASE(Min)
 {
   DContainer c(10,3);
 
-  for(int i = 0; i < 30; i++)
-  {
-    c << i;
-  }
+  for(int i = 0; i < 30; i++) c << i;
 
-  CPPUNIT_ASSERT_EQUAL(0, (int)c.min(0));
-  CPPUNIT_ASSERT_EQUAL(1, (int)c.min(1));
-  CPPUNIT_ASSERT_EQUAL(2, (int)c.min(2));
-  CPPUNIT_ASSERT_EQUAL(0, (int)c.min());
+  BOOST_TEST(0 == (int)c.min(0));
+  BOOST_TEST(1 == (int)c.min(1));
+  BOOST_TEST(2 == (int)c.min(2));
+  BOOST_TEST(0 == (int)c.min());
 
 }
 
-void containerTest::testExtractColumns()
+BOOST_AUTO_TEST_CASE(ExtractColumns)
 {
   int rows    = 50;
   int columns = 5;
@@ -350,14 +346,14 @@ void containerTest::testExtractColumns()
 
   for(int i = 0; i < rows; i++)
   {
-    CPPUNIT_ASSERT_EQUAL((int)c(i,0), (int)(*onethreefive)(i,0));
-    CPPUNIT_ASSERT_EQUAL((int)c(i,2), (int)(*onethreefive)(i,1));
-    CPPUNIT_ASSERT_EQUAL((int)c(i,4), (int)(*onethreefive)(i,2));
+    BOOST_TEST((int)c(i,0) == (int)(*onethreefive)(i,0));
+    BOOST_TEST((int)c(i,2) == (int)(*onethreefive)(i,1));
+    BOOST_TEST((int)c(i,4) == (int)(*onethreefive)(i,2));
   }
 
 }
 
-void containerTest::testNormaliseColumn()
+BOOST_AUTO_TEST_CASE(NormaliseColumn)
 {
   int rows    = 50;
   int columns = 5;
@@ -380,13 +376,13 @@ void containerTest::testNormaliseColumn()
   {
     for(int j = 0; j < columns; j++)
     {
-      CPPUNIT_ASSERT(0.0    <= c(i,j));
-      CPPUNIT_ASSERT(c(i,j) <= 1.0);
+      BOOST_TEST((0.0    <= c(i,j)));
+      BOOST_TEST((c(i,j) <= 1.0));
     }
   }
 }
 
-void containerTest::testCopyFunc()
+BOOST_AUTO_TEST_CASE(CopyFunc)
 {
   int rows    = 50;
   int columns = 5;
@@ -405,12 +401,12 @@ void containerTest::testCopyFunc()
   {
     for(int j = 0; j < columns; j++)
     {
-      CPPUNIT_ASSERT_EQUAL((int)c(i,j), (int)(*d)(i,j));
+      BOOST_TEST((int)c(i,j) == (int)(*d)(i,j));
     }
   }
 }
 
-void containerTest::testMerge()
+BOOST_AUTO_TEST_CASE(Merge)
 {
   DContainer c(10,3);
   DContainer d(10,5);
@@ -420,15 +416,15 @@ void containerTest::testMerge()
 
   c += d;
 
-  CPPUNIT_ASSERT_EQUAL(10, c.rows());
-  CPPUNIT_ASSERT_EQUAL(8,  c.columns());
+  BOOST_TEST(10 == c.rows());
+  BOOST_TEST(8  == c.columns());
 
   int index = 0;
   for(int i = 0; i < 10; i++)
   {
     for(int j = 0; j < 3; j++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(index++, c(i,j), 0.0001);
+      BOOST_CHECK_CLOSE(index++, c(i,j), 0.001);
     }
   }
 
@@ -437,24 +433,24 @@ void containerTest::testMerge()
   {
     for(int j = 0; j < 5; j++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(index++, c(i,3+j), 0.0001);
+      BOOST_CHECK_CLOSE(index++, c(i,3+j), 0.001);
     }
   }
 }
 
-void containerTest::testFillMode()
+BOOST_AUTO_TEST_CASE(FillMode)
 {
   DContainer container(2,3);
   container.setFillMode(FILL_MODE_BY_ROW);
 
-  CPPUNIT_ASSERT_EQUAL(2, container.rows());
-  CPPUNIT_ASSERT_EQUAL(3, container.columns());
+  BOOST_TEST(2 == container.rows());
+  BOOST_TEST(3 == container.columns());
 
   for(int r = 0; r < container.rows(); r++)
   {
     for(int c = 0; c < container.columns(); c++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, container(r,c), 0.0001);
+      BOOST_CHECK_CLOSE(0.0, container(r,c), 0.001);
     }
   }
 
@@ -462,7 +458,7 @@ void containerTest::testFillMode()
   {
     for(int c = 0; c < container.columns(); c++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, container.get(r,c), 0.0001);
+      BOOST_CHECK_CLOSE(0.0, container.get(r,c), 0.001);
     }
   }
 
@@ -476,7 +472,7 @@ void containerTest::testFillMode()
   {
     for(int c = 0; c < container.columns(); c++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(index, container(r,c), 0.0001);
+      BOOST_CHECK_CLOSE(index, container(r,c), 0.001);
       index++;
     }
   }
@@ -494,14 +490,14 @@ void containerTest::testFillMode()
   {
     for(int r = 0; r < container2.rows(); r++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(index, container2(r,c), 0.0001);
+      BOOST_CHECK_CLOSE(index, container2(r,c), 0.001);
       index++;
     }
   }
 }
 
 
-void containerTest::testUnique1()
+BOOST_AUTO_TEST_CASE(Unique1)
 {
   IContainer* container  = new IContainer(10,5);
   IContainer* uniqueTest = new IContainer(1,5);
@@ -521,11 +517,11 @@ void containerTest::testUnique1()
 
   IContainer *unique = container->unique();
 
-  CPPUNIT_ASSERT_EQUAL(1, unique->rows());
-  CPPUNIT_ASSERT(uniqueTest->equals(unique));
+  BOOST_TEST(1 == unique->rows());
+  BOOST_TEST(uniqueTest->equals(unique));
 }
 
-void containerTest::testUnique2()
+BOOST_AUTO_TEST_CASE(Unique2)
 {
   IContainer* container  = new IContainer(10,5);
   IContainer* uniqueTest = new IContainer(4,5);
@@ -548,11 +544,11 @@ void containerTest::testUnique2()
 
   IContainer *unique = container->unique();
 
-  CPPUNIT_ASSERT(uniqueTest->equals(unique));
-  CPPUNIT_ASSERT_EQUAL(4, unique->rows());
+  BOOST_TEST(uniqueTest->equals(unique));
+  BOOST_TEST(4 == unique->rows());
 }
 
-void containerTest::testFind1()
+BOOST_AUTO_TEST_CASE(Find1)
 {
   IContainer* container = new IContainer(10,5);
 
@@ -575,10 +571,10 @@ void containerTest::testFind1()
   v[4] = 5;
   int r = container->find(v);
 
-  CPPUNIT_ASSERT_EQUAL(0, r);
+  BOOST_TEST(0 == r);
 }
 
-void containerTest::testFind2()
+BOOST_AUTO_TEST_CASE(Find2)
 {
   IContainer* container = new IContainer(10,5);
 
@@ -598,22 +594,22 @@ void containerTest::testFind2()
 
   v[0] = 1; v[1] = 2; v[2] = 3; v[3] = 4; v[4] = 5;
   r = container->find(v);
-  CPPUNIT_ASSERT_EQUAL(0, r);
+  BOOST_TEST(0 == r);
 
   v[0] = 2; v[1] = 2; v[2] = 3; v[3] = 4; v[4] = 5;
   r = container->find(v);
-  CPPUNIT_ASSERT_EQUAL(1, r);
+  BOOST_TEST(1 == r);
 
   v[0] = 1; v[1] = 2; v[2] = 1; v[3] = 4; v[4] = 5;
   r = container->find(v);
-  CPPUNIT_ASSERT_EQUAL(5, r);
+  BOOST_TEST(5 == r);
 
   v[0] = 1; v[1] = 2; v[2] = 5; v[3] = 4; v[4] = 5;
   r = container->find(v);
-  CPPUNIT_ASSERT_EQUAL(9, r);
+  BOOST_TEST(9 == r);
 }
 
-void containerTest::testFindList1()
+BOOST_AUTO_TEST_CASE(FindList1)
 {
   IContainer* container = new IContainer(10,5);
 
@@ -636,14 +632,14 @@ void containerTest::testFindList1()
   v[4] = 5;
   vector<int> r = container->findlist(v);
 
-  CPPUNIT_ASSERT_EQUAL(10, (int)r.size());
+  BOOST_TEST(10 == (int)r.size());
   for(int i = 0; i < 10; i++)
   {
-    CPPUNIT_ASSERT_EQUAL(i, r[i]);
+    BOOST_TEST(i == r[i]);
   }
 }
 
-void containerTest::testFindList2()
+BOOST_AUTO_TEST_CASE(FindList2)
 {
   IContainer* container = new IContainer(10,5);
 
@@ -663,33 +659,33 @@ void containerTest::testFindList2()
 
   v[0] = 1; v[1] = 2; v[2] = 3; v[3] = 4; v[4] = 5;
   r = container->findlist(v);
-  CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(0, r[0]);
-  CPPUNIT_ASSERT_EQUAL(2, r[1]);
-  CPPUNIT_ASSERT_EQUAL(4, r[2]);
-  CPPUNIT_ASSERT_EQUAL(6, r[3]);
-  CPPUNIT_ASSERT_EQUAL(8, r[4]);
+  BOOST_TEST(5 == (int)r.size());
+  BOOST_TEST(0 == r[0]);
+  BOOST_TEST(2 == r[1]);
+  BOOST_TEST(4 == r[2]);
+  BOOST_TEST(6 == r[3]);
+  BOOST_TEST(8 == r[4]);
 
   v[0] = 2; v[1] = 2; v[2] = 3; v[3] = 4; v[4] = 5;
   r = container->findlist(v);
-  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(1, r[0]);
-  CPPUNIT_ASSERT_EQUAL(3, r[1]);
+  BOOST_TEST(2 == (int)r.size());
+  BOOST_TEST(1 == r[0]);
+  BOOST_TEST(3 == r[1]);
 
   v[0] = 1; v[1] = 2; v[2] = 1; v[3] = 4; v[4] = 5;
   r = container->findlist(v);
-  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(5, r[0]);
-  CPPUNIT_ASSERT_EQUAL(7, r[1]);
+  BOOST_TEST(2 == (int)r.size());
+  BOOST_TEST(5 == r[0]);
+  BOOST_TEST(7 == r[1]);
 
   v[0] = 1; v[1] = 2; v[2] = 5; v[3] = 4; v[4] = 5;
   r = container->findlist(v);
-  CPPUNIT_ASSERT_EQUAL(1, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(9, r[0]);
+  BOOST_TEST(1 == (int)r.size());
+  BOOST_TEST(9 == r[0]);
 }
 
 
-void containerTest::testFind1ByContainer()
+BOOST_AUTO_TEST_CASE(Find1ByContainer)
 {
   IContainer* container = new IContainer(10,5);
 
@@ -709,10 +705,10 @@ void containerTest::testFind1ByContainer()
 
   int r = container->find(unique, 0);
 
-  CPPUNIT_ASSERT_EQUAL(0, r);
+  BOOST_TEST(0 == r);
 }
 
-void containerTest::testFind2ByContainer()
+BOOST_AUTO_TEST_CASE(Find2ByContainer)
 {
   IContainer* container  = new IContainer(10,5);
   IContainer* uniqueTest = new IContainer(4,5);
@@ -736,23 +732,23 @@ void containerTest::testFind2ByContainer()
   IContainer *unique = container->unique();
   int r = -1;
 
-  CPPUNIT_ASSERT(uniqueTest->equals(unique));
+  BOOST_TEST(uniqueTest->equals(unique));
 
   r = container->find(unique, 0);
-  CPPUNIT_ASSERT_EQUAL(0, r);
+  BOOST_TEST(0 == r);
 
   r = container->find(unique, 1);
-  CPPUNIT_ASSERT_EQUAL(1, r);
+  BOOST_TEST(1 == r);
 
   r = container->find(unique, 2);
-  CPPUNIT_ASSERT_EQUAL(5, r);
+  BOOST_TEST(5 == r);
 
   r = container->find(unique, 3);
-  CPPUNIT_ASSERT_EQUAL(9, r);
+  BOOST_TEST(9 == r);
 
 }
 
-void containerTest::testFindList1ByContainer()
+BOOST_AUTO_TEST_CASE(FindList1ByContainer)
 {
   IContainer* container = new IContainer(10,5);
 
@@ -771,14 +767,14 @@ void containerTest::testFindList1ByContainer()
 
   vector<int> r = container->findlist(unique, 0);
 
-  CPPUNIT_ASSERT_EQUAL(10, (int)r.size());
+  BOOST_TEST(10 == (int)r.size());
   for(int i = 0; i < 10; i++)
   {
-    CPPUNIT_ASSERT_EQUAL(i, r[i]);
+    BOOST_TEST(i == r[i]);
   }
 }
 
-void containerTest::testFindList2ByContainer()
+BOOST_AUTO_TEST_CASE(FindList2ByContainer)
 {
   IContainer* container  = new IContainer(10,5);
   IContainer* uniqueTest = new IContainer(4,5);
@@ -801,34 +797,34 @@ void containerTest::testFindList2ByContainer()
 
   IContainer* unique = container->unique();
 
-  CPPUNIT_ASSERT(unique->equals(uniqueTest));
+  BOOST_TEST(unique->equals(uniqueTest));
 
   vector<int> r;
 
   r = container->findlist(unique, 0);
-  CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(0, r[0]);
-  CPPUNIT_ASSERT_EQUAL(2, r[1]);
-  CPPUNIT_ASSERT_EQUAL(4, r[2]);
-  CPPUNIT_ASSERT_EQUAL(6, r[3]);
-  CPPUNIT_ASSERT_EQUAL(8, r[4]);
+  BOOST_TEST(5 == (int)r.size());
+  BOOST_TEST(0 == r[0]);
+  BOOST_TEST(2 == r[1]);
+  BOOST_TEST(4 == r[2]);
+  BOOST_TEST(6 == r[3]);
+  BOOST_TEST(8 == r[4]);
 
   r = container->findlist(unique, 1);
-  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(1, r[0]);
-  CPPUNIT_ASSERT_EQUAL(3, r[1]);
+  BOOST_TEST(2 == (int)r.size());
+  BOOST_TEST(1 == r[0]);
+  BOOST_TEST(3 == r[1]);
 
   r = container->findlist(unique, 2);
-  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(5, r[0]);
-  CPPUNIT_ASSERT_EQUAL(7, r[1]);
+  BOOST_TEST(2 == (int)r.size());
+  BOOST_TEST(5 == r[0]);
+  BOOST_TEST(7 == r[1]);
 
   r = container->findlist(unique, 3);
-  CPPUNIT_ASSERT_EQUAL(1, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(9, r[0]);
+  BOOST_TEST(1 == (int)r.size());
+  BOOST_TEST(9 == r[0]);
 }
 
-void containerTest::testFindList3ByContainer()
+BOOST_AUTO_TEST_CASE(FindList3ByContainer)
 {
   IContainer* container = new IContainer(10,5);
 
@@ -849,25 +845,25 @@ void containerTest::testFindList3ByContainer()
   indices.push_back(1);
 
   r = container->findlist(container, 0, indices);
-  CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(0, r[0]);
-  CPPUNIT_ASSERT_EQUAL(1, r[1]);
-  CPPUNIT_ASSERT_EQUAL(2, r[2]);
-  CPPUNIT_ASSERT_EQUAL(3, r[3]);
-  CPPUNIT_ASSERT_EQUAL(4, r[4]);
+  BOOST_TEST(5 == (int)r.size());
+  BOOST_TEST(0 == r[0]);
+  BOOST_TEST(1 == r[1]);
+  BOOST_TEST(2 == r[2]);
+  BOOST_TEST(3 == r[3]);
+  BOOST_TEST(4 == r[4]);
 
   indices.clear();
   indices.push_back(0);
   indices.push_back(2);
 
   r = container->findlist(container, 5, indices);
-  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(5, r[0]);
-  CPPUNIT_ASSERT_EQUAL(9, r[1]);
+  BOOST_TEST(2 == (int)r.size());
+  BOOST_TEST(5 == r[0]);
+  BOOST_TEST(9 == r[1]);
 
 }
 
-void containerTest::testFindList4ByContainer()
+BOOST_AUTO_TEST_CASE(FindList4ByContainer)
 {
   IContainer* container = new IContainer(10,5);
 
@@ -891,12 +887,12 @@ void containerTest::testFindList4ByContainer()
   values.push_back(2);
 
   r = container->findlist(values, indices);
-  CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(0, r[0]);
-  CPPUNIT_ASSERT_EQUAL(1, r[1]);
-  CPPUNIT_ASSERT_EQUAL(2, r[2]);
-  CPPUNIT_ASSERT_EQUAL(3, r[3]);
-  CPPUNIT_ASSERT_EQUAL(4, r[4]);
+  BOOST_TEST(5 == (int)r.size());
+  BOOST_TEST(0 == r[0]);
+  BOOST_TEST(1 == r[1]);
+  BOOST_TEST(2 == r[2]);
+  BOOST_TEST(3 == r[3]);
+  BOOST_TEST(4 == r[4]);
 
   indices.clear();
   indices.push_back(0);
@@ -906,13 +902,13 @@ void containerTest::testFindList4ByContainer()
   values.push_back(10);
 
   r = container->findlist(container, 5, indices);
-  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(5, r[0]);
-  CPPUNIT_ASSERT_EQUAL(9, r[1]);
+  BOOST_TEST(2 == (int)r.size());
+  BOOST_TEST(5 == r[0]);
+  BOOST_TEST(9 == r[1]);
 
 }
 
-void containerTest::testGetRow1()
+BOOST_AUTO_TEST_CASE(GetRow1)
 {
   IContainer* container = new IContainer(10,5);
 
@@ -929,34 +925,34 @@ void containerTest::testGetRow1()
 
   vector<int> r = container->row(0);
 
-  CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(1,  r[0]);
-  CPPUNIT_ASSERT_EQUAL(2,  r[1]);
-  CPPUNIT_ASSERT_EQUAL(1,  r[2]);
-  CPPUNIT_ASSERT_EQUAL(11, r[3]);
-  CPPUNIT_ASSERT_EQUAL(21, r[4]);
+  BOOST_TEST(5  == (int)r.size());
+  BOOST_TEST(1  == r[0]);
+  BOOST_TEST(2  == r[1]);
+  BOOST_TEST(1  == r[2]);
+  BOOST_TEST(11 == r[3]);
+  BOOST_TEST(21 == r[4]);
 
   r = container->row(1);
 
-  CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(1,  r[0]);
-  CPPUNIT_ASSERT_EQUAL(2,  r[1]);
-  CPPUNIT_ASSERT_EQUAL(2,  r[2]);
-  CPPUNIT_ASSERT_EQUAL(12, r[3]);
-  CPPUNIT_ASSERT_EQUAL(22, r[4]);
+  BOOST_TEST(5  == (int)r.size());
+  BOOST_TEST(1  == r[0]);
+  BOOST_TEST(2  == r[1]);
+  BOOST_TEST(2  == r[2]);
+  BOOST_TEST(12 == r[3]);
+  BOOST_TEST(22 == r[4]);
 
   r = container->row(2);
 
-  CPPUNIT_ASSERT_EQUAL(5, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(1,  r[0]);
-  CPPUNIT_ASSERT_EQUAL(2,  r[1]);
-  CPPUNIT_ASSERT_EQUAL(3,  r[2]);
-  CPPUNIT_ASSERT_EQUAL(13, r[3]);
-  CPPUNIT_ASSERT_EQUAL(23, r[4]);
+  BOOST_TEST(5  == (int)r.size());
+  BOOST_TEST(1  == r[0]);
+  BOOST_TEST(2  == r[1]);
+  BOOST_TEST(3  == r[2]);
+  BOOST_TEST(13 == r[3]);
+  BOOST_TEST(23 == r[4]);
 
 }
 
-void containerTest::testGetRow2()
+BOOST_AUTO_TEST_CASE(GetRow2)
 {
   IContainer* container = new IContainer(10,5);
 
@@ -976,23 +972,23 @@ void containerTest::testGetRow2()
   indices.push_back(4);
   vector<int> r = container->row(0, indices);
 
-  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(11, r[0]);
-  CPPUNIT_ASSERT_EQUAL(21, r[1]);
+  BOOST_TEST(2  == (int)r.size());
+  BOOST_TEST(11 == r[0]);
+  BOOST_TEST(21 == r[1]);
 
   r = container->row(1, indices);
-  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(12, r[0]);
-  CPPUNIT_ASSERT_EQUAL(22, r[1]);
+  BOOST_TEST(2  == (int)r.size());
+  BOOST_TEST(12 == r[0]);
+  BOOST_TEST(22 == r[1]);
 
   r = container->row(2, indices);
-  CPPUNIT_ASSERT_EQUAL(2, (int)r.size());
-  CPPUNIT_ASSERT_EQUAL(13, r[0]);
-  CPPUNIT_ASSERT_EQUAL(23, r[1]);
+  BOOST_TEST(2  == (int)r.size());
+  BOOST_TEST(13 == r[0]);
+  BOOST_TEST(23 == r[1]);
 
 }
 
-void containerTest::testEqual()
+BOOST_AUTO_TEST_CASE(Equal)
 {
   IContainer* A = new IContainer(10,5);
   IContainer* B = new IContainer(10,5);
@@ -1005,5 +1001,7 @@ void containerTest::testEqual()
       *B << (r + c);
     }
   }
-  CPPUNIT_ASSERT(A->equals(B));
+  BOOST_TEST(A->equals(B));
 }
+
+BOOST_AUTO_TEST_SUITE_END()

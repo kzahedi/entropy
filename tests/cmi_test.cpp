@@ -1,4 +1,6 @@
-#include "cmi_test.h"
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE cmi_test
+#include <boost/test/unit_test.hpp>
 
 #include <entropy++/Container.h>
 #include <entropy++/CMI.h>
@@ -13,10 +15,8 @@
 using namespace std;
 using namespace entropy;
 
-// Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( cmiTest );
 
-void cmiTest::testSinus()
+BOOST_AUTO_TEST_CASE(Sinus)
 {
 
   DContainer X(1000,1);
@@ -53,14 +53,14 @@ void cmiTest::testSinus()
 
   double s = entropy::CMI(dx, dy, dz);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(2.473493, s, 0.00001); // recalcuate somewhere else
+  BOOST_CHECK_CLOSE(2.473493, s, 0.001); // recalcuate somewhere else
 
   delete dx;
   delete dy;
 }
 
 
-void cmiTest::testSparseVsNonSparse()
+BOOST_AUTO_TEST_CASE(SparseVsNonSparse)
 {
   DContainer X(1000,1);
   DContainer Y(1000,1);
@@ -96,14 +96,14 @@ void cmiTest::testSparseVsNonSparse()
 
   double s1 = entropy::CMI(dx, dy, dz);
   double s2 = entropy::sparse::CMI(dx, dy, dz);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(s1, s2, 0.00001);
+  BOOST_CHECK_CLOSE(s1, s2, 0.001);
 
   delete dx;
   delete dy;
 }
 
 
-void cmiTest::testMatrixWiseComparision()
+BOOST_AUTO_TEST_CASE(MatrixWiseComparision)
 {
   //
   // Generating data
@@ -211,8 +211,8 @@ void cmiTest::testMatrixWiseComparision()
     {
       for(int z = 0; z < maxZ; z++)
       {
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, pxyz[x][y][z], 0.0000001);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, pxy_c_z[x][y][z], 0.0000001);
+        BOOST_CHECK_CLOSE(0.0, pxyz[x][y][z], 0.001);
+        BOOST_CHECK_CLOSE(0.0, pxy_c_z[x][y][z], 0.001);
       }
     }
   }
@@ -221,7 +221,7 @@ void cmiTest::testMatrixWiseComparision()
   {
     for(int z = 0; z < maxZ; z++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, py_c_z[y][z], 0.0000001);
+      BOOST_CHECK_CLOSE(0.0, py_c_z[y][z], 0.001);
     }
   }
 
@@ -229,12 +229,12 @@ void cmiTest::testMatrixWiseComparision()
   {
     for(int z = 0; z < maxZ; z++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, px_c_z[x][z], 0.0000001);
+      BOOST_CHECK_CLOSE(0.0, px_c_z[x][z], 0.001);
     }
   }
   for(int z = 0; z < maxZ; z++)
   {
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, pz[z], 0.0000001);
+    BOOST_CHECK_CLOSE(0.0, pz[z], 0.001);
   }
 
   for(int i = 0; i < dx->rows(); i++)
@@ -264,11 +264,11 @@ void cmiTest::testMatrixWiseComparision()
       for(int z = 0; z < maxZ; z++)
       {
         sum += pxyz[x][y][z];
-        CPPUNIT_ASSERT(pxyz[x][y][z] >= 0.0 && pxyz[x][y][z] <= 1.0);
+        BOOST_TEST((pxyz[x][y][z] >= 0.0 && pxyz[x][y][z] <= 1.0));
       }
     }
   }
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, sum, 0.0000001);
+  BOOST_CHECK_CLOSE(1.0, sum, 0.001);
 
   for(int x = 0; x < maxX; x++)
   {
@@ -427,9 +427,9 @@ void cmiTest::testMatrixWiseComparision()
     {
       for(int z = 0; z < maxZ; z++)
       {
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(pxyz[x][y][z],    spxyz(x,y,z),    0.00000001);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(pxyz[x][y][z],    spxyz(x,y,z),    0.00000001);
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(pxy_c_z[x][y][z], spxy_c_z(x,y,z), 0.00000001);
+        BOOST_CHECK_CLOSE(pxyz[x][y][z],    spxyz(x,y,z),    0.001);
+        BOOST_CHECK_CLOSE(pxyz[x][y][z],    spxyz(x,y,z),    0.001);
+        BOOST_CHECK_CLOSE(pxy_c_z[x][y][z], spxy_c_z(x,y,z), 0.001);
       }
     }
   }
@@ -438,18 +438,17 @@ void cmiTest::testMatrixWiseComparision()
   {
     for(int z = 0; z < maxZ; z++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(px_c_z[x][z], spx_c_z(x,z), 0.00000001);
+      BOOST_CHECK_CLOSE(px_c_z[x][z], spx_c_z(x,z), 0.001);
     }
   }
   for(int y = 0; y < maxY; y++)
   {
     for(int z = 0; z < maxZ; z++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(py_c_z[y][z], spy_c_z(y,z), 0.00000001);
+      BOOST_CHECK_CLOSE(py_c_z[y][z], spy_c_z(y,z), 0.001);
     }
   }
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(array_r, s_r, 0.00000001);
-
+  BOOST_CHECK_CLOSE(array_r, s_r, 0.001);
 
 }

@@ -80,7 +80,7 @@ endif(ENTROPY_COMPILE_ITSC)
 if(ENTROPY_TESTS)
   add_subdirectory(tests)
 endif(ENTROPY_TESTS)
- 
+
 
 find_package(Doxygen)
 if(DOXYGEN_FOUND)

@@ -703,20 +703,3 @@ BOOST_AUTO_TEST_CASE(MC_W)
   // cout << kl->divergence2() << endl;
 }
 BOOST_AUTO_TEST_SUITE_END()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

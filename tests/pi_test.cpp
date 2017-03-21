@@ -1,4 +1,6 @@
-#include "pi_test.h"
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE pi_test
+#include <boost/test/unit_test.hpp>
 
 #include <entropy++/Container.h>
 #include <entropy++/PI.h>
@@ -12,11 +14,7 @@
 using namespace std;
 using namespace entropy;
 
-// Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( piTest );
-
-
-void piTest::testSinus()
+BOOST_AUTO_TEST_CASE(Sinus)
 {
 
   DContainer container(1000,2);
@@ -45,13 +43,13 @@ void piTest::testSinus()
 
   double s = entropy::PI(d);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(9.56171, s, 0.00001); // recalcuate somewhere else
+  BOOST_CHECK_CLOSE(8.196816, s, 0.01); // recalcuate somewhere else
 
   delete d;
 }
 
 
-void piTest::testSparseVsNonSparse()
+BOOST_AUTO_TEST_CASE(SparseVsNonSparse)
 {
   DContainer container(1000,2);
   for(float i = 0; i < 1000.0; i = i + 1.0)
@@ -82,7 +80,7 @@ void piTest::testSparseVsNonSparse()
 
   double s1 = entropy::PI(d);
   double s2 = entropy::sparse::PI(d);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(s1, s2, 0.00001);
+  BOOST_CHECK_CLOSE(s1, s2, 0.01);
 
   delete d;
 }

@@ -1,4 +1,6 @@
-#include "matrix_test.h"
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE matrix_test
+#include <boost/test/unit_test.hpp>
 
 #include <entropy++/SparseMatrix.h>
 #include <entropy++/Matrix.h>
@@ -10,10 +12,8 @@
 
 using namespace std;
 
-// Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( matrixTest );
 
-void matrixTest::testInitialisation()
+BOOST_AUTO_TEST_CASE(Initialisation)
 {
   entropy::SparseMatrix sm;
 
@@ -21,7 +21,7 @@ void matrixTest::testInitialisation()
   {
     for(int col = 0; col < 10; col++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, sm(row,col), 0.0001);
+      BOOST_CHECK_CLOSE(0.0, sm(row,col), 0.001);
     }
   }
 
@@ -31,12 +31,12 @@ void matrixTest::testInitialisation()
   {
     for(int col = 0; col < 10; col++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, sm2(row,col), 0.0001);
+      BOOST_CHECK_CLOSE(2.0, sm2(row,col), 0.001);
     }
   }
 }
 
-void matrixTest::testSet()
+BOOST_AUTO_TEST_CASE(Set)
 {
   entropy::SparseMatrix sm;
 
@@ -48,17 +48,17 @@ void matrixTest::testSet()
     {
       if(row == 1 && col == 1)
       {
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(2.0, sm(row,col), 0.0001);
+        BOOST_CHECK_CLOSE(2.0, sm(row,col), 0.001);
       }
       else
       {
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, sm(row,col), 0.0001);
+        BOOST_CHECK_CLOSE(0.0, sm(row,col), 0.001);
       }
     }
   }
 }
 
-void matrixTest::testAdd()
+BOOST_AUTO_TEST_CASE(Add)
 {
   time_t t;
   time(&t);
@@ -90,7 +90,7 @@ void matrixTest::testAdd()
   {
     for(int col = 0; col < 10; col++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(m1(row,col), sm1(row,col), 0.0001);
+      BOOST_CHECK_CLOSE(m1(row,col), sm1(row,col), 0.001);
     }
   }
 
@@ -98,7 +98,7 @@ void matrixTest::testAdd()
   {
     for(int col = 0; col < 10; col++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(m2(row,col), sm2(row,col), 0.0001);
+      BOOST_CHECK_CLOSE(m2(row,col), sm2(row,col), 0.001);
     }
   }
 
@@ -109,12 +109,12 @@ void matrixTest::testAdd()
   {
     for(int col = 0; col < 10; col++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(m3(row,col), sm3(row,col), 0.0001);
+      BOOST_CHECK_CLOSE(m3(row,col), sm3(row,col), 0.001);
     }
   }
 }
 
-void matrixTest::testMul()
+BOOST_AUTO_TEST_CASE(Mul)
 {
   time_t t;
   time(&t);
@@ -143,7 +143,7 @@ void matrixTest::testMul()
   {
     for(int col = 0; col < 10; col++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(m1(row,col), sm1(row,col), 0.0001);
+      BOOST_CHECK_CLOSE(m1(row,col), sm1(row,col), 0.001);
     }
   }
 
@@ -154,12 +154,12 @@ void matrixTest::testMul()
   {
     for(int col = 0; col < 10; col++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(m3(row,col), sm3(row,col), 0.0001);
+      BOOST_CHECK_CLOSE(m3(row,col), sm3(row,col), 0.001);
     }
   }
 }
 
-void matrixTest::testDiv()
+BOOST_AUTO_TEST_CASE(Div)
 {
   time_t t;
   time(&t);
@@ -188,7 +188,7 @@ void matrixTest::testDiv()
   {
     for(int col = 0; col < 10; col++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(m1(row,col), sm1(row,col), 0.0001);
+      BOOST_CHECK_CLOSE(m1(row,col), sm1(row,col), 0.001);
     }
   }
 
@@ -199,7 +199,7 @@ void matrixTest::testDiv()
   {
     for(int col = 0; col < 10; col++)
     {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(m2(row,col), sm2(row,col), 0.0001);
+      BOOST_CHECK_CLOSE(m2(row,col), sm2(row,col), 0.001);
     }
   }
 }

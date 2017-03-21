@@ -1,4 +1,6 @@
-#include "delta_test.h"
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE delta_test
+#include <boost/test/unit_test.hpp>
 
 #include <entropy++/iterativescaling/Delta.h>
 
@@ -10,11 +12,8 @@
 using namespace std;
 using namespace entropy::iterativescaling;
 
-// Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( deltaTest );
 
-
-void deltaTest::testDeltaMatch()
+BOOST_AUTO_TEST_CASE(DeltaMatch)
 {
   vector<unsigned long> xrow;
   xrow.push_back(0);
@@ -65,10 +64,10 @@ void deltaTest::testDeltaMatch()
   yIndices.push_back(7);
 
   Delta *d = new Delta(xrow, xIndices, yrow, yIndices);
-  CPPUNIT_ASSERT_EQUAL(true, d->match(xrowmatch, yrowmatch));
+  BOOST_TEST(d->match(xrowmatch, yrowmatch));
 }
 
-void deltaTest::testDeltaMatchXY()
+BOOST_AUTO_TEST_CASE(DeltaMatchXY)
 {
   vector<unsigned long> xrow;
   xrow.push_back(0);
@@ -156,6 +155,6 @@ void deltaTest::testDeltaMatchXY()
 
   Delta *d1 = new Delta(xrow,  xIndices, yrow,  yIndices);
   Delta *d2 = new Delta(xrow2, xIndices, yrow2, yIndices);
-  CPPUNIT_ASSERT_EQUAL(true,  d1->matchXY(xrowmatch, yrowmatch));
-  CPPUNIT_ASSERT_EQUAL(false, d2->matchXY(xrowmatch, yrowmatch));
+  BOOST_TEST(true  == d1->matchXY(xrowmatch, yrowmatch));
+  BOOST_TEST(false == d2->matchXY(xrowmatch, yrowmatch));
 }

@@ -1,4 +1,6 @@
-#include "entropy_test.h"
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE entropy_test
+#include <boost/test/unit_test.hpp>
 
 #include <entropy++/Container.h>
 
@@ -17,11 +19,8 @@
 using namespace std;
 using namespace entropy;
 
-// Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( entropyTest );
 
-
-void entropyTest::testMax()
+BOOST_AUTO_TEST_CASE(Max)
 {
   DContainer X(1000,1);
   for(float i = 0; i < 1000.0; i = i + 1.0)
@@ -44,16 +43,16 @@ void entropyTest::testMax()
 
   double s = entropy::H(dx);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(log2(1000.0), s, 0.00001);
+  BOOST_CHECK_CLOSE(log2(1000.0), s, 0.001);
 
   double t = entropy::sparse::H(dx);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(log2(1000.0), t, 0.00001);
+  BOOST_CHECK_CLOSE(log2(1000.0), t, 0.001);
 
   delete dx;
 }
 
-void entropyTest::testZero()
+BOOST_AUTO_TEST_CASE(Zero)
 {
   DContainer X(1000,1);
   for(float i = 0; i < 1000.0; i = i + 1.0)
@@ -76,17 +75,17 @@ void entropyTest::testZero()
 
   double s = entropy::H(dx);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, s, 0.00001);
+  BOOST_CHECK_CLOSE(0.0, s, 0.001);
 
   double t = entropy::sparse::H(dx);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, t, 0.00001);
+  BOOST_CHECK_CLOSE(0.0, t, 0.001);
 
   delete dx;
 }
 
 // H(X|Y) = H(X,Y) - H(Y)
-void entropyTest::testConditional()
+BOOST_AUTO_TEST_CASE(Conditional)
 {
   DContainer X(1000,1);
   DContainer Y(1000,1);
@@ -127,11 +126,11 @@ void entropyTest::testConditional()
 
   double b = entropy::H(dz) - entropy::H(dy);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(b, a, 0.00001);
+  BOOST_CHECK_CLOSE(b, a, 0.001);
 
   double c = entropy::sparse::ConditionalEntropy(dx, dy);
 
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(a, c, 0.00001);
+  BOOST_CHECK_CLOSE(a, c, 0.001);
 
   delete dx;
   delete dy;
