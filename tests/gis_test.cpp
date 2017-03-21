@@ -294,18 +294,13 @@ void gisTest::testMC_W()
   {
     if(p->error() > ERROR_THRESHOLD) p->iterate();
     if(q->error() > ERROR_THRESHOLD) q->iterate();
-    cout << *p << endl;
-    // if(i % 1 == 0 && i > 0)
-    // {
-      // p->calculateProbabilities();
-      // q->calculateProbabilities();
-      // KL* kl = new KL(p, q);
-      // cout << "after " << i << " iterations: " << kl->divergence2() << endl;
-      // delete kl;
-    // }
+    if(i % 100 == 0 && i > 0)
+    {
+      KL* kl = new KL(p, q);
+      cout << "after " << i << " iterations: " << kl->divergence2() << endl;
+      delete kl;
+    }
   }
-
-
 
 
 

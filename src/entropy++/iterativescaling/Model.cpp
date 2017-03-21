@@ -50,8 +50,8 @@ void Model::setFeatures(vector<vector<int> > Xindices,
 
 void Model::createUniqueContainer()
 {
- // Xalphabet = Xdata->unique();
- // Yalphabet = Ydata->unique();
+ Xalphabet = Xdata->unique();
+ Yalphabet = Ydata->unique();
   if (_x_alphabet != NULL) delete _x_alphabet;
   if (_y_alphabet != NULL) delete _y_alphabet;
 
@@ -83,8 +83,8 @@ void Model::createUniqueContainer()
       }
     }
   }
-  Xalphabet= __uniqueRows(_x_indices,Xdata);
-  Yalphabet= __uniqueRows(_y_indices,Ydata);
+  // Xalphabet = __uniqueRows(_x_indices,Xdata);
+  // Yalphabet = __uniqueRows(_y_indices,Ydata);
 // cout << "Xalphabet" << endl << (*Xalphabet) << endl;
 // cout << "Yalphabet" << endl << (*Yalphabet) << endl;
 /*  _yAlphabetSize = 1.0;
