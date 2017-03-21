@@ -40,6 +40,7 @@ set(SRC
   sparse/state/MI.cpp
 
   iterativescaling/Delta.cpp
+  iterativescaling/DeltaMatcher.cpp
   iterativescaling/Feature.cpp
   iterativescaling/Model.cpp
   iterativescaling/GIS.cpp

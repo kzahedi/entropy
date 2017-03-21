@@ -15,7 +15,6 @@ void GIS::init()
   createUniqueContainer();
   countObservedFeatures();
   _s.resize(Yalphabet->rows());
-  // VLOG(100) << "Each iteration will require " << (deltas.size() * Xdata->rows() * Yalphabet->rows()) << " calculations.";
 }
 
 void GIS::iterate()
@@ -48,18 +47,16 @@ void GIS::iterate()
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       vector<unsigned long> y_row = Yalphabet->row(y);
-
-      // cout << "X:";  for(vector<unsigned long>::iterator v = x_row.begin(); v != x_row.end(); v++) cout << " " << *v;
-      // cout << " Y:"; for(vector<unsigned long>::iterator v = y_row.begin(); v != y_row.end(); v++) cout << " " << *v;
-      // cout << endl;
-      for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+      // for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+      // {
+        // if((*d)->matchXY(x_row, y_row))
+        // {
+          // (*d)->setExpected((*d)->expected() + exp(_s[y]) / z);
+        // }
+      // }
+      for(vector<Delta*>::iterator d = deltaMatcher->begin(j); d != deltaMatcher->end(j); d++)
       {
-        if((*d)->matchXY(x_row, y_row))
-        {
-          // cout << "found match (" << index << ") " << (*d)->expected() << " -> ";
-          (*d)->setExpected((*d)->expected() + exp(_s[y]) / z);
-          // cout << (*d)->expected() << endl;
-        }
+        if((*d)->matchY(y_row)) (*d)->setExpected((*d)->expected() + exp(_s[y]) / z);
       }
     }
   } // j

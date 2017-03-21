@@ -23,6 +23,8 @@ namespace entropy
 
         bool matchXY(vector<unsigned long> xValues, vector<unsigned long> yValues);
 
+        bool matchY(vector<unsigned long> yValues);
+
         void incObserved();
 
         void setObserved(double v);

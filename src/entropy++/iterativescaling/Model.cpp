@@ -30,9 +30,6 @@ void Model::setData(ULContainer *X, ULContainer *Y)
 
 Model::~Model()
 {
-  // delete Xdata;
-  // delete Ydata;
-
   delete Xalphabet;
   delete Yalphabet;
 
@@ -83,26 +80,16 @@ void Model::createUniqueContainer()
       }
     }
   }
-  // Xalphabet = __uniqueRows(_x_indices,Xdata);
-  // Yalphabet = __uniqueRows(_y_indices,Ydata);
-// cout << "Xalphabet" << endl << (*Xalphabet) << endl;
-// cout << "Yalphabet" << endl << (*Yalphabet) << endl;
-/*  _yAlphabetSize = 1.0;
-  for (int c = 0; c < Yalphabet->columns(); c++)
-  {
-    _yAlphabetSize *= Yalphabet->getBinSize(c);
-  } */
 }
 
 void Model::countObservedFeatures()
 {
-  for (int d = 0; d < Xdata->rows(); d++)
+  for (int i = 0; i < Xdata->rows(); i++)
   {
-    vector<unsigned long> xrow = Xdata->row(d);
-    vector<unsigned long> yrow = Ydata->row(d);
+    vector<unsigned long> xrow = Xdata->row(i);
+    vector<unsigned long> yrow = Ydata->row(i);
 
-    for (vector<Feature*>::iterator f = features.begin(); f != features.end();
-        f++)
+    for (vector<Feature*>::iterator f = features.begin(); f != features.end(); f++)
     {
       bool found = false;
       for (vector<Delta*>::iterator d = (*f)->begin(); d != (*f)->end(); d++)
@@ -124,14 +111,23 @@ void Model::countObservedFeatures()
       }
     }
   }
-//  if (VLOG_IS_ON(100))
-//  {
-//    VLOG(100) << "Counting done";
-//    for (vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-//    {
-//      VLOG(100) << **d;
-//    }
-//  }
+
+  deltaMatcher = new DeltaMatcher(Xdata->rows());
+  for(int x = 0; x < Xdata->rows(); x++)
+  {
+    vector<unsigned long> x_row = Xdata->row(x);
+    for(int y = 0; y < Yalphabet->rows(); y++)
+    {
+      vector<unsigned long> y_row = Yalphabet->row(y);
+      for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+      {
+        if((*d)->matchXY(x_row, y_row))
+        {
+          deltaMatcher->add(x, *d);
+        }
+      }
+    }
+  }
 }
 
 int Model::nrOfFeatures()
@@ -149,11 +145,13 @@ ULContainer* Model::Y()
   return Ydata;
 }
 
-ULContainer* Model::XAlphabet(){
+ULContainer* Model::XAlphabet()
+{
   return Xalphabet;
 }
 
-ULContainer* Model::YAlphabet(){
+ULContainer* Model::YAlphabet()
+{
   return Yalphabet;
 }
 
@@ -199,10 +197,6 @@ void Model::calculateProbabilities()
       M(x, y) = exp(M(x,y));
     }
   }
-
-  // cout << "**" << endl;
-  // cout << M << endl;
-  // cout << "##" << endl;
 
   _conditional = new Matrix(_x_alphabet->rows(), _y_alphabet->rows());
   _joint       = new Matrix(_x_alphabet->rows(), _y_alphabet->rows());
@@ -272,10 +266,14 @@ int Model::getNrOfUniqueY()
 {
   return Yalphabet->rows();
 }
-vector<int> Model::getAllColumnsForX(){
+
+vector<int> Model::getAllColumnsForX()
+{
   return _x_indices;
 }
-vector<int> Model::getAllColumnsForY(){
+
+vector<int> Model::getAllColumnsForY()
+{
   return _y_indices;
 }
 

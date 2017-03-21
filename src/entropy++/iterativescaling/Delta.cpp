@@ -91,20 +91,12 @@ bool Delta::matchXY(vector<unsigned long> xv, vector<unsigned long> yv)
 {
   for(int i = 0; i < (int)_xValues.size(); i++) if(_xValues[i] != xv[_xIndices[i]]) return false;
   for(int i = 0; i < (int)_yValues.size(); i++) if(_yValues[i] != yv[_yIndices[i]]) return false;
+  return true;
+}
 
-  // cout << "XV:";
-  // for(int i = 0; i < (int)xv.size(); i++) cout << " " << xv[i];
-  // cout << endl;
-  // cout << "YV:";
-  // for(int i = 0; i < (int)yv.size(); i++) cout << " " << yv[i];
-  // cout << endl;
-
-  // cout << "Delta match: X:";
-  // for(int i = 0; i < (int)_xValues.size(); i++) cout << " " << _xValues[i] << " = " << xv[_xIndices[i]];
-  // cout << " Y:";
-  // for(int i = 0; i < (int)_yValues.size(); i++) cout << " " << _yValues[i] << " = " << yv[_yIndices[i]];
-  // cout << endl;
-
+bool Delta::matchY(vector<unsigned long> yv)
+{
+  for(int i = 0; i < (int)_yValues.size(); i++) if(_yValues[i] != yv[_yIndices[i]]) return false;
   return true;
 }
 
