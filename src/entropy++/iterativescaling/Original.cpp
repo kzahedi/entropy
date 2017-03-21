@@ -122,6 +122,25 @@ double Original::calculateKL(int iterations){
   }
   return sum;
 }
+double Original::calculateKL(vector<double> p,vector<double> q){
+  double sum = 0.0;
+  for(int i=0;i< _sizeAlphabet;i++){
+    if(p[i]>0){
+      sum+= p[i]*(log2(p[i])-log2(q[i]));
+    }
+  }
+  return sum;
+}
+double Original::calculateConditionalKL(vector<double> p,vector<double> q,vector<int> featMarg, vector<int> featCond){
+  double sum = 0.0;
+  for(int i=0;i< _sizeAlphabet;i++){
+    if(p[i]>0){
+      sum+= p[i]*(log2(getConditionalProp(featMarg,featCond,i,p))-log2( getConditionalProp(featMarg,featCond,i,q)));
+   //   cout <<  p[i] << " " <<  getConditionalProp(featMarg,featCond,i,p)<< " " << getConditionalProp(featMarg,featCond,i,q) <<endl;
+    }
+  }
+  return sum;
+}
 void   Original::iterate(double KL){
   int iterations = 0;
   double kl      = 5;
@@ -148,9 +167,9 @@ void   Original::iterate(double KL){
       }
     }
     kl= calculateKL(iterations%2);
-//    cout << " iteration: " << it << " p1,p2,p   featindex " << featIndex  << endl;
+  //  cout << " iteration: " << iterations << " p1,p2,p   featindex " << featIndex  << endl;
     for(int i=0; i< _sizeAlphabet;i++){
-//      cout << _p1[i] << "  " << _p2[i] << "  " << _targetp[i] << endl;
+  //    cout << _p1[i] << "  " << _p2[i] << "  " << _targetp[i] << endl;
     }
   }
 }
@@ -168,7 +187,7 @@ void   Original::iterate(int iterations){
     }
     else{
       for(int i=0;i<_sizeAlphabet;i++){
-//        cout <<i << " " << _getprop(_targetp, featIndex,i) << "  " << _p2[i] << " " << _getprop(_p2,featIndex,i) << endl;
+ //       cout <<i << " " << _getprop(_targetp, featIndex,i) << "  " << _p2[i] << " " << _getprop(_p2,featIndex,i) << endl;
         _p1[i]=_getprop(_targetp, featIndex,i)*_p2[i];
         if(_p1[i]!=0){
           _p1[i]=_p1[i]/_getprop(_p2,featIndex,i);
