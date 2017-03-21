@@ -23,6 +23,8 @@ namespace entropy
         void            iterate(int iterations);
         void            iterate(double kl);
         double          calculateKL(int iterations);
+        double          calculateKL(vector<double> p,vector<double> q);
+        double          calculateConditionalKL(vector<double> p,vector<double> q,vector<int> featMarg, vector<int> featCond);
         vector<double>  getp();
         double          getMarginalProp(int ind,vector<int> feat, vector<double> p);
         double          getConditionalProp(vector<int> featMarg, vector<int> featCond, int ind, vector<double> p);

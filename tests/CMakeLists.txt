@@ -1,14 +1,17 @@
 include_directories(${PROJECT_SOURCE_DIR}/src)
 link_directories(${PROJECT_BINARY_DIR}/lib)
 
-add_executable(container-tests        main.cpp  container_test.cpp)
-target_link_libraries(container-tests Entropy++ cppunit dl)
+# add_executable(container-tests        main.cpp  container_test.cpp)
+# target_link_libraries(container-tests Entropy++ stdcc++ cppunit dl)
 
-add_executable(matrix-tests           main.cpp  matrix_test.cpp)
-target_link_libraries(matrix-tests    Entropy++ cppunit dl)
+# add_executable(matrix-tests           main.cpp  matrix_test.cpp)
+# target_link_libraries(matrix-tests    Entropy++ stdc++  cppunit dl)
 
-add_executable(pi-tests               main.cpp  pi_test.cpp)
-target_link_libraries(pi-tests        Entropy++ cppunit dl)
+# add_executable(pi-tests               main.cpp  pi_test.cpp)
+# target_link_libraries(pi-tests        Entropy++ stdc++  cppunit dl)
+
+# add_executable(delta-tests            main.cpp  delta_test.cpp)
+# target_link_libraries(delta-tests     Entropy++ stdc++  cppunit dl)
 
 # add_executable(it-tests               main.cpp  it_test.cpp)
 # target_link_libraries(it-tests        Entropy++ cppunit dl eit)
@@ -16,7 +19,7 @@ target_link_libraries(pi-tests        Entropy++ cppunit dl)
 # add_executable(iterative-scaling-tests        main.cpp  iterative_scaling_test.cpp)
 # target_link_libraries(iterative-scaling-tests Entropy++ cppunit dl eit)
 
-add_definitions(-DPARENT="${CMAKE_SOURCE_DIR}/experiments/hopping/data/")
+# add_definitions(-DPARENT="${CMAKE_SOURCE_DIR}/experiments/hopping/data/")
 # add_executable(it-cmi-tests           main.cpp  it_cmi_test.cpp)
 # target_link_libraries(it-cmi-tests    Entropy++ cppunit dl eit)
 
@@ -26,33 +29,37 @@ add_definitions(-DPARENT="${CMAKE_SOURCE_DIR}/experiments/hopping/data/")
 # add_executable(iterative-scaling-cmi-tests        main.cpp  iterative_scaling_cmi_test.cpp)
 # target_link_libraries(iterative-scaling-cmi-tests Entropy++ cppunit dl)
 
-add_executable(mi-tests               main.cpp  mi_test.cpp)
-target_link_libraries(mi-tests        Entropy++ cppunit dl)
+# add_executable(mi-tests               main.cpp  mi_test.cpp)
+# target_link_libraries(mi-tests        Entropy++ stdc++ cppunit dl)
 
-add_executable(entropy-tests          main.cpp  entropy_test.cpp)
-target_link_libraries(entropy-tests   Entropy++ cppunit dl)
+# add_executable(entropy-tests          main.cpp  entropy_test.cpp)
+# target_link_libraries(entropy-tests   Entropy++ stdc++ cppunit dl)
 
-add_executable(cmi-tests              main.cpp  cmi_test.cpp)
-target_link_libraries(cmi-tests       Entropy++ cppunit dl)
+# add_executable(cmi-tests              main.cpp  cmi_test.cpp)
+# target_link_libraries(cmi-tests       Entropy++ stdc++ cppunit dl)
 
 # add_executable(feature-tests          main.cpp  feature_test.cpp)
 # target_link_libraries(feature-tests   Entropy++ cppunit dl eit)
 
-add_definitions(-DTEST_CSV="${PROJECT_SOURCE_DIR}/tests/test.csv")
-add_executable(csv-tests              main.cpp  csv_test.cpp)
-target_link_libraries(csv-tests       Entropy++ cppunit dl)
+# add_definitions(-DTEST_CSV="${PROJECT_SOURCE_DIR}/tests/test.csv")
+# add_executable(csv-tests              main.cpp  csv_test.cpp)
+# target_link_libraries(csv-tests       Entropy++ stdc++ cppunit dl)
 
-add_executable(gis-tests            main.cpp  gis_test.cpp)
-target_link_libraries(gis-tests     Entropy++ cppunit dl)
+add_executable(gis-tests        gis_test.cpp)
+target_link_libraries(gis-tests Entropy++ ${Boost_LIBRARIES})
 
-add_executable(iso-tests            main.cpp  iso_test.cpp)
-target_link_libraries(iso-tests     Entropy++ cppunit dl)
+add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
+add_executable(test-test        test_test.cpp)
+target_link_libraries(test-test Entropy++ ${Boost_LIBRARIES})
 
-add_executable(scgis-tests            main.cpp  scgis_test.cpp)
-target_link_libraries(scgis-tests     Entropy++ cppunit dl)
+# add_executable(iso-tests            main.cpp  iso_test.cpp)
+# target_link_libraries(iso-tests     Entropy++ stdc++ cppunit dl)
 
-add_executable(original-tests            main.cpp  original_test.cpp)
-target_link_libraries(original-tests     Entropy++ cppunit dl)
+# add_executable(scgis-tests            main.cpp  scgis_test.cpp)
+# target_link_libraries(scgis-tests     Entropy++ stdc++ cppunit dl)
+
+# add_executable(original-tests            main.cpp  original_test.cpp)
+# target_link_libraries(original-tests     Entropy++ stdc++ cppunit dl)
 
 # ADD_TEST(feature   "${PROJECT_BINARY_DIR}/bin/feature-tests")
 # ADD_TEST(it        "${PROJECT_BINARY_DIR}/bin/it-tests")
@@ -61,6 +68,7 @@ target_link_libraries(original-tests     Entropy++ cppunit dl)
 ADD_TEST(container      "${PROJECT_BINARY_DIR}/bin/container-tests")
 ADD_TEST(matrix         "${PROJECT_BINARY_DIR}/bin/matrix-tests")
 ADD_TEST(mi             "${PROJECT_BINARY_DIR}/bin/mi-tests")
+ADD_TEST(delta          "${PROJECT_BINARY_DIR}/bin/delta-tests")
 ADD_TEST(entropy        "${PROJECT_BINARY_DIR}/bin/entropy-tests")
 ADD_TEST(cmi            "${PROJECT_BINARY_DIR}/bin/cmi-tests")
 ADD_TEST(csv            "${PROJECT_BINARY_DIR}/bin/csv-tests")
@@ -68,5 +76,6 @@ ADD_TEST(GIS            "${PROJECT_BINARY_DIR}/bin/gis-tests")
 ADD_TEST(Original-It-Sc "${PROJECT_BINARY_DIR}/bin/iso-tests")
 ADD_TEST(SCGIS          "${PROJECT_BINARY_DIR}/bin/scgis-tests")
 ADD_TEST(Original       "${PROJECT_BINARY_DIR}/bin/original-tests")
+ADD_TEST(testing_boost  test-test)
 
 #ADD_TEST(iterativescaling-cmi "${PROJECT_BINARY_DIR}/bin/iterative-scaling-cmi-tests")

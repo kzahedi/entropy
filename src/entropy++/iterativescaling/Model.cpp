@@ -1,4 +1,5 @@
 #include <entropy++/iterativescaling/Model.h>
+#include <omp.h>
 
 // #include <glog/logging.h>
 
@@ -84,6 +85,7 @@ void Model::createUniqueContainer()
 
 void Model::countObservedFeatures()
 {
+
   for (int i = 0; i < Xdata->rows(); i++)
   {
     vector<unsigned long> xrow = Xdata->row(i);
@@ -229,7 +231,6 @@ void Model::calculateProbabilities()
     (*_marginal)(x, 0) = a / b;
   }
 
- // cout << "marginals:" << endl << (*_marginal) << endl;
   delete x_alphabet_full;
   delete y_alphabet_full;
 }

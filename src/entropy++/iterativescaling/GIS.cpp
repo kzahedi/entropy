@@ -1,4 +1,5 @@
 #include <entropy++/iterativescaling/GIS.h>
+#include <omp.h>
 
 // #include <glog/logging.h>
 
@@ -28,6 +29,7 @@ void GIS::iterate()
   {
     vector<unsigned long> x_row = Xdata->row(j);
 
+#pragma omp for
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       _s[y] = 0.0;
@@ -44,16 +46,10 @@ void GIS::iterate()
     double z = 0.0;
     for(vector<double>::iterator i = _s.begin(); i != _s.end(); i++) z += exp(*i);
 
+#pragma omp for
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       vector<unsigned long> y_row = Yalphabet->row(y);
-      // for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-      // {
-        // if((*d)->matchXY(x_row, y_row))
-        // {
-          // (*d)->setExpected((*d)->expected() + exp(_s[y]) / z);
-        // }
-      // }
       for(vector<Delta*>::iterator d = deltaMatcher->begin(j); d != deltaMatcher->end(j); d++)
       {
         if((*d)->matchY(y_row)) (*d)->setExpected((*d)->expected() + exp(_s[y]) / z);
@@ -91,14 +87,6 @@ void GIS::iterate()
   }
 
   _error = sqrt(_error);
-
-//  if(VLOG_IS_ON(100))
-//  {
-//    for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-//    {
-//      VLOG(100) << **d;
-//    }
-//  }
 }
 
 double GIS::error()

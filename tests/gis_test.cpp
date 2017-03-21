@@ -1,4 +1,6 @@
-#include "gis_test.h"
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE gis_test
+#include <boost/test/unit_test.hpp>
 
 #include <entropy++/Container.h>
 #include <entropy++/Csv.h>
@@ -44,84 +46,477 @@ using namespace std;
 using namespace entropy;
 using namespace entropy::iterativescaling;
 
-
-// Registers the fixture into the 'registry'
-CPPUNIT_TEST_SUITE_REGISTRATION( gisTest );
-
 entropy::SparseMatrix pz;
 entropy::SparseMatrix pyz;
 entropy::SparseMatrix px_c_yz;
 entropy::SparseMatrix pxyz;
 
-void calculateProbabilities(ULContainer* X, ULContainer* Y, ULContainer* Z)
+BOOST_AUTO_TEST_SUITE(Logic)
+BOOST_AUTO_TEST_CASE(AND)
 {
-  assert(X->isDiscretised());
-  assert(Y->isDiscretised());
-  assert(Z->isDiscretised());
+  ULContainer *xData = new ULContainer(4,2);
+  *xData << 0 << 0;
+  *xData << 0 << 1;
+  *xData << 1 << 0;
+  *xData << 1 << 1;
 
-  int    maxX = 0;
-  int    maxY = 0;
-  int    maxZ = 0;
-  double sum  = 0.0;
+  ULContainer *yData = new ULContainer(4,1);
+  *yData << 0;
+  *yData << 0;
+  *yData << 0;
+  *yData << 1;
 
-  for(int i = 0; i < X->rows(); i++)
+  ////////////////////////////////////////////////////////////////////////////////
+  // independent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > ia;
+  vector<vector<int> > ib;
+
+  vector<int> iaa;
+  iaa.push_back(0);
+  ia.push_back(iaa);
+  vector<int> iab;
+  iab.push_back(1);
+  ia.push_back(iab);
+
+  vector<int> ibb;
+  ibb.push_back(0);
+  ib.push_back(ibb);
+
+  vector<Feature*> features;
+  features.push_back(new Feature(0,0));
+  features.push_back(new Feature(1,0));
+
+  GIS* independentModel = new GIS();
+  independentModel->setData(xData, yData);
+  independentModel->setFeatures(ia,ib,features);
+  independentModel->init();
+
+  for(int i = 0; i < 20000; i++)
   {
-    if(X->get(i,0) > maxX) maxX = X->get(i,0);
-    if(Y->get(i,0) > maxY) maxY = Y->get(i,0);
-    if(Z->get(i,0) > maxZ) maxZ = Z->get(i,0);
+    independentModel->iterate();
+    if(independentModel->error() < 0.000000001) break;
   }
 
-  maxX = maxX + 1;
-  maxY = maxY + 1;
-  maxZ = maxZ + 1;
+  ////////////////////////////////////////////////////////////////////////////////
+  // dependent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > da;
+  vector<vector<int> > db;
 
-  pxyz.reset();
-  px_c_yz.reset();
-  pz.reset();
+  vector<int> daa;
+  daa.push_back(0);
+  daa.push_back(1);
+  da.push_back(daa);
 
-  for(int i = 0; i < X->rows(); i++)
+  vector<int> dbb;
+  dbb.push_back(0);
+  db.push_back(dbb);
+
+  vector<Feature*> dfeatures;
+  dfeatures.push_back(new Feature(0,0));
+
+  GIS* dependentModel = new GIS();
+  dependentModel->setData(xData, yData);
+  dependentModel->setFeatures(da,db,dfeatures);
+  dependentModel->init();
+
+  for(int i = 0; i < 20000; i++)
   {
-    int x = X->get(i, 0);
-    int y = Y->get(i, 0);
-    int z = Z->get(i, 0);
-    pxyz(x,y,z) = pxyz(x,y,z) + 1.0;
+    dependentModel->iterate();
+    if(dependentModel->error() < 0.000000001) break;
   }
 
-  pxyz /= (double)(X->rows());
+  dependentModel->calculateProbabilities();
 
-  sum = 0.0;
-  for(int i = 0; i < pxyz.size(); i++) sum += pxyz.get(i);
-  assert(fabs(sum - 1.0) < 0.000001);
+  Matrix ipycx(2,4);
+  ipycx(0,0) = 1.0;
+  ipycx(0,1) = 1.0;
+  ipycx(0,2) = 1.0;
+  ipycx(1,3) = 1.0;
 
-  for(int i = 0; i < pxyz.size(); i++)
-  {
-    entropy::MatrixIndex mi = pxyz.getmi(i);
-    int x = mi.first;
-    int y = mi.second;
-    int z = mi.third;
-    pz(z)    += pxyz(x,y,z);
-    pyz(y,z) += pxyz(x,y,z);
-  }
+  Matrix ipx(1,4);
+  ipx(0,0) = 1.0/4.0;
+  ipx(0,1) = 1.0/4.0;
+  ipx(0,2) = 1.0/4.0;
+  ipx(0,3) = 1.0/4.0;
 
-  sum = 0.0;
-  for(int i = 0; i < pz.size(); i++) sum += pz.get(i);
-  assert(fabs(sum - 1.0) < 0.000001);
 
-  sum = 0.0;
-  for(int i = 0; i < pyz.size(); i++) sum += pyz.get(i);
-  assert(fabs(sum - 1.0) < 0.000001);
+  BOOST_CHECK_CLOSE(ipycx(0,0), dependentModel->p_y_c_x(0,0), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(0,1), dependentModel->p_y_c_x(0,1), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(0,2), dependentModel->p_y_c_x(0,2), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(0,3), dependentModel->p_y_c_x(0,3), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,0), dependentModel->p_y_c_x(1,0), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,1), dependentModel->p_y_c_x(1,1), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,2), dependentModel->p_y_c_x(1,2), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,3), dependentModel->p_y_c_x(1,3), EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,0), dependentModel->p_x(0), EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,1), dependentModel->p_x(1), EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,2), dependentModel->p_x(2), EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,3), dependentModel->p_x(3), EPSILON);
 
-  for(int i = 0; i < pxyz.size(); i++)
-  {
-    entropy::MatrixIndex mi = pxyz.getmi(i);
-    int x = mi.first;
-    int y = mi.second;
-    int z = mi.third;
-    px_c_yz(x,y,z) = pxyz(x,y,z) / pyz(y,z);
-  }
+  ////////////////////////////////////////////////////////////////////////////////
+  // Synergy
+  ////////////////////////////////////////////////////////////////////////////////
+
+  KL* kl = new KL(dependentModel, independentModel);
+  cout << "AND (bits): " << kl->divergence2() << endl;
+  cout << "AND (nats): " << kl->divergenceN() << endl;
 }
 
-void gisTest::testMC_W()
+BOOST_AUTO_TEST_CASE(ANDCMI)
+{
+  ULContainer *xData = new ULContainer(4,2);
+  *xData << 0 << 0;
+  *xData << 0 << 1;
+  *xData << 1 << 0;
+  *xData << 1 << 1;
+
+  ULContainer *yData = new ULContainer(4,1);
+  *yData << 0;
+  *yData << 0;
+  *yData << 0;
+  *yData << 1;
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // independent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > ia;
+  vector<vector<int> > ib;
+
+  vector<int> iaa;
+  iaa.push_back(1);
+  ia.push_back(iaa);
+
+  vector<int> ibb;
+  ibb.push_back(0);
+  ib.push_back(ibb);
+
+  vector<Feature*> features;
+  features.push_back(new Feature(0,0));
+
+  GIS* independentModel = new GIS();
+  independentModel->setData(xData, yData);
+  independentModel->setFeatures(ia,ib,features);
+  independentModel->init();
+
+  for(int i = 0; i < 5000; i++)
+  {
+    independentModel->iterate();
+    if(independentModel->error() < 0.000000001) break;
+  }
+
+  independentModel->calculateProbabilities();
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // dependent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > da;
+  vector<vector<int> > db;
+
+  vector<int> daa;
+  daa.push_back(0);
+  daa.push_back(1);
+  da.push_back(daa);
+
+  vector<int> dbb;
+  dbb.push_back(0);
+  db.push_back(dbb);
+
+  vector<Feature*> dfeatures;
+  dfeatures.push_back(new Feature(0,0));
+
+  GIS* dependentModel = new GIS();
+  dependentModel->setData(xData, yData);
+  dependentModel->setFeatures(da,db,dfeatures);
+  dependentModel->init();
+
+  for(int i = 0; i < 5000; i++)
+  {
+    dependentModel->iterate();
+    if(dependentModel->error() < 0.000000001) break;
+  }
+
+  Matrix dpycx(2,4,0.0);
+  dpycx(0,0) = 1.0;
+  dpycx(0,1) = 1.0;
+  dpycx(0,2) = 1.0;
+  dpycx(1,3) = 1.0;
+
+  Matrix dpx(1,4, 0.0);
+  dpx(0,0) = 1.0/4.0;
+  dpx(0,1) = 1.0/4.0;
+  dpx(0,2) = 1.0/4.0;
+  dpx(0,3) = 1.0/4.0;
+
+  Matrix ipycx(2,2);
+  ipycx(0,0) = 1.0;
+  ipycx(1,0) = 0.0;
+  ipycx(0,1) = 0.5;
+  ipycx(1,1) = 0.5;
+
+  Matrix ipx(1,2, 0.0);
+  ipx(0,0) = 1.0/2.0;
+  ipx(0,1) = 1.0/2.0;
+
+  dependentModel->calculateProbabilities();
+  BOOST_CHECK_CLOSE(dpycx(0,0), dependentModel->p_y_c_x(0,0), EPSILON);
+  BOOST_CHECK_CLOSE(dpycx(0,1), dependentModel->p_y_c_x(0,1), EPSILON);
+  BOOST_CHECK_CLOSE(dpycx(0,2), dependentModel->p_y_c_x(0,2), EPSILON);
+  BOOST_CHECK_CLOSE(dpycx(0,3), dependentModel->p_y_c_x(0,3), EPSILON);
+  BOOST_CHECK_CLOSE(dpycx(1,0), dependentModel->p_y_c_x(1,0), EPSILON);
+  BOOST_CHECK_CLOSE(dpycx(1,1), dependentModel->p_y_c_x(1,1), EPSILON);
+  BOOST_CHECK_CLOSE(dpycx(1,2), dependentModel->p_y_c_x(1,2), EPSILON);
+  BOOST_CHECK_CLOSE(dpycx(1,3), dependentModel->p_y_c_x(1,3), EPSILON);
+  BOOST_CHECK_CLOSE(dpx(0,0),   dependentModel->p_x(0),       EPSILON);
+  BOOST_CHECK_CLOSE(dpx(0,1),   dependentModel->p_x(1),       EPSILON);
+  BOOST_CHECK_CLOSE(dpx(0,2),   dependentModel->p_x(2),       EPSILON);
+  BOOST_CHECK_CLOSE(dpx(0,3),   dependentModel->p_x(3),       EPSILON);
+
+  BOOST_CHECK_CLOSE(ipycx(0,0), independentModel->p_y_c_x(0,0), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(0,1), independentModel->p_y_c_x(0,1), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,0), independentModel->p_y_c_x(1,0), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,1), independentModel->p_y_c_x(1,1), EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,0),   independentModel->p_x(0),       EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,1),   independentModel->p_x(1),       EPSILON);
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // Synergy
+  ////////////////////////////////////////////////////////////////////////////////
+
+  KL* kl = new KL(dependentModel, independentModel);
+  cout << "AND CMI (bits): " << kl->divergence2() << endl;
+  cout << "AND CMI (nats): " << kl->divergenceN() << endl;
+}
+
+BOOST_AUTO_TEST_CASE(OR)
+{
+  ULContainer *xData = new ULContainer(4,2);
+  *xData << 0 << 0;
+  *xData << 0 << 1;
+  *xData << 1 << 0;
+  *xData << 1 << 1;
+
+  ULContainer *yData = new ULContainer(4,1);
+  *yData << 0;
+  *yData << 1;
+  *yData << 1;
+  *yData << 1;
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // independent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > ia;
+  vector<vector<int> > ib;
+
+  vector<int> iaa;
+  iaa.push_back(0);
+  ia.push_back(iaa);
+  vector<int> iab;
+  iab.push_back(1);
+  ia.push_back(iab);
+
+  vector<int> ibb;
+  ibb.push_back(0);
+  ib.push_back(ibb);
+
+  vector<Feature*> features;
+  features.push_back(new Feature(0,0));
+  features.push_back(new Feature(1,0));
+
+  GIS* independentModel = new GIS();
+  independentModel->setData(xData, yData);
+  independentModel->setFeatures(ia,ib,features);
+  independentModel->init();
+
+  for(int i = 0; i < 20000; i++)
+  {
+    independentModel->iterate();
+    if(independentModel->error() < ERROR_THRESHOLD) break;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // dependent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > da;
+  vector<vector<int> > db;
+
+  vector<int> daa;
+  daa.push_back(0);
+  daa.push_back(1);
+  da.push_back(daa);
+
+  vector<int> dbb;
+  dbb.push_back(0);
+  db.push_back(dbb);
+
+  vector<Feature*> dfeatures;
+  dfeatures.push_back(new Feature(0,0));
+
+  GIS* dependentModel = new GIS();
+  dependentModel->setData(xData, yData);
+  dependentModel->setFeatures(da,db,dfeatures);
+  dependentModel->init();
+
+  for(int i = 0; i < 20000; i++)
+  {
+    dependentModel->iterate();
+    if(dependentModel->error() < ERROR_THRESHOLD) break;
+  }
+
+  Matrix ipycx(2,4);
+  ipycx(0,0) = 1.0;
+  ipycx(1,1) = 1.0;
+  ipycx(1,2) = 1.0;
+  ipycx(1,3) = 1.0;
+
+  Matrix ipx(1,4);
+  ipx(0,0) = 1.0/4.0;
+  ipx(0,1) = 1.0/4.0;
+  ipx(0,2) = 1.0/4.0;
+  ipx(0,3) = 1.0/4.0;
+
+  dependentModel->calculateProbabilities();
+  BOOST_CHECK_CLOSE(ipycx(0,0), dependentModel->p_y_c_x(0,0), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(0,1), dependentModel->p_y_c_x(0,1), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(0,2), dependentModel->p_y_c_x(0,2), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(0,3), dependentModel->p_y_c_x(0,3), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,0), dependentModel->p_y_c_x(1,0), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,1), dependentModel->p_y_c_x(1,1), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,2), dependentModel->p_y_c_x(1,2), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,3), dependentModel->p_y_c_x(1,3), EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,0), dependentModel->p_x(0), EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,1), dependentModel->p_x(1), EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,2), dependentModel->p_x(2), EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,3), dependentModel->p_x(3), EPSILON);
+
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // Synergy
+  ////////////////////////////////////////////////////////////////////////////////
+
+  KL* kl = new KL(dependentModel, independentModel);
+  cout << "OR (bits): " << kl->divergence2() << endl;
+  cout << "OR (nats): " << kl->divergenceN() << endl;
+}
+
+BOOST_AUTO_TEST_CASE(XOR)
+{
+  ULContainer *xData = new ULContainer(4,2);
+  *xData << 0 << 0;
+  *xData << 0 << 1;
+  *xData << 1 << 0;
+  *xData << 1 << 1;
+
+  ULContainer *yData = new ULContainer(4,1);
+  *yData << 0;
+  *yData << 1;
+  *yData << 1;
+  *yData << 0;
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // independent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > ia;
+  vector<vector<int> > ib;
+
+  vector<int> iaa;
+  iaa.push_back(0);
+  ia.push_back(iaa);
+
+  vector<int> iab;
+  iab.push_back(1);
+  ia.push_back(iab);
+
+  vector<int> ibb;
+  ibb.push_back(0);
+  ib.push_back(ibb);
+
+  vector<Feature*> features;
+  features.push_back(new Feature(0,0));
+  features.push_back(new Feature(1,0));
+
+  GIS* independentModel = new GIS();
+  independentModel->setData(xData, yData);
+  independentModel->setFeatures(ia,ib,features);
+  independentModel->init();
+
+  for(int i = 0; i < 10; i++)
+  {
+    independentModel->iterate();
+    if(independentModel->error() < ERROR_THRESHOLD) break;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // dependent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > da;
+  vector<vector<int> > db;
+
+  vector<int> daa;
+  daa.push_back(0);
+  daa.push_back(1);
+  da.push_back(daa);
+
+  vector<int> dbb;
+  dbb.push_back(0);
+  db.push_back(dbb);
+
+  vector<Feature*> dfeatures;
+  dfeatures.push_back(new Feature(0,0));
+
+  GIS* dependentModel = new GIS();
+  dependentModel->setData(xData, yData);
+  dependentModel->setFeatures(da,db,dfeatures);
+  dependentModel->init();
+
+  for(int i = 0; i < 20000; i++)
+  {
+    dependentModel->iterate();
+    independentModel->iterate();
+  }
+
+
+  Matrix ipycx(2,4);
+  ipycx(0,0) = 1.0;
+  ipycx(1,1) = 1.0;
+  ipycx(1,2) = 1.0;
+  ipycx(0,3) = 1.0;
+
+  Matrix ipx(1,4);
+  ipx(0,0) = 1.0/4.0;
+  ipx(0,1) = 1.0/4.0;
+  ipx(0,2) = 1.0/4.0;
+  ipx(0,3) = 1.0/4.0;
+
+  dependentModel->calculateProbabilities();
+  BOOST_CHECK_CLOSE(ipycx(0,0), dependentModel->p_y_c_x(0,0), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(0,1), dependentModel->p_y_c_x(0,1), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(0,2), dependentModel->p_y_c_x(0,2), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(0,3), dependentModel->p_y_c_x(0,3), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,0), dependentModel->p_y_c_x(1,0), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,1), dependentModel->p_y_c_x(1,1), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,2), dependentModel->p_y_c_x(1,2), EPSILON);
+  BOOST_CHECK_CLOSE(ipycx(1,3), dependentModel->p_y_c_x(1,3), EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,0), dependentModel->p_x(0), EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,1), dependentModel->p_x(1), EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,2), dependentModel->p_x(2), EPSILON);
+  BOOST_CHECK_CLOSE(ipx(0,3), dependentModel->p_x(3), EPSILON);
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // Synergy
+  ////////////////////////////////////////////////////////////////////////////////
+
+  KL* kl = new KL(dependentModel, independentModel);
+  // BOOST_CHECK_CLOSE(EPSILON, kl->divergence(), EPSILON);
+  cout << "XOR (bits): " << kl->divergence2() << endl;
+  cout << "XOR (nats): " << kl->divergenceN() << endl;
+}
+BOOST_AUTO_TEST_SUITE_END()
+
+BOOST_AUTO_TEST_SUITE(MorphologicalComputation)
+
+BOOST_AUTO_TEST_CASE(MC_W)
 {
   cout << PARENT << "/dcmot_small.csv" << endl;
 
@@ -307,466 +702,9 @@ void gisTest::testMC_W()
   // KL* kl = new KL(p, q);
   // cout << kl->divergence2() << endl;
 }
+BOOST_AUTO_TEST_SUITE_END()
 
-void gisTest::testAND()
-{
-  ULContainer *xData = new ULContainer(4,2);
-  *xData << 0 << 0;
-  *xData << 0 << 1;
-  *xData << 1 << 0;
-  *xData << 1 << 1;
 
-  ULContainer *yData = new ULContainer(4,1);
-  *yData << 0;
-  *yData << 0;
-  *yData << 0;
-  *yData << 1;
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // independent model
-  ////////////////////////////////////////////////////////////////////////////////
-  vector<vector<int> > ia;
-  vector<vector<int> > ib;
-
-  vector<int> iaa;
-  iaa.push_back(0);
-  ia.push_back(iaa);
-  vector<int> iab;
-  iab.push_back(1);
-  ia.push_back(iab);
-
-  vector<int> ibb;
-  ibb.push_back(0);
-  ib.push_back(ibb);
-
-  vector<Feature*> features;
-  features.push_back(new Feature(0,0));
-  features.push_back(new Feature(1,0));
-
-  GIS* independentModel = new GIS();
-  independentModel->setData(xData, yData);
-  independentModel->setFeatures(ia,ib,features);
-  independentModel->init();
-
-  for(int i = 0; i < 20000; i++)
-  {
-    independentModel->iterate();
-    if(independentModel->error() < 0.000000001) break;
-  }
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // dependent model
-  ////////////////////////////////////////////////////////////////////////////////
-  vector<vector<int> > da;
-  vector<vector<int> > db;
-
-  vector<int> daa;
-  daa.push_back(0);
-  daa.push_back(1);
-  da.push_back(daa);
-
-  vector<int> dbb;
-  dbb.push_back(0);
-  db.push_back(dbb);
-
-  vector<Feature*> dfeatures;
-  dfeatures.push_back(new Feature(0,0));
-
-  GIS* dependentModel = new GIS();
-  dependentModel->setData(xData, yData);
-  dependentModel->setFeatures(da,db,dfeatures);
-  dependentModel->init();
-
-  for(int i = 0; i < 20000; i++)
-  {
-    dependentModel->iterate();
-    if(dependentModel->error() < 0.000000001) break;
-  }
-
-  dependentModel->calculateProbabilities();
-
-  Matrix ipycx(2,4);
-  ipycx(0,0) = 1.0;
-  ipycx(0,1) = 1.0;
-  ipycx(0,2) = 1.0;
-  ipycx(1,3) = 1.0;
-
-  Matrix ipx(1,4);
-  ipx(0,0) = 1.0/4.0;
-  ipx(0,1) = 1.0/4.0;
-  ipx(0,2) = 1.0/4.0;
-  ipx(0,3) = 1.0/4.0;
-
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,0), dependentModel->p_y_c_x(0,0), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,1), dependentModel->p_y_c_x(0,1), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,2), dependentModel->p_y_c_x(0,2), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,3), dependentModel->p_y_c_x(0,3), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,0), dependentModel->p_y_c_x(1,0), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,1), dependentModel->p_y_c_x(1,1), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,2), dependentModel->p_y_c_x(1,2), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,3), dependentModel->p_y_c_x(1,3), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,0), dependentModel->p_x(0), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,1), dependentModel->p_x(1), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,2), dependentModel->p_x(2), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,3), dependentModel->p_x(3), EPSILON);
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // Synergy
-  ////////////////////////////////////////////////////////////////////////////////
-
-  KL* kl = new KL(dependentModel, independentModel);
-  cout << "AND (bits): " << kl->divergence2() << endl;
-  cout << "AND (nats): " << kl->divergenceN() << endl;
-}
-
-void gisTest::testANDCMI()
-{
-  ULContainer *xData = new ULContainer(4,2);
-  *xData << 0 << 0;
-  *xData << 0 << 1;
-  *xData << 1 << 0;
-  *xData << 1 << 1;
-
-  ULContainer *yData = new ULContainer(4,1);
-  *yData << 0;
-  *yData << 0;
-  *yData << 0;
-  *yData << 1;
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // independent model
-  ////////////////////////////////////////////////////////////////////////////////
-  vector<vector<int> > ia;
-  vector<vector<int> > ib;
-
-  vector<int> iaa;
-  iaa.push_back(1);
-  ia.push_back(iaa);
-
-  vector<int> ibb;
-  ibb.push_back(0);
-  ib.push_back(ibb);
-
-  vector<Feature*> features;
-  features.push_back(new Feature(0,0));
-
-  GIS* independentModel = new GIS();
-  independentModel->setData(xData, yData);
-  independentModel->setFeatures(ia,ib,features);
-  independentModel->init();
-
-  for(int i = 0; i < 5000; i++)
-  {
-    independentModel->iterate();
-    if(independentModel->error() < 0.000000001) break;
-  }
-
-  independentModel->calculateProbabilities();
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // dependent model
-  ////////////////////////////////////////////////////////////////////////////////
-  vector<vector<int> > da;
-  vector<vector<int> > db;
-
-  vector<int> daa;
-  daa.push_back(0);
-  daa.push_back(1);
-  da.push_back(daa);
-
-  vector<int> dbb;
-  dbb.push_back(0);
-  db.push_back(dbb);
-
-  vector<Feature*> dfeatures;
-  dfeatures.push_back(new Feature(0,0));
-
-  GIS* dependentModel = new GIS();
-  dependentModel->setData(xData, yData);
-  dependentModel->setFeatures(da,db,dfeatures);
-  dependentModel->init();
-
-  for(int i = 0; i < 5000; i++)
-  {
-    dependentModel->iterate();
-    if(dependentModel->error() < 0.000000001) break;
-  }
-
-  Matrix dpycx(2,4,0.0);
-  dpycx(0,0) = 1.0;
-  dpycx(0,1) = 1.0;
-  dpycx(0,2) = 1.0;
-  dpycx(1,3) = 1.0;
-
-  Matrix dpx(1,4, 0.0);
-  dpx(0,0) = 1.0/4.0;
-  dpx(0,1) = 1.0/4.0;
-  dpx(0,2) = 1.0/4.0;
-  dpx(0,3) = 1.0/4.0;
-
-  Matrix ipycx(2,2);
-  ipycx(0,0) = 1.0;
-  ipycx(1,0) = 0.0;
-  ipycx(0,1) = 0.5;
-  ipycx(1,1) = 0.5;
-
-  Matrix ipx(1,2, 0.0);
-  ipx(0,0) = 1.0/2.0;
-  ipx(0,1) = 1.0/2.0;
-
-  dependentModel->calculateProbabilities();
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dpycx(0,0), dependentModel->p_y_c_x(0,0), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dpycx(0,1), dependentModel->p_y_c_x(0,1), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dpycx(0,2), dependentModel->p_y_c_x(0,2), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dpycx(0,3), dependentModel->p_y_c_x(0,3), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dpycx(1,0), dependentModel->p_y_c_x(1,0), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dpycx(1,1), dependentModel->p_y_c_x(1,1), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dpycx(1,2), dependentModel->p_y_c_x(1,2), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dpycx(1,3), dependentModel->p_y_c_x(1,3), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dpx(0,0),   dependentModel->p_x(0),       EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dpx(0,1),   dependentModel->p_x(1),       EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dpx(0,2),   dependentModel->p_x(2),       EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(dpx(0,3),   dependentModel->p_x(3),       EPSILON);
-
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,0), independentModel->p_y_c_x(0,0), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,1), independentModel->p_y_c_x(0,1), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,0), independentModel->p_y_c_x(1,0), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,1), independentModel->p_y_c_x(1,1), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,0),   independentModel->p_x(0),       EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,1),   independentModel->p_x(1),       EPSILON);
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // Synergy
-  ////////////////////////////////////////////////////////////////////////////////
-
-  KL* kl = new KL(dependentModel, independentModel);
-  cout << "AND CMI (bits): " << kl->divergence2() << endl;
-  cout << "AND CMI (nats): " << kl->divergenceN() << endl;
-}
-
-void gisTest::testOR()
-{
-  ULContainer *xData = new ULContainer(4,2);
-  *xData << 0 << 0;
-  *xData << 0 << 1;
-  *xData << 1 << 0;
-  *xData << 1 << 1;
-
-  ULContainer *yData = new ULContainer(4,1);
-  *yData << 0;
-  *yData << 1;
-  *yData << 1;
-  *yData << 1;
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // independent model
-  ////////////////////////////////////////////////////////////////////////////////
-  vector<vector<int> > ia;
-  vector<vector<int> > ib;
-
-  vector<int> iaa;
-  iaa.push_back(0);
-  ia.push_back(iaa);
-  vector<int> iab;
-  iab.push_back(1);
-  ia.push_back(iab);
-
-  vector<int> ibb;
-  ibb.push_back(0);
-  ib.push_back(ibb);
-
-  vector<Feature*> features;
-  features.push_back(new Feature(0,0));
-  features.push_back(new Feature(1,0));
-
-  GIS* independentModel = new GIS();
-  independentModel->setData(xData, yData);
-  independentModel->setFeatures(ia,ib,features);
-  independentModel->init();
-
-  for(int i = 0; i < 20000; i++)
-  {
-    independentModel->iterate();
-    if(independentModel->error() < ERROR_THRESHOLD) break;
-  }
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // dependent model
-  ////////////////////////////////////////////////////////////////////////////////
-  vector<vector<int> > da;
-  vector<vector<int> > db;
-
-  vector<int> daa;
-  daa.push_back(0);
-  daa.push_back(1);
-  da.push_back(daa);
-
-  vector<int> dbb;
-  dbb.push_back(0);
-  db.push_back(dbb);
-
-  vector<Feature*> dfeatures;
-  dfeatures.push_back(new Feature(0,0));
-
-  GIS* dependentModel = new GIS();
-  dependentModel->setData(xData, yData);
-  dependentModel->setFeatures(da,db,dfeatures);
-  dependentModel->init();
-
-  for(int i = 0; i < 20000; i++)
-  {
-    dependentModel->iterate();
-    if(dependentModel->error() < ERROR_THRESHOLD) break;
-  }
-
-  Matrix ipycx(2,4);
-  ipycx(0,0) = 1.0;
-  ipycx(1,1) = 1.0;
-  ipycx(1,2) = 1.0;
-  ipycx(1,3) = 1.0;
-
-  Matrix ipx(1,4);
-  ipx(0,0) = 1.0/4.0;
-  ipx(0,1) = 1.0/4.0;
-  ipx(0,2) = 1.0/4.0;
-  ipx(0,3) = 1.0/4.0;
-
-  dependentModel->calculateProbabilities();
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,0), dependentModel->p_y_c_x(0,0), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,1), dependentModel->p_y_c_x(0,1), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,2), dependentModel->p_y_c_x(0,2), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,3), dependentModel->p_y_c_x(0,3), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,0), dependentModel->p_y_c_x(1,0), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,1), dependentModel->p_y_c_x(1,1), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,2), dependentModel->p_y_c_x(1,2), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,3), dependentModel->p_y_c_x(1,3), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,0), dependentModel->p_x(0), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,1), dependentModel->p_x(1), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,2), dependentModel->p_x(2), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,3), dependentModel->p_x(3), EPSILON);
-
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // Synergy
-  ////////////////////////////////////////////////////////////////////////////////
-
-  KL* kl = new KL(dependentModel, independentModel);
-  cout << "OR (bits): " << kl->divergence2() << endl;
-  cout << "OR (nats): " << kl->divergenceN() << endl;
-}
-
-void gisTest::testXOR()
-{
-  ULContainer *xData = new ULContainer(4,2);
-  *xData << 0 << 0;
-  *xData << 0 << 1;
-  *xData << 1 << 0;
-  *xData << 1 << 1;
-
-  ULContainer *yData = new ULContainer(4,1);
-  *yData << 0;
-  *yData << 1;
-  *yData << 1;
-  *yData << 0;
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // independent model
-  ////////////////////////////////////////////////////////////////////////////////
-  vector<vector<int> > ia;
-  vector<vector<int> > ib;
-
-  vector<int> iaa;
-  iaa.push_back(0);
-  ia.push_back(iaa);
-
-  vector<int> iab;
-  iab.push_back(1);
-  ia.push_back(iab);
-
-  vector<int> ibb;
-  ibb.push_back(0);
-  ib.push_back(ibb);
-
-  vector<Feature*> features;
-  features.push_back(new Feature(0,0));
-  features.push_back(new Feature(1,0));
-
-  GIS* independentModel = new GIS();
-  independentModel->setData(xData, yData);
-  independentModel->setFeatures(ia,ib,features);
-  independentModel->init();
-
-  for(int i = 0; i < 10; i++)
-  {
-    independentModel->iterate();
-    if(independentModel->error() < ERROR_THRESHOLD) break;
-  }
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // dependent model
-  ////////////////////////////////////////////////////////////////////////////////
-  vector<vector<int> > da;
-  vector<vector<int> > db;
-
-  vector<int> daa;
-  daa.push_back(0);
-  daa.push_back(1);
-  da.push_back(daa);
-
-  vector<int> dbb;
-  dbb.push_back(0);
-  db.push_back(dbb);
-
-  vector<Feature*> dfeatures;
-  dfeatures.push_back(new Feature(0,0));
-
-  GIS* dependentModel = new GIS();
-  dependentModel->setData(xData, yData);
-  dependentModel->setFeatures(da,db,dfeatures);
-  dependentModel->init();
-
-  for(int i = 0; i < 20000; i++)
-  {
-    dependentModel->iterate();
-    independentModel->iterate();
-  }
-
-
-  Matrix ipycx(2,4);
-  ipycx(0,0) = 1.0;
-  ipycx(1,1) = 1.0;
-  ipycx(1,2) = 1.0;
-  ipycx(0,3) = 1.0;
-
-  Matrix ipx(1,4);
-  ipx(0,0) = 1.0/4.0;
-  ipx(0,1) = 1.0/4.0;
-  ipx(0,2) = 1.0/4.0;
-  ipx(0,3) = 1.0/4.0;
-
-  dependentModel->calculateProbabilities();
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,0), dependentModel->p_y_c_x(0,0), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,1), dependentModel->p_y_c_x(0,1), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,2), dependentModel->p_y_c_x(0,2), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(0,3), dependentModel->p_y_c_x(0,3), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,0), dependentModel->p_y_c_x(1,0), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,1), dependentModel->p_y_c_x(1,1), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,2), dependentModel->p_y_c_x(1,2), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipycx(1,3), dependentModel->p_y_c_x(1,3), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,0), dependentModel->p_x(0), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,1), dependentModel->p_x(1), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,2), dependentModel->p_x(2), EPSILON);
-  CPPUNIT_ASSERT_DOUBLES_EQUAL(ipx(0,3), dependentModel->p_x(3), EPSILON);
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // Synergy
-  ////////////////////////////////////////////////////////////////////////////////
-
-  KL* kl = new KL(dependentModel, independentModel);
-  // CPPUNIT_ASSERT_DOUBLES_EQUAL(EPSILON, kl->divergence(), EPSILON);
-  cout << "XOR (bits): " << kl->divergence2() << endl;
-  cout << "XOR (nats): " << kl->divergenceN() << endl;
-}
 
 
 

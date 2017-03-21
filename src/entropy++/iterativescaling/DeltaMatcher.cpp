@@ -12,7 +12,6 @@ DeltaMatcher::DeltaMatcher(int xSize)
   for(int i = 0; i < xSize; i++) _deltas[i].resize(0);
 }
 
-
 void DeltaMatcher::add(int index, Delta* d)
 {
   _deltas[index].push_back(d);
@@ -27,4 +26,3 @@ vector<Delta*>::iterator DeltaMatcher::end(int index)
 {
   return _deltas[index].end();
 }
-
