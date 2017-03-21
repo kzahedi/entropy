@@ -23,5 +23,4 @@ class gisTest : public CppUnit::TestFixture
     void testUnique();
     void testUnique2();
     void testMC_W();
-
 };

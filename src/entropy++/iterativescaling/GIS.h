@@ -8,7 +8,7 @@ namespace entropy
   namespace iterativescaling
   {
     class GIS : public IS
-    { 
+    {
       public:
         GIS();
 

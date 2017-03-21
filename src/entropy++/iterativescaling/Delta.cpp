@@ -4,23 +4,18 @@ using namespace std;
 using namespace entropy;
 using namespace entropy::iterativescaling;
 
-Delta::Delta(vector<unsigned long> xValues, vector<int> xIndices, vector<unsigned long> yValues, vector<int> yIndices)
+Delta::Delta(vector<unsigned long> xv, vector<int> xi, vector<unsigned long> yv, vector<int> yi)
 {
-  _xIndices = xIndices;
-  _yIndices = yIndices;
 
+  _xIndices.resize(0);
+  _yIndices.resize(0);
   _xValues.resize(0);
   _yValues.resize(0);
 
-  for(int i = 0; i < _xIndices.size(); i++)
-  {
-    _xValues.push_back(xValues[_xIndices[i]]);
-  }
-
-  for(int i = 0; i < _yIndices.size(); i++)
-  {
-    _yValues.push_back(yValues[_yIndices[i]]);
-  }
+  for(int i = 0; i < xi.size();        i++) _xIndices.push_back(xi[i]);
+  for(int i = 0; i < yi.size();        i++) _yIndices.push_back(yi[i]);
+  for(int i = 0; i < _xIndices.size(); i++) _xValues.push_back(xv[_xIndices[i]]);
+  for(int i = 0; i < _yIndices.size(); i++) _yValues.push_back(yv[_yIndices[i]]);
 
   _observed = 0.0;
   _expected = 0.0;
@@ -83,45 +78,42 @@ double Delta::marginalProbability()
   return _marginalProbability;
 }
 
-bool Delta::matchX(vector<unsigned long>& xValues)
+bool Delta::matchX(vector<unsigned long> xValues)
 {
   for(int i = 0; i < (int)_xIndices.size(); i++)
   {
-    if(_xValues[i] != xValues[_xIndices[i]]) return false;
+    if(_xValues[i] != xValues[i]) return false;
   }
   return true;
 }
 
-bool Delta::matchXY(vector<unsigned long>& xValues, vector<unsigned long>& yValues)
+bool Delta::matchXY(vector<unsigned long> xv, vector<unsigned long> yv)
 {
-  for(int i = 0; i < (int)_xValues.size(); i++)
-  {
-    if(_xValues[i] != xValues[_xIndices[i]]) return false;
-  }
-  for(int i = 0; i < (int)_yValues.size(); i++)
-  {
-    if(_yValues[i] != yValues[_yIndices[i]]) return false;
-  }
+  for(int i = 0; i < (int)_xValues.size(); i++) if(_xValues[i] != xv[_xIndices[i]]) return false;
+  for(int i = 0; i < (int)_yValues.size(); i++) if(_yValues[i] != yv[_yIndices[i]]) return false;
+
+  // cout << "XV:";
+  // for(int i = 0; i < (int)xv.size(); i++) cout << " " << xv[i];
+  // cout << endl;
+  // cout << "YV:";
+  // for(int i = 0; i < (int)yv.size(); i++) cout << " " << yv[i];
+  // cout << endl;
+
+  // cout << "Delta match: X:";
+  // for(int i = 0; i < (int)_xValues.size(); i++) cout << " " << _xValues[i] << " = " << xv[_xIndices[i]];
+  // cout << " Y:";
+  // for(int i = 0; i < (int)_yValues.size(); i++) cout << " " << _yValues[i] << " = " << yv[_yIndices[i]];
+  // cout << endl;
+
   return true;
 }
 
-bool Delta::matchP(vector<unsigned long>& xValues, vector<unsigned long>& yValues)
+bool Delta::match(vector<unsigned long> xv, vector<unsigned long> yv)
 {
-  if(xValues.size() != _xValues.size() ||
-     yValues.size() != _yValues.size())
-  {
-    return false;
-  }
+  if(xv.size() != _xValues.size() || yv.size() != _yValues.size()) return false;
 
-  for(int i = 0; i < (int)xValues.size(); i++)
-  {
-    if(xValues[i] != _xValues[i]) return false;
-  }
+  for(int i = 0; i < (int)xv.size(); i++) if(xv[i] != _xValues[i]) return false;
+  for(int i = 0; i < (int)yv.size(); i++) if(yv[i] != _yValues[i]) return false;
 
-  for(int i = 0; i < (int)yValues.size(); i++)
-  {
-    if(yValues[i] != _yValues[i]) return false;
-  }
-
-  return false;
+  return true;
 }

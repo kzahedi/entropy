@@ -16,13 +16,12 @@ namespace entropy
         Delta(vector<unsigned long> xValues, vector<int> xIndices, vector<unsigned long> yValues, vector<int> yIndices);
 
         // match piece-wise
-        bool matchP(vector<unsigned long>& xValues, vector<unsigned long>& yValues);
+        bool match(vector<unsigned long> xValues, vector<unsigned long> yValues);
 
         // match full row
-        bool matchX(vector<unsigned long>& xValues);
+        bool matchX(vector<unsigned long> xValues);
 
-        // match full rows
-        bool matchXY(vector<unsigned long>& xValues, vector<unsigned long>& yValues);
+        bool matchXY(vector<unsigned long> xValues, vector<unsigned long> yValues);
 
         void incObserved();
 

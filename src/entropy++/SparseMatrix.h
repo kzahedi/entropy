@@ -62,7 +62,7 @@ namespace entropy
   };
 
 
-  class SparseMatrix 
+  class SparseMatrix
   {
     public:
 

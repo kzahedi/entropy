@@ -10,10 +10,11 @@ using namespace entropy::iterativescaling;
 Model::Model()
 {
   _yAlphabetSize = 0;
-  _conditionals = NULL;
-  _marginals = NULL;
-  _x_alphabet = NULL;
-  _y_alphabet = NULL;
+  _conditional   = NULL;
+  _marginal      = NULL;
+  _joint         = NULL;
+  _x_alphabet    = NULL;
+  _y_alphabet    = NULL;
 
 }
 
@@ -35,8 +36,8 @@ Model::~Model()
   delete Xalphabet;
   delete Yalphabet;
 
-  delete _conditionals;
-  delete _marginals;
+  delete _conditional;
+  delete _marginal;
 }
 
 void Model::setFeatures(vector<vector<int> > Xindices,
@@ -163,8 +164,9 @@ Feature* Model::feature(int i)
 
 void Model::calculateProbabilities()
 {
-  if (_conditionals != NULL) delete _conditionals;
-  if (_marginals != NULL) delete _marginals;
+  if (_conditional != NULL) delete _conditional;
+  if (_marginal    != NULL) delete _marginal;
+  if (_joint       != NULL) delete _joint;
 
   ULContainer *x_alphabet_full = Xdata->columns(_x_indices);
   _x_alphabet = x_alphabet_full->unique();
@@ -180,27 +182,31 @@ void Model::calculateProbabilities()
     for (int y = 0; y < Yalphabet->rows(); y++)
     {
       vector<unsigned long> y_row = Yalphabet->row(y);
-      double sum = 0.0;
       for (vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
       {
         if ((*d)->matchXY(x_row, y_row))
         {
-          sum += (*d)->lambda();
+          M(x,y) += (*d)->lambda();
         }
-      }
-      if (fabs(sum) <= EPSILON)
-      {
-        M(x, y) = 0.0;
-      }
-      else
-      {
-        M(x, y) = exp(sum);
       }
     }
   }
 
-  _conditionals = new Matrix(_x_alphabet->rows(), _y_alphabet->rows());
-  _marginals = new Matrix(_x_alphabet->rows(), 1);
+  for (int x = 0; x < M.rows(); x++)
+  {
+    for (int y = 0; y < M.cols(); y++)
+    {
+      M(x, y) = exp(M(x,y));
+    }
+  }
+
+  // cout << "**" << endl;
+  // cout << M << endl;
+  // cout << "##" << endl;
+
+  _conditional = new Matrix(_x_alphabet->rows(), _y_alphabet->rows());
+  _joint       = new Matrix(_x_alphabet->rows(), _y_alphabet->rows());
+  _marginal    = new Matrix(_x_alphabet->rows(), 1);
 
   for (int x = 0; x < Xalphabet->rows(); x++)
   {
@@ -208,56 +214,53 @@ void Model::calculateProbabilities()
     for (int y = 0; y < Yalphabet->rows(); y++)
     {
       int y_row_index = __convertAlphabetToMatrixY(y);
-      (*_conditionals)(x_row_index, y_row_index) += M(x, y);
+      (*_conditional)(x_row_index, y_row_index) += M(x, y);
     }
   }
 
- // cout << "C: " << endl;
- // cout << *_conditionals << endl;
-
   double sum = 0.0;
-  for (int x = 0; x < _marginals->rows(); x++)
+  for (int x = 0; x < _marginal->rows(); x++)
   {
-    (*_marginals)(x, 0) = _conditionals->rowSum(x);
-    sum += (*_marginals)(x, 0);
-    for (int y = 0; y < _conditionals->cols(); y++)
+    (*_marginal)(x, 0) = _conditional->rowSum(x);
+    sum += (*_marginal)(x, 0);
+    for (int y = 0; y < _conditional->cols(); y++)
     {
-      (*_conditionals)(x, y) = (*_conditionals)(x, y) / (*_marginals)(x, 0);
+      (*_conditional)(x,y) = (*_conditional)(x,y) / (*_marginal)(x, 0);
     }
   }
   double b = x_alphabet_full->rows();
-  for (int x = 0; x < _marginals->rows(); x++)
+  for (int x = 0; x < _marginal->rows(); x++)
   {
     double a = x_alphabet_full->findlist(_x_alphabet, x).size();
-    (*_marginals)(x, 0) = a / b;
+    (*_marginal)(x, 0) = a / b;
   }
 
- // cout << "marginals:" << endl << (*_marginals) << endl;
+ // cout << "marginals:" << endl << (*_marginal) << endl;
   delete x_alphabet_full;
   delete y_alphabet_full;
 }
 
 double Model::p_y_c_x(int yUniqueIndex, int xUniqueIndex)
 {
-  return (*_conditionals)(xUniqueIndex, yUniqueIndex);
+  return (*_conditional)(xUniqueIndex, yUniqueIndex);
 }
 
 double Model::p_x(int xUniqueIndex)
 {
-  return (*_marginals)(xUniqueIndex, 0);
+  return (*_marginal)(xUniqueIndex, 0);
 }
 
 double Model::p_y_c_x_d(int yAlphabetIndex, int xAlphabetIndex)
 {
   int x = __convertAlphabetToMatrixX(xAlphabetIndex);
   int y = __convertAlphabetToMatrixY(yAlphabetIndex);
-  return (*_conditionals)(x, y);
+  return (*_conditional)(x, y);
 }
 
 double Model::p_x_d(int xAlphabetIndex)
 {
   int x = __convertAlphabetToMatrixX(xAlphabetIndex);
-  return (*_marginals)(x, 0);
+  return (*_marginal)(x, 0);
 }
 
 int Model::getNrOfUniqueX()
@@ -297,6 +300,7 @@ int Model::__convertAlphabetToMatrixY(int y)
   }
   return _y_alphabet->find(y_values);
 }
+
 ULContainer* Model::__uniqueRows(vector<int> columns, ULContainer* data)
 {
   vector<vector<unsigned long> > new_container;

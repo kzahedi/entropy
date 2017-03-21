@@ -40,21 +40,25 @@ void GIS::iterate()
           _s[y] += (*d)->lambda();
         }
       }
-      if(fabs(_s[y]) < MIN_S) _s[y] = -1.0;
-    } // for each output y
+    }
 
-    // double z = _yAlphabetSize - (int)_s.size();
     double z = 0.0;
     for(vector<double>::iterator i = _s.begin(); i != _s.end(); i++) z += exp(*i);
 
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       vector<unsigned long> y_row = Yalphabet->row(y);
+
+      // cout << "X:";  for(vector<unsigned long>::iterator v = x_row.begin(); v != x_row.end(); v++) cout << " " << *v;
+      // cout << " Y:"; for(vector<unsigned long>::iterator v = y_row.begin(); v != y_row.end(); v++) cout << " " << *v;
+      // cout << endl;
       for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
       {
         if((*d)->matchXY(x_row, y_row))
         {
+          // cout << "found match (" << index << ") " << (*d)->expected() << " -> ";
           (*d)->setExpected((*d)->expected() + exp(_s[y]) / z);
+          // cout << (*d)->expected() << endl;
         }
       }
     }
@@ -71,11 +75,11 @@ void GIS::iterate()
     vector<unsigned long> x_row = Xdata->row(j);
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
-      vector<unsigned long> Y = Yalphabet->row(y);
+      vector<unsigned long> y_row = Yalphabet->row(y);
       double f = 0.0;
       for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
       {
-        if((*d)->matchXY(x_row, Y)) f += 1.0;
+        if((*d)->matchXY(x_row, y_row)) f += 1.0;
       }
       if(f > max) max = f;
     }

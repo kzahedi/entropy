@@ -50,13 +50,11 @@ namespace entropy
         void calculateProbabilities();
 
         double p_y_c_x(int yUniqueIndex, int xUniqueIndex);
+        double p_y_x(int yUniqueIndex, int xUniqueIndex);
         double p_x(int xUniqueIndex);
 
         double p_y_c_x_d(int yAlphabetIndex, int xAlphabetIndex);
         double p_x_d(int xAlphabetIndex);
-
-        Matrix* p_y_c_x() { return _conditionals;};
-        Matrix* p_x()     { return _marginals;};
 
         int getNrOfUniqueX();
         int getNrOfUniqueY();
@@ -100,8 +98,9 @@ namespace entropy
         vector<int>  _x_indices;
         vector<int>  _y_indices;
 
-        Matrix* _conditionals;
-        Matrix* _marginals;
+        Matrix* _conditional;
+        Matrix* _joint;
+        Matrix* _marginal;
         int     _yAlphabetSize;
     };
   }
