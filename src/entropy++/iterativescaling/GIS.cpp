@@ -1,5 +1,5 @@
 #include <entropy++/iterativescaling/GIS.h>
-// #include <omp.h>
+#include <omp.h>
 
 // #include <glog/logging.h>
 
@@ -25,36 +25,42 @@ void GIS::iterate()
     (*d)->setExpected(0.0);
   }
 
+#pragma omp parallel for
   for(int j = 0; j < Xdata->rows(); j++)
   {
     vector<unsigned long> x_row = Xdata->row(j);
 
-// #pragma omp for
+    double *s = new double[Yalphabet->rows()];
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
-      _s[y] = 0.0;
+      // cout << omp_get_thread_num() << " " << omp_get_num_threads() << " " << y << endl;
+      // _s[y] = 0.0;
+      s[y] = 0.0;
       vector<unsigned long> y_row = Yalphabet->row(y);
-      for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+      for(vector<Delta*>::const_iterator d = deltas.begin(); d != deltas.end(); d++)
       {
         if((*d)->matchXY(x_row, y_row))
         {
-          _s[y] += (*d)->lambda();
+          // _s[y] += (*d)->lambda();
+          s[y] += (*d)->lambda();
         }
       }
     }
 
     double z = 0.0;
-    for(vector<double>::iterator i = _s.begin(); i != _s.end(); i++) z += exp(*i);
+    // for(vector<double>::iterator i = _s.begin(); i != _s.end(); i++) z += exp(*i);
+    for(int i = 0; i < Yalphabet->rows(); i++) z += exp(s[i]);
 
-// #pragma omp for
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       vector<unsigned long> y_row = Yalphabet->row(y);
       for(vector<Delta*>::iterator d = deltaMatcher->begin(j); d != deltaMatcher->end(j); d++)
       {
-        if((*d)->matchY(y_row)) (*d)->setExpected((*d)->expected() + exp(_s[y]) / z);
+        // if((*d)->matchY(y_row)) (*d)->setExpected((*d)->expected() + exp(_s[y]) / z);
+        if((*d)->matchY(y_row)) (*d)->setExpected((*d)->expected() + exp(s[y]) / z);
       }
     }
+    delete[] s;
   } // j
 
   _error = 0.0;

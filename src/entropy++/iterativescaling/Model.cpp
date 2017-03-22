@@ -86,6 +86,7 @@ void Model::createUniqueContainer()
 void Model::countObservedFeatures()
 {
 
+#pragma omp parallel for
   for (int i = 0; i < Xdata->rows(); i++)
   {
     vector<unsigned long> xrow = Xdata->row(i);

@@ -25,7 +25,7 @@ void SCGIS::init()
   createUniqueContainer();
   countObservedFeatures();
   _z = new Matrix(Xdata->rows(), 1, Yalphabet->rows());
-  _s = new Matrix(Xdata->rows(), Yalphabet->rows(), 0.0); 
+  _s = new Matrix(Xdata->rows(), Yalphabet->rows(), 0.0);
 
  // VLOG(100) << "Each iteration requires " << (deltas.size() * 2.0 * Yalphabet->rows() * Xdata->rows()) << " loops";
 }
@@ -35,32 +35,36 @@ void SCGIS::iterate()
   double delta = 0.0;
   double e = 0.0;
   _error = 0.0;
-  for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+
+#pragma omp parallel for
+  // for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+  for(int i = 0; i < (int)deltas.size(); i++)
   {
-    (*d)->setExpected(0);
+    Delta *d = deltas[i];
+    d->setExpected(0);
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       vector<unsigned long> y_row = Yalphabet->row(y);
       for(int j = 0; j < Xdata->rows(); j++)
       {
         vector<unsigned long> x_row = Xdata->row(j);
-        if((*d)->matchXY(x_row, y_row))
+        if(d->matchXY(x_row, y_row))
         {
-          (*d)->setExpected((*d)->expected() + exp((*_s)(j,y)) / (*_z)(j,0));
+          d->setExpected(d->expected() + exp((*_s)(j,y)) / (*_z)(j,0));
         }
       }
     }
-    delta = log((*d)->observed() / (*d)->expected());
-    e = (*d)->observed() - (*d)->expected();
+    delta   = log(d->observed() / d->expected());
+    e       = d->observed() - d->expected();
     _error += e * e;
-    (*d)->setLambda((*d)->lambda() + delta);
+    d->setLambda(d->lambda() + delta);
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       vector<unsigned long> y_row = Yalphabet->row(y);
       for(int j = 0; j < Xdata->rows(); j++)
       {
         vector<unsigned long> x_row = Xdata->row(j);
-        if((*d)->matchXY(x_row, y_row))
+        if(d->matchXY(x_row, y_row))
         {
           (*_z)(j,0) -= exp((*_s)(j,y));
           (*_s)(j,y) += delta;

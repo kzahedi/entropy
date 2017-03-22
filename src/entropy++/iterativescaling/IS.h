@@ -8,7 +8,7 @@ namespace entropy
   namespace iterativescaling
   {
     class IS : public Model
-    { 
+    {
       public:
         IS() : Model() {};
         virtual void   init()    = 0;
