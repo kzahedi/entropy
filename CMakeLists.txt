@@ -11,15 +11,17 @@ set(LIBRARY_OUTPUT_PATH          ${PROJECT_BINARY_DIR}/lib)
 
 set(CMAKE_VERBOSE_MAKEFILE       OFF)
 
+find_package(OpenMP)
+
 if(APPLE)
   set(CMAKE_CXX_COMPILER           "/usr/local/Cellar/llvm/4.0.0/bin/clang++")
   set(CMAKE_CXX_COMPILER_FULLPATH  "/usr/local/Cellar/llvm/4.0.0/bin/clang++")
-  set(CMAKE_CXX_FLAGS_DEBUG        "-g  -fopenmp")
-  set(CMAKE_CXX_FLAGS_RELEASE      "-g  -fopenmp")
-  set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O3 -fopenmp")
+  set(CMAKE_CXX_FLAGS_DEBUG        "-g  ${OpenMP_CXX_FLAGS}")
+  set(CMAKE_CXX_FLAGS_RELEASE      "-g  ${OpenMP_CXX_FLAGS}")
+  set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O3 ${OpenMP_CXX_FLAGS}")
 else(APPLE)
-  set(CMAKE_CXX_FLAGS_DEBUG        "-g  -fPIC")
-  set(CMAKE_CXX_FLAGS_RELEASE      "-g  -fPIC")
+  set(CMAKE_CXX_FLAGS_DEBUG        "-g  -fPIC ${OpenMP_CXX_FLAGS}")
+  set(CMAKE_CXX_FLAGS_RELEASE      "-g  -fPIC ${OpenMP_CXX_FLAGS}")
   set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O3")
 endif(APPLE)
 

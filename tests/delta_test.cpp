@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(DeltaMatch)
   yIndices.push_back(7);
 
   Delta *d = new Delta(xrow, xIndices, yrow, yIndices);
-  BOOST_TEST(d->match(xrowmatch, yrowmatch));
+  BOOST_CHECK(d->match(xrowmatch, yrowmatch));
 }
 
 BOOST_AUTO_TEST_CASE(DeltaMatchXY)
@@ -155,6 +155,6 @@ BOOST_AUTO_TEST_CASE(DeltaMatchXY)
 
   Delta *d1 = new Delta(xrow,  xIndices, yrow,  yIndices);
   Delta *d2 = new Delta(xrow2, xIndices, yrow2, yIndices);
-  BOOST_TEST(true  == d1->matchXY(xrowmatch, yrowmatch));
-  BOOST_TEST(false == d2->matchXY(xrowmatch, yrowmatch));
+  BOOST_CHECK(true  == d1->matchXY(xrowmatch, yrowmatch));
+  BOOST_CHECK(false == d2->matchXY(xrowmatch, yrowmatch));
 }

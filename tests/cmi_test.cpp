@@ -264,7 +264,7 @@ BOOST_AUTO_TEST_CASE(MatrixWiseComparision)
       for(int z = 0; z < maxZ; z++)
       {
         sum += pxyz[x][y][z];
-        BOOST_TEST((pxyz[x][y][z] >= 0.0 && pxyz[x][y][z] <= 1.0));
+        BOOST_CHECK((pxyz[x][y][z] >= 0.0 && pxyz[x][y][z] <= 1.0));
       }
     }
   }

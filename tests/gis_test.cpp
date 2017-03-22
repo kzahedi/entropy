@@ -142,18 +142,18 @@ BOOST_AUTO_TEST_CASE(AND)
   ipx(0,3) = 1.0/4.0;
 
 
-  BOOST_TEST((fabs(ipycx(0,0) - dependentModel->p_y_c_x(0,0)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(0,1) - dependentModel->p_y_c_x(0,1)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(0,2) - dependentModel->p_y_c_x(0,2)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(0,3) - dependentModel->p_y_c_x(0,3)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,0) - dependentModel->p_y_c_x(1,0)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,1) - dependentModel->p_y_c_x(1,1)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,2) - dependentModel->p_y_c_x(1,2)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,3) - dependentModel->p_y_c_x(1,3)) < EPSILON));
-  BOOST_TEST((fabs(ipx(0,0)   - dependentModel->p_x(0))       < EPSILON));
-  BOOST_TEST((fabs(ipx(0,1)   - dependentModel->p_x(1))       < EPSILON));
-  BOOST_TEST((fabs(ipx(0,2)   - dependentModel->p_x(2))       < EPSILON));
-  BOOST_TEST((fabs(ipx(0,3)   - dependentModel->p_x(3))       < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,0) - dependentModel->p_y_c_x(0,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,1) - dependentModel->p_y_c_x(0,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,2) - dependentModel->p_y_c_x(0,2)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,3) - dependentModel->p_y_c_x(0,3)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,0) - dependentModel->p_y_c_x(1,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,1) - dependentModel->p_y_c_x(1,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,2) - dependentModel->p_y_c_x(1,2)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,3) - dependentModel->p_y_c_x(1,3)) < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,0)   - dependentModel->p_x(0))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,1)   - dependentModel->p_x(1))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,2)   - dependentModel->p_x(2))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,3)   - dependentModel->p_x(3))       < EPSILON));
 
   ////////////////////////////////////////////////////////////////////////////////
   // Synergy
@@ -260,25 +260,25 @@ BOOST_AUTO_TEST_CASE(ANDCMI)
   ipx(0,1) = 1.0/2.0;
 
   dependentModel->calculateProbabilities();
-  BOOST_TEST((fabs(dpycx(0,0) - dependentModel->p_y_c_x(0,0))   < EPSILON));
-  BOOST_TEST((fabs(dpycx(0,1) - dependentModel->p_y_c_x(0,1))   < EPSILON));
-  BOOST_TEST((fabs(dpycx(0,2) - dependentModel->p_y_c_x(0,2))   < EPSILON));
-  BOOST_TEST((fabs(dpycx(0,3) - dependentModel->p_y_c_x(0,3))   < EPSILON));
-  BOOST_TEST((fabs(dpycx(1,0) - dependentModel->p_y_c_x(1,0))   < EPSILON));
-  BOOST_TEST((fabs(dpycx(1,1) - dependentModel->p_y_c_x(1,1))   < EPSILON));
-  BOOST_TEST((fabs(dpycx(1,2) - dependentModel->p_y_c_x(1,2))   < EPSILON));
-  BOOST_TEST((fabs(dpycx(1,3) - dependentModel->p_y_c_x(1,3))   < EPSILON));
-  BOOST_TEST((fabs(dpx(0,0)   - dependentModel->p_x(0))         < EPSILON));
-  BOOST_TEST((fabs(dpx(0,1)   - dependentModel->p_x(1))         < EPSILON));
-  BOOST_TEST((fabs(dpx(0,2)   - dependentModel->p_x(2))         < EPSILON));
-  BOOST_TEST((fabs(dpx(0,3)   - dependentModel->p_x(3))         < EPSILON));
+  BOOST_CHECK((fabs(dpycx(0,0) - dependentModel->p_y_c_x(0,0))   < EPSILON));
+  BOOST_CHECK((fabs(dpycx(0,1) - dependentModel->p_y_c_x(0,1))   < EPSILON));
+  BOOST_CHECK((fabs(dpycx(0,2) - dependentModel->p_y_c_x(0,2))   < EPSILON));
+  BOOST_CHECK((fabs(dpycx(0,3) - dependentModel->p_y_c_x(0,3))   < EPSILON));
+  BOOST_CHECK((fabs(dpycx(1,0) - dependentModel->p_y_c_x(1,0))   < EPSILON));
+  BOOST_CHECK((fabs(dpycx(1,1) - dependentModel->p_y_c_x(1,1))   < EPSILON));
+  BOOST_CHECK((fabs(dpycx(1,2) - dependentModel->p_y_c_x(1,2))   < EPSILON));
+  BOOST_CHECK((fabs(dpycx(1,3) - dependentModel->p_y_c_x(1,3))   < EPSILON));
+  BOOST_CHECK((fabs(dpx(0,0)   - dependentModel->p_x(0))         < EPSILON));
+  BOOST_CHECK((fabs(dpx(0,1)   - dependentModel->p_x(1))         < EPSILON));
+  BOOST_CHECK((fabs(dpx(0,2)   - dependentModel->p_x(2))         < EPSILON));
+  BOOST_CHECK((fabs(dpx(0,3)   - dependentModel->p_x(3))         < EPSILON));
 
-  BOOST_TEST((fabs(ipycx(0,0) - independentModel->p_y_c_x(0,0)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(0,1) - independentModel->p_y_c_x(0,1)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,0) - independentModel->p_y_c_x(1,0)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,1) - independentModel->p_y_c_x(1,1)) < EPSILON));
-  BOOST_TEST((fabs(ipx(0,0)   - independentModel->p_x(0))       < EPSILON));
-  BOOST_TEST((fabs(ipx(0,1)   - independentModel->p_x(1))       < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,0) - independentModel->p_y_c_x(0,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,1) - independentModel->p_y_c_x(0,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,0) - independentModel->p_y_c_x(1,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,1) - independentModel->p_y_c_x(1,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,0)   - independentModel->p_x(0))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,1)   - independentModel->p_x(1))       < EPSILON));
 
   ////////////////////////////////////////////////////////////////////////////////
   // Synergy
@@ -377,18 +377,18 @@ BOOST_AUTO_TEST_CASE(OR)
   ipx(0,3) = 1.0/4.0;
 
   dependentModel->calculateProbabilities();
-  BOOST_TEST((fabs(ipycx(0,0) - dependentModel->p_y_c_x(0,0)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(0,1) - dependentModel->p_y_c_x(0,1)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(0,2) - dependentModel->p_y_c_x(0,2)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(0,3) - dependentModel->p_y_c_x(0,3)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,0) - dependentModel->p_y_c_x(1,0)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,1) - dependentModel->p_y_c_x(1,1)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,2) - dependentModel->p_y_c_x(1,2)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,3) - dependentModel->p_y_c_x(1,3)) < EPSILON));
-  BOOST_TEST((fabs(ipx(0,0)   - dependentModel->p_x(0))       < EPSILON));
-  BOOST_TEST((fabs(ipx(0,1)   - dependentModel->p_x(1))       < EPSILON));
-  BOOST_TEST((fabs(ipx(0,2)   - dependentModel->p_x(2))       < EPSILON));
-  BOOST_TEST((fabs(ipx(0,3)   - dependentModel->p_x(3))       < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,0) - dependentModel->p_y_c_x(0,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,1) - dependentModel->p_y_c_x(0,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,2) - dependentModel->p_y_c_x(0,2)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,3) - dependentModel->p_y_c_x(0,3)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,0) - dependentModel->p_y_c_x(1,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,1) - dependentModel->p_y_c_x(1,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,2) - dependentModel->p_y_c_x(1,2)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,3) - dependentModel->p_y_c_x(1,3)) < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,0)   - dependentModel->p_x(0))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,1)   - dependentModel->p_x(1))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,2)   - dependentModel->p_x(2))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,3)   - dependentModel->p_x(3))       < EPSILON));
 
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -490,18 +490,18 @@ BOOST_AUTO_TEST_CASE(XOR)
   ipx(0,3) = 1.0/4.0;
 
   dependentModel->calculateProbabilities();
-  BOOST_TEST((fabs(ipycx(0,0) - dependentModel->p_y_c_x(0,0)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(0,1) - dependentModel->p_y_c_x(0,1)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(0,2) - dependentModel->p_y_c_x(0,2)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(0,3) - dependentModel->p_y_c_x(0,3)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,0) - dependentModel->p_y_c_x(1,0)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,1) - dependentModel->p_y_c_x(1,1)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,2) - dependentModel->p_y_c_x(1,2)) < EPSILON));
-  BOOST_TEST((fabs(ipycx(1,3) - dependentModel->p_y_c_x(1,3)) < EPSILON));
-  BOOST_TEST((fabs(ipx(0,0)   - dependentModel->p_x(0))       < EPSILON));
-  BOOST_TEST((fabs(ipx(0,1)   - dependentModel->p_x(1))       < EPSILON));
-  BOOST_TEST((fabs(ipx(0,2)   - dependentModel->p_x(2))       < EPSILON));
-  BOOST_TEST((fabs(ipx(0,3)   - dependentModel->p_x(3))       < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,0) - dependentModel->p_y_c_x(0,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,1) - dependentModel->p_y_c_x(0,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,2) - dependentModel->p_y_c_x(0,2)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,3) - dependentModel->p_y_c_x(0,3)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,0) - dependentModel->p_y_c_x(1,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,1) - dependentModel->p_y_c_x(1,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,2) - dependentModel->p_y_c_x(1,2)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,3) - dependentModel->p_y_c_x(1,3)) < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,0)   - dependentModel->p_x(0))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,1)   - dependentModel->p_x(1))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,2)   - dependentModel->p_x(2))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,3)   - dependentModel->p_x(3))       < EPSILON));
 
   ////////////////////////////////////////////////////////////////////////////////
   // Synergy

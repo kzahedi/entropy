@@ -16,8 +16,8 @@ BOOST_AUTO_TEST_CASE(Filling)
 {
   DContainer container(2,3);
 
-  BOOST_TEST(2 == container.rows());
-  BOOST_TEST(3 == container.columns());
+  BOOST_CHECK(2 == container.rows());
+  BOOST_CHECK(3 == container.columns());
 
   for(int r = 0; r < container.rows(); r++)
   {
@@ -63,8 +63,8 @@ BOOST_AUTO_TEST_CASE(Dropping)
 
   DContainer *d = c.drop(3);
 
-  BOOST_TEST(7 == d->rows());
-  BOOST_TEST(3 == d->columns());
+  BOOST_CHECK(7 == d->rows());
+  BOOST_CHECK(3 == d->columns());
 
   int v = 8;
   for(int i = 0; i < d->rows(); i++)
@@ -72,14 +72,14 @@ BOOST_AUTO_TEST_CASE(Dropping)
     for(int j = 0; j < d->columns(); j++)
     {
       v++;
-      BOOST_TEST((int)v == (int)d->get(i,j));
+      BOOST_CHECK((int)v == (int)d->get(i,j));
     }
   }
 
   DContainer *e = d->drop(-3);
 
-  BOOST_TEST(4 == e->rows());
-  BOOST_TEST(3 == e->columns());
+  BOOST_CHECK(4 == e->rows());
+  BOOST_CHECK(3 == e->columns());
 
   v = 8;
   for(int i = 0; i < e->rows(); i++)
@@ -87,7 +87,7 @@ BOOST_AUTO_TEST_CASE(Dropping)
     for(int j = 0; j < e->columns(); j++)
     {
       v++;
-      BOOST_TEST((int)v == (int)e->get(i,j));
+      BOOST_CHECK((int)v == (int)e->get(i,j));
     }
   }
 }
@@ -114,17 +114,17 @@ BOOST_AUTO_TEST_CASE(UniformDiscretisationUnary)
 
   ULContainer *d = c.discretise();
 
-  BOOST_TEST(0 == (int)d->get(0,  0));
-  BOOST_TEST(1 == (int)d->get(1,  0));
-  BOOST_TEST(2 == (int)d->get(2,  0));
-  BOOST_TEST(3 == (int)d->get(3,  0));
-  BOOST_TEST(4 == (int)d->get(4,  0));
-  BOOST_TEST(5 == (int)d->get(5,  0));
-  BOOST_TEST(6 == (int)d->get(6,  0));
-  BOOST_TEST(7 == (int)d->get(7,  0));
-  BOOST_TEST(8 == (int)d->get(8,  0));
-  BOOST_TEST(9 == (int)d->get(9,  0));
-  BOOST_TEST(9 == (int)d->get(10, 0));
+  BOOST_CHECK(0 == (int)d->get(0,  0));
+  BOOST_CHECK(1 == (int)d->get(1,  0));
+  BOOST_CHECK(2 == (int)d->get(2,  0));
+  BOOST_CHECK(3 == (int)d->get(3,  0));
+  BOOST_CHECK(4 == (int)d->get(4,  0));
+  BOOST_CHECK(5 == (int)d->get(5,  0));
+  BOOST_CHECK(6 == (int)d->get(6,  0));
+  BOOST_CHECK(7 == (int)d->get(7,  0));
+  BOOST_CHECK(8 == (int)d->get(8,  0));
+  BOOST_CHECK(9 == (int)d->get(9,  0));
+  BOOST_CHECK(9 == (int)d->get(10, 0));
 
   delete   domain[0];
   delete[] domain;
@@ -158,27 +158,27 @@ BOOST_AUTO_TEST_CASE(UniformDiscretisationByColumn)
 
   ULContainer *d = c.discretiseByColumn(false);
 
-  BOOST_TEST(0 == (int)d->get(0, 0));
-  BOOST_TEST(1 == (int)d->get(1, 0));
-  BOOST_TEST(2 == (int)d->get(2, 0));
-  BOOST_TEST(3 == (int)d->get(3, 0));
-  BOOST_TEST(4 == (int)d->get(4, 0));
-  BOOST_TEST(5 == (int)d->get(5, 0));
-  BOOST_TEST(6 == (int)d->get(6, 0));
-  BOOST_TEST(7 == (int)d->get(7, 0));
-  BOOST_TEST(8 == (int)d->get(8, 0));
-  BOOST_TEST(9 == (int)d->get(9, 0));
+  BOOST_CHECK(0 == (int)d->get(0, 0));
+  BOOST_CHECK(1 == (int)d->get(1, 0));
+  BOOST_CHECK(2 == (int)d->get(2, 0));
+  BOOST_CHECK(3 == (int)d->get(3, 0));
+  BOOST_CHECK(4 == (int)d->get(4, 0));
+  BOOST_CHECK(5 == (int)d->get(5, 0));
+  BOOST_CHECK(6 == (int)d->get(6, 0));
+  BOOST_CHECK(7 == (int)d->get(7, 0));
+  BOOST_CHECK(8 == (int)d->get(8, 0));
+  BOOST_CHECK(9 == (int)d->get(9, 0));
 
-  BOOST_TEST(5 == (int)d->get(0, 1));
-  BOOST_TEST(6 == (int)d->get(1, 1));
-  BOOST_TEST(7 == (int)d->get(2, 1));
-  BOOST_TEST(8 == (int)d->get(3, 1));
-  BOOST_TEST(9 == (int)d->get(4, 1));
-  BOOST_TEST(0 == (int)d->get(5, 1));
-  BOOST_TEST(1 == (int)d->get(6, 1));
-  BOOST_TEST(2 == (int)d->get(7, 1));
-  BOOST_TEST(3 == (int)d->get(8, 1));
-  BOOST_TEST(4 == (int)d->get(9, 1));
+  BOOST_CHECK(5 == (int)d->get(0, 1));
+  BOOST_CHECK(6 == (int)d->get(1, 1));
+  BOOST_CHECK(7 == (int)d->get(2, 1));
+  BOOST_CHECK(8 == (int)d->get(3, 1));
+  BOOST_CHECK(9 == (int)d->get(4, 1));
+  BOOST_CHECK(0 == (int)d->get(5, 1));
+  BOOST_CHECK(1 == (int)d->get(6, 1));
+  BOOST_CHECK(2 == (int)d->get(7, 1));
+  BOOST_CHECK(3 == (int)d->get(8, 1));
+  BOOST_CHECK(4 == (int)d->get(9, 1));
 }
 
 BOOST_AUTO_TEST_CASE(UniformDiscretisationUnary2)
@@ -204,16 +204,16 @@ BOOST_AUTO_TEST_CASE(UniformDiscretisationUnary2)
 
   ULContainer *d = c.discretise();
 
-  BOOST_TEST(0 == (int)d->get(0,  0));
-  BOOST_TEST(1 == (int)d->get(1,  0));
-  BOOST_TEST(2 == (int)d->get(2,  0));
-  BOOST_TEST(3 == (int)d->get(3,  0));
-  BOOST_TEST(4 == (int)d->get(4,  0));
-  BOOST_TEST(5 == (int)d->get(5,  0));
-  BOOST_TEST(6 == (int)d->get(6,  0));
-  BOOST_TEST(7 == (int)d->get(7,  0));
-  BOOST_TEST(8 == (int)d->get(8,  0));
-  BOOST_TEST(9 == (int)d->get(9,  0));
+  BOOST_CHECK(0 == (int)d->get(0,  0));
+  BOOST_CHECK(1 == (int)d->get(1,  0));
+  BOOST_CHECK(2 == (int)d->get(2,  0));
+  BOOST_CHECK(3 == (int)d->get(3,  0));
+  BOOST_CHECK(4 == (int)d->get(4,  0));
+  BOOST_CHECK(5 == (int)d->get(5,  0));
+  BOOST_CHECK(6 == (int)d->get(6,  0));
+  BOOST_CHECK(7 == (int)d->get(7,  0));
+  BOOST_CHECK(8 == (int)d->get(8,  0));
+  BOOST_CHECK(9 == (int)d->get(9,  0));
 
   delete   domain[0];
   delete[] domain;
@@ -255,17 +255,17 @@ BOOST_AUTO_TEST_CASE(UniformDiscretisation)
 
   ULContainer *d = c.discretise();
 
-  BOOST_TEST(0  == (int)d->get(0,  0)); // 210
-  BOOST_TEST(1  == (int)d->get(1,  0)); // 321
-  BOOST_TEST(2  == (int)d->get(2,  0)); // 432
-  BOOST_TEST(3  == (int)d->get(3,  0)); // 543
-  BOOST_TEST(4  == (int)d->get(4,  0)); // 654
-  BOOST_TEST(5  == (int)d->get(5,  0)); // 765
-  BOOST_TEST(6  == (int)d->get(6,  0)); // 876
-  BOOST_TEST(7  == (int)d->get(7,  0)); // 987
-  BOOST_TEST(8  == (int)d->get(8,  0)); // 98
-  BOOST_TEST(9  == (int)d->get(9,  0)); // 109
-  BOOST_TEST(10 == (int)d->get(10, 0)); // 210
+  BOOST_CHECK(0  == (int)d->get(0,  0)); // 210
+  BOOST_CHECK(1  == (int)d->get(1,  0)); // 321
+  BOOST_CHECK(2  == (int)d->get(2,  0)); // 432
+  BOOST_CHECK(3  == (int)d->get(3,  0)); // 543
+  BOOST_CHECK(4  == (int)d->get(4,  0)); // 654
+  BOOST_CHECK(5  == (int)d->get(5,  0)); // 765
+  BOOST_CHECK(6  == (int)d->get(6,  0)); // 876
+  BOOST_CHECK(7  == (int)d->get(7,  0)); // 987
+  BOOST_CHECK(8  == (int)d->get(8,  0)); // 98
+  BOOST_CHECK(9  == (int)d->get(9,  0)); // 109
+  BOOST_CHECK(10 == (int)d->get(10, 0)); // 210
 
   delete   domain[0];
   delete   domain[1];
@@ -283,20 +283,20 @@ BOOST_AUTO_TEST_CASE(Copy)
 
   d = c;
 
-  BOOST_TEST(c.rows()    == d.rows());
-  BOOST_TEST(c.columns() == d.columns());
+  BOOST_CHECK(c.rows()    == d.rows());
+  BOOST_CHECK(c.columns() == d.columns());
 
   for(int i = 0; i < 10; i++)
   {
     for(int j = 0; j < 3; j++)
     {
-      BOOST_TEST((int)c(i,j) == (int)d(i,j));
+      BOOST_CHECK((int)c(i,j) == (int)d(i,j));
     }
   }
 
   c(0, 0) =  10;
 
-  BOOST_TEST((int)c(0,0) != (int)d(0,0));
+  BOOST_CHECK((int)c(0,0) != (int)d(0,0));
 }
 
 BOOST_AUTO_TEST_CASE(Max)
@@ -308,10 +308,10 @@ BOOST_AUTO_TEST_CASE(Max)
     c << i;
   }
 
-  BOOST_TEST(27 == (int)c.max(0));
-  BOOST_TEST(28 == (int)c.max(1));
-  BOOST_TEST(29 == (int)c.max(2));
-  BOOST_TEST(29 == (int)c.max());
+  BOOST_CHECK(27 == (int)c.max(0));
+  BOOST_CHECK(28 == (int)c.max(1));
+  BOOST_CHECK(29 == (int)c.max(2));
+  BOOST_CHECK(29 == (int)c.max());
 
 }
 
@@ -321,10 +321,10 @@ BOOST_AUTO_TEST_CASE(Min)
 
   for(int i = 0; i < 30; i++) c << i;
 
-  BOOST_TEST(0 == (int)c.min(0));
-  BOOST_TEST(1 == (int)c.min(1));
-  BOOST_TEST(2 == (int)c.min(2));
-  BOOST_TEST(0 == (int)c.min());
+  BOOST_CHECK(0 == (int)c.min(0));
+  BOOST_CHECK(1 == (int)c.min(1));
+  BOOST_CHECK(2 == (int)c.min(2));
+  BOOST_CHECK(0 == (int)c.min());
 
 }
 
@@ -346,9 +346,9 @@ BOOST_AUTO_TEST_CASE(ExtractColumns)
 
   for(int i = 0; i < rows; i++)
   {
-    BOOST_TEST((int)c(i,0) == (int)(*onethreefive)(i,0));
-    BOOST_TEST((int)c(i,2) == (int)(*onethreefive)(i,1));
-    BOOST_TEST((int)c(i,4) == (int)(*onethreefive)(i,2));
+    BOOST_CHECK((int)c(i,0) == (int)(*onethreefive)(i,0));
+    BOOST_CHECK((int)c(i,2) == (int)(*onethreefive)(i,1));
+    BOOST_CHECK((int)c(i,4) == (int)(*onethreefive)(i,2));
   }
 
 }
@@ -376,8 +376,8 @@ BOOST_AUTO_TEST_CASE(NormaliseColumn)
   {
     for(int j = 0; j < columns; j++)
     {
-      BOOST_TEST((0.0    <= c(i,j)));
-      BOOST_TEST((c(i,j) <= 1.0));
+      BOOST_CHECK((0.0    <= c(i,j)));
+      BOOST_CHECK((c(i,j) <= 1.0));
     }
   }
 }
@@ -401,7 +401,7 @@ BOOST_AUTO_TEST_CASE(CopyFunc)
   {
     for(int j = 0; j < columns; j++)
     {
-      BOOST_TEST((int)c(i,j) == (int)(*d)(i,j));
+      BOOST_CHECK((int)c(i,j) == (int)(*d)(i,j));
     }
   }
 }
@@ -416,8 +416,8 @@ BOOST_AUTO_TEST_CASE(Merge)
 
   c += d;
 
-  BOOST_TEST(10 == c.rows());
-  BOOST_TEST(8  == c.columns());
+  BOOST_CHECK(10 == c.rows());
+  BOOST_CHECK(8  == c.columns());
 
   int index = 0;
   for(int i = 0; i < 10; i++)
@@ -443,8 +443,8 @@ BOOST_AUTO_TEST_CASE(FillMode)
   DContainer container(2,3);
   container.setFillMode(FILL_MODE_BY_ROW);
 
-  BOOST_TEST(2 == container.rows());
-  BOOST_TEST(3 == container.columns());
+  BOOST_CHECK(2 == container.rows());
+  BOOST_CHECK(3 == container.columns());
 
   for(int r = 0; r < container.rows(); r++)
   {
@@ -517,8 +517,8 @@ BOOST_AUTO_TEST_CASE(Unique1)
 
   IContainer *unique = container->unique();
 
-  BOOST_TEST(1 == unique->rows());
-  BOOST_TEST(uniqueTest->equals(unique));
+  BOOST_CHECK(1 == unique->rows());
+  BOOST_CHECK(uniqueTest->equals(unique));
 }
 
 BOOST_AUTO_TEST_CASE(Unique2)
@@ -544,8 +544,8 @@ BOOST_AUTO_TEST_CASE(Unique2)
 
   IContainer *unique = container->unique();
 
-  BOOST_TEST(uniqueTest->equals(unique));
-  BOOST_TEST(4 == unique->rows());
+  BOOST_CHECK(uniqueTest->equals(unique));
+  BOOST_CHECK(4 == unique->rows());
 }
 
 BOOST_AUTO_TEST_CASE(Find1)
@@ -571,7 +571,7 @@ BOOST_AUTO_TEST_CASE(Find1)
   v[4] = 5;
   int r = container->find(v);
 
-  BOOST_TEST(0 == r);
+  BOOST_CHECK(0 == r);
 }
 
 BOOST_AUTO_TEST_CASE(Find2)
@@ -594,19 +594,19 @@ BOOST_AUTO_TEST_CASE(Find2)
 
   v[0] = 1; v[1] = 2; v[2] = 3; v[3] = 4; v[4] = 5;
   r = container->find(v);
-  BOOST_TEST(0 == r);
+  BOOST_CHECK(0 == r);
 
   v[0] = 2; v[1] = 2; v[2] = 3; v[3] = 4; v[4] = 5;
   r = container->find(v);
-  BOOST_TEST(1 == r);
+  BOOST_CHECK(1 == r);
 
   v[0] = 1; v[1] = 2; v[2] = 1; v[3] = 4; v[4] = 5;
   r = container->find(v);
-  BOOST_TEST(5 == r);
+  BOOST_CHECK(5 == r);
 
   v[0] = 1; v[1] = 2; v[2] = 5; v[3] = 4; v[4] = 5;
   r = container->find(v);
-  BOOST_TEST(9 == r);
+  BOOST_CHECK(9 == r);
 }
 
 BOOST_AUTO_TEST_CASE(FindList1)
@@ -632,10 +632,10 @@ BOOST_AUTO_TEST_CASE(FindList1)
   v[4] = 5;
   vector<int> r = container->findlist(v);
 
-  BOOST_TEST(10 == (int)r.size());
+  BOOST_CHECK(10 == (int)r.size());
   for(int i = 0; i < 10; i++)
   {
-    BOOST_TEST(i == r[i]);
+    BOOST_CHECK(i == r[i]);
   }
 }
 
@@ -659,29 +659,29 @@ BOOST_AUTO_TEST_CASE(FindList2)
 
   v[0] = 1; v[1] = 2; v[2] = 3; v[3] = 4; v[4] = 5;
   r = container->findlist(v);
-  BOOST_TEST(5 == (int)r.size());
-  BOOST_TEST(0 == r[0]);
-  BOOST_TEST(2 == r[1]);
-  BOOST_TEST(4 == r[2]);
-  BOOST_TEST(6 == r[3]);
-  BOOST_TEST(8 == r[4]);
+  BOOST_CHECK(5 == (int)r.size());
+  BOOST_CHECK(0 == r[0]);
+  BOOST_CHECK(2 == r[1]);
+  BOOST_CHECK(4 == r[2]);
+  BOOST_CHECK(6 == r[3]);
+  BOOST_CHECK(8 == r[4]);
 
   v[0] = 2; v[1] = 2; v[2] = 3; v[3] = 4; v[4] = 5;
   r = container->findlist(v);
-  BOOST_TEST(2 == (int)r.size());
-  BOOST_TEST(1 == r[0]);
-  BOOST_TEST(3 == r[1]);
+  BOOST_CHECK(2 == (int)r.size());
+  BOOST_CHECK(1 == r[0]);
+  BOOST_CHECK(3 == r[1]);
 
   v[0] = 1; v[1] = 2; v[2] = 1; v[3] = 4; v[4] = 5;
   r = container->findlist(v);
-  BOOST_TEST(2 == (int)r.size());
-  BOOST_TEST(5 == r[0]);
-  BOOST_TEST(7 == r[1]);
+  BOOST_CHECK(2 == (int)r.size());
+  BOOST_CHECK(5 == r[0]);
+  BOOST_CHECK(7 == r[1]);
 
   v[0] = 1; v[1] = 2; v[2] = 5; v[3] = 4; v[4] = 5;
   r = container->findlist(v);
-  BOOST_TEST(1 == (int)r.size());
-  BOOST_TEST(9 == r[0]);
+  BOOST_CHECK(1 == (int)r.size());
+  BOOST_CHECK(9 == r[0]);
 }
 
 
@@ -705,7 +705,7 @@ BOOST_AUTO_TEST_CASE(Find1ByContainer)
 
   int r = container->find(unique, 0);
 
-  BOOST_TEST(0 == r);
+  BOOST_CHECK(0 == r);
 }
 
 BOOST_AUTO_TEST_CASE(Find2ByContainer)
@@ -732,19 +732,19 @@ BOOST_AUTO_TEST_CASE(Find2ByContainer)
   IContainer *unique = container->unique();
   int r = -1;
 
-  BOOST_TEST(uniqueTest->equals(unique));
+  BOOST_CHECK(uniqueTest->equals(unique));
 
   r = container->find(unique, 0);
-  BOOST_TEST(0 == r);
+  BOOST_CHECK(0 == r);
 
   r = container->find(unique, 1);
-  BOOST_TEST(1 == r);
+  BOOST_CHECK(1 == r);
 
   r = container->find(unique, 2);
-  BOOST_TEST(5 == r);
+  BOOST_CHECK(5 == r);
 
   r = container->find(unique, 3);
-  BOOST_TEST(9 == r);
+  BOOST_CHECK(9 == r);
 
 }
 
@@ -767,10 +767,10 @@ BOOST_AUTO_TEST_CASE(FindList1ByContainer)
 
   vector<int> r = container->findlist(unique, 0);
 
-  BOOST_TEST(10 == (int)r.size());
+  BOOST_CHECK(10 == (int)r.size());
   for(int i = 0; i < 10; i++)
   {
-    BOOST_TEST(i == r[i]);
+    BOOST_CHECK(i == r[i]);
   }
 }
 
@@ -797,31 +797,31 @@ BOOST_AUTO_TEST_CASE(FindList2ByContainer)
 
   IContainer* unique = container->unique();
 
-  BOOST_TEST(unique->equals(uniqueTest));
+  BOOST_CHECK(unique->equals(uniqueTest));
 
   vector<int> r;
 
   r = container->findlist(unique, 0);
-  BOOST_TEST(5 == (int)r.size());
-  BOOST_TEST(0 == r[0]);
-  BOOST_TEST(2 == r[1]);
-  BOOST_TEST(4 == r[2]);
-  BOOST_TEST(6 == r[3]);
-  BOOST_TEST(8 == r[4]);
+  BOOST_CHECK(5 == (int)r.size());
+  BOOST_CHECK(0 == r[0]);
+  BOOST_CHECK(2 == r[1]);
+  BOOST_CHECK(4 == r[2]);
+  BOOST_CHECK(6 == r[3]);
+  BOOST_CHECK(8 == r[4]);
 
   r = container->findlist(unique, 1);
-  BOOST_TEST(2 == (int)r.size());
-  BOOST_TEST(1 == r[0]);
-  BOOST_TEST(3 == r[1]);
+  BOOST_CHECK(2 == (int)r.size());
+  BOOST_CHECK(1 == r[0]);
+  BOOST_CHECK(3 == r[1]);
 
   r = container->findlist(unique, 2);
-  BOOST_TEST(2 == (int)r.size());
-  BOOST_TEST(5 == r[0]);
-  BOOST_TEST(7 == r[1]);
+  BOOST_CHECK(2 == (int)r.size());
+  BOOST_CHECK(5 == r[0]);
+  BOOST_CHECK(7 == r[1]);
 
   r = container->findlist(unique, 3);
-  BOOST_TEST(1 == (int)r.size());
-  BOOST_TEST(9 == r[0]);
+  BOOST_CHECK(1 == (int)r.size());
+  BOOST_CHECK(9 == r[0]);
 }
 
 BOOST_AUTO_TEST_CASE(FindList3ByContainer)
@@ -845,21 +845,21 @@ BOOST_AUTO_TEST_CASE(FindList3ByContainer)
   indices.push_back(1);
 
   r = container->findlist(container, 0, indices);
-  BOOST_TEST(5 == (int)r.size());
-  BOOST_TEST(0 == r[0]);
-  BOOST_TEST(1 == r[1]);
-  BOOST_TEST(2 == r[2]);
-  BOOST_TEST(3 == r[3]);
-  BOOST_TEST(4 == r[4]);
+  BOOST_CHECK(5 == (int)r.size());
+  BOOST_CHECK(0 == r[0]);
+  BOOST_CHECK(1 == r[1]);
+  BOOST_CHECK(2 == r[2]);
+  BOOST_CHECK(3 == r[3]);
+  BOOST_CHECK(4 == r[4]);
 
   indices.clear();
   indices.push_back(0);
   indices.push_back(2);
 
   r = container->findlist(container, 5, indices);
-  BOOST_TEST(2 == (int)r.size());
-  BOOST_TEST(5 == r[0]);
-  BOOST_TEST(9 == r[1]);
+  BOOST_CHECK(2 == (int)r.size());
+  BOOST_CHECK(5 == r[0]);
+  BOOST_CHECK(9 == r[1]);
 
 }
 
@@ -887,12 +887,12 @@ BOOST_AUTO_TEST_CASE(FindList4ByContainer)
   values.push_back(2);
 
   r = container->findlist(values, indices);
-  BOOST_TEST(5 == (int)r.size());
-  BOOST_TEST(0 == r[0]);
-  BOOST_TEST(1 == r[1]);
-  BOOST_TEST(2 == r[2]);
-  BOOST_TEST(3 == r[3]);
-  BOOST_TEST(4 == r[4]);
+  BOOST_CHECK(5 == (int)r.size());
+  BOOST_CHECK(0 == r[0]);
+  BOOST_CHECK(1 == r[1]);
+  BOOST_CHECK(2 == r[2]);
+  BOOST_CHECK(3 == r[3]);
+  BOOST_CHECK(4 == r[4]);
 
   indices.clear();
   indices.push_back(0);
@@ -902,9 +902,9 @@ BOOST_AUTO_TEST_CASE(FindList4ByContainer)
   values.push_back(10);
 
   r = container->findlist(container, 5, indices);
-  BOOST_TEST(2 == (int)r.size());
-  BOOST_TEST(5 == r[0]);
-  BOOST_TEST(9 == r[1]);
+  BOOST_CHECK(2 == (int)r.size());
+  BOOST_CHECK(5 == r[0]);
+  BOOST_CHECK(9 == r[1]);
 
 }
 
@@ -925,30 +925,30 @@ BOOST_AUTO_TEST_CASE(GetRow1)
 
   vector<int> r = container->row(0);
 
-  BOOST_TEST(5  == (int)r.size());
-  BOOST_TEST(1  == r[0]);
-  BOOST_TEST(2  == r[1]);
-  BOOST_TEST(1  == r[2]);
-  BOOST_TEST(11 == r[3]);
-  BOOST_TEST(21 == r[4]);
+  BOOST_CHECK(5  == (int)r.size());
+  BOOST_CHECK(1  == r[0]);
+  BOOST_CHECK(2  == r[1]);
+  BOOST_CHECK(1  == r[2]);
+  BOOST_CHECK(11 == r[3]);
+  BOOST_CHECK(21 == r[4]);
 
   r = container->row(1);
 
-  BOOST_TEST(5  == (int)r.size());
-  BOOST_TEST(1  == r[0]);
-  BOOST_TEST(2  == r[1]);
-  BOOST_TEST(2  == r[2]);
-  BOOST_TEST(12 == r[3]);
-  BOOST_TEST(22 == r[4]);
+  BOOST_CHECK(5  == (int)r.size());
+  BOOST_CHECK(1  == r[0]);
+  BOOST_CHECK(2  == r[1]);
+  BOOST_CHECK(2  == r[2]);
+  BOOST_CHECK(12 == r[3]);
+  BOOST_CHECK(22 == r[4]);
 
   r = container->row(2);
 
-  BOOST_TEST(5  == (int)r.size());
-  BOOST_TEST(1  == r[0]);
-  BOOST_TEST(2  == r[1]);
-  BOOST_TEST(3  == r[2]);
-  BOOST_TEST(13 == r[3]);
-  BOOST_TEST(23 == r[4]);
+  BOOST_CHECK(5  == (int)r.size());
+  BOOST_CHECK(1  == r[0]);
+  BOOST_CHECK(2  == r[1]);
+  BOOST_CHECK(3  == r[2]);
+  BOOST_CHECK(13 == r[3]);
+  BOOST_CHECK(23 == r[4]);
 
 }
 
@@ -972,19 +972,19 @@ BOOST_AUTO_TEST_CASE(GetRow2)
   indices.push_back(4);
   vector<int> r = container->row(0, indices);
 
-  BOOST_TEST(2  == (int)r.size());
-  BOOST_TEST(11 == r[0]);
-  BOOST_TEST(21 == r[1]);
+  BOOST_CHECK(2  == (int)r.size());
+  BOOST_CHECK(11 == r[0]);
+  BOOST_CHECK(21 == r[1]);
 
   r = container->row(1, indices);
-  BOOST_TEST(2  == (int)r.size());
-  BOOST_TEST(12 == r[0]);
-  BOOST_TEST(22 == r[1]);
+  BOOST_CHECK(2  == (int)r.size());
+  BOOST_CHECK(12 == r[0]);
+  BOOST_CHECK(22 == r[1]);
 
   r = container->row(2, indices);
-  BOOST_TEST(2  == (int)r.size());
-  BOOST_TEST(13 == r[0]);
-  BOOST_TEST(23 == r[1]);
+  BOOST_CHECK(2  == (int)r.size());
+  BOOST_CHECK(13 == r[0]);
+  BOOST_CHECK(23 == r[1]);
 
 }
 
@@ -1001,7 +1001,7 @@ BOOST_AUTO_TEST_CASE(Equal)
       *B << (r + c);
     }
   }
-  BOOST_TEST(A->equals(B));
+  BOOST_CHECK(A->equals(B));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -19,8 +19,8 @@ BOOST_AUTO_TEST_CASE(readTestFile)
   Csv *csv = new Csv();
   DContainer *c = csv->read(TEST_CSV, 3, 0, 3, 7);
 
-  BOOST_TEST(21 == c->rows());
-  BOOST_TEST(3  == c->columns());
+  BOOST_CHECK(21 == c->rows());
+  BOOST_CHECK(3  == c->columns());
 
   BOOST_CHECK_CLOSE(0.0, c->get(0,0), 0.00001);
   BOOST_CHECK_CLOSE(3.0, c->get(0,1), 0.00001);
