@@ -1,5 +1,5 @@
 #include <entropy++/iterativescaling/GIS.h>
-#include <omp.h>
+// #include <omp.h>
 
 // #include <glog/logging.h>
 
@@ -29,7 +29,7 @@ void GIS::iterate()
   {
     vector<unsigned long> x_row = Xdata->row(j);
 
-#pragma omp for
+// #pragma omp for
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       _s[y] = 0.0;
@@ -46,7 +46,7 @@ void GIS::iterate()
     double z = 0.0;
     for(vector<double>::iterator i = _s.begin(); i != _s.end(); i++) z += exp(*i);
 
-#pragma omp for
+// #pragma omp for
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       vector<unsigned long> y_row = Yalphabet->row(y);
