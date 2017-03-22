@@ -19,8 +19,8 @@
 # define EPSILON         0.01
 # define ERROR_THRESHOLD 0.01
 
-// # define BINS 300
-# define BINS 10
+# define BINS 300
+// # define BINS 10
 
 
 #ifndef PARENT

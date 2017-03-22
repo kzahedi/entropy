@@ -39,6 +39,7 @@ add_executable(original-tests            original_test.cpp)
 target_link_libraries(original-tests     Entropy++ cppunit dl)
 ADD_TEST(Original       "${PROJECT_BINARY_DIR}/bin/original-tests")
 
+add_definitions(-DPARENT="${PROJECT_SOURCE_DIR}/experiments/hopping/data")
 add_executable(gis-tests        gis_test.cpp)
 target_link_libraries(gis-tests Entropy++ ${Boost_LIBRARIES})
 ADD_TEST(GIS "${PROJECT_BINARY_DIR}/bin/gis-tests")
