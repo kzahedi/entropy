@@ -1,6 +1,6 @@
 #include <entropy++/iterativescaling/SCGIS.h>
-
 #include <iostream>
+#include <omp.h>
 
 // #include <glog/logging.h>
 
@@ -26,18 +26,15 @@ void SCGIS::init()
   countObservedFeatures();
   _z = new Matrix(Xdata->rows(), 1, Yalphabet->rows());
   _s = new Matrix(Xdata->rows(), Yalphabet->rows(), 0.0);
-
- // VLOG(100) << "Each iteration requires " << (deltas.size() * 2.0 * Yalphabet->rows() * Xdata->rows()) << " loops";
 }
 
 void SCGIS::iterate()
 {
   double delta = 0.0;
-  double e = 0.0;
-  _error = 0.0;
+  double e     = 0.0;
+  _error       = 0.0;
 
-#pragma omp parallel for
-  // for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+#pragma omp parallel for private(delta),shared(deltas,e)
   for(int i = 0; i < (int)deltas.size(); i++)
   {
     Delta *d = deltas[i];
@@ -74,14 +71,6 @@ void SCGIS::iterate()
     }
   }
   _error = sqrt(_error);
-
-//  if(VLOG_IS_ON(100))
-//  {
-//    for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-//    {
-//      VLOG(100) << **d;
-//    }
-//  }
 }
 
 double SCGIS::error()
