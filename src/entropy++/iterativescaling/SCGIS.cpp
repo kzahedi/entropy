@@ -52,7 +52,7 @@ void SCGIS::iterate()
   double e     = 0.0;
   _error       = 0.0;
 
-#pragma omp parallel for private(delta),shared(deltas,e,_rowMatcher)
+#pragma omp parallel for private(delta) // ,shared(deltas,e,entropy::iterativescaling::SCGIS::_rowMatcher)
   for(int i = 0; i < (int)deltas.size(); i++)
   {
     Delta *d = deltas[i];

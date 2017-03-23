@@ -36,7 +36,7 @@ ADD_TEST(cmi "${PROJECT_BINARY_DIR}/bin/cmi-tests")
 
 
 add_executable(original-tests            original_test.cpp)
-target_link_libraries(original-tests     Entropy++ cppunit dl)
+target_link_libraries(original-tests     Entropy++ ${Boost_LIBRARIES})
 ADD_TEST(Original       "${PROJECT_BINARY_DIR}/bin/original-tests")
 
 add_definitions(-DPARENT="${PROJECT_SOURCE_DIR}/experiments/hopping/data")
