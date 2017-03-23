@@ -5,7 +5,6 @@
 
 #include <entropy++/iterativescaling/Feature.h>
 #include <entropy++/iterativescaling/Delta.h>
-#include <entropy++/iterativescaling/DeltaMatcher.h>
 #include <entropy++/Container.h>
 #include <entropy++/Matrix.h>
 
@@ -62,9 +61,13 @@ namespace entropy
         vector<int> getAllColumnsForX();
         vector<int> getAllColumnsForY();
 
+        // void save(string filename);
+        // void load(string filename);
+
         friend std::ostream& operator<<(std::ostream& str, const Model& m)
         {
           int index = 0;
+          str << "Nr. of features: " << m.deltas.size() << endl;
           for(vector<Delta*>::const_iterator d = m.deltas.begin(); d != m.deltas.end(); d++)
           {
             index++;
@@ -83,7 +86,6 @@ namespace entropy
         ULContainer*  Yalphabet;
         ULContainer*  _x_alphabet;
         ULContainer*  _y_alphabet;
-        DeltaMatcher* deltaMatcher;
 
       private:
         int __convertAlphabetToMatrixX(int x);

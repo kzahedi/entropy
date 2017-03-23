@@ -78,24 +78,21 @@ double Delta::marginalProbability()
   return _marginalProbability;
 }
 
-bool Delta::matchX(vector<unsigned long> xValues)
+bool Delta::matchX(vector<unsigned long> xv)
 {
-  for(int i = 0; i < (int)_xIndices.size(); i++)
-  {
-    if(_xValues[i] != xValues[i]) return false;
-  }
+  for(int i = 0; i < (int)_xValues.size(); i++) if(_xValues[i] != xv[_xIndices[i]]) return false;
+  return true;
+}
+
+bool Delta::matchY(vector<unsigned long> yv)
+{
+  for(int i = 0; i < (int)_yValues.size(); i++) if(_yValues[i] != yv[_yIndices[i]]) return false;
   return true;
 }
 
 bool Delta::matchXY(vector<unsigned long> xv, vector<unsigned long> yv)
 {
   for(int i = 0; i < (int)_xValues.size(); i++) if(_xValues[i] != xv[_xIndices[i]]) return false;
-  for(int i = 0; i < (int)_yValues.size(); i++) if(_yValues[i] != yv[_yIndices[i]]) return false;
-  return true;
-}
-
-bool Delta::matchY(vector<unsigned long> yv)
-{
   for(int i = 0; i < (int)_yValues.size(); i++) if(_yValues[i] != yv[_yIndices[i]]) return false;
   return true;
 }

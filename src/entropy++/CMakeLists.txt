@@ -41,6 +41,7 @@ set(SRC
 
   iterativescaling/Delta.cpp
   iterativescaling/DeltaMatcher.cpp
+  iterativescaling/RowMatcher.cpp
   iterativescaling/Feature.cpp
   iterativescaling/Model.cpp
   iterativescaling/GIS.cpp

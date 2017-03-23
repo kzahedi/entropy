@@ -80,8 +80,8 @@ int main(int argc, char** argv)
     Matrix X(FLAGS_n, 1);
     Matrix W(FLAGS_n, FLAGS_n);
 
-    ULContainer data(FLAGS_i+1, FLAGS_n); 
-    ULContainer first(1, FLAGS_n); 
+    ULContainer data(FLAGS_i+1, FLAGS_n);
+    ULContainer first(1, FLAGS_n);
 
     for(int i = 0; i < FLAGS_n; i++)
     {

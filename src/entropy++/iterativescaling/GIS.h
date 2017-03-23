@@ -2,6 +2,7 @@
 #define __GIS_H__
 
 #include <entropy++/iterativescaling/IS.h>
+#include <entropy++/iterativescaling/DeltaMatcher.h>
 
 namespace entropy
 {
@@ -11,7 +12,7 @@ namespace entropy
     {
       public:
         GIS();
-
+        ~GIS();
         void   init();
         void   iterate();
         double error();
@@ -19,7 +20,7 @@ namespace entropy
       private:
         double         _error;
         vector<double> _s;
-
+        DeltaMatcher*  _deltaMatcher;
     };
   }
 }

@@ -114,23 +114,6 @@ void Model::countObservedFeatures()
       }
     }
   }
-
-  deltaMatcher = new DeltaMatcher(Xdata->rows());
-  for(int x = 0; x < Xdata->rows(); x++)
-  {
-    vector<unsigned long> x_row = Xdata->row(x);
-    for(int y = 0; y < Yalphabet->rows(); y++)
-    {
-      vector<unsigned long> y_row = Yalphabet->row(y);
-      for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-      {
-        if((*d)->matchXY(x_row, y_row))
-        {
-          deltaMatcher->add(x, *d);
-        }
-      }
-    }
-  }
 }
 
 int Model::nrOfFeatures()
