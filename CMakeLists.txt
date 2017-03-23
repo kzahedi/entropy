@@ -13,6 +13,8 @@ set(CMAKE_VERBOSE_MAKEFILE       OFF)
 
 find_package(OpenMP)
 
+set(CMAKE_BUILD_TYPE "Debug")
+
 if(APPLE)
   set(CMAKE_CXX_COMPILER           "/usr/local/Cellar/llvm/4.0.0/bin/clang++")
   set(CMAKE_CXX_COMPILER_FULLPATH  "/usr/local/Cellar/llvm/4.0.0/bin/clang++")

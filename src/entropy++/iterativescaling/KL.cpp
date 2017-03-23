@@ -19,6 +19,7 @@ double KL::divergence2()
   int nr_of_x = _p->getNrOfUniqueX(); // Xalphabet
   int nr_of_y = _p->getNrOfUniqueY(); // Yalphabet
 
+
 #pragma omp parallel for reduction(+:sum)
   for(int x = 0; x < nr_of_x; x++)
   {

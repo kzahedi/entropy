@@ -67,6 +67,7 @@ void SCGIS::iterate()
         vector<unsigned long> x_row = Xdata->row(*j);
         if(d->matchXY(x_row, y_row))
         {
+          // if ((*_z)(*j,0) < 1.0) cout << (*_z)(*j,0) << endl;
           d->setExpected(d->expected() + exp((*_s)(*j,*y)) / (*_z)(*j,0));
         }
       }
@@ -85,9 +86,9 @@ void SCGIS::iterate()
         vector<unsigned long> x_row = Xdata->row(*j);
         if(d->matchXY(x_row, y_row))
         {
-          (*_z)(*j,0) -= exp((*_s)(*j,*y));
+          (*_z)(*j,0)  -= exp((*_s)(*j,*y));
           (*_s)(*j,*y) += delta;
-          (*_z)(*j,0) += exp((*_s)(*j,*y));
+          (*_z)(*j,0)  += exp((*_s)(*j,*y));
         }
       }
     }
