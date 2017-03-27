@@ -225,10 +225,12 @@ BOOST_AUTO_TEST_CASE(MC_W)
 
   for(int i = 0; i < 20000; i++)
   {
+    cout << i << " p iterate" << endl;
     if(p->error() > ERROR_THRESHOLD) p->iterate();
+    cout << i << " q iterate" << endl;
     if(q->error() > ERROR_THRESHOLD) q->iterate();
     // cout << "Iteration " << i << " error: " << p->error() << " : " << q->error() << endl;
-    if(i % 100 == 0 && i > 0)
+    // if(i % 100 == 0 && i > 0)
     {
       KL* kl = new KL(p, q);
       cout << "after " << i << " iterations: " << kl->divergence2() << endl;

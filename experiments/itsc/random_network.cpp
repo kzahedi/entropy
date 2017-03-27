@@ -26,10 +26,10 @@ using namespace boost;
 using namespace entropy;
 using namespace entropy::iterativescaling;
 
-DEFINE_int64(i,  1000,  "nr. of iterations for each experiment");
-DEFINE_int64(l,  100,   "nr. of last iterations to keep for the analysis");
+DEFINE_int64(i,  5000,  "nr. of iterations for each experiment");
+DEFINE_int64(l,  2500,  "nr. of last iterations to keep for the analysis");
 DEFINE_int64(e,  100,   "nr. of experiments with random weight matrix");
-DEFINE_int64(c,  100,   "nr. of convergence iterations");
+DEFINE_int64(c,  200,  "nr. of convergence iterations");
 DEFINE_double(t, 0.1,   "convergence abort threshold");
 DEFINE_int64(n,  5,     "nr. of neurones");
 DEFINE_double(b, 0.1,   "beta");

@@ -1,6 +1,9 @@
 #include <entropy++/iterativescaling/SCGIS.h>
 #include <iostream>
-#include <omp.h>
+// #include <omp.h>
+#include <math.h>
+
+#define EPSILON 0.00001
 
 // #include <glog/logging.h>
 
@@ -30,6 +33,7 @@ void SCGIS::init()
   _s = new Matrix(Xdata->rows(), Yalphabet->rows(), 0.0);
   _rowMatcher = new RowMatcher(Xdata->rows());
 
+#pragma omp parallel for
   for(int i = 0; i < (int)deltas.size(); i++)
   {
     Delta *d = deltas[i];
@@ -48,11 +52,10 @@ void SCGIS::init()
 
 void SCGIS::iterate()
 {
-  double delta = 0.0;
   double e     = 0.0;
   _error       = 0.0;
 
-#pragma omp parallel for private(delta) // ,shared(deltas,e,entropy::iterativescaling::SCGIS::_rowMatcher)
+#pragma omp parallel for shared(deltas,e,_rowMatcher)
   for(int i = 0; i < (int)deltas.size(); i++)
   {
     Delta *d = deltas[i];
@@ -67,14 +70,19 @@ void SCGIS::iterate()
         vector<unsigned long> x_row = Xdata->row(*j);
         if(d->matchXY(x_row, y_row))
         {
-          // if ((*_z)(*j,0) < 1.0) cout << (*_z)(*j,0) << endl;
           d->setExpected(d->expected() + exp((*_s)(*j,*y)) / (*_z)(*j,0));
+          // must do better
+          if(d->expected() < EPSILON) d->setExpected(EPSILON);
         }
       }
     }
-    delta   = log(d->observed() / d->expected());
+    double delta   = log(d->observed() / d->expected());
     e       = d->observed() - d->expected();
     _error += e * e;
+    if(isnan(_error))
+    {
+      cout << "delta: " << delta << " = log(" << d->observed() << " / " << d->expected() << ")" << endl;
+    }
     d->setLambda(d->lambda() + delta);
     // for(int y = 0; y < Yalphabet->rows(); y++)
     for(vector<int>::iterator y = _rowMatcher->y_begin(i); y != _rowMatcher->y_end(i); y++)
