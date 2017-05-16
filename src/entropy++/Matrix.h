@@ -9,7 +9,7 @@
 
 namespace entropy
 {
-  class Matrix 
+  class Matrix
   {
     public:
       /** Most simple constructor. Every cell is initialised with 0.*/

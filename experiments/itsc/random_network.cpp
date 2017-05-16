@@ -65,7 +65,6 @@ int main(int argc, char** argv)
   google::InitGoogleLogging(argv[0]);
   FLAGS_log_dir = ".";
   FLAGS_logtostderr = true;
-  Random::initialise();
 
   VLOG(0) << "Starting an experiment with: ";
   VLOG(0) << "  " << FLAGS_i << " iterations.";
@@ -77,6 +76,7 @@ int main(int argc, char** argv)
 
   for(int e = 0; e < FLAGS_e; e++)
   {
+    Random::initialise();
     Matrix X(FLAGS_n, 1);
     Matrix W(FLAGS_n, FLAGS_n);
 

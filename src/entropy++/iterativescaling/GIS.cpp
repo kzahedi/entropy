@@ -1,5 +1,5 @@
 #include <entropy++/iterativescaling/GIS.h>
-#include <omp.h>
+// #include <omp.h>
 
 // #include <glog/logging.h>
 

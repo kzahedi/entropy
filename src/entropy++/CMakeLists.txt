@@ -1,6 +1,8 @@
 include_directories(${PROJECT_SOURCE_DIR}/src)
 link_directories(${PROJECT_BINARY_DIR}/lib)
 
+message(${PROJECT_SOURCE_DIR}/src)
+
 set(SRC
 
   CMI.cpp
@@ -16,6 +18,12 @@ set(SRC
   Csv.cpp
   powi.cpp
   Random.cpp
+
+  distribution/CMI.cpp
+  distribution/MI.cpp
+  distribution/MC_W.cpp
+  distribution/MC_A.cpp
+  distribution/MC_MI.cpp
 
   state/CMI.cpp
   state/MC_CW.cpp
@@ -48,7 +56,6 @@ set(SRC
   iterativescaling/SCGIS.cpp
   iterativescaling/KL.cpp
   iterativescaling/Original.cpp
-
 )
 
 if(APPLE)
