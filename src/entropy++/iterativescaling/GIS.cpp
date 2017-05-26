@@ -1,4 +1,6 @@
 #include <entropy++/iterativescaling/GIS.h>
+#include <entropy++/defs.h>
+
 // #include <omp.h>
 
 // #include <glog/logging.h>
@@ -8,8 +10,7 @@
 using namespace entropy::iterativescaling;
 
 GIS::GIS() : IS()
-{
-}
+{ }
 
 GIS::~GIS()
 {
@@ -26,19 +27,29 @@ void GIS::init()
   for(int x = 0; x < Xdata->rows(); x++)
   {
     vector<unsigned long> x_row = Xdata->row(x);
-    for(int y = 0; y < Yalphabet->rows(); y++)
+    // for(int y = 0; y < Yalphabet->rows(); y++)
+    // for(int y = 0; y < Ydata->rows(); y++)
     {
-      vector<unsigned long> y_row = Yalphabet->row(y);
+      // vector<unsigned long> y_row = Yalphabet->row(y);
+      vector<unsigned long> y_row = Ydata->row(x);
       for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
       {
         if((*d)->matchXY(x_row, y_row))
         {
-          _deltaMatcher->add(x, *d);
+          bool found = false;
+          for(vector<Delta*>::iterator dm = _deltaMatcher->begin(x); dm != _deltaMatcher->end(x); dm++)
+          {
+            if(*dm == *d)
+            {
+              found = true;
+              break;
+            }
+          }
+          if(found == false) _deltaMatcher->add(x, *d);
         }
       }
     }
   }
-
 }
 
 void GIS::iterate()
@@ -57,21 +68,18 @@ void GIS::iterate()
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       // cout << omp_get_thread_num() << " " << omp_get_num_threads() << " " << y << endl;
-      // _s[y] = 0.0;
       s[y] = 0.0;
       vector<unsigned long> y_row = Yalphabet->row(y);
       for(vector<Delta*>::const_iterator d = deltas.begin(); d != deltas.end(); d++)
       {
         if((*d)->matchXY(x_row, y_row))
         {
-          // _s[y] += (*d)->lambda();
           s[y] += (*d)->lambda();
         }
       }
     }
 
     double z = 0.0;
-    // for(vector<double>::iterator i = _s.begin(); i != _s.end(); i++) z += exp(*i);
     for(int i = 0; i < Yalphabet->rows(); i++) z += exp(s[i]);
 
     for(int y = 0; y < Yalphabet->rows(); y++)
@@ -79,8 +87,10 @@ void GIS::iterate()
       vector<unsigned long> y_row = Yalphabet->row(y);
       for(vector<Delta*>::iterator d = _deltaMatcher->begin(j); d != _deltaMatcher->end(j); d++)
       {
-        // if((*d)->matchY(y_row)) (*d)->setExpected((*d)->expected() + exp(_s[y]) / z);
-        if((*d)->matchY(y_row)) (*d)->setExpected((*d)->expected() + exp(s[y]) / z);
+        if((*d)->matchY(y_row))
+        {
+          (*d)->setExpected((*d)->expected() + exp(s[y]) / z);
+        }
       }
     }
     delete[] s;
@@ -116,6 +126,13 @@ void GIS::iterate()
   }
 
   _error = sqrt(_error);
+
+  // cout << "**********" << endl;
+  // for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+  // {
+    // cout << **d << endl;
+  // }
+
 }
 
 double GIS::error()

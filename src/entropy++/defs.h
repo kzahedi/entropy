@@ -24,6 +24,16 @@ typedef vector<vector<int> > ivvector;
 typedef vector<double>          dvector;
 typedef vector<vector<double> > dvvector;
 
+#ifndef ROW_OUTPUT
+#define ROW_OUTPUT(label, vec) \
+  cout << label << ":"; \
+  for(vector<unsigned long>::iterator i = vec.begin(); i != vec.end(); i++)\
+  {\
+    cout << " " << *i;\
+  }\
+  cout << endl;
+#endif
+
 
 
 #endif // __DEFS_H__

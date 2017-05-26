@@ -26,6 +26,10 @@ namespace entropy
           for(int i = 0; i < m._rows; i++)
           {
             str << "Row " << i << ": " << m._deltas[i].size() << endl;
+            for(vector<Delta*>::iterator d = m._deltas[i].begin(); d != m._deltas[i].end(); d++)
+            {
+              str << "  " << **d << endl;
+            }
           }
           return str;
         };

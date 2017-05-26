@@ -1,4 +1,6 @@
 #include <entropy++/iterativescaling/Model.h>
+#include <entropy++/defs.h>
+
 // #include <omp.h>
 
 // #include <glog/logging.h>
@@ -105,10 +107,15 @@ void Model::countObservedFeatures()
       }
       if (found == false)
       {
-        vector<int> xIndices = _Xindices[(*f)->xListIndex()];
-        vector<int> yIndices = _Yindices[(*f)->yListIndex()];
+        int xI = (*f)->xListIndex();
+        int yI = (*f)->yListIndex();
+        vector<int> xIndices;
+        vector<int> yIndices;
+        if(xI >= 0) xIndices = _Xindices[(*f)->xListIndex()];
+        if(yI >= 0) yIndices = _Yindices[(*f)->yListIndex()];
         Delta *d = new Delta(xrow, xIndices, yrow, yIndices);
-        d->incObserved();
+        if(xI == -1) d->setOutputOnly();
+        if(yI == -1) d->setInputOnly();
         deltas.push_back(d);
         (*f)->push_back(d);
       }

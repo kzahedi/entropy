@@ -17,12 +17,10 @@ Delta::Delta(vector<unsigned long> xv, vector<int> xi, vector<unsigned long> yv,
   for(int i = 0; i < _xIndices.size(); i++) _xValues.push_back(xv[_xIndices[i]]);
   for(int i = 0; i < _yIndices.size(); i++) _yValues.push_back(yv[_yIndices[i]]);
 
-  _observed               = 1.0;
-  _expected               = 0.0;
-  _lambda                 = 1.0;
+  _observed = 0.0;
+  _expected = 0.0;
+  _lambda   = 1.0;
   _conditionalProbability = -1.0;
-  _inputOnly              = false;
-  _outputOnly             = false;
 }
 
 void Delta::incObserved()
@@ -82,57 +80,29 @@ double Delta::marginalProbability()
 
 bool Delta::matchX(vector<unsigned long> xv)
 {
-  if(_outputOnly == true) return true;
   for(int i = 0; i < (int)_xValues.size(); i++) if(_xValues[i] != xv[_xIndices[i]]) return false;
   return true;
 }
 
 bool Delta::matchY(vector<unsigned long> yv)
 {
-  if(_inputOnly == true) return true;
   for(int i = 0; i < (int)_yValues.size(); i++) if(_yValues[i] != yv[_yIndices[i]]) return false;
   return true;
 }
 
 bool Delta::matchXY(vector<unsigned long> xv, vector<unsigned long> yv)
 {
-  if(_outputOnly == false)
-    for(int i = 0; i < (int)_xValues.size(); i++) if(_xValues[i] != xv[_xIndices[i]]) return false;
-  if(_inputOnly == false)
-    for(int i = 0; i < (int)_yValues.size(); i++) if(_yValues[i] != yv[_yIndices[i]]) return false;
+  for(int i = 0; i < (int)_xValues.size(); i++) if(_xValues[i] != xv[_xIndices[i]]) return false;
+  for(int i = 0; i < (int)_yValues.size(); i++) if(_yValues[i] != yv[_yIndices[i]]) return false;
   return true;
 }
 
 bool Delta::match(vector<unsigned long> xv, vector<unsigned long> yv)
 {
-  if(_outputOnly == false && _inputOnly == false) if(xv.size() != _xValues.size() || yv.size() != _yValues.size()) return false;
-  if(_outputOnly == false && _inputOnly == true)  if(xv.size() != _xValues.size()) return false;
-  if(_outputOnly == true  && _inputOnly == false) if(yv.size() != _yValues.size()) return false;
+  if(xv.size() != _xValues.size() || yv.size() != _yValues.size()) return false;
 
-  if(_outputOnly == false)
-    for(int i = 0; i < (int)xv.size(); i++) if(xv[i] != _xValues[i]) return false;
-  if(_inputOnly == false)
-    for(int i = 0; i < (int)yv.size(); i++) if(yv[i] != _yValues[i]) return false;
+  for(int i = 0; i < (int)xv.size(); i++) if(xv[i] != _xValues[i]) return false;
+  for(int i = 0; i < (int)yv.size(); i++) if(yv[i] != _yValues[i]) return false;
 
   return true;
-}
-
-void Delta::setInputOnly()
-{
-  _inputOnly = true;
-}
-
-bool Delta::isInputOnly()
-{
-  return _inputOnly;
-}
-
-void Delta::setOutputOnly()
-{
-  _outputOnly = true;
-}
-
-bool Delta::isOutputOnly()
-{
-  return _outputOnly;
 }

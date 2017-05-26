@@ -17,6 +17,16 @@ namespace entropy
         void   iterate();
         double error();
 
+        friend std::ostream& operator<<(std::ostream& str, const GIS& m)
+        {
+          for(vector<Delta*>::const_iterator d = m.deltas.begin(); d != m.deltas.end(); d++)
+          {
+            cout << **d << endl;
+          }
+          str << *m._deltaMatcher << endl;
+          return str;
+        };
+
       private:
         double         _error;
         vector<double> _s;

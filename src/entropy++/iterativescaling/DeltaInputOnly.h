@@ -42,12 +42,6 @@ namespace entropy
         void setMarginalProbability(double value);
         double marginalProbability();
 
-        void setInputOnly(); // if used, then this delta will only match X
-        bool isInputOnly();
-
-        void setOutputOnly(); // if used, then this delta will only match X
-        bool isOutputOnly();
-
         friend std::ostream& operator<<(std::ostream& str, const Delta& m)
         {
           str << "X: (";
@@ -55,25 +49,23 @@ namespace entropy
           {
             str << m._xValues[i] << ",";
           }
-          if(m._xValues.size() > 0) str << m._xValues[m._xValues.size() - 1];
-          str << ") [";
+          str << m._xValues[m._xValues.size() - 1] << ") [";
           for(int i = 0; i < (int)m._xIndices.size()-1; i++)
           {
             str << m._xIndices[i] << ",";
           }
-          if(m._xIndices.size() > 0) str << m._xIndices[m._xIndices.size() - 1];
+          str << m._xIndices[m._xIndices.size() - 1];
           str << "], Y: (";
           for(int i = 0; i < (int)m._yValues.size()-1; i++)
           {
             str << m._yValues[i] << ",";
           }
-          if(m._yValues.size() > 0) str << m._yValues[m._yValues.size() - 1];
-          str << ") [";
+          str << m._yValues[m._yValues.size() - 1] << ") [";
           for(int i = 0; i < (int)m._yIndices.size()-1; i++)
           {
             str << m._yIndices[i] << ",";
           }
-          if(m._yIndices.size() > 0) str << m._yIndices[m._yIndices.size() - 1];
+          str << m._yIndices[m._yIndices.size() - 1];
           str << "]";
           str << ", Obs: " << m._observed;
           str << ", Exp: " << m._expected;
@@ -83,18 +75,14 @@ namespace entropy
 
       private:
         vector<unsigned long> _xValues;
-        vector<unsigned long> _yValues;
 
         vector<int> _xIndices;
-        vector<int> _yIndices;
 
         double _observed;
         double _expected;
         double _lambda;
         double _conditionalProbability;
         double _marginalProbability;
-        bool   _inputOnly;
-        bool   _outputOnly;
     };
   }
 }

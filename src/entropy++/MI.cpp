@@ -1,4 +1,5 @@
 #include <entropy++/MI.h>
+#include <entropy++/distribution/MI.h>
 
 #include <iostream>
 #include <assert.h>

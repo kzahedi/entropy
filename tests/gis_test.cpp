@@ -42,6 +42,8 @@
 # define ACT_MATLAB_INDEX                 (10 - 1)
 # define MUSCLE_SENSOR_INPUT_MATLAB_INDEX (5  - 1)
 
+# define ITERATIONS 100000
+
 using namespace std;
 using namespace entropy;
 using namespace entropy::iterativescaling;
@@ -52,6 +54,7 @@ entropy::SparseMatrix px_c_yz;
 entropy::SparseMatrix pxyz;
 
 BOOST_AUTO_TEST_SUITE(Logic)
+  /*
 BOOST_AUTO_TEST_CASE(AND)
 {
   ULContainer *xData = new ULContainer(4,2);
@@ -163,7 +166,132 @@ BOOST_AUTO_TEST_CASE(AND)
   cout << "AND (bits): " << kl->divergence2() << endl;
   cout << "AND (nats): " << kl->divergenceN() << endl;
 }
+*/
 
+BOOST_AUTO_TEST_CASE(AND_WITH_INPUT_DISTRIBUTION)
+{
+  ULContainer *xData = new ULContainer(4,2);
+  *xData << 0 << 0;
+  *xData << 0 << 1;
+  *xData << 1 << 0;
+  *xData << 1 << 1;
+
+  ULContainer *yData = new ULContainer(4,1);
+  *yData << 0;
+  *yData << 0;
+  *yData << 0;
+  *yData << 1;
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // independent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > ia;
+  vector<vector<int> > ib;
+
+  vector<int> iaa;
+  iaa.push_back(0);
+  ia.push_back(iaa);
+  vector<int> iab;
+  iab.push_back(1);
+  ia.push_back(iab);
+  vector<int> iac;
+  iac.push_back(0);
+  iac.push_back(1);
+  ia.push_back(iac);
+
+  vector<int> ibb;
+  ibb.push_back(0);
+  ib.push_back(ibb);
+
+  vector<Feature*> features;
+  features.push_back(new Feature(0,0));
+  features.push_back(new Feature(1,0));
+  features.push_back(new Feature(2,-1));
+
+  GIS* independentModel = new GIS();
+  independentModel->setData(xData, yData);
+  independentModel->setFeatures(ia,ib,features);
+  independentModel->init();
+
+  cout << "Independent Model: " << endl;
+  cout << *independentModel << endl;
+
+  for(int i = 0; i < ITERATIONS; i++)
+  // for(int i = 0; i < 20; i++)
+  {
+    independentModel->iterate();
+    if(independentModel->error() < 0.000000001) break;
+  }
+  cout << "Independent Model: " << endl;
+  cout << *independentModel << endl;
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // dependent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > da;
+  vector<vector<int> > db;
+
+  vector<int> daa;
+  daa.push_back(0);
+  daa.push_back(1);
+  da.push_back(daa);
+
+  vector<int> dbb;
+  dbb.push_back(0);
+  db.push_back(dbb);
+
+  vector<Feature*> dfeatures;
+  dfeatures.push_back(new Feature(0,0));
+
+  GIS* dependentModel = new GIS();
+  dependentModel->setData(xData, yData);
+  dependentModel->setFeatures(da,db,dfeatures);
+  dependentModel->init();
+
+  for(int i = 0; i < ITERATIONS; i++)
+  {
+    dependentModel->iterate();
+    if(dependentModel->error() < 0.000000001) break;
+  }
+
+  dependentModel->calculateProbabilities();
+
+  Matrix ipycx(2,4);
+  ipycx(0,0) = 1.0;
+  ipycx(0,1) = 1.0;
+  ipycx(0,2) = 1.0;
+  ipycx(1,3) = 1.0;
+
+  Matrix ipx(1,4);
+  ipx(0,0) = 1.0/4.0;
+  ipx(0,1) = 1.0/4.0;
+  ipx(0,2) = 1.0/4.0;
+  ipx(0,3) = 1.0/4.0;
+
+
+  BOOST_CHECK((fabs(ipycx(0,0) - dependentModel->p_y_c_x(0,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,1) - dependentModel->p_y_c_x(0,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,2) - dependentModel->p_y_c_x(0,2)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,3) - dependentModel->p_y_c_x(0,3)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,0) - dependentModel->p_y_c_x(1,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,1) - dependentModel->p_y_c_x(1,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,2) - dependentModel->p_y_c_x(1,2)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,3) - dependentModel->p_y_c_x(1,3)) < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,0)   - dependentModel->p_x(0))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,1)   - dependentModel->p_x(1))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,2)   - dependentModel->p_x(2))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,3)   - dependentModel->p_x(3))       < EPSILON));
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // Synergy
+  ////////////////////////////////////////////////////////////////////////////////
+
+  KL* kl = new KL(dependentModel, independentModel);
+  cout << "AND WITH INPUT DISTRIBUTION (bits): " << kl->divergence2() << endl;
+  cout << "AND WITH INPUT DISTRIBUTION (nats): " << kl->divergenceN() << endl;
+}
+
+/*
 BOOST_AUTO_TEST_CASE(ANDCMI)
 {
   ULContainer *xData = new ULContainer(4,2);
@@ -400,6 +528,122 @@ BOOST_AUTO_TEST_CASE(OR)
   cout << "OR (nats): " << kl->divergenceN() << endl;
 }
 
+BOOST_AUTO_TEST_CASE(OR_WITH_INPUT_DISTRIBUTION)
+{
+  ULContainer *xData = new ULContainer(4,2);
+  *xData << 0 << 0;
+  *xData << 0 << 1;
+  *xData << 1 << 0;
+  *xData << 1 << 1;
+
+  ULContainer *yData = new ULContainer(4,1);
+  *yData << 0;
+  *yData << 1;
+  *yData << 1;
+  *yData << 1;
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // independent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > ia;
+  vector<vector<int> > ib;
+
+  vector<int> iaa;
+  iaa.push_back(0);
+  ia.push_back(iaa);
+  vector<int> iab;
+  iab.push_back(1);
+  ia.push_back(iab);
+  vector<int> iac;
+  iac.push_back(0);
+  iac.push_back(1);
+  ia.push_back(iab);
+
+  vector<int> ibb;
+  ibb.push_back(0);
+  ib.push_back(ibb);
+
+  vector<Feature*> features;
+  features.push_back(new Feature(0,0));
+  features.push_back(new Feature(1,0));
+  features.push_back(new Feature(2,-1));
+
+  GIS* independentModel = new GIS();
+  independentModel->setData(xData, yData);
+  independentModel->setFeatures(ia,ib,features);
+  independentModel->init();
+
+  for(int i = 0; i < 20000; i++)
+  {
+    independentModel->iterate();
+    if(independentModel->error() < ERROR_THRESHOLD) break;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // dependent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > da;
+  vector<vector<int> > db;
+
+  vector<int> daa;
+  daa.push_back(0);
+  daa.push_back(1);
+  da.push_back(daa);
+
+  vector<int> dbb;
+  dbb.push_back(0);
+  db.push_back(dbb);
+
+  vector<Feature*> dfeatures;
+  dfeatures.push_back(new Feature(0,0));
+
+  GIS* dependentModel = new GIS();
+  dependentModel->setData(xData, yData);
+  dependentModel->setFeatures(da,db,dfeatures);
+  dependentModel->init();
+
+  for(int i = 0; i < 20000; i++)
+  {
+    dependentModel->iterate();
+    if(dependentModel->error() < ERROR_THRESHOLD) break;
+  }
+
+  Matrix ipycx(2,4);
+  ipycx(0,0) = 1.0;
+  ipycx(1,1) = 1.0;
+  ipycx(1,2) = 1.0;
+  ipycx(1,3) = 1.0;
+
+  Matrix ipx(1,4);
+  ipx(0,0) = 1.0/4.0;
+  ipx(0,1) = 1.0/4.0;
+  ipx(0,2) = 1.0/4.0;
+  ipx(0,3) = 1.0/4.0;
+
+  dependentModel->calculateProbabilities();
+  BOOST_CHECK((fabs(ipycx(0,0) - dependentModel->p_y_c_x(0,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,1) - dependentModel->p_y_c_x(0,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,2) - dependentModel->p_y_c_x(0,2)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,3) - dependentModel->p_y_c_x(0,3)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,0) - dependentModel->p_y_c_x(1,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,1) - dependentModel->p_y_c_x(1,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,2) - dependentModel->p_y_c_x(1,2)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,3) - dependentModel->p_y_c_x(1,3)) < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,0)   - dependentModel->p_x(0))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,1)   - dependentModel->p_x(1))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,2)   - dependentModel->p_x(2))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,3)   - dependentModel->p_x(3))       < EPSILON));
+
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // Synergy
+  ////////////////////////////////////////////////////////////////////////////////
+
+  KL* kl = new KL(dependentModel, independentModel);
+  cout << "OR with input distribution (bits): " << kl->divergence2() << endl;
+  cout << "OR with input distribution  (nats): " << kl->divergenceN() << endl;
+}
+
 BOOST_AUTO_TEST_CASE(XOR)
 {
   ULContainer *xData = new ULContainer(4,2);
@@ -512,8 +756,129 @@ BOOST_AUTO_TEST_CASE(XOR)
   cout << "XOR (bits): " << kl->divergence2() << endl;
   cout << "XOR (nats): " << kl->divergenceN() << endl;
 }
+
+BOOST_AUTO_TEST_CASE(XOR_WITH_INPUT_DISTRIBUTION)
+{
+  ULContainer *xData = new ULContainer(4,2);
+  *xData << 0 << 0;
+  *xData << 0 << 1;
+  *xData << 1 << 0;
+  *xData << 1 << 1;
+
+  ULContainer *yData = new ULContainer(4,1);
+  *yData << 0;
+  *yData << 1;
+  *yData << 1;
+  *yData << 0;
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // independent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > ia;
+  vector<vector<int> > ib;
+
+  vector<int> iaa;
+  iaa.push_back(0);
+  ia.push_back(iaa);
+
+  vector<int> iab;
+  iab.push_back(1);
+  ia.push_back(iab);
+
+  vector<int> iac;
+  iab.push_back(0);
+  iab.push_back(1);
+  ia.push_back(iab);
+
+  vector<int> ibb;
+  ibb.push_back(0);
+  ib.push_back(ibb);
+
+  vector<Feature*> features;
+  features.push_back(new Feature(0,0));
+  features.push_back(new Feature(1,0));
+  features.push_back(new Feature(2,-1));
+
+  GIS* independentModel = new GIS();
+  independentModel->setData(xData, yData);
+  independentModel->setFeatures(ia,ib,features);
+  independentModel->init();
+
+  for(int i = 0; i < 10; i++)
+  {
+    independentModel->iterate();
+    if(independentModel->error() < ERROR_THRESHOLD) break;
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // dependent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > da;
+  vector<vector<int> > db;
+
+  vector<int> daa;
+  daa.push_back(0);
+  daa.push_back(1);
+  da.push_back(daa);
+
+  vector<int> dbb;
+  dbb.push_back(0);
+  db.push_back(dbb);
+
+  vector<Feature*> dfeatures;
+  dfeatures.push_back(new Feature(0,0));
+
+  GIS* dependentModel = new GIS();
+  dependentModel->setData(xData, yData);
+  dependentModel->setFeatures(da,db,dfeatures);
+  dependentModel->init();
+
+  for(int i = 0; i < 20000; i++)
+  {
+    dependentModel->iterate();
+    independentModel->iterate();
+  }
+
+
+  Matrix ipycx(2,4);
+  ipycx(0,0) = 1.0;
+  ipycx(1,1) = 1.0;
+  ipycx(1,2) = 1.0;
+  ipycx(0,3) = 1.0;
+
+  Matrix ipx(1,4);
+  ipx(0,0) = 1.0/4.0;
+  ipx(0,1) = 1.0/4.0;
+  ipx(0,2) = 1.0/4.0;
+  ipx(0,3) = 1.0/4.0;
+
+  dependentModel->calculateProbabilities();
+  BOOST_CHECK((fabs(ipycx(0,0) - dependentModel->p_y_c_x(0,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,1) - dependentModel->p_y_c_x(0,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,2) - dependentModel->p_y_c_x(0,2)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(0,3) - dependentModel->p_y_c_x(0,3)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,0) - dependentModel->p_y_c_x(1,0)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,1) - dependentModel->p_y_c_x(1,1)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,2) - dependentModel->p_y_c_x(1,2)) < EPSILON));
+  BOOST_CHECK((fabs(ipycx(1,3) - dependentModel->p_y_c_x(1,3)) < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,0)   - dependentModel->p_x(0))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,1)   - dependentModel->p_x(1))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,2)   - dependentModel->p_x(2))       < EPSILON));
+  BOOST_CHECK((fabs(ipx(0,3)   - dependentModel->p_x(3))       < EPSILON));
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // Synergy
+  ////////////////////////////////////////////////////////////////////////////////
+
+  KL* kl = new KL(dependentModel, independentModel);
+  // BOOST_CHECK_CLOSE(EPSILON, kl->divergence(), EPSILON);
+  cout << "XOR WITH INPUT DISTRIBUTION (bits): " << kl->divergence2() << endl;
+  cout << "XOR WITH INPUT DISTRIBUTION (nats): " << kl->divergenceN() << endl;
+}
+*/
 BOOST_AUTO_TEST_SUITE_END()
 
+  /*
 BOOST_AUTO_TEST_SUITE(MorphologicalComputation)
 
 BOOST_AUTO_TEST_CASE(MC_W)
@@ -703,3 +1068,4 @@ BOOST_AUTO_TEST_CASE(MC_W)
   // cout << kl->divergence2() << endl;
 }
 BOOST_AUTO_TEST_SUITE_END()
+*/
