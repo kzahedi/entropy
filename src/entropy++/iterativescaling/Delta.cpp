@@ -23,6 +23,7 @@ Delta::Delta(vector<unsigned long> xv, vector<int> xi, vector<unsigned long> yv,
   _conditionalProbability = -1.0;
   _inputOnly              = false;
   _outputOnly             = false;
+  _used                   = false;
 }
 
 void Delta::incObserved()
@@ -105,9 +106,13 @@ bool Delta::matchXY(vector<unsigned long> xv, vector<unsigned long> yv)
 
 bool Delta::match(vector<unsigned long> xv, vector<unsigned long> yv)
 {
-  if(_outputOnly == false && _inputOnly == false) if(xv.size() != _xValues.size() || yv.size() != _yValues.size()) return false;
-  if(_outputOnly == false && _inputOnly == true)  if(xv.size() != _xValues.size()) return false;
-  if(_outputOnly == true  && _inputOnly == false) if(yv.size() != _yValues.size()) return false;
+  if(_outputOnly == false && _inputOnly == false)
+    if(xv.size() != _xValues.size() ||
+       yv.size() != _yValues.size()) return false;
+  if(_outputOnly == false && _inputOnly == true)
+    if(xv.size() != _xValues.size()) return false;
+  if(_outputOnly == true  && _inputOnly == false)
+    if(yv.size() != _yValues.size()) return false;
 
   if(_outputOnly == false)
     for(int i = 0; i < (int)xv.size(); i++) if(xv[i] != _xValues[i]) return false;
@@ -136,3 +141,14 @@ bool Delta::isOutputOnly()
 {
   return _outputOnly;
 }
+
+void Delta::setUsed(bool b)
+{
+  _used = b;
+}
+
+bool Delta::used()
+{
+  return _used;
+}
+

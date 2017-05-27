@@ -1,6 +1,12 @@
-#define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE gis_test
+#define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
+// #include <boost/test/included/unit_test.hpp>
+
+# define ITERATIONS 1000
+// #define TEST_OR
+#define TEST_AND
+// #define TEST_XOR
 
 #include <entropy++/Container.h>
 #include <entropy++/Csv.h>
@@ -18,6 +24,8 @@
 
 # define EPSILON         0.01
 # define ERROR_THRESHOLD 0.01
+
+# define TOLERANCE(a) boost::test_tools::tolerance(a)
 
 # define BINS 300
 // # define BINS 3
@@ -42,7 +50,7 @@
 # define ACT_MATLAB_INDEX                 (10 - 1)
 # define MUSCLE_SENSOR_INPUT_MATLAB_INDEX (5  - 1)
 
-# define ITERATIONS 100000
+
 
 using namespace std;
 using namespace entropy;
@@ -95,7 +103,7 @@ BOOST_AUTO_TEST_CASE(AND)
   independentModel->setFeatures(ia,ib,features);
   independentModel->init();
 
-  for(int i = 0; i < 20000; i++)
+  for(int i = 0; i < ITERATIONS; i++)
   {
     independentModel->iterate();
     if(independentModel->error() < 0.000000001) break;
@@ -124,7 +132,7 @@ BOOST_AUTO_TEST_CASE(AND)
   dependentModel->setFeatures(da,db,dfeatures);
   dependentModel->init();
 
-  for(int i = 0; i < 20000; i++)
+  for(int i = 0; i < ITERATIONS; i++)
   {
     dependentModel->iterate();
     if(dependentModel->error() < 0.000000001) break;
@@ -168,6 +176,7 @@ BOOST_AUTO_TEST_CASE(AND)
 }
 */
 
+#ifdef TEST_AND
 BOOST_AUTO_TEST_CASE(AND_WITH_INPUT_DISTRIBUTION)
 {
   ULContainer *xData = new ULContainer(4,2);
@@ -213,17 +222,15 @@ BOOST_AUTO_TEST_CASE(AND_WITH_INPUT_DISTRIBUTION)
   independentModel->setFeatures(ia,ib,features);
   independentModel->init();
 
-  cout << "Independent Model: " << endl;
-  cout << *independentModel << endl;
-
   for(int i = 0; i < ITERATIONS; i++)
   // for(int i = 0; i < 20; i++)
   {
     independentModel->iterate();
     if(independentModel->error() < 0.000000001) break;
   }
-  cout << "Independent Model: " << endl;
-  cout << *independentModel << endl;
+
+  cout << "AND IM:" << endl;
+  cout << *independentModel    << endl;
 
   ////////////////////////////////////////////////////////////////////////////////
   // dependent model
@@ -253,6 +260,8 @@ BOOST_AUTO_TEST_CASE(AND_WITH_INPUT_DISTRIBUTION)
     dependentModel->iterate();
     if(dependentModel->error() < 0.000000001) break;
   }
+  cout << "AND DM:" << endl;
+  cout << *dependentModel    << endl;
 
   dependentModel->calculateProbabilities();
 
@@ -268,19 +277,18 @@ BOOST_AUTO_TEST_CASE(AND_WITH_INPUT_DISTRIBUTION)
   ipx(0,2) = 1.0/4.0;
   ipx(0,3) = 1.0/4.0;
 
-
-  BOOST_CHECK((fabs(ipycx(0,0) - dependentModel->p_y_c_x(0,0)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(0,1) - dependentModel->p_y_c_x(0,1)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(0,2) - dependentModel->p_y_c_x(0,2)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(0,3) - dependentModel->p_y_c_x(0,3)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(1,0) - dependentModel->p_y_c_x(1,0)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(1,1) - dependentModel->p_y_c_x(1,1)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(1,2) - dependentModel->p_y_c_x(1,2)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(1,3) - dependentModel->p_y_c_x(1,3)) < EPSILON));
-  BOOST_CHECK((fabs(ipx(0,0)   - dependentModel->p_x(0))       < EPSILON));
-  BOOST_CHECK((fabs(ipx(0,1)   - dependentModel->p_x(1))       < EPSILON));
-  BOOST_CHECK((fabs(ipx(0,2)   - dependentModel->p_x(2))       < EPSILON));
-  BOOST_CHECK((fabs(ipx(0,3)   - dependentModel->p_x(3))       < EPSILON));
+  // BOOST_CHECK_EQUAL(ipycx(0,0), dependentModel->p_y_c_x(0,0)); //, TOLERANCE(EPSILON));
+  // BOOST_CHECK_EQUAL(ipycx(0,1), dependentModel->p_y_c_x(0,1)); //, TOLERANCE(EPSILON));
+  // BOOST_CHECK_EQUAL(ipycx(0,2), dependentModel->p_y_c_x(0,2)); //, TOLERANCE(EPSILON));
+  // BOOST_CHECK_EQUAL(ipycx(0,3), dependentModel->p_y_c_x(0,3)); //, TOLERANCE(EPSILON));
+  // BOOST_CHECK_EQUAL(ipycx(1,0), dependentModel->p_y_c_x(1,0)); //, TOLERANCE(EPSILON));
+  // BOOST_CHECK_EQUAL(ipycx(1,1), dependentModel->p_y_c_x(1,1)); //, TOLERANCE(EPSILON));
+  // BOOST_CHECK_EQUAL(ipycx(1,2), dependentModel->p_y_c_x(1,2)); //, TOLERANCE(EPSILON));
+  // BOOST_CHECK_EQUAL(ipycx(1,3), dependentModel->p_y_c_x(1,3)); //, TOLERANCE(EPSILON));
+  // BOOST_CHECK_EQUAL(ipx(0,0),   dependentModel->p_x(0));       //,       TOLERANCE(EPSILON));
+  // BOOST_CHECK_EQUAL(ipx(0,1),   dependentModel->p_x(1));       //,       TOLERANCE(EPSILON));
+  // BOOST_CHECK_EQUAL(ipx(0,2),   dependentModel->p_x(2));       //,       TOLERANCE(EPSILON));
+  // BOOST_CHECK_EQUAL(ipx(0,3),   dependentModel->p_x(3));       //,       TOLERANCE(EPSILON));
 
   ////////////////////////////////////////////////////////////////////////////////
   // Synergy
@@ -290,6 +298,7 @@ BOOST_AUTO_TEST_CASE(AND_WITH_INPUT_DISTRIBUTION)
   cout << "AND WITH INPUT DISTRIBUTION (bits): " << kl->divergence2() << endl;
   cout << "AND WITH INPUT DISTRIBUTION (nats): " << kl->divergenceN() << endl;
 }
+#endif
 
 /*
 BOOST_AUTO_TEST_CASE(ANDCMI)
@@ -416,7 +425,10 @@ BOOST_AUTO_TEST_CASE(ANDCMI)
   cout << "AND CMI (bits): " << kl->divergence2() << endl;
   cout << "AND CMI (nats): " << kl->divergenceN() << endl;
 }
+*/
 
+
+/*
 BOOST_AUTO_TEST_CASE(OR)
 {
   ULContainer *xData = new ULContainer(4,2);
@@ -457,7 +469,7 @@ BOOST_AUTO_TEST_CASE(OR)
   independentModel->setFeatures(ia,ib,features);
   independentModel->init();
 
-  for(int i = 0; i < 20000; i++)
+  for(int i = 0; i < ITERATIONS; i++)
   {
     independentModel->iterate();
     if(independentModel->error() < ERROR_THRESHOLD) break;
@@ -486,7 +498,7 @@ BOOST_AUTO_TEST_CASE(OR)
   dependentModel->setFeatures(da,db,dfeatures);
   dependentModel->init();
 
-  for(int i = 0; i < 20000; i++)
+  for(int i = 0; i < ITERATIONS; i++)
   {
     dependentModel->iterate();
     if(dependentModel->error() < ERROR_THRESHOLD) break;
@@ -527,7 +539,9 @@ BOOST_AUTO_TEST_CASE(OR)
   cout << "OR (bits): " << kl->divergence2() << endl;
   cout << "OR (nats): " << kl->divergenceN() << endl;
 }
+*/
 
+#ifdef TEST_OR
 BOOST_AUTO_TEST_CASE(OR_WITH_INPUT_DISTRIBUTION)
 {
   ULContainer *xData = new ULContainer(4,2);
@@ -551,13 +565,15 @@ BOOST_AUTO_TEST_CASE(OR_WITH_INPUT_DISTRIBUTION)
   vector<int> iaa;
   iaa.push_back(0);
   ia.push_back(iaa);
+
   vector<int> iab;
   iab.push_back(1);
   ia.push_back(iab);
+
   vector<int> iac;
   iac.push_back(0);
   iac.push_back(1);
-  ia.push_back(iab);
+  ia.push_back(iac);
 
   vector<int> ibb;
   ibb.push_back(0);
@@ -573,11 +589,14 @@ BOOST_AUTO_TEST_CASE(OR_WITH_INPUT_DISTRIBUTION)
   independentModel->setFeatures(ia,ib,features);
   independentModel->init();
 
-  for(int i = 0; i < 20000; i++)
+  for(int i = 0; i < ITERATIONS; i++)
   {
     independentModel->iterate();
     if(independentModel->error() < ERROR_THRESHOLD) break;
   }
+
+  cout << "OR IM" << endl;
+  cout << *independentModel << endl;
 
   ////////////////////////////////////////////////////////////////////////////////
   // dependent model
@@ -602,11 +621,13 @@ BOOST_AUTO_TEST_CASE(OR_WITH_INPUT_DISTRIBUTION)
   dependentModel->setFeatures(da,db,dfeatures);
   dependentModel->init();
 
-  for(int i = 0; i < 20000; i++)
+  for(int i = 0; i < ITERATIONS; i++)
   {
     dependentModel->iterate();
     if(dependentModel->error() < ERROR_THRESHOLD) break;
   }
+  cout << "OR DM" << endl;
+  cout << *dependentModel << endl;
 
   Matrix ipycx(2,4);
   ipycx(0,0) = 1.0;
@@ -643,7 +664,10 @@ BOOST_AUTO_TEST_CASE(OR_WITH_INPUT_DISTRIBUTION)
   cout << "OR with input distribution (bits): " << kl->divergence2() << endl;
   cout << "OR with input distribution  (nats): " << kl->divergenceN() << endl;
 }
+#endif
 
+
+#ifdef TEST_XOR
 BOOST_AUTO_TEST_CASE(XOR)
 {
   ULContainer *xData = new ULContainer(4,2);
@@ -685,11 +709,16 @@ BOOST_AUTO_TEST_CASE(XOR)
   independentModel->setFeatures(ia,ib,features);
   independentModel->init();
 
-  for(int i = 0; i < 10; i++)
+  // cout << "Independent model:" << endl;
+  // cout << *independentModel << endl;
+  for(int i = 0; i < ITERATIONS; i++)
   {
     independentModel->iterate();
     if(independentModel->error() < ERROR_THRESHOLD) break;
+    // if(i % 1000 == 0) cout << *independentModel << endl;
   }
+  cout << "XOR IM" << endl;
+  cout << *independentModel << endl;
 
   ////////////////////////////////////////////////////////////////////////////////
   // dependent model
@@ -714,12 +743,19 @@ BOOST_AUTO_TEST_CASE(XOR)
   dependentModel->setFeatures(da,db,dfeatures);
   dependentModel->init();
 
-  for(int i = 0; i < 20000; i++)
+  // cout << "Dependent model:" << endl;
+  // cout << *dependentModel << endl;
+
+  for(int i = 0; i < ITERATIONS; i++)
   {
     dependentModel->iterate();
-    independentModel->iterate();
   }
 
+  cout << "XOR DM" << endl;
+  cout << *dependentModel << endl;
+
+  // cout << "Dependent model:" << endl;
+  // cout << *dependentModel << endl;
 
   Matrix ipycx(2,4);
   ipycx(0,0) = 1.0;
@@ -756,7 +792,9 @@ BOOST_AUTO_TEST_CASE(XOR)
   cout << "XOR (bits): " << kl->divergence2() << endl;
   cout << "XOR (nats): " << kl->divergenceN() << endl;
 }
+#endif
 
+/*
 BOOST_AUTO_TEST_CASE(XOR_WITH_INPUT_DISTRIBUTION)
 {
   ULContainer *xData = new ULContainer(4,2);
@@ -804,7 +842,7 @@ BOOST_AUTO_TEST_CASE(XOR_WITH_INPUT_DISTRIBUTION)
   independentModel->setFeatures(ia,ib,features);
   independentModel->init();
 
-  for(int i = 0; i < 10; i++)
+  for(int i = 0; i < ITERATIONS; i++)
   {
     independentModel->iterate();
     if(independentModel->error() < ERROR_THRESHOLD) break;
@@ -833,7 +871,7 @@ BOOST_AUTO_TEST_CASE(XOR_WITH_INPUT_DISTRIBUTION)
   dependentModel->setFeatures(da,db,dfeatures);
   dependentModel->init();
 
-  for(int i = 0; i < 20000; i++)
+  for(int i = 0; i < ITERATIONS; i++)
   {
     dependentModel->iterate();
     independentModel->iterate();
@@ -875,10 +913,8 @@ BOOST_AUTO_TEST_CASE(XOR_WITH_INPUT_DISTRIBUTION)
   cout << "XOR WITH INPUT DISTRIBUTION (bits): " << kl->divergence2() << endl;
   cout << "XOR WITH INPUT DISTRIBUTION (nats): " << kl->divergenceN() << endl;
 }
-*/
 BOOST_AUTO_TEST_SUITE_END()
 
-  /*
 BOOST_AUTO_TEST_SUITE(MorphologicalComputation)
 
 BOOST_AUTO_TEST_CASE(MC_W)
@@ -1064,8 +1100,8 @@ BOOST_AUTO_TEST_CASE(MC_W)
     }
   }
 
-  // KL* kl = new KL(p, q);
-  // cout << kl->divergence2() << endl;
+  KL* kl = new KL(p, q);
+  cout << kl->divergence2() << endl;
 }
-BOOST_AUTO_TEST_SUITE_END()
 */
+BOOST_AUTO_TEST_SUITE_END()

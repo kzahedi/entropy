@@ -167,17 +167,19 @@ void Model::calculateProbabilities()
 
   Matrix M(Xalphabet->rows(), Yalphabet->rows());
 
-  for (int x = 0; x < Xalphabet->rows(); x++)
+  for(int x = 0; x < Xalphabet->rows(); x++)
   {
     vector<unsigned long> x_row = Xalphabet->row(x);
+    for (vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++) (*d)->setUsed(false);
     for (int y = 0; y < Yalphabet->rows(); y++)
     {
       vector<unsigned long> y_row = Yalphabet->row(y);
       for (vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
       {
-        if ((*d)->matchXY(x_row, y_row))
+        if((*d)->matchXY(x_row, y_row) && (*d)->used() == false)
         {
           M(x,y) += (*d)->lambda();
+          (*d)->setUsed(true);
         }
       }
     }
