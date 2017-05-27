@@ -48,9 +48,6 @@ namespace entropy
         void setOutputOnly(); // if used, then this delta will only match X
         bool isOutputOnly();
 
-        void setUsed(bool b);
-        bool used();
-
         friend std::ostream& operator<<(std::ostream& str, const Delta& m)
         {
           str << "X: (";
@@ -98,7 +95,6 @@ namespace entropy
         double _marginalProbability;
         bool   _inputOnly;
         bool   _outputOnly;
-        bool   _used;
     };
   }
 }

@@ -70,31 +70,39 @@ void GIS::iterate()
       // cout << omp_get_thread_num() << " " << omp_get_num_threads() << " " << y << endl;
       s[y] = 0.0;
       vector<unsigned long> y_row = Yalphabet->row(y);
-      __unsetDeltas();
-      for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+      // for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+      for(vector<Delta*>::iterator d = _deltaMatcher->begin(j); d != _deltaMatcher->end(j); d++)
       {
-        if((*d)->matchXY(x_row, y_row) && (*d)->used() == false)
+        if((*d)->matchXY(x_row, y_row))
         {
           s[y] += (*d)->lambda();
-          (*d)->setUsed(true);
         }
       }
-
     }
 
     double z = 0.0;
     for(int i = 0; i < Yalphabet->rows(); i++) z += exp(s[i]);
 
-    __unsetDeltas();
+    vector<unsigned long> xx;
+    xx.push_back(1);
+    xx.push_back(1);
+
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       vector<unsigned long> y_row = Yalphabet->row(y);
+      // ROW_OUTPUT("update x:", x_row);
+      // ROW_OUTPUT("update y:", y_row);
       for(vector<Delta*>::iterator d = _deltaMatcher->begin(j); d != _deltaMatcher->end(j); d++)
       {
-        if((*d)->matchXY(x_row, y_row) && (*d)->used() == false)
+        if((*d)->matchXY(x_row, y_row))
         {
+          // cout << "found:  " << **d << endl;
+          // cout << "exp:    " << (*d)->expected() << endl;
+          // cout << "z:      " << z << endl;
+          // cout << "exp(s): " << exp(s[y]) << endl;
+          // cout << "delta:  " << exp(s[y]) / z << endl;
           (*d)->setExpected((*d)->expected() + exp(s[y]) / z);
-          (*d)->setUsed(true);
+          // cout << "set to: " << **d << endl;
         }
       }
     }
@@ -112,15 +120,13 @@ void GIS::iterate()
     vector<unsigned long> x_row = Xdata->row(j);
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
-      __unsetDeltas();
       vector<unsigned long> y_row = Yalphabet->row(y);
       double f = 0.0;
       for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
       {
-        if((*d)->matchXY(x_row, y_row) && (*d)->used() == false)
+        if((*d)->matchXY(x_row, y_row))
         {
           f += 1.0;
-          (*d)->setUsed(true);
         }
       }
       if(f > max) max = f;
@@ -137,21 +143,15 @@ void GIS::iterate()
 
   _error = sqrt(_error);
 
-  cout << "**********" << endl;
-  for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-  {
-    cout << **d << endl;
-  }
+  // cout << "**********" << endl;
+  // for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
+  // {
+    // cout << **d << endl;
+  // }
 
 }
 
 double GIS::error()
 {
   return _error;
-}
-
-void GIS::__unsetDeltas()
-{
-  for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-    (*d)->setUsed(false);
 }

@@ -23,7 +23,6 @@ Delta::Delta(vector<unsigned long> xv, vector<int> xi, vector<unsigned long> yv,
   _conditionalProbability = -1.0;
   _inputOnly              = false;
   _outputOnly             = false;
-  _used                   = false;
 }
 
 void Delta::incObserved()
@@ -141,14 +140,3 @@ bool Delta::isOutputOnly()
 {
   return _outputOnly;
 }
-
-void Delta::setUsed(bool b)
-{
-  _used = b;
-}
-
-bool Delta::used()
-{
-  return _used;
-}
-

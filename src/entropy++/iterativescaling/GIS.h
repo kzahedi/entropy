@@ -44,7 +44,6 @@ namespace entropy
         };
 
       private:
-        void           __unsetDeltas();
         double         _error;
         vector<double> _s;
         DeltaMatcher*  _deltaMatcher;

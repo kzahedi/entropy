@@ -3,10 +3,13 @@
 #include <boost/test/unit_test.hpp>
 // #include <boost/test/included/unit_test.hpp>
 
-# define ITERATIONS 1000
-// #define TEST_OR
+# define ITERATIONS 5000
+#define TEST_OR
+#define TEST_OR_WI
 #define TEST_AND
-// #define TEST_XOR
+#define TEST_AND_WI
+#define TEST_XOR
+#define TEST_XOR_WI
 
 #include <entropy++/Container.h>
 #include <entropy++/Csv.h>
@@ -23,7 +26,7 @@
 #include <math.h>
 
 # define EPSILON         0.01
-# define ERROR_THRESHOLD 0.01
+# define ERROR_THRESHOLD 0.00001
 
 # define TOLERANCE(a) boost::test_tools::tolerance(a)
 
@@ -62,7 +65,8 @@ entropy::SparseMatrix px_c_yz;
 entropy::SparseMatrix pxyz;
 
 BOOST_AUTO_TEST_SUITE(Logic)
-  /*
+
+#ifdef TEST_AND
 BOOST_AUTO_TEST_CASE(AND)
 {
   ULContainer *xData = new ULContainer(4,2);
@@ -106,7 +110,8 @@ BOOST_AUTO_TEST_CASE(AND)
   for(int i = 0; i < ITERATIONS; i++)
   {
     independentModel->iterate();
-    if(independentModel->error() < 0.000000001) break;
+    // if(i % 100 == 0) cout << i << ": " << independentModel->error() << endl;
+    if(independentModel->error() < ERROR_THRESHOLD) break;
   }
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +140,8 @@ BOOST_AUTO_TEST_CASE(AND)
   for(int i = 0; i < ITERATIONS; i++)
   {
     dependentModel->iterate();
-    if(dependentModel->error() < 0.000000001) break;
+    // if(i % 100 == 0) cout << i << ": " << dependentModel->error() << endl;
+    if(dependentModel->error() < ERROR_THRESHOLD) break;
   }
 
   dependentModel->calculateProbabilities();
@@ -174,9 +180,9 @@ BOOST_AUTO_TEST_CASE(AND)
   cout << "AND (bits): " << kl->divergence2() << endl;
   cout << "AND (nats): " << kl->divergenceN() << endl;
 }
-*/
+#endif
 
-#ifdef TEST_AND
+#ifdef TEST_AND_WI
 BOOST_AUTO_TEST_CASE(AND_WITH_INPUT_DISTRIBUTION)
 {
   ULContainer *xData = new ULContainer(4,2);
@@ -226,11 +232,12 @@ BOOST_AUTO_TEST_CASE(AND_WITH_INPUT_DISTRIBUTION)
   // for(int i = 0; i < 20; i++)
   {
     independentModel->iterate();
-    if(independentModel->error() < 0.000000001) break;
+    // if(i % 100 == 0) cout << i << ": " << independentModel->error() << endl;
+    if(independentModel->error() < 0.001) break;
   }
 
-  cout << "AND IM:" << endl;
-  cout << *independentModel    << endl;
+  // cout << "AND IM:" << endl;
+  // cout << *independentModel    << endl;
 
   ////////////////////////////////////////////////////////////////////////////////
   // dependent model
@@ -258,10 +265,11 @@ BOOST_AUTO_TEST_CASE(AND_WITH_INPUT_DISTRIBUTION)
   for(int i = 0; i < ITERATIONS; i++)
   {
     dependentModel->iterate();
-    if(dependentModel->error() < 0.000000001) break;
+    // if(i % 100 == 0) cout << i << ": " << dependentModel->error() << endl;
+    if(dependentModel->error() < ERROR_THRESHOLD) break;
   }
-  cout << "AND DM:" << endl;
-  cout << *dependentModel    << endl;
+  // cout << "AND DM:" << endl;
+  // cout << *dependentModel    << endl;
 
   dependentModel->calculateProbabilities();
 
@@ -428,7 +436,7 @@ BOOST_AUTO_TEST_CASE(ANDCMI)
 */
 
 
-/*
+#ifdef TEST_OR
 BOOST_AUTO_TEST_CASE(OR)
 {
   ULContainer *xData = new ULContainer(4,2);
@@ -472,6 +480,7 @@ BOOST_AUTO_TEST_CASE(OR)
   for(int i = 0; i < ITERATIONS; i++)
   {
     independentModel->iterate();
+    // if(i % 100 == 0) cout << i << ": " << independentModel->error() << endl;
     if(independentModel->error() < ERROR_THRESHOLD) break;
   }
 
@@ -501,6 +510,7 @@ BOOST_AUTO_TEST_CASE(OR)
   for(int i = 0; i < ITERATIONS; i++)
   {
     dependentModel->iterate();
+    // if(i % 100 == 0) cout << i << ": " << dependentModel->error() << endl;
     if(dependentModel->error() < ERROR_THRESHOLD) break;
   }
 
@@ -539,9 +549,9 @@ BOOST_AUTO_TEST_CASE(OR)
   cout << "OR (bits): " << kl->divergence2() << endl;
   cout << "OR (nats): " << kl->divergenceN() << endl;
 }
-*/
+#endif
 
-#ifdef TEST_OR
+#ifdef TEST_OR_WI
 BOOST_AUTO_TEST_CASE(OR_WITH_INPUT_DISTRIBUTION)
 {
   ULContainer *xData = new ULContainer(4,2);
@@ -595,9 +605,6 @@ BOOST_AUTO_TEST_CASE(OR_WITH_INPUT_DISTRIBUTION)
     if(independentModel->error() < ERROR_THRESHOLD) break;
   }
 
-  cout << "OR IM" << endl;
-  cout << *independentModel << endl;
-
   ////////////////////////////////////////////////////////////////////////////////
   // dependent model
   ////////////////////////////////////////////////////////////////////////////////
@@ -626,9 +633,6 @@ BOOST_AUTO_TEST_CASE(OR_WITH_INPUT_DISTRIBUTION)
     dependentModel->iterate();
     if(dependentModel->error() < ERROR_THRESHOLD) break;
   }
-  cout << "OR DM" << endl;
-  cout << *dependentModel << endl;
-
   Matrix ipycx(2,4);
   ipycx(0,0) = 1.0;
   ipycx(1,1) = 1.0;
@@ -717,8 +721,6 @@ BOOST_AUTO_TEST_CASE(XOR)
     if(independentModel->error() < ERROR_THRESHOLD) break;
     // if(i % 1000 == 0) cout << *independentModel << endl;
   }
-  cout << "XOR IM" << endl;
-  cout << *independentModel << endl;
 
   ////////////////////////////////////////////////////////////////////////////////
   // dependent model
@@ -750,9 +752,6 @@ BOOST_AUTO_TEST_CASE(XOR)
   {
     dependentModel->iterate();
   }
-
-  cout << "XOR DM" << endl;
-  cout << *dependentModel << endl;
 
   // cout << "Dependent model:" << endl;
   // cout << *dependentModel << endl;
@@ -794,7 +793,7 @@ BOOST_AUTO_TEST_CASE(XOR)
 }
 #endif
 
-/*
+#ifdef TEST_XOR_WI
 BOOST_AUTO_TEST_CASE(XOR_WITH_INPUT_DISTRIBUTION)
 {
   ULContainer *xData = new ULContainer(4,2);
@@ -913,10 +912,12 @@ BOOST_AUTO_TEST_CASE(XOR_WITH_INPUT_DISTRIBUTION)
   cout << "XOR WITH INPUT DISTRIBUTION (bits): " << kl->divergence2() << endl;
   cout << "XOR WITH INPUT DISTRIBUTION (nats): " << kl->divergenceN() << endl;
 }
+#endif
 BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE(MorphologicalComputation)
 
+  /*
 BOOST_AUTO_TEST_CASE(MC_W)
 {
   cout << PARENT << "/dcmot_small.csv" << endl;
