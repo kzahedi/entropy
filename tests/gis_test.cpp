@@ -3,7 +3,7 @@
 #include <boost/test/unit_test.hpp>
 // #include <boost/test/included/unit_test.hpp>
 
-# define ITERATIONS 5000
+#define ITERATIONS 10000
 #define TEST_OR
 #define TEST_OR_WI
 #define TEST_AND
