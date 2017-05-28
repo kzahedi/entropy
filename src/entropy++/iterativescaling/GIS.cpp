@@ -59,9 +59,7 @@ void GIS::iterate()
     (*d)->setExpected(0.0);
   }
 
-#ifdef USE_OMP
 #pragma omp parallel for
-#endif
   for(int j = 0; j < Xdata->rows(); j++)
   {
     vector<unsigned long> x_row = Xdata->row(j);

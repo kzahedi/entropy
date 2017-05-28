@@ -33,7 +33,7 @@ void SCGIS::init()
   _s = new Matrix(Xdata->rows(), Yalphabet->rows(), 0.0);
   _rowMatcher = new RowMatcher(Xdata->rows());
 
-// #pragma omp parallel for
+#pragma omp parallel for
   for(int i = 0; i < (int)deltas.size(); i++)
   {
     Delta *d = deltas[i];
@@ -55,7 +55,7 @@ void SCGIS::iterate()
   double e     = 0.0;
   _error       = 0.0;
 
-// #pragma omp parallel for shared(deltas,e,_rowMatcher)
+#pragma omp parallel for shared(deltas,e,_rowMatcher)
   for(int i = 0; i < (int)deltas.size(); i++)
   {
     Delta *d = deltas[i];
