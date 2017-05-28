@@ -1,6 +1,14 @@
 project(entropy)
 
 cmake_minimum_required(VERSION 3.0)
+if(APPLE)
+  set(CMAKE_CXX_COMPILER           "/usr/local/opt/llvm/bin/clang++")
+  set(CMAKE_CXX_COMPILER_FULLPATH  "/usr/local/opt/llvm/bin/clang++")
+  link_directories(/usr/local/opt/llvm/lib)
+  include_directories(/usr/local/opt/llvm/include)
+endif(APPLE)
+
+set(CMAKE_BUILD_TYPE "Debug")
 
 ENABLE_TESTING()
 
@@ -11,16 +19,33 @@ set(LIBRARY_OUTPUT_PATH          ${PROJECT_BINARY_DIR}/lib)
 
 set(CMAKE_VERBOSE_MAKEFILE       OFF)
 
-find_package(OpenMP)
+option(ENTROPY_COMPILE_HOPPING "Compile MC example with hopping data" OFF)
+option(ENTROPY_COMPILE_RBO     "Compile MC example for RBOHand data"  OFF)
+option(ENTROPY_COMPILE_ITSC    "Compile Iterative Scaling examples"   OFF)
+option(ENTROPY_TESTS           "Compile test cases"                   OFF)
+option(ENTROPY_OPENMP          "Use OpenMP"                           OFF)
+
+
+# if(ENTROPY_OPENMP)
+# find_package(OpenMP)
+# endif(ENTROPY_OPENMP)
 
 set(CMAKE_BUILD_TYPE "Debug")
 
 if(APPLE)
-  set(CMAKE_CXX_COMPILER           "/usr/local/Cellar/gcc/7.1.0/bin/g++-7")
-  set(CMAKE_CXX_COMPILER_FULLPATH  "/usr/local/Cellar/gcc/7.1.0/bin/g++-7")
-  set(CMAKE_CXX_FLAGS_DEBUG        "-g  ${OpenMP_CXX_FLAGS} -fopenmp")
-  set(CMAKE_CXX_FLAGS_RELEASE      "-g  ${OpenMP_CXX_FLAGS} -fopenmp")
-  set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O3 ${OpenMP_CXX_FLAGS} -fopenmp")
+  set(CMAKE_CXX_COMPILER           "/usr/local/opt/llvm/bin/clang++")
+  set(CMAKE_CXX_COMPILER_FULLPATH  "/usr/local/opt/llvm/bin/clang++")
+  link_directories(/usr/local/opt/llvm/lib)
+  include_directories(/usr/local/opt/llvm/include)
+  if(ENTROPY_OPENMP)
+    set(CMAKE_CXX_FLAGS_DEBUG        "-g  -fopenmp -stdlib=libstdc++")
+    set(CMAKE_CXX_FLAGS_RELEASE      "-g  -fopenmp -stdlib=libstdc++")
+    set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O3 -fopenmp -stdlib=libstdc++")
+  else(ENTROPY_OPENMP)
+    set(CMAKE_CXX_FLAGS_DEBUG        "-g") # ${OpenMP_CXX_FLAGS} -fopenmp")
+    set(CMAKE_CXX_FLAGS_RELEASE      "-g") # ${OpenMP_CXX_FLAGS} -fopenmp")
+    set(CMAKE_CXX_FLAGS_DISTRIBUTION "-O3") # ${OpenMP_CXX_FLAGS} -fopenmp")
+  endif(ENTROPY_OPENMP)
 else(APPLE)
   # set(CMAKE_CXX_COMPILER           "clang++")
   set(CMAKE_CXX_FLAGS_DEBUG        "-g  -fPIC ${OpenMP_CXX_FLAGS}")
@@ -38,7 +63,7 @@ if(UNIX AND NOT APPLE)
 endif(UNIX AND NOT APPLE)
 
 set(Boost_USE_STATIC_LIBS OFF)
-find_package(Boost REQUIRED filesystem system unit_test_framework)
+find_package(Boost REQUIRED thread filesystem system unit_test_framework)
 
 add_subdirectory(src/entropy++)
 
@@ -63,12 +88,6 @@ INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib/
   PATTERN "*.cpp" EXCLUDE
   PATTERN "*.txt" EXCLUDE
   )
-
-
-option(ENTROPY_COMPILE_HOPPING "Compile MC example with hopping data" OFF)
-option(ENTROPY_COMPILE_RBO     "Compile MC example for RBOHand data"  OFF)
-option(ENTROPY_COMPILE_ITSC    "Compile Iterative Scaling examples"   OFF)
-option(ENTROPY_TESTS           "Compile test cases"                   OFF)
 
 if(ENTROPY_COMPILE_HOPPING)
   add_subdirectory(experiments/hopping)

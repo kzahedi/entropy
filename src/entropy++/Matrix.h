@@ -34,8 +34,8 @@ namespace entropy
       /** Allows to access and modification of the values by indexing */
       double&   operator()(int row, int col) throw(EntropyException);
       double    operator()(int row, int col) const throw(EntropyException);
-      Matrix&   operator+=(const Matrix &m)  throw(EntropyException);
-      Matrix&   operator-=(const Matrix &m)  throw(EntropyException);
+      Matrix&   operator+=(const Matrix &m) throw(EntropyException);
+      Matrix&   operator-=(const Matrix &m) throw(EntropyException);
 
       // TODO: Matrix A(10,10); Matrix A = B; does not work
       const Matrix operator* (const double factor);

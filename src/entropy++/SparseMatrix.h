@@ -85,8 +85,8 @@ namespace entropy
       double&   operator()(int first, int second, int third) throw(EntropyException);
       double    operator()(int first, int second, int third) const throw(EntropyException);
 
-      SparseMatrix&   operator+=(const SparseMatrix &m)  throw(EntropyException);
-      SparseMatrix&   operator-=(const SparseMatrix &m)  throw(EntropyException);
+      SparseMatrix&   operator+=(const SparseMatrix &m) throw(EntropyException);
+      SparseMatrix&   operator-=(const SparseMatrix &m) throw(EntropyException);
 
       // TODO: SparseMatrix A(10,10); SparseMatrix A = B; does not work
       const SparseMatrix operator* (const double factor);

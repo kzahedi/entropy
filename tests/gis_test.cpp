@@ -3,7 +3,7 @@
 #include <boost/test/unit_test.hpp>
 // #include <boost/test/included/unit_test.hpp>
 
-#define ITERATIONS 10000
+#define ITERATIONS 500000
 #define TEST_OR
 #define TEST_OR_WI
 #define TEST_AND
@@ -26,7 +26,7 @@
 #include <math.h>
 
 # define EPSILON         0.01
-# define ERROR_THRESHOLD 0.00001
+# define ERROR_THRESHOLD 0.0001
 
 # define TOLERANCE(a) boost::test_tools::tolerance(a)
 
@@ -111,7 +111,11 @@ BOOST_AUTO_TEST_CASE(AND)
   {
     independentModel->iterate();
     // if(i % 100 == 0) cout << i << ": " << independentModel->error() << endl;
-    if(independentModel->error() < ERROR_THRESHOLD) break;
+    if(independentModel->error() < ERROR_THRESHOLD)
+    {
+      cout << "Stopping after " << i << " iterations." << endl;
+      break;
+    }
   }
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +145,12 @@ BOOST_AUTO_TEST_CASE(AND)
   {
     dependentModel->iterate();
     // if(i % 100 == 0) cout << i << ": " << dependentModel->error() << endl;
-    if(dependentModel->error() < ERROR_THRESHOLD) break;
+    if(dependentModel->error() < ERROR_THRESHOLD)
+    {
+      cout << "Stopping after " << i << " iterations." << endl;
+      break;
+    }
+
   }
 
   dependentModel->calculateProbabilities();
@@ -266,7 +275,11 @@ BOOST_AUTO_TEST_CASE(AND_WITH_INPUT_DISTRIBUTION)
   {
     dependentModel->iterate();
     // if(i % 100 == 0) cout << i << ": " << dependentModel->error() << endl;
-    if(dependentModel->error() < ERROR_THRESHOLD) break;
+    if(dependentModel->error() < ERROR_THRESHOLD)
+    {
+      cout << "Stopping after " << i << " iterations." << endl;
+      break;
+    }
   }
   // cout << "AND DM:" << endl;
   // cout << *dependentModel    << endl;
@@ -481,7 +494,12 @@ BOOST_AUTO_TEST_CASE(OR)
   {
     independentModel->iterate();
     // if(i % 100 == 0) cout << i << ": " << independentModel->error() << endl;
-    if(independentModel->error() < ERROR_THRESHOLD) break;
+    if(independentModel->error() < ERROR_THRESHOLD)
+    {
+      cout << "Stopping after " << i << " iterations." << endl;
+      break;
+    }
+
   }
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -511,7 +529,12 @@ BOOST_AUTO_TEST_CASE(OR)
   {
     dependentModel->iterate();
     // if(i % 100 == 0) cout << i << ": " << dependentModel->error() << endl;
-    if(dependentModel->error() < ERROR_THRESHOLD) break;
+    if(dependentModel->error() < ERROR_THRESHOLD)
+    {
+      cout << "Stopping after " << i << " iterations." << endl;
+      break;
+    }
+
   }
 
   Matrix ipycx(2,4);
@@ -602,7 +625,12 @@ BOOST_AUTO_TEST_CASE(OR_WITH_INPUT_DISTRIBUTION)
   for(int i = 0; i < ITERATIONS; i++)
   {
     independentModel->iterate();
-    if(independentModel->error() < ERROR_THRESHOLD) break;
+    if(independentModel->error() < ERROR_THRESHOLD)
+    {
+      cout << "Stopping after " << i << " iterations." << endl;
+      break;
+    }
+
   }
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -631,8 +659,13 @@ BOOST_AUTO_TEST_CASE(OR_WITH_INPUT_DISTRIBUTION)
   for(int i = 0; i < ITERATIONS; i++)
   {
     dependentModel->iterate();
-    if(dependentModel->error() < ERROR_THRESHOLD) break;
+    if(dependentModel->error() < ERROR_THRESHOLD)
+    {
+      cout << "Stopping after " << i << " iterations." << endl;
+      break;
+    }
   }
+
   Matrix ipycx(2,4);
   ipycx(0,0) = 1.0;
   ipycx(1,1) = 1.0;
@@ -718,7 +751,12 @@ BOOST_AUTO_TEST_CASE(XOR)
   for(int i = 0; i < ITERATIONS; i++)
   {
     independentModel->iterate();
-    if(independentModel->error() < ERROR_THRESHOLD) break;
+    if(independentModel->error() < ERROR_THRESHOLD)
+    {
+      cout << "Stopping after " << i << " iterations." << endl;
+      break;
+    }
+
     // if(i % 1000 == 0) cout << *independentModel << endl;
   }
 
@@ -844,7 +882,12 @@ BOOST_AUTO_TEST_CASE(XOR_WITH_INPUT_DISTRIBUTION)
   for(int i = 0; i < ITERATIONS; i++)
   {
     independentModel->iterate();
-    if(independentModel->error() < ERROR_THRESHOLD) break;
+    if(independentModel->error() < ERROR_THRESHOLD)
+    {
+      cout << "Stopping after " << i << " iterations." << endl;
+      break;
+    }
+
   }
 
   ////////////////////////////////////////////////////////////////////////////////

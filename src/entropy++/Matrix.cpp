@@ -446,41 +446,41 @@ double Matrix::det() throw(EntropyException)
     throw EntropyException("Determinant is only implemented for quadratic matrices");
   }
 
-  double result = 0; 
+  double result = 0;
 
   if(_rows == 1)
   {
     result = get(0,0);
-    return result; 
-  } 
+    return result;
+  }
 
   if(_rows == 2)
-  { 
-    result = get(0, 0) * get(1, 1) - get(0, 1) * get(1, 0); 
-    return result; 
-  } 
+  {
+    result = get(0, 0) * get(1, 1) - get(0, 1) * get(1, 0);
+    return result;
+  }
 
   for(int i = 0; i < cols(); i++)
-  { 
+  {
     Matrix tmp(_rows-1, _cols-1, 0.0);
     for(int j = 1; j < rows(); j++)
-    { 
+    {
       for(int k = 0; k < cols(); k++)
-      { 
+      {
         if(k < i)
-        { 
-          tmp(j - 1, k) = get(j,k); 
+        {
+          tmp(j - 1, k) = get(j,k);
         }
         else if(k > i)
-        { 
-          tmp(j - 1, k - 1) = get(j,k); 
-        } 
-      } 
-    } 
+        {
+          tmp(j - 1, k - 1) = get(j,k);
+        }
+      }
+    }
     result += get(0,i) * pow(-1, (double)i) * tmp.det();
-  } 
+  }
 
-  return result; 
+  return result;
 }
 
 void Matrix::transpose()
@@ -500,7 +500,7 @@ void Matrix::transpose()
 void Matrix::adjunct()
 {
   Matrix m(_rows, _cols);
-  
+
   m = *this;
 
   for(int r = 0; r < _rows; r++)
@@ -593,8 +593,8 @@ Matrix& Matrix::operator*=(const Matrix &m)
   return *this;
 }
 
-Matrix operator*(double factor, const Matrix& m) 
-{ 
+Matrix operator*(double factor, const Matrix& m)
+{
   Matrix R(m.rows(), m.cols());
 
   for(int r = 0; r < m.rows(); r++)
@@ -604,7 +604,7 @@ Matrix operator*(double factor, const Matrix& m)
       R(r, c) = m(r,c) * factor;
     }
   }
-  return R;	
+  return R;
 }
 
 // from http://users.erols.com/mdinolfo/matrix.htm

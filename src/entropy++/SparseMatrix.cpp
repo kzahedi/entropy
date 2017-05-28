@@ -80,14 +80,12 @@ double entropy::SparseMatrix::__get(const int f, const int s, const int t) const
   return _default;
 }
 
-double entropy::SparseMatrix::operator()(int first) const
-  throw(EntropyException)
+double entropy::SparseMatrix::operator()(int first) const throw(EntropyException)
 {
   return __get(first, -1, -1);
 }
 
-double& entropy::SparseMatrix::operator()(int first)
-  throw(EntropyException)
+double& entropy::SparseMatrix::operator()(int first) throw(EntropyException)
 {
   for(int i = 0; i < (int)_indices.size(); i++)
   {

@@ -1,3 +1,10 @@
+if(APPLE)
+  set(CMAKE_CXX_COMPILER           "/usr/local/opt/llvm/bin/clang++")
+  set(CMAKE_CXX_COMPILER_FULLPATH  "/usr/local/opt/llvm/bin/clang++")
+  link_directories(/usr/local/opt/llvm/lib)
+  include_directories(/usr/local/opt/llvm/include)
+endif(APPLE)
+
 include_directories(${PROJECT_SOURCE_DIR}/src)
 link_directories(${PROJECT_BINARY_DIR}/lib)
 
@@ -12,6 +19,10 @@ ADD_TEST(matrix "${PROJECT_BINARY_DIR}/bin/matrix-tests")
 add_executable(pi-tests               pi_test.cpp)
 target_link_libraries(pi-tests        Entropy++ ${Boost_LIBRARIES})
 ADD_TEST(PI "${PROJECT_BINARY_DIR}/bin/pi-tests")
+
+add_executable(omp-tests              omp_test.cpp)
+target_link_libraries(omp-tests       Entropy++ ${Boost_LIBRARIES})
+ADD_TEST(OMP "${PROJECT_BINARY_DIR}/bin/omp-tests")
 
 add_executable(mi-tests               mi_test.cpp)
 target_link_libraries(mi-tests        Entropy++ ${Boost_LIBRARIES})
