@@ -1,4 +1,7 @@
 #include <entropy++/iterativescaling/Delta.h>
+#ifdef USE_OPENMP
+#include <omp.h>
+#endif
 
 using namespace std;
 using namespace entropy;
@@ -43,6 +46,17 @@ double Delta::observed()
 double Delta::expected()
 {
   return _expected;
+}
+
+void Delta::updateExpected(double v)
+{
+#ifdef USE_OPENMP
+  _mutex.lock();
+#endif // USE_OPENMP
+  _expected += v;
+#ifdef USE_OPENMP
+  _mutex.unlock();
+#endif // USE_OPENMP
 }
 
 void Delta::setExpected(double v)

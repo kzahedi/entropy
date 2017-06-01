@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <boost/thread.hpp>
 
 using namespace std;
 
@@ -30,6 +31,7 @@ namespace entropy
         void setObserved(double v);
         double observed();
 
+        void updateExpected(double v);
         void setExpected(double v);
         double expected();
 
@@ -88,13 +90,14 @@ namespace entropy
         vector<int> _xIndices;
         vector<int> _yIndices;
 
-        double _observed;
-        double _expected;
-        double _lambda;
-        double _conditionalProbability;
-        double _marginalProbability;
-        bool   _inputOnly;
-        bool   _outputOnly;
+        double       _observed;
+        double       _expected;
+        double       _lambda;
+        double       _conditionalProbability;
+        double       _marginalProbability;
+        bool         _inputOnly;
+        bool         _outputOnly;
+        boost::mutex _mutex;
     };
   }
 }

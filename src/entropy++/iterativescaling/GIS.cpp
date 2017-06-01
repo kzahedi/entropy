@@ -111,6 +111,7 @@ void GIS::iterate()
       {
         if((*d)->matchXY(x_row, y_row))
         {
+#pragma omp atomic update
           s[y] += (*d)->lambda();
         }
       }
@@ -134,7 +135,8 @@ void GIS::iterate()
           VLOG(100) << "z:      " << z;
           VLOG(100) << "exp(s): " << exp(s[y]);
           VLOG(100) << "delta:  " << exp(s[y])/z;
-          (*d)->setExpected((*d)->expected() + exp(s[y]) / z);
+          // (*d)->setExpected((*d)->expected() + exp(s[y]) / z);
+          (*d)->updateExpected(exp(s[y]) / z);
           VLOG(100) << "set to: " << **d;
         }
       }
@@ -158,6 +160,7 @@ void GIS::iterate()
       {
         if((*d)->matchXY(x_row, y_row))
         {
+#pragma omp atomic update
           f += 1.0;
         }
       }
@@ -174,12 +177,6 @@ void GIS::iterate()
   }
 
   _error = sqrt(_error);
-
-  // cout << "**********" << endl;
-  // for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
-  // {
-    // cout << **d << endl;
-  // }
 
 }
 
