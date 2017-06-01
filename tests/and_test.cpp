@@ -4,6 +4,7 @@
 #include <glog/logging.h>
 
 #define ITERATIONS  500000
+// #define ITERATIONS  500
 #define DEBUG_LEVEL 0
 
 #include <fstream>
@@ -159,7 +160,6 @@ BOOST_AUTO_TEST_CASE(AND_GIS)
   cout << "AND-GIS (bits): " << kl->divergence2() << endl;
 }
 
-/*
 BOOST_AUTO_TEST_CASE(AND_SCGIS)
 {
   FLAGS_logtostderr = 1;
@@ -287,5 +287,5 @@ BOOST_AUTO_TEST_CASE(AND_SCGIS)
   KL* kl = new KL(dependentModel, independentModel);
   cout << "AND-SCGIS (bits): " << kl->divergence2() << endl;
 }
-*/
+
 BOOST_AUTO_TEST_SUITE_END()

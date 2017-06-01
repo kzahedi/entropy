@@ -35,6 +35,7 @@ namespace entropy
         void setExpected(double v);
         double expected();
 
+        void updateLambda(double v);
         void setLambda(double v);
         double lambda();
 

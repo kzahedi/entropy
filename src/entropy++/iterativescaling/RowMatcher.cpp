@@ -33,6 +33,16 @@ vector<int>::iterator RowMatcher::x_end(int index)
   return _x_rows[index].end();
 }
 
+int RowMatcher::y_size(int index)
+{
+  return _y_rows[index].size();
+}
+
+int RowMatcher::y(int delta_index, int y_index)
+{
+  return _y_rows[delta_index][y_index];
+}
+
 vector<int>::iterator RowMatcher::y_begin(int index)
 {
   return _y_rows[index].begin();

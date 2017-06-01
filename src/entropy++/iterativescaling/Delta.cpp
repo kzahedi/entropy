@@ -35,7 +35,13 @@ void Delta::incObserved()
 
 void Delta::setObserved(double v)
 {
+#ifdef USE_OPENMP
+  _mutex.lock();
+#endif // USE_OPENMP
   _observed = v;
+#ifdef USE_OPENMP
+  _mutex.lock();
+#endif // USE_OPENMP
 }
 
 double Delta::observed()
@@ -61,13 +67,37 @@ void Delta::updateExpected(double v)
 
 void Delta::setExpected(double v)
 {
+#ifdef USE_OPENMP
+  _mutex.lock();
+#endif // USE_OPENMP
   _expected = v;
+#ifdef USE_OPENMP
+  _mutex.unlock();
+#endif // USE_OPENMP
 }
 
 void Delta::setLambda(double v)
 {
+#ifdef USE_OPENMP
+  _mutex.lock();
+#endif // USE_OPENMP
   _lambda = v;
+#ifdef USE_OPENMP
+  _mutex.unlock();
+#endif // USE_OPENMP
 }
+
+void Delta::updateLambda(double v)
+{
+#ifdef USE_OPENMP
+  _mutex.lock();
+#endif // USE_OPENMP
+  _lambda += v;
+#ifdef USE_OPENMP
+  _mutex.unlock();
+#endif // USE_OPENMP
+}
+
 
 double Delta::lambda()
 {

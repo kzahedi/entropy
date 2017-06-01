@@ -23,6 +23,8 @@ namespace entropy
 
         vector<int>::iterator y_begin(int index);
         vector<int>::iterator y_end(int index);
+        int y_size(int index);
+        int y(int delta_index, int y_row_index);
 
       private:
         Ivector* _x_rows;
