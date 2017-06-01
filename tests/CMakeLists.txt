@@ -57,6 +57,10 @@ add_executable(gis-tests        gis_test.cpp)
 target_link_libraries(gis-tests Entropy++ ${Boost_LIBRARIES})
 ADD_TEST(GIS "${PROJECT_BINARY_DIR}/bin/gis-tests")
 
+add_executable(and-tests        and_test.cpp)
+target_link_libraries(and-tests Entropy++ ${Boost_LIBRARIES})
+ADD_TEST(GIS "${PROJECT_BINARY_DIR}/bin/and-tests")
+
 add_executable(scgis-tests        scgis_test.cpp)
 target_link_libraries(scgis-tests Entropy++ ${Boost_LIBRARIES})
 ADD_TEST(SCGIS "${PROJECT_BINARY_DIR}/bin/scgis-tests")

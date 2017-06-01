@@ -1,15 +1,20 @@
 #define BOOST_TEST_MODULE gis_test
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
+#include <glog/logging.h>
 // #include <boost/test/included/unit_test.hpp>
 
+// #define DEBUG_LEVEL 100
+// #define DEBUG_LEVEL 10
+#define DEBUG_LEVEL 0
 #define ITERATIONS 500000
-#define TEST_OR
-#define TEST_OR_WI
-#define TEST_AND
-#define TEST_AND_WI
-#define TEST_XOR
-#define TEST_XOR_WI
+// #define TEST_OR
+// #define TEST_OR_WI
+// #define TEST_AND
+// #define TEST_AND_WI
+// #define TEST_XOR
+// #define TEST_XOR_WI
+#define TEST_MC_W
 
 #include <entropy++/Container.h>
 #include <entropy++/Csv.h>
@@ -69,12 +74,17 @@ BOOST_AUTO_TEST_SUITE(Logic)
 #ifdef TEST_AND
 BOOST_AUTO_TEST_CASE(AND)
 {
+  google::InitGoogleLogging("");
+  FLAGS_logtostderr = 1;
+  FLAGS_v = DEBUG_LEVEL;
+  VLOG(10) << "Setting up X data";
   ULContainer *xData = new ULContainer(4,2);
   *xData << 0 << 0;
   *xData << 0 << 1;
   *xData << 1 << 0;
   *xData << 1 << 1;
 
+  VLOG(10) << "Setting up Y data";
   ULContainer *yData = new ULContainer(4,1);
   *yData << 0;
   *yData << 0;
@@ -102,6 +112,7 @@ BOOST_AUTO_TEST_CASE(AND)
   features.push_back(new Feature(0,0));
   features.push_back(new Feature(1,0));
 
+  VLOG(10) << "Setting up independent model";
   GIS* independentModel = new GIS();
   independentModel->setData(xData, yData);
   independentModel->setFeatures(ia,ib,features);
@@ -111,6 +122,7 @@ BOOST_AUTO_TEST_CASE(AND)
   {
     independentModel->iterate();
     // if(i % 100 == 0) cout << i << ": " << independentModel->error() << endl;
+    VLOG(1000) << *independentModel;
     if(independentModel->error() < ERROR_THRESHOLD)
     {
       cout << "Stopping after " << i << " iterations." << endl;
@@ -960,7 +972,7 @@ BOOST_AUTO_TEST_SUITE_END()
 
 BOOST_AUTO_TEST_SUITE(MorphologicalComputation)
 
-  /*
+#ifdef TEST_MC_W
 BOOST_AUTO_TEST_CASE(MC_W)
 {
   cout << PARENT << "/dcmot_small.csv" << endl;
@@ -1147,5 +1159,6 @@ BOOST_AUTO_TEST_CASE(MC_W)
   KL* kl = new KL(p, q);
   cout << kl->divergence2() << endl;
 }
-*/
+#endif
+
 BOOST_AUTO_TEST_SUITE_END()

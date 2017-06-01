@@ -19,9 +19,9 @@ option(ENTROPY_TESTS           "Compile test cases"                   OFF)
 option(ENTROPY_OPENMP          "Use OpenMP"                           OFF)
 
 
-# if(ENTROPY_OPENMP)
-# find_package(OpenMP)
-# endif(ENTROPY_OPENMP)
+if(ENTROPY_OPENMP)
+  add_definitions(-DUSE_OPENMP)
+endif(ENTROPY_OPENMP)
 
 set(CMAKE_BUILD_TYPE "Debug")
 

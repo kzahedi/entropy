@@ -1,7 +1,9 @@
 #include <entropy++/iterativescaling/Model.h>
 #include <entropy++/defs.h>
 
-// #include <omp.h>
+#ifdef USE_OPENMP
+#include <omp.h>
+#endif // USE_OPENMP
 
 // #include <glog/logging.h>
 
@@ -88,7 +90,7 @@ void Model::createUniqueContainer()
 void Model::countObservedFeatures()
 {
 
-#pragma omp parallel for
+// #pragma omp parallel for
   for (int i = 0; i < Xdata->rows(); i++)
   {
     vector<unsigned long> xrow = Xdata->row(i);
