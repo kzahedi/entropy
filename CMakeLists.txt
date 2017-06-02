@@ -3,6 +3,9 @@ project(entropy)
 cmake_minimum_required(VERSION 3.0)
 set(CMAKE_BUILD_TYPE "Debug")
 
+set(CMAKE_CXX_COMPILER           "clang++-3.5")
+set(CMAKE_CXX_COMPILER_FULLPATH  "clang++-3.5")
+
 ENABLE_TESTING()
 
 cmake_policy(SET CMP0042 OLD)

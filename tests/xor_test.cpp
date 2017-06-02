@@ -26,9 +26,9 @@ using namespace std;
 using namespace entropy;
 using namespace entropy::iterativescaling;
 
-BOOST_AUTO_TEST_SUITE(OR)
+BOOST_AUTO_TEST_SUITE(XOR)
 
-BOOST_AUTO_TEST_CASE(OR_GIS)
+BOOST_AUTO_TEST_CASE(XOR_GIS)
 {
   google::InitGoogleLogging("");
   FLAGS_logtostderr = 1;
@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE(OR_GIS)
   *yData << 0;
   *yData << 1;
   *yData << 1;
-  *yData << 1;
+  *yData << 0;
 
   ////////////////////////////////////////////////////////////////////////////////
   // independent model
@@ -131,10 +131,10 @@ BOOST_AUTO_TEST_CASE(OR_GIS)
   ////////////////////////////////////////////////////////////////////////////////
 
   KL* kl = new KL(dependentModel, independentModel);
-  cout << "OR-GIS (bits): " << kl->divergence2() << endl;
+  cout << "XOR-GIS (bits): " << kl->divergence2() << endl;
 }
 
-BOOST_AUTO_TEST_CASE(OR_SCGIS)
+BOOST_AUTO_TEST_CASE(XOR_SCGIS)
 {
   FLAGS_logtostderr = 1;
   FLAGS_v = DEBUG_LEVEL;
@@ -150,7 +150,7 @@ BOOST_AUTO_TEST_CASE(OR_SCGIS)
   *yData << 0;
   *yData << 1;
   *yData << 1;
-  *yData << 1;
+  *yData << 0;
 
   ////////////////////////////////////////////////////////////////////////////////
   // independent model
@@ -233,7 +233,7 @@ BOOST_AUTO_TEST_CASE(OR_SCGIS)
   ////////////////////////////////////////////////////////////////////////////////
 
   KL* kl = new KL(dependentModel, independentModel);
-  cout << "OR-SCGIS (bits): " << kl->divergence2() << endl;
+  cout << "XOR-SCGIS (bits): " << kl->divergence2() << endl;
 }
 
 BOOST_AUTO_TEST_SUITE_END()

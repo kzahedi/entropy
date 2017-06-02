@@ -57,6 +57,11 @@ add_executable(gis-tests        gis_test.cpp)
 target_link_libraries(gis-tests Entropy++ ${Boost_LIBRARIES})
 ADD_TEST(GIS "${PROJECT_BINARY_DIR}/bin/gis-tests")
 
+add_definitions(-DPARENT="${PROJECT_SOURCE_DIR}/experiments/hopping/data")
+add_executable(mc_w_gis-tests        mc_w_gis_test.cpp)
+target_link_libraries(mc_w_gis-tests Entropy++ ${Boost_LIBRARIES})
+ADD_TEST(GIS "${PROJECT_BINARY_DIR}/bin/mc_w_gis-tests")
+
 add_executable(and-tests        and_test.cpp)
 target_link_libraries(and-tests Entropy++ ${Boost_LIBRARIES})
 ADD_TEST(GIS "${PROJECT_BINARY_DIR}/bin/and-tests")
@@ -64,6 +69,10 @@ ADD_TEST(GIS "${PROJECT_BINARY_DIR}/bin/and-tests")
 add_executable(or-tests        or_test.cpp)
 target_link_libraries(or-tests Entropy++ ${Boost_LIBRARIES})
 ADD_TEST(GIS "${PROJECT_BINARY_DIR}/bin/or-tests")
+
+add_executable(xor-tests        xor_test.cpp)
+target_link_libraries(xor-tests Entropy++ ${Boost_LIBRARIES})
+ADD_TEST(GIS "${PROJECT_BINARY_DIR}/bin/xor-tests")
 
 add_executable(scgis-tests        scgis_test.cpp)
 target_link_libraries(scgis-tests Entropy++ ${Boost_LIBRARIES})

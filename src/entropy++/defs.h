@@ -2,6 +2,8 @@
 #define __DEFS_H__
 
 #include <vector>
+#include <string>
+#include <iostream>
 using namespace std;
 
 # define EMPERICAL 2001
@@ -34,7 +36,4 @@ typedef vector<vector<double> > dvvector;
   cout << endl;
 #endif
 
-
-
 #endif // __DEFS_H__
-

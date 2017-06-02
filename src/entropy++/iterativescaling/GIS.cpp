@@ -1,6 +1,8 @@
 #include <entropy++/iterativescaling/GIS.h>
 #include <entropy++/defs.h>
 
+#include <boost/progress.hpp>
+
 #include <glog/logging.h>
 
 #ifdef USE_OPENMP
@@ -23,45 +25,21 @@ GIS::~GIS()
 
 void GIS::init()
 {
-  VLOG(10) << "creating unique containers";
   createUniqueContainer();
-  VLOG(10) << "counting observed features";
   countObservedFeatures();
   _s.resize(Yalphabet->rows());
 
-  VLOG(10) << "Initialising DeltaMatcher";
+  cout << "Initialising DeltaMatcher" << endl;
   _deltaMatcher = new DeltaMatcher(Xdata->rows());
+  boost::progress_display show_progress( Xdata->rows() );
   for(int x = 0; x < Xdata->rows(); x++)
   {
     vector<unsigned long> x_row = Xdata->row(x);
 
-    if (VLOG_IS_ON(10))
-    {
-      stringstream sst;
-      sst << "x-row " << x << " data:";
-      for(vector<unsigned long>::iterator i = x_row.begin(); i != x_row.end(); i++)
-      {
-        sst << " " << *i;
-      }
-      VLOG(10) << sst.str();
-    }
-
+#pragma omp parallel for
     for(int y = 0; y < Yalphabet->rows(); y++)
-    // for(int y = 0; y < Ydata->rows(); y++)
     {
       vector<unsigned long> y_row = Yalphabet->row(y);
-      // vector<unsigned long> y_row = Ydata->row(x);
-
-      if (VLOG_IS_ON(10))
-      {
-        stringstream sst;
-        sst << "  y-row " << x << " data:";
-        for(vector<unsigned long>::iterator i = y_row.begin(); i != y_row.end(); i++)
-        {
-          sst << " " << *i;
-        }
-        VLOG(10) << sst.str();
-      }
 
       for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
       {
@@ -80,22 +58,20 @@ void GIS::init()
         }
       }
     }
+    ++show_progress;
   }
 }
 
 void GIS::iterate()
 {
-  VLOG(100) << "Setting expected to 0";
   for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
   {
     (*d)->setExpected(0.0);
   }
 
-
 #pragma omp parallel for
   for(int j = 0; j < Xdata->rows(); j++)
   {
-    VLOG(10) << "Working on row " << j;
     vector<unsigned long> x_row = Xdata->row(j);
 
     vector<double> s;
@@ -130,14 +106,8 @@ void GIS::iterate()
       {
         if((*d)->matchXY(x_row, y_row))
         {
-          VLOG(100) << "found:  " << **d;
-          VLOG(100) << "exp:    " << (*d)->expected();
-          VLOG(100) << "z:      " << z;
-          VLOG(100) << "exp(s): " << exp(s[y]);
-          VLOG(100) << "delta:  " << exp(s[y])/z;
           // (*d)->setExpected((*d)->expected() + exp(s[y]) / z);
-          (*d)->updateExpected(exp(s[y]) / z);
-          VLOG(100) << "set to: " << **d;
+          (*d)->setExpected((*d)->expected() + exp(s[y]) / z);
         }
       }
     }
