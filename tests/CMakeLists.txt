@@ -1,3 +1,6 @@
+set(CMAKE_CXX_COMPILER           "g++")
+set(CMAKE_CXX_COMPILER_FULLPATH  "g++")
+
 if(APPLE)
   set(CMAKE_CXX_COMPILER           "/usr/local/opt/llvm/bin/clang++")
   set(CMAKE_CXX_COMPILER_FULLPATH  "/usr/local/opt/llvm/bin/clang++")
