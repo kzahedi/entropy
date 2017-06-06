@@ -36,7 +36,7 @@ void GIS::init()
   {
     vector<unsigned long> x_row = Xdata->row(x);
 
-#pragma omp parallel for
+// #pragma omp parallel for
     for(int y = 0; y < Yalphabet->rows(); y++)
     {
       vector<unsigned long> y_row = Yalphabet->row(y);

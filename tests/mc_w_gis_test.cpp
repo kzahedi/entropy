@@ -25,7 +25,8 @@
 
 # define TOLERANCE(a) boost::test_tools::tolerance(a)
 
-# define BINS 300
+// # define BINS 300
+# define BINS 10
 
 #ifndef PARENT
 #define PARENT "/Users/zahedi/projects/entropy/experiments/hopping/data/"
