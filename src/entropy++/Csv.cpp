@@ -26,7 +26,7 @@ DContainer* Csv::read(string filename)
     boost::char_separator<char> sep(",");
     tokenizer<boost::char_separator<char> > tk(line,sep);
     vector<string> vec;
-    for(tokenizer<boost::char_separator<char> >::iterator i(tk.begin()); i!=tk.end();++i)
+    for(tokenizer<boost::char_separator<char> >::iterator i(tk.begin()); i!=tk.end();++i) 
     {
       vec.push_back(*i);
     }
@@ -46,7 +46,7 @@ DContainer* Csv::read(string filename)
   {
     boost::char_separator<char> sep(",");
     tokenizer<boost::char_separator<char> > tk(line,sep);
-    for(tokenizer<boost::char_separator<char> >::iterator i(tk.begin()); i!=tk.end();++i)
+    for(tokenizer<boost::char_separator<char> >::iterator i(tk.begin()); i!=tk.end();++i) 
     {
       (*c) << atof((*i).c_str());
     }
@@ -83,7 +83,7 @@ DContainer* Csv::read(string filename, int n, ...)
     boost::char_separator<char> sep(",");
     tokenizer<boost::char_separator<char> > tk(line,sep);
     vector<string> vec;
-    for(tokenizer<boost::char_separator<char> >::iterator i(tk.begin()); i!=tk.end();++i)
+    for(tokenizer<boost::char_separator<char> >::iterator i(tk.begin()); i!=tk.end();++i) 
     {
       vec.push_back(*i);
     }
@@ -116,7 +116,7 @@ DContainer* Csv::read(string filename, vector<int> indices)
     boost::char_separator<char> sep(",");
     tokenizer<boost::char_separator<char> > tk(line,sep);
     vector<string> vec;
-    for(tokenizer<boost::char_separator<char> >::iterator i(tk.begin()); i!=tk.end();++i)
+    for(tokenizer<boost::char_separator<char> >::iterator i(tk.begin()); i!=tk.end();++i) 
     {
       // cout << *i << " ";
       vec.push_back(*i);
@@ -142,7 +142,7 @@ void Csv::write(string filename, DContainer* container)
   {
     out << (*container)(r,0);
     for(int c = 1; c < container->columns(); c++)
-    {
+    { 
       out << "," << (*container)(r,c);
     }
     out << endl;
@@ -157,7 +157,7 @@ void Csv::write(string filename, ULContainer* container)
   {
     out << (*container)(r,0);
     for(int c = 1; c < container->columns(); c++)
-    {
+    { 
       out << "," << (*container)(r,c);
     }
     out << endl;
@@ -172,7 +172,7 @@ void Csv::write(string filename, IContainer* container)
   {
     out << (*container)(r,0);
     for(int c = 1; c < container->columns(); c++)
-    {
+    { 
       out << "," << (*container)(r,c);
     }
     out << endl;

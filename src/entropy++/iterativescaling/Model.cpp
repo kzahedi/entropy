@@ -1,8 +1,6 @@
 #include <entropy++/iterativescaling/Model.h>
 #include <entropy++/defs.h>
 
-#include <boost/progress.hpp>
-
 #ifdef USE_OPENMP
 #include <omp.h>
 #endif // USE_OPENMP
@@ -22,8 +20,8 @@ Model::Model()
   _joint         = NULL;
   _x_alphabet    = NULL;
   _y_alphabet    = NULL;
-
 }
+
 
 void Model::setData(ULContainer *X, ULContainer *Y)
 {
@@ -91,7 +89,6 @@ void Model::createUniqueContainer()
 
 void Model::countObservedFeatures()
 {
-  boost::progress_display show_progress( Xdata->rows() );
   for (int i = 0; i < Xdata->rows(); i++)
   {
     vector<unsigned long> xrow = Xdata->row(i);
@@ -123,7 +120,6 @@ void Model::countObservedFeatures()
         (*f)->push_back(d);
       }
     }
-    ++show_progress;
   }
 }
 
