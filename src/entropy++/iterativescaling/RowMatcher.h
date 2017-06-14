@@ -15,6 +15,7 @@ namespace entropy
     {
       public:
         RowMatcher(int xSize);
+        ~RowMatcher();
         void add_x(int delta_index, int x_row_index);
         void add_y(int delta_index, int y_row_index);
 

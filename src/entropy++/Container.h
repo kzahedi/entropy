@@ -77,13 +77,17 @@ namespace entropy
             for(int c = 0; c < _columns; c++) delete _domains[c];
             delete _domains;
           }
+          else if(_domains != NULL)
+          {
+            delete _domains;
+          }
 
-          if(_bins != NULL && _binsGiven == true)
+          if(_bins != NULL)
           {
             delete _bins;
           }
-        }
 
+        }
 
         // Container(const Container);
         Container<T>& operator=(const Container<T>& c)

@@ -22,6 +22,26 @@ Model::Model()
   _y_alphabet    = NULL;
 }
 
+Model::~Model()
+{
+  delete Xalphabet;
+  delete Yalphabet;
+
+  delete _conditional;
+  delete _marginal;
+  delete _joint;
+
+  // delete  Xdata;
+  // delete  Ydata;
+  delete  _x_alphabet;
+  delete  _y_alphabet;
+
+  for(int i = 0; i < (int)features.size(); i++) delete features[i];
+  for(int i = 0; i < (int)deltas.size();   i++) delete deltas[i];
+
+  features.clear();
+  deltas.clear();
+}
 
 void Model::setData(ULContainer *X, ULContainer *Y)
 {
@@ -33,14 +53,7 @@ void Model::setData(ULContainer *X, ULContainer *Y)
 
 }
 
-Model::~Model()
-{
-  delete Xalphabet;
-  delete Yalphabet;
 
-  delete _conditional;
-  delete _marginal;
-}
 
 void Model::setFeatures(vector<vector<int> > Xindices,
     vector<vector<int> > Yindices, vector<Feature*> f)

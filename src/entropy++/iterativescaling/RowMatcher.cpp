@@ -13,6 +13,13 @@ RowMatcher::RowMatcher(int xSize)
   for(int i = 0; i < xSize; i++) _y_rows[i].resize(0);
 }
 
+
+RowMatcher::~RowMatcher()
+{
+  delete[] _x_rows;
+  delete[] _y_rows;
+}
+
 void RowMatcher::add_x(int delta_index, int x_index)
 {
   _x_rows[delta_index].push_back(x_index);
