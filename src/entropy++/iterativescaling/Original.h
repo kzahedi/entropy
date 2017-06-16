@@ -20,14 +20,17 @@ namespace entropy
         Original(int n, vector<vector<int> > features, vector<double> p);
         ~Original();
 
-        void            iterate(int iterations);
-        void            iterate(double kl);
-        double          calculateKL(int iterations);
-        double          calculateKL(vector<double> p,vector<double> q);
-        double          calculateConditionalKL(vector<double> p,vector<double> q,vector<int> featMarg, vector<int> featCond);
-        vector<double>  getp();
-        double          getMarginalProp(int ind,vector<int> feat, vector<double> p);
-        double          getConditionalProp(vector<int> featMarg, vector<int> featCond, int ind, vector<double> p);
+        void   iterate(int iterations);
+        void   iterate(double kl);
+        double calculateKL(int iterations);
+        double calculateKL(vector<double> p, vector<double> q);
+        double calculateConditionalKL(vector<double> p, vector<double> q,
+                                      vector<int> featMarg, vector<int> featCond);
+        double getMarginalProp(int ind,vector<int> feat, vector<double> p);
+        double getConditionalProp(vector<int> featMarg, vector<int> featCond,
+                                  int ind, vector<double> p);
+
+        vector<double> getp();
 
         friend std::ostream& operator<<(std::ostream& str, const Original& m)
         {
@@ -41,8 +44,8 @@ namespace entropy
         };
 
       private:
-        void                 _generateAlphabet(int n);
-        double               _getprop(vector<double> p, int feat, int ind);
+        void                 __generateAlphabet(int n);
+        double               __getprop(vector<double> p, int feat, int ind);
         vector<vector<int> > _features;
         vector<double>       _targetp;
         vector<double>       _p1;

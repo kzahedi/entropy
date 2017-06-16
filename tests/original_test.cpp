@@ -139,9 +139,10 @@ BOOST_AUTO_TEST_CASE(XOR)
   Original* Test = new Original(3, features, p );
   Test->iterate(5);
   vector<double> pconv = Test->getp();
-  //  for(int i=0;i<8;i++){
-  //    cout<< pconv[i] << endl;
-  //   }
+  for(int i = 0; i < 8; i++)
+  {
+    cout << p[i] << " vs. " << pconv[i] << endl;
+  }
   vector<int> x;
   x.push_back(0);
   x.push_back(1);
@@ -150,8 +151,8 @@ BOOST_AUTO_TEST_CASE(XOR)
 
   BOOST_CHECK_CLOSE(Test->calculateKL(p,pconv), 1 ,0.001);
   BOOST_CHECK_CLOSE(Test->calculateConditionalKL(p,pconv,y,x) , 1 ,0.001);
-  //cout << Test->calculateKL(p,pconv)<< endl;
-  //cout << Test->calculateConditionalKL(p,pconv,y,x)  << endl;
+  // cout << Test->calculateKL(p,pconv)<< endl;
+  // cout << Test->calculateConditionalKL(p,pconv,y,x)  << endl;
 }
 
 BOOST_AUTO_TEST_CASE(OR)
