@@ -23,6 +23,14 @@ Original::Original(int n, vector<vector<int> > features, vector<double> p)
 
   _features = features;
 
+  int max = 0;
+  for(int i = 0; i < (int)_features.size(); i++)
+  {
+    if(_features[i].size() > max) max = _features.size();
+  }
+
+  cout << "Expected number of iterations: " << max * _sizeAlphabet << endl;
+
   _p1 = vector<double>(_sizeAlphabet);
   _p2 = vector<double>(_sizeAlphabet);
 
@@ -47,7 +55,6 @@ void Original::__generateAlphabet(int n)
       (*_alphabet)(z,n-s) = ((int)(z%(int)(pow(2,s)))) / (int)(pow(2,s-1));
     }
   }
-
 }
 
 vector<double> Original::getp()
@@ -57,11 +64,11 @@ vector<double> Original::getp()
 
 double Original::__getprop(vector<double>& p, int feat, int ind)
 {
-  assert(ind < _sizeAlphabet);
-  assert(feat < _features.size());
-  bool found      = true;
-  double sum      = 0.0;
-  int featuresize = 0;
+  // assert(ind < _sizeAlphabet);
+  // assert(feat < _features.size());
+  bool   found       = true;
+  double sum         = 0.0;
+  int    featuresize = 0;
   for(int i = 0; i < _sizeAlphabet; i++)
   {
     featuresize = _features[feat].size();
@@ -70,6 +77,7 @@ double Original::__getprop(vector<double>& p, int feat, int ind)
       if((*_alphabet)(i,_features[feat][j]) != (*_alphabet)(ind,_features[feat][j]))
       {
         found = false;
+        break;
       }
     }
     if(found)
@@ -92,6 +100,7 @@ double Original::getMarginalProp(int ind, vector<int> feat, vector<double> p)
       if((*_alphabet)(i,feat[j]) != (*_alphabet)(ind,feat[j]))
       {
         found = false;
+        break;
       }
     }
     if(found)
@@ -108,7 +117,7 @@ double Original::getConditionalProp(vector<int> featMarg, vector<int> featCond,
 {
   double sum = 0.0;
   featMarg.insert(featMarg.end(), featCond.begin(), featCond.end());
-  sum = getMarginalProp(ind, featMarg, p) / getMarginalProp(ind,featCond,p);
+  sum = getMarginalProp(ind, featMarg, p) / getMarginalProp(ind, featCond, p);
   return sum;
 }
 
@@ -122,7 +131,7 @@ double Original::calculateKL(int iterations)
     {
       if(_p1[i] > 0)
       {
-        sum += _p1[i]*(log2(_p1[i]) - log2(_p2[i]));
+        sum += _p1[i] * (log2(_p1[i]) - log2(_p2[i]));
       }
     }
   }
@@ -168,20 +177,21 @@ double Original::calculateConditionalKL(vector<double> p, vector<double> q,
   return sum;
 }
 
-void Original::iterate(double KL)
+void Original::iterate(double threshold)
 {
   int iterations = 0;
-  double kl      = 5;
-  while( kl > KL || iterations <= _features.size())
+  double kl      = 2.0 * threshold;
+  while( kl > threshold || iterations <= _features.size())
   {
     iterations++;
+    cout << "Iteration: " << iterations << endl;
     int featIndex = (iterations-1) % _features.size();
     if((iterations % 2) != 0)
     {
 #pragma omp parallel for
       for(int i = 0; i < _sizeAlphabet; i++)
       {
-        _p2[i] = __getprop(_targetp, featIndex,i) * _p1[i];
+        _p2[i] = __getprop(_targetp, featIndex, i) * _p1[i];
         if(_p2[i] != 0)
         {
           _p2[i] = _p2[i] / __getprop(_p1,featIndex,i);
@@ -201,6 +211,7 @@ void Original::iterate(double KL)
       }
     }
     kl = calculateKL(iterations % 2);
+    cout << "  KL: " << kl << endl;
   }
 }
 

@@ -21,7 +21,7 @@ namespace entropy
         ~Original();
 
         void   iterate(int iterations);
-        void   iterate(double kl);
+        void   iterate(double threshold);
         double calculateKL(int iterations);
         double calculateKL(vector<double> p, vector<double> q);
         double calculateConditionalKL(vector<double> p, vector<double> q,
