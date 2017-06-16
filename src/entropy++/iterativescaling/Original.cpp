@@ -1,6 +1,8 @@
 #include "Original.h"
 #include <entropy++/powi.h>
 
+#include <omp.h>
+
 #include <iostream>
 
 using namespace entropy::iterativescaling;
@@ -29,7 +31,9 @@ Original::Original(int n, vector<vector<int> > features, vector<double> p)
     if(_features[i].size() > max) max = _features.size();
   }
 
-  cout << "Expected number of iterations: " << max * _sizeAlphabet << endl;
+  cout << "Expected number of iterations: "
+    << ((float)max * _sizeAlphabet * _sizeAlphabet)/((float)omp_get_num_procs())
+    << endl;
 
   _p1 = vector<double>(_sizeAlphabet);
   _p2 = vector<double>(_sizeAlphabet);
