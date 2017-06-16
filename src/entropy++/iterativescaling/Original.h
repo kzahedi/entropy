@@ -45,7 +45,7 @@ namespace entropy
 
       private:
         void                 __generateAlphabet(int n);
-        double               __getprop(vector<double> p, int feat, int ind);
+        double               __getprop(vector<double>& p, int feat, int ind);
         vector<vector<int> > _features;
         vector<double>       _targetp;
         vector<double>       _p1;

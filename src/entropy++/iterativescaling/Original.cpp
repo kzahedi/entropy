@@ -55,7 +55,7 @@ vector<double> Original::getp()
   return _p1;
 }
 
-double Original::__getprop(vector<double> p, int feat, int ind)
+double Original::__getprop(vector<double>& p, int feat, int ind)
 {
   assert(ind < _sizeAlphabet);
   assert(feat < _features.size());
