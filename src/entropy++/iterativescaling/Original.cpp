@@ -31,9 +31,9 @@ Original::Original(int n, vector<vector<int> > features, vector<double> p)
     if(_features[i].size() > max) max = _features.size();
   }
 
-  cout << "Expected number of iterations: "
-    << ((float)max * _sizeAlphabet * _sizeAlphabet)/((float)omp_get_num_procs())
-    << endl;
+  // cout << "Expected number of iterations: "
+    // << ((float)max * _sizeAlphabet * _sizeAlphabet)/((float)omp_get_num_procs())
+    // << endl;
 
   _p1 = vector<double>(_sizeAlphabet);
   _p2 = vector<double>(_sizeAlphabet);
@@ -115,7 +115,8 @@ double Original::getMarginalProp(int ind, vector<int> feat, vector<double> p)
   }
   return sum;
 }
-//p(featMarg|featCond)
+
+// p(featMarg|featCond)
 double Original::getConditionalProp(vector<int> featMarg, vector<int> featCond,
                                     int ind, vector<double> p)
 {
@@ -188,7 +189,7 @@ void Original::iterate(double threshold)
   while( kl > threshold || iterations <= _features.size())
   {
     iterations++;
-    cout << "Iteration: " << iterations << endl;
+    // cout << "Iteration: " << iterations << endl;
     int featIndex = (iterations-1) % _features.size();
     if((iterations % 2) != 0)
     {
@@ -215,7 +216,7 @@ void Original::iterate(double threshold)
       }
     }
     kl = calculateKL(iterations % 2);
-    cout << "  KL: " << kl << endl;
+    // cout << "  KL: " << kl << endl;
   }
 }
 
