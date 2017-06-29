@@ -15,17 +15,21 @@ using namespace entropy;
 
 void Random::initialise()
 {
-#ifdef __linux__
-  int randomData = open("/dev/random", O_RDONLY);
-  int seed = 0;
-  read(randomData, &seed, 2);
-  cout << "seed: " << seed << endl;
-  seed += time(NULL);
-  cout << "seed: " << seed << endl;
-  srand48(seed);
-#else
-  sranddev();
-#endif
+// #ifdef __linux__
+  // int randomData = open("/dev/random", O_RDONLY);
+  // int seed = 0;
+  // read(randomData, &seed, 2);
+  // cout << "seed: " << seed << endl;
+  // seed += time(NULL);
+  // cout << "seed: " << seed << endl;
+  // srand48(seed);
+// #else
+  // sranddev();
+// #endif
+
+  time_t t;
+  time(&t);
+  srand48(t);
 
   cout << "random initialised:";
   for(int i = 0; i < 10; i++)

@@ -37,6 +37,7 @@
 #define __MC_SY_SCGIS 1004
 #define __MC_SY_GIS   1005
 #define __MC_SYO      1006
+#define __MC_SYO_NID  1007
 
 using namespace std;
 using namespace boost;
@@ -1056,6 +1057,106 @@ double calculate_mc_sy_scgis(double mu, double phi, double psi, double chi, doub
   return r;
 }
 
+double calculate_mc_sy_orig_nid(double mu, double phi, double psi, double chi, double zeta, double tau, int iterations)
+{
+  double**** m_pw2w1s1a1   = new double***[bins];
+  double***  m_pw2_c_w1_a1 = new double**[bins];
+  double**   m_pa1_c_s1    = new double*[bins];
+  double**   m_ps1_c_w1    = new double*[bins];
+  double*    m_pw1         = new double[bins];
+  double***  m_pw2w1a1     = new double**[bins];
+
+  create_pw2w1s1a1(m_pw2w1s1a1);
+  create_pw2_c_w1a1(m_pw2_c_w1_a1);
+  create_pa1_c_s1(m_pa1_c_s1);
+  create_ps1_c_w1(m_ps1_c_w1);
+  create_pw2w1a1(m_pw2w1a1);
+
+  generate_probability_distrbution(mu, phi, psi, chi, zeta, tau,
+                                   m_pw2w1s1a1, m_pw2_c_w1_a1, m_pa1_c_s1, m_ps1_c_w1, m_pw1);
+
+  for(int w2 = 0; w2 < bins; w2++)
+    for(int w1 = 0; w1 < bins; w1++)
+      for(int a1 = 0; a1 < bins; a1++)
+        m_pw2w1a1[w2][w1][a1] = 0.0;
+
+  for(int w2 = 0; w2 < bins; w2++)
+    for(int w1 = 0; w1 < bins; w1++)
+      for(int a1 = 0; a1 < bins; a1++)
+        for(int s1 = 0; s1 < bins; s1++)
+          m_pw2w1a1[w2][w1][a1] += m_pw2w1s1a1[w2][w1][s1][a1];
+
+  vector<vector<int> > features;
+
+  vector<int> a;
+  int bits = (int)log2(bins);
+  // cout << bits << endl;
+  for(int i = 0; i < bits; i++) // W',w
+  {
+    a.push_back(i);
+    a.push_back(i + bits);
+  }
+  features.push_back(a);
+
+  vector<int> b;
+  for(int i = 0; i < bits; i++) // W',A
+  {
+    b.push_back(i);
+    b.push_back(i + 2 * bits);
+  }
+  features.push_back(b);
+
+  // vector<int> c;
+  // for(int i = 0; i < bits; i++) // W,A
+  // {
+    // c.push_back(i + bits);
+    // c.push_back(i + 2 * bits);
+  // }
+  // features.push_back(c);
+
+  vector<double> p;
+  for(int w2 = 0; w2 < bins; w2++)
+  {
+    for(int w1 = 0; w1 < bins; w1++)
+    {
+      for(int a1 = 0; a1 < bins; a1++)
+      {
+        p.push_back(m_pw2w1a1[w2][w1][a1]);
+        // cout << w2 << ", " << w1 << ", " << a1 << ": " << m_pw2w1a1[w2][w1][a1] << endl;
+      }
+    }
+  }
+
+  Original* itsc = new Original((int)(log2(p.size())), features, p );
+  itsc->iterate(iterations);
+  vector<double> pconv = itsc->getp();
+
+  vector<int> x;
+  for(int i = 0; i < bits; i++)
+  {
+    x.push_back(i + bits);
+    x.push_back(i + 2 * bits);
+  }
+
+  vector<int> y;
+  for(int i = 0; i < bits; i++)
+  {
+    y.push_back(i);
+  }
+
+  double r = itsc->calculateConditionalKL(p,pconv,y,x);
+
+  delete itsc;
+  // cout << r << endl;
+  clear_pw2w1s1a1(m_pw2w1s1a1);
+  clear_pw2_c_w1a1(m_pw2_c_w1_a1);
+  clear_pa1_c_s1(m_pa1_c_s1);
+  clear_ps1_c_w1(m_ps1_c_w1);
+  clear_pw1(m_pw1);
+
+
+  return r;
+}
 double calculate_mc_sy_orig(double mu, double phi, double psi, double chi, double zeta, double tau, int iterations)
 {
   double**** m_pw2w1s1a1   = new double***[bins];
@@ -1221,6 +1322,7 @@ int main(int argc, char** argv)
   if(FLAGS_mc == "MC_SY_GIS")   type = __MC_SY_GIS;
   if(FLAGS_mc == "MC_SY_SCGIS") type = __MC_SY_GIS;
   if(FLAGS_mc == "MC_SYO")      type = __MC_SYO;
+  if(FLAGS_mc == "MC_SYO_NID")  type = __MC_SYO_NID;
   if(type == NONE)
   {
     cerr << "Error: unknown MC type given \"" << FLAGS_mc << "\"." << endl;
@@ -1249,12 +1351,13 @@ int main(int argc, char** argv)
               double r = 0.0;
               switch(type)
               {
-                case __MC_W:        r = calculate_mc_w(mu[k],        phi[i], psi[j], chi[n], zeta[l], tau[m]); break;
-                case __MC_A:        r = calculate_mc_a(mu[k],        phi[i], psi[j], chi[n], zeta[l], tau[m]); break;
-                case __MC_MI:       r = calculate_mc_mi(mu[k],       phi[i], psi[j], chi[n], zeta[l], tau[m]); break;
-                case __MC_SY_SCGIS: r = calculate_mc_sy_scgis(mu[k], phi[i], psi[j], chi[n], zeta[l], tau[m], FLAGS_sysi); break;
-                case __MC_SY_GIS:   r = calculate_mc_sy_gis(mu[k],   phi[i], psi[j], chi[n], zeta[l], tau[m], FLAGS_sysi); break;
-                case __MC_SYO:      r = calculate_mc_sy_orig(mu[k],  phi[i], psi[j], chi[n], zeta[l], tau[m], FLAGS_syci); break;
+                case __MC_W:        r = calculate_mc_w(mu[k],           phi[i], psi[j], chi[n], zeta[l], tau[m]); break;
+                case __MC_A:        r = calculate_mc_a(mu[k],           phi[i], psi[j], chi[n], zeta[l], tau[m]); break;
+                case __MC_MI:       r = calculate_mc_mi(mu[k],          phi[i], psi[j], chi[n], zeta[l], tau[m]); break;
+                case __MC_SY_SCGIS: r = calculate_mc_sy_scgis(mu[k],    phi[i], psi[j], chi[n], zeta[l], tau[m], FLAGS_sysi); break;
+                case __MC_SY_GIS:   r = calculate_mc_sy_gis(mu[k],      phi[i], psi[j], chi[n], zeta[l], tau[m], FLAGS_sysi); break;
+                case __MC_SYO:      r = calculate_mc_sy_orig(mu[k],     phi[i], psi[j], chi[n], zeta[l], tau[m], FLAGS_syci); break;
+                case __MC_SYO_NID:  r = calculate_mc_sy_orig_nid(mu[k], phi[i], psi[j], chi[n], zeta[l], tau[m], FLAGS_syci); break;
               }
 #pragma omp critical
               {
