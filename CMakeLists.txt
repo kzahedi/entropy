@@ -20,6 +20,7 @@ option(ENTROPY_COMPILE_RBO     "Compile MC example for RBOHand data"  OFF)
 option(ENTROPY_COMPILE_ITSC    "Compile Iterative Scaling examples"   OFF)
 option(ENTROPY_TESTS           "Compile test cases"                   OFF)
 option(ENTROPY_OPENMP          "Use OpenMP"                           OFF)
+option(ENTROPY_COMPILE_SML     "Compile SML"                          OFF)
 
 
 if(ENTROPY_OPENMP)
@@ -100,6 +101,10 @@ endif(ENTROPY_COMPILE_RBO)
 if(ENTROPY_COMPILE_ITSC)
   add_subdirectory(experiments/itsc)
 endif(ENTROPY_COMPILE_ITSC)
+
+if(ENTROPY_COMPILE_SML)
+  add_subdirectory(experiments/sml)
+endif(ENTROPY_COMPILE_SML)
 
 if(ENTROPY_TESTS)
   add_subdirectory(tests)

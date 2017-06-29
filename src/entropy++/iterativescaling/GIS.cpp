@@ -1,8 +1,6 @@
 #include <entropy++/iterativescaling/GIS.h>
 #include <entropy++/defs.h>
 
-#include <boost/progress.hpp>
-
 #include <glog/logging.h>
 
 #ifdef USE_OPENMP
@@ -29,9 +27,9 @@ void GIS::init()
   countObservedFeatures();
   _s.resize(Yalphabet->rows());
 
-  cout << "Initialising DeltaMatcher" << endl;
+  // cout << "Initialising DeltaMatcher" << endl;
   _deltaMatcher = new DeltaMatcher(Xdata->rows());
-  boost::progress_display show_progress( Xdata->rows() );
+  // boost::progress_display show_progress( Xdata->rows() );
   for(int x = 0; x < Xdata->rows(); x++)
   {
     vector<unsigned long> x_row = Xdata->row(x);
@@ -58,7 +56,7 @@ void GIS::init()
         }
       }
     }
-    ++show_progress;
+    // ++show_progress;
   }
 }
 
