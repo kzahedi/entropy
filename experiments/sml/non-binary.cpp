@@ -9,6 +9,7 @@
 #include <boost/tokenizer.hpp>
 
 #include <entropy++/Container.h>
+#include <entropy++/Csv.h>
 #include <entropy++/distribution/MC_A.h>
 #include <entropy++/distribution/MC_MI.h>
 #include <entropy++/distribution/MC_W.h>
@@ -38,6 +39,7 @@
 #define __MC_SY_GIS   1005
 #define __MC_SYO      1006
 #define __MC_SYO_NID  1007
+#define __GENERATE    1008
 
 using namespace std;
 using namespace boost;
@@ -62,7 +64,7 @@ DEFINE_string(mc,   "MC_W",     "quantification");
 DEFINE_string(o,    "mc_w.csv", "output file");
 DEFINE_int64(b,     2,          "bins per random variable");
 DEFINE_int64(syci,  1000,       "SYO convergence iterations");
-DEFINE_int64(sysi,  10000,      "SY data drive sample iterations");
+DEFINE_int64(sysi,  100,        "SY data drive sample iterations");
 
 
 class Indicator
@@ -227,6 +229,10 @@ void create_pa1_c_s1(double** a)
   for(int i = 0; i < bins; i++)
   {
     a[i] = new double[bins];
+    for(int j = 0; j < bins; j++)
+    {
+      a[i][j] = 0.0;
+    }
   }
   // return a;
 }
@@ -251,6 +257,10 @@ void create_ps1_c_w1(double **a)
   for(int i = 0; i < bins; i++)
   {
     a[i] = new double[bins];
+    for(int j = 0; j < bins; j++)
+    {
+      a[i][j] = 0.0;
+    }
   }
   // return a;
 }
@@ -282,6 +292,10 @@ void create_pw2_c_w1a1(double*** a)
     for(int j = 0; j < bins; j++)
     {
       a[i][j] = new double[bins];
+      for(int k = 0; k < bins; k++)
+      {
+        a[i][j][k] = 0.0;
+      }
     }
   }
   // return a;
@@ -322,6 +336,10 @@ void create_pw2w1s1a1(double**** a)
       for(int k = 0; k < bins; k++)
       {
         a[i][j][k] = new double[bins];
+        for(int l = 0; l < bins; l++)
+        {
+          a[i][j][k][l] = 0.0;
+        }
       }
     }
   }
@@ -338,6 +356,10 @@ void create_pw2w1a1(double*** a)
     for(int j = 0; j < bins; j++)
     {
       a[i][j] = new double[bins];
+      for(int k = 0; k < bins; k++)
+      {
+        a[i][j][k] = 0.0;
+      }
     }
   }
   // return a;
@@ -370,6 +392,10 @@ void create_pw2a1w1(double*** a)
     for(int j = 0; j < bins; j++)
     {
       a[i][j] = new double[bins];
+      for(int k = 0; k < bins; k++)
+      {
+        a[i][j][k] = 0.0;
+      }
     }
   }
   // return a;
@@ -784,6 +810,7 @@ double calculate_mc_sy_gis(double mu, double phi, double psi, double chi, double
 {
   double**** m_pw2w1s1a1   = new double***[bins];
   double***  m_pw2w1a1     = new double**[bins];
+  double***  test_pw2w1a1  = new double**[bins];
   double***  m_pw2_c_w1_a1 = new double**[bins];
   double**   m_pa1_c_s1    = new double*[bins];
   double**   m_ps1_c_w1    = new double*[bins];
@@ -791,6 +818,7 @@ double calculate_mc_sy_gis(double mu, double phi, double psi, double chi, double
 
   create_pw2w1s1a1(m_pw2w1s1a1);
   create_pw2w1a1(m_pw2w1a1);
+  create_pw2w1a1(test_pw2w1a1);
   create_pw2_c_w1a1(m_pw2_c_w1_a1);
   create_pa1_c_s1(m_pa1_c_s1);
   create_ps1_c_w1(m_ps1_c_w1);
@@ -832,6 +860,7 @@ double calculate_mc_sy_gis(double mu, double phi, double psi, double chi, double
             (*yData) << w2;
             (*xData) << w1 << a1;
             // cout << "row " << i << ": [" << w1 << "," << a1 << "] -> [" << w2 << "]" << endl;
+            test_pw2w1a1[w2][w1][a1] += 1.0;
             found = true;
             break;
           }
@@ -842,6 +871,30 @@ double calculate_mc_sy_gis(double mu, double phi, double psi, double chi, double
       if(found) break;
     }
   }
+
+  double test = 0.0;
+  for(int w2 = 0; w2 < bins; w2++)
+  {
+    for(int w1 = 0; w1 < bins; w1++)
+    {
+      for(int a1 = 0; a1 < bins; a1++)
+      {
+        test_pw2w1a1[w2][w1][a1] /= (float)iterations;
+        if(test_pw2w1a1[w2][w1][a1] > 0.0)
+        {
+          test += m_pw2w1a1[w2][w1][a1] * log2(m_pw2w1a1[w2][w1][a1] / test_pw2w1a1[w2][w1][a1]);
+        }
+      }
+    }
+  }
+
+  if(test > 0.1)
+  {
+    cerr << "Estimation error is: " << test << endl;
+  }
+
+
+
 
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -911,6 +964,8 @@ double calculate_mc_sy_gis(double mu, double phi, double psi, double chi, double
   delete yData;
 
   clear_pw2w1s1a1(m_pw2w1s1a1);
+  clear_pw2w1a1(m_pw2w1a1);
+  clear_pw2w1a1(test_pw2w1a1);
   clear_pw2_c_w1a1(m_pw2_c_w1_a1);
   clear_pa1_c_s1(m_pa1_c_s1);
   clear_ps1_c_w1(m_ps1_c_w1);
@@ -918,10 +973,12 @@ double calculate_mc_sy_gis(double mu, double phi, double psi, double chi, double
 
   return r;
 }
+
 double calculate_mc_sy_scgis(double mu, double phi, double psi, double chi, double zeta, double tau, int iterations)
 {
   double**** m_pw2w1s1a1   = new double***[bins];
   double***  m_pw2w1a1     = new double**[bins];
+  double***  test_pw2w1a1  = new double**[bins];
   double***  m_pw2_c_w1_a1 = new double**[bins];
   double**   m_pa1_c_s1    = new double*[bins];
   double**   m_ps1_c_w1    = new double*[bins];
@@ -929,6 +986,7 @@ double calculate_mc_sy_scgis(double mu, double phi, double psi, double chi, doub
 
   create_pw2w1s1a1(m_pw2w1s1a1);
   create_pw2w1a1(m_pw2w1a1);
+  create_pw2w1a1(test_pw2w1a1);
   create_pw2_c_w1a1(m_pw2_c_w1_a1);
   create_pa1_c_s1(m_pa1_c_s1);
   create_ps1_c_w1(m_ps1_c_w1);
@@ -969,7 +1027,7 @@ double calculate_mc_sy_scgis(double mu, double phi, double psi, double chi, doub
           {
             (*yData) << w2;
             (*xData) << w1 << a1;
-            // cout << "row " << i << ": [" << w1 << "," << a1 << "] -> [" << w2 << "]" << endl;
+            test_pw2w1a1[w2][w1][a1] += 1.0;
             found = true;
             break;
           }
@@ -981,6 +1039,26 @@ double calculate_mc_sy_scgis(double mu, double phi, double psi, double chi, doub
     }
   }
 
+  double test = 0.0;
+  for(int w2 = 0; w2 < bins; w2++)
+  {
+    for(int w1 = 0; w1 < bins; w1++)
+    {
+      for(int a1 = 0; a1 < bins; a1++)
+      {
+        test_pw2w1a1[w2][w1][a1] /= (float)iterations;
+        if(test_pw2w1a1[w2][w1][a1] > 0.0)
+        {
+          test += m_pw2w1a1[w2][w1][a1] * log2(m_pw2w1a1[w2][w1][a1] / test_pw2w1a1[w2][w1][a1]);
+        }
+      }
+    }
+  }
+
+  if(test > 0.1)
+  {
+    cerr << "Estimation error is: " << test << endl;
+  }
 
   ////////////////////////////////////////////////////////////////////////////////
   // independent model
@@ -1048,11 +1126,13 @@ double calculate_mc_sy_scgis(double mu, double phi, double psi, double chi, doub
   delete xData;
   delete yData;
 
-  clear_pw2w1s1a1(m_pw2w1s1a1);
-  clear_pw2_c_w1a1(m_pw2_c_w1_a1);
   clear_pa1_c_s1(m_pa1_c_s1);
   clear_ps1_c_w1(m_ps1_c_w1);
   clear_pw1(m_pw1);
+  clear_pw2_c_w1a1(m_pw2_c_w1_a1);
+  clear_pw2w1a1(m_pw2w1a1);
+  clear_pw2w1a1(test_pw2w1a1);
+  clear_pw2w1s1a1(m_pw2w1s1a1);
 
   return r;
 }
@@ -1157,6 +1237,75 @@ double calculate_mc_sy_orig_nid(double mu, double phi, double psi, double chi, d
 
   return r;
 }
+
+void generate(double mu, double phi, double psi, double chi, double zeta, double tau, int iterations)
+{
+
+  double**** m_pw2w1s1a1   = new double***[bins];
+  double***  m_pw2w1a1     = new double**[bins];
+  double***  test_pw2w1a1  = new double**[bins];
+  double***  m_pw2_c_w1_a1 = new double**[bins];
+  double**   m_pa1_c_s1    = new double*[bins];
+  double**   m_ps1_c_w1    = new double*[bins];
+  double*    m_pw1         = new double[bins];
+
+  create_pw2w1s1a1(m_pw2w1s1a1);
+  create_pw2w1a1(m_pw2w1a1);
+  create_pw2w1a1(test_pw2w1a1);
+  create_pw2_c_w1a1(m_pw2_c_w1_a1);
+  create_pa1_c_s1(m_pa1_c_s1);
+  create_ps1_c_w1(m_ps1_c_w1);
+
+  generate_probability_distrbution(mu, phi, psi, chi, zeta, tau,
+                                   m_pw2w1s1a1, m_pw2_c_w1_a1, m_pa1_c_s1, m_ps1_c_w1, m_pw1);
+
+  ULContainer* data = new ULContainer(iterations,3);
+
+  for(int w2 = 0; w2 < bins; w2++)
+  {
+    for(int w1 = 0; w1 < bins; w1++)
+    {
+      for(int s1 = 0; s1 < bins; s1++)
+      {
+        for(int a1 = 0; a1 < bins; a1++)
+        {
+          m_pw2w1a1[w2][w1][a1] += m_pw2w1s1a1[w2][w1][s1][a1];
+        }
+      }
+    }
+  }
+
+  for(int i = 0; i < iterations; i++)
+  {
+    double p = Random::unit();
+    double s = 0.0;
+    bool found = false;
+    for(int w2 = 0; w2 < bins; w2++)
+    {
+      for(int w1 = 0; w1 < bins; w1++)
+      {
+        for(int a1 = 0; a1 < bins; a1++)
+        {
+          s += m_pw2w1a1[w2][w1][a1];
+          if(s >= p)
+          {
+            (*data) << w2 << w1 << a1;
+            test_pw2w1a1[w2][w1][a1] += 1.0;
+            found = true;
+            break;
+          }
+          if(found) break;
+        }
+        if(found) break;
+      }
+      if(found) break;
+    }
+  }
+
+  Csv::write("data.csv",data);
+  delete data;
+}
+
 double calculate_mc_sy_orig(double mu, double phi, double psi, double chi, double zeta, double tau, int iterations)
 {
   double**** m_pw2w1s1a1   = new double***[bins];
@@ -1320,20 +1469,23 @@ int main(int argc, char** argv)
   if(FLAGS_mc == "MC_A")        type = __MC_A;
   if(FLAGS_mc == "MC_MI")       type = __MC_MI;
   if(FLAGS_mc == "MC_SY_GIS")   type = __MC_SY_GIS;
-  if(FLAGS_mc == "MC_SY_SCGIS") type = __MC_SY_GIS;
+  if(FLAGS_mc == "MC_SY_SCGIS") type = __MC_SY_SCGIS;
   if(FLAGS_mc == "MC_SYO")      type = __MC_SYO;
   if(FLAGS_mc == "MC_SYO_NID")  type = __MC_SYO_NID;
+  if(FLAGS_mc == "GENERATE")    type = __GENERATE;
   if(type == NONE)
   {
     cerr << "Error: unknown MC type given \"" << FLAGS_mc << "\"." << endl;
     exit(-1);
   }
 
-  ofstream out(FLAGS_o.c_str());
+
+  ofstream out;
+  if(type != __GENERATE) out.open(FLAGS_o.c_str());
 
   cout << "Number of iterations: " << mu.size() * phi.size() * psi.size() * zeta.size() * tau.size() * chi.size() << endl;
   boost::progress_display show_progress( phi.size() * psi.size() * chi.size());
-  out << "# phi, psi, chi, mu, zeta, tau, MC" << endl;
+  if(type != __GENERATE) out << "# phi, psi, chi, mu, zeta, tau, MC" << endl;
 
 #pragma omp parallel for
   LOOP(i, phi)
@@ -1358,18 +1510,22 @@ int main(int argc, char** argv)
                 case __MC_SY_GIS:   r = calculate_mc_sy_gis(mu[k],      phi[i], psi[j], chi[n], zeta[l], tau[m], FLAGS_sysi); break;
                 case __MC_SYO:      r = calculate_mc_sy_orig(mu[k],     phi[i], psi[j], chi[n], zeta[l], tau[m], FLAGS_syci); break;
                 case __MC_SYO_NID:  r = calculate_mc_sy_orig_nid(mu[k], phi[i], psi[j], chi[n], zeta[l], tau[m], FLAGS_syci); break;
+                case __GENERATE:    generate(mu[k], phi[i], psi[j], chi[n], zeta[l], tau[m], FLAGS_syci); break;
               }
 #pragma omp critical
               {
-                out
-                  << phi[i]  << ","
-                  << psi[j]  << ","
-                  << chi[n]  << ","
-                  << mu[k]   << ","
-                  << zeta[l] << ","
-                  << tau[m]  << ","
-                  << r << endl;
-                out.flush();
+                if(type != __GENERATE)
+                {
+                  out
+                    << phi[i]  << ","
+                    << psi[j]  << ","
+                    << chi[n]  << ","
+                    << mu[k]   << ","
+                    << zeta[l] << ","
+                    << tau[m]  << ","
+                    << r << endl;
+                  out.flush();
+                }
               }
             }
           }
@@ -1379,5 +1535,5 @@ int main(int argc, char** argv)
       }
     }
   }
-  out.close();
+  if(type != __GENERATE) out.close();
 }

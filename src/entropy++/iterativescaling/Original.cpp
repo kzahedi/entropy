@@ -1,7 +1,7 @@
 #include "Original.h"
 #include <entropy++/powi.h>
 
-#include <omp.h>
+//#include <omp.h>
 
 #include <iostream>
 
