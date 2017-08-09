@@ -68,16 +68,17 @@ void Joint_GIS::countObservedFeatures()
   }
 }
 void Joint_GIS::setAlphabet(ULContainer* X){
-  Xalphabet = X;
+  Xalphabet     = X;
+  _sizeAlphabet = Xalphabet->rows();
 }
 void Joint_GIS::init()
 {
   countObservedFeatures();
 
   // cout << "Initialising DeltaMatcher" << endl;
-  _deltaMatcher = new DeltaMatcher(Xalphabet->rows());
+  _deltaMatcher = new DeltaMatcher(_sizeAlphabet);
   // boost::progress_display show_progress( Xdata->rows() );
-  for(int x = 0; x < Xalphabet->rows(); x++)
+  for(int x = 0; x < _sizeAlphabet; x++)
   {
     vector<unsigned long> x_row = Xalphabet->row(x);
     for(vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
@@ -108,7 +109,7 @@ void Joint_GIS::iterate()
   }
   double z = 0.0;
   vector<double> s;
-  for(int j = 0; j < Xalphabet->rows(); j++)
+  for(int j = 0; j < _sizeAlphabet; j++)
   {
     vector<unsigned long> x_row = Xalphabet->row(j);
     s.resize(Xalphabet->rows());
@@ -121,7 +122,7 @@ void Joint_GIS::iterate()
     }
     z+= exp(s[j]);
   }
-  for(int j = 0; j < Xalphabet->rows(); j++)
+  for(int j = 0; j < _sizeAlphabet; j++)
   {
     vector<unsigned long> x_row = Xalphabet->row(j);
     for(vector<Delta*>::iterator d = _deltaMatcher->begin(j); d != _deltaMatcher->end(j); d++)
@@ -138,7 +139,7 @@ void Joint_GIS::iterate()
   double e = 0.0;
 
   // get f^#
-  for(int j = 0; j < Xalphabet->rows(); j++)
+  for(int j = 0; j < _sizeAlphabet; j++)
   {
     vector<unsigned long> x_row = Xalphabet->row(j);
     {
@@ -166,11 +167,25 @@ void Joint_GIS::iterate()
   _error = sqrt(_error);
 
 }
+vector<double> Joint_GIS::getProbabilities(){
+    calculateProbabilities();
+    return _marginals;
+}
+double Joint_GIS::calculateKL(vector<double> q){
+  calculateProbabilities();
+  double sum=0.0;
+  for(int i=0; i< _sizeAlphabet; i++ ){
+    if(_marginals[i] != 0){
+      sum+= _marginals[i]*(log2(_marginals[i])-log2(q[i]));
+    }
+  }
+  return sum;
+}
 void Joint_GIS::calculateProbabilities()
 {
-  vector<double> M(Xalphabet->rows());
+  vector<double> M(_sizeAlphabet);
 
-  for(int x = 0; x < Xalphabet->rows(); x++)
+  for(int x = 0; x < _sizeAlphabet; x++)
   {
     vector<unsigned long> x_row = Xalphabet->row(x);
     for (vector<Delta*>::iterator d = deltas.begin(); d != deltas.end(); d++)
@@ -182,21 +197,21 @@ void Joint_GIS::calculateProbabilities()
      }
    }
 
-  for (int x = 0; x < Xalphabet->rows(); x++)
+  for (int x = 0; x < _sizeAlphabet; x++)
   {
     M[x]= exp(M[x]);
   }
   double z = 0;
-  for (int x = 0; x < Xalphabet->rows(); x++)
+  for (int x = 0; x < _sizeAlphabet; x++)
   {
     z+= M[x];
   }
-  _marginals.resize(Xalphabet->rows());
-  for (int x = 0; x < Xalphabet->rows(); x++)
+  _marginals.resize(_sizeAlphabet);
+  for (int x = 0; x < _sizeAlphabet; x++)
   {
     _marginals[x]= M[x]/z;
   }
-  for(int i=0;i< Xalphabet->rows();i++){
+  for(int i=0;i< _sizeAlphabet;i++){
     cout<< _marginals[i] << " " << endl;
   }
 }

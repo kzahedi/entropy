@@ -14,14 +14,16 @@ namespace entropy
       public:
         Joint_GIS();
         ~Joint_GIS();
-        void   setFeatures(vector<vector<int> > Xindices, vector<Feature*> f);
-        void   countObservedFeatures();
-        void   init();
-        void   setAlphabet(ULContainer* XAlphabet);
-        void   iterate();
-        double error();
-        void   calculateProbabilities();
-        bool   matchX(vector<unsigned long> x, vector<unsigned long> y);
+        void            setFeatures(vector<vector<int> > Xindices, vector<Feature*> f);
+        void            countObservedFeatures();
+        void            init();
+        void            setAlphabet(ULContainer* XAlphabet);
+        void            iterate();
+        double          error();
+        void            calculateProbabilities();
+        bool            matchX(vector<unsigned long> x, vector<unsigned long> y);
+        vector<double>  getProbabilities();
+        double          calculateKL(vector<double> q);
 
         friend std::ostream& operator<<(std::ostream& str, const Joint_GIS& m)
         {
@@ -44,11 +46,12 @@ namespace entropy
         };
 
       private:
-        double               _error;
-        vector<double>       _marginals;
-        vector<double>       _s;
-        vector<int>          _indices;
-        DeltaMatcher*        _deltaMatcher;
+        double                _error;
+        double                _sizeAlphabet;
+        vector<double>        _marginals;
+        vector<double>        _s;
+        vector<int>           _indices;
+        DeltaMatcher*         _deltaMatcher;
         vector<vector<int> >  _Indices;
     };
   }

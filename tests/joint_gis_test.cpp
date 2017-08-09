@@ -94,7 +94,6 @@ BOOST_AUTO_TEST_CASE(AND)
   // independent model
   ////////////////////////////////////////////////////////////////////////////////
   vector<vector<int> > ia;
-  vector<vector<int> > ib;
 
   vector<int> iaa;
   iaa.push_back(0);
@@ -117,18 +116,18 @@ BOOST_AUTO_TEST_CASE(AND)
   independentModel->setFeatures(ia,features);
   independentModel->init();
   cout << "independent: " << endl;
-  for(int i = 0; i < 200; i++)
+  for(int i = 0; i < 2000; i++)
   {
     independentModel->iterate();
   }
   cout << (*independentModel) << endl;
-  independentModel->calculateProbabilities();
+
+  vector<double> q = independentModel->getProbabilities();
 
   ////////////////////////////////////////////////////////////////////////////////
   // dependent model
   ////////////////////////////////////////////////////////////////////////////////
   vector<vector<int> > da;
-  vector<vector<int> > db;
 
   vector<int> daa;
   daa.push_back(0);
@@ -146,46 +145,91 @@ BOOST_AUTO_TEST_CASE(AND)
   dependentModel->init();
 
   cout << "dependent" << endl;
-  for(int i = 0; i < 200; i++)
+  for(int i = 0; i < 2000; i++)
   {
     dependentModel->iterate();
   }
   cout << (*dependentModel) << endl;
 
-  dependentModel->calculateProbabilities();
-/*
-  Matrix ipycx(2,4);
-  ipycx(0,0) = 1.0;
-  ipycx(0,1) = 1.0;
-  ipycx(0,2) = 1.0;
-  ipycx(1,3) = 1.0;
+  cout << "KL: " <<  dependentModel->calculateKL(q) << endl;
+}
+}
+BOOST_AUTO_TEST_CASE(ANDCMI)
+{
+  ULContainer *xData = new ULContainer(4,3);
+  *xData << 0 << 0 << 0;
+  *xData << 0 << 1 << 0;
+  *xData << 1 << 0 << 0;
+  *xData << 1 << 1 << 1;
 
-  Matrix ipx(1,4);
-  ipx(0,0) = 1.0/4.0;
-  ipx(0,1) = 1.0/4.0;
-  ipx(0,2) = 1.0/4.0;
-  ipx(0,3) = 1.0/4.0;
+  ULContainer *XAlphabet = new ULContainer(8,3);
+  *XAlphabet << 0 << 0 << 0;
+  *XAlphabet << 0 << 0 << 1;
+  *XAlphabet << 0 << 1 << 0;
+  *XAlphabet << 0 << 1 << 1;
+  *XAlphabet << 1 << 0 << 0;
+  *XAlphabet << 1 << 0 << 1;
+  *XAlphabet << 1 << 1 << 0;
+  *XAlphabet << 1 << 1 << 1;
 
-
-  BOOST_CHECK((fabs(ipycx(0,0) - dependentModel->p_y_c_x(0,0)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(0,1) - dependentModel->p_y_c_x(0,1)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(0,2) - dependentModel->p_y_c_x(0,2)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(0,3) - dependentModel->p_y_c_x(0,3)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(1,0) - dependentModel->p_y_c_x(1,0)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(1,1) - dependentModel->p_y_c_x(1,1)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(1,2) - dependentModel->p_y_c_x(1,2)) < EPSILON));
-  BOOST_CHECK((fabs(ipycx(1,3) - dependentModel->p_y_c_x(1,3)) < EPSILON));
-  BOOST_CHECK((fabs(ipx(0,0)   - dependentModel->p_x(0))       < EPSILON));
-  BOOST_CHECK((fabs(ipx(0,1)   - dependentModel->p_x(1))       < EPSILON));
-  BOOST_CHECK((fabs(ipx(0,2)   - dependentModel->p_x(2))       < EPSILON));
-  BOOST_CHECK((fabs(ipx(0,3)   - dependentModel->p_x(3))       < EPSILON));
+  ULContainer *yData = new ULContainer(0,0);
 
   ////////////////////////////////////////////////////////////////////////////////
-  // Synergy
+  // independent model
   ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > ia;
 
-  KL* kl = new KL(dependentModel, independentModel);
-  cout << "AND (bits): " << kl->divergence2() << endl;
-  cout << "AND (nats): " << kl->divergenceN() << endl; */
-} }
+
+  vector<int> iaa;
+  iaa.push_back(0);
+  iaa.push_back(2);
+  ia.push_back(iaa);
+
+  vector<Feature*> features;
+  features.push_back(new Feature(0,-1));
+
+  Joint_GIS* independentModel = new Joint_GIS();
+  independentModel->setData(xData, yData);
+  independentModel->setAlphabet(XAlphabet);
+  independentModel->setFeatures(ia,features);
+  independentModel->init();
+
+  for(int i = 0; i < 500; i++)
+  {
+    independentModel->iterate();
+  }
+  cout << (*independentModel) << endl;
+  vector<double> q = independentModel->getProbabilities();
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // dependent model
+  ////////////////////////////////////////////////////////////////////////////////
+  vector<vector<int> > da;
+
+  vector<int> daa;
+  daa.push_back(0);
+  daa.push_back(1);
+  daa.push_back(2);
+  da.push_back(daa);
+
+  vector<Feature*> dfeatures;
+  dfeatures.push_back(new Feature(0,-1));
+
+  Joint_GIS* dependentModel = new Joint_GIS();
+  dependentModel->setData(xData, yData);
+  dependentModel->setAlphabet(XAlphabet);
+  dependentModel->setFeatures(da, dfeatures);
+  dependentModel->init();
+
+  for(int i = 0; i < 500; i++)
+  {
+    dependentModel->iterate();
+    if(dependentModel->error() < 0.000000001) break;
+  }
+  cout << (*dependentModel) << endl;
+
+  cout << "KL: " <<  dependentModel->calculateKL(q) << endl;
+
+}
+
 #endif
