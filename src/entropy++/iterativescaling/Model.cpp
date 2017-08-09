@@ -85,7 +85,6 @@ void Model::createUniqueContainer()
       }
     }
   }
-
   // get all columns for Y
   for (vector<vector<int> >::iterator v = _Yindices.begin();
       v != _Yindices.end(); v++)
@@ -281,7 +280,9 @@ vector<int> Model::getAllColumnsForY()
 {
   return _y_indices;
 }
-
+void Model::setXIndices(vector<vector <int> > Indices){
+  _Xindices = Indices;
+}
 int Model::__convertAlphabetToMatrixX(int x)
 {
   vector<unsigned long> x_row = Xalphabet->row(x);

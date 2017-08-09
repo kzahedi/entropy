@@ -60,6 +60,7 @@ namespace entropy
         int getNrOfUniqueY();
         vector<int> getAllColumnsForX();
         vector<int> getAllColumnsForY();
+        void setXIndices(vector<vector<int> > Indices);
 
         // void save(string filename);
         // void load(string filename);
