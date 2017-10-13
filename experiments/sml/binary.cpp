@@ -211,11 +211,11 @@ void generate_probability_distrbution_pw2w1a1(double mu, double phi, double psi,
             pw1(w1, tau);
 }
 
-DEFINE_string(mu,   "0:0.1:1", "mu values");
-DEFINE_string(phi,  "0:0.25:5", "phi values");
-DEFINE_string(psi,  "0:0.25:5", "psi values");
-DEFINE_string(zeta, "5.0:0.1:5.0", "zeta values");
-DEFINE_string(tau,  "0.0:0.1:0.0", "tau values");
+DEFINE_string(mu,   "0", "mu values");
+DEFINE_string(phi,  "0.0:0.1:5.0", "phi values");
+DEFINE_string(psi,  "0.0:0.1:5.0", "psi values");
+DEFINE_string(zeta, "0.0", "zeta values");
+DEFINE_string(tau,  "0.0", "tau values");
 DEFINE_string(mc,   "MC_W",    "quantification");
 DEFINE_string(o,    "out.csv",        "output file");
 

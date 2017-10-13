@@ -56,6 +56,10 @@ set(SRC
   iterativescaling/SCGIS.cpp
   iterativescaling/KL.cpp
   iterativescaling/Original.cpp
+
+  continuous/FrenzelPompe.cpp
+  continuous/state/FrenzelPompe.cpp
+  continuous/Functions.cpp
 )
 
 if(APPLE)

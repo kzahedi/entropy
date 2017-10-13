@@ -276,9 +276,16 @@ namespace entropy
 
         void normaliseColumn(int c, double min, double max)
         {
-          for(int r = 0; r < _rows; r++)
+          if(fabs(min - max) < 0.00001)
           {
-            _data[r][c] = (_data[r][c] - min) / (max - min);
+            for(int r = 0; r < _rows; r++) _data[r][c] = 0.0;
+          }
+          else
+          {
+            for(int r = 0; r < _rows; r++)
+            {
+              _data[r][c] = (_data[r][c] - min) / (max - min);
+            }
           }
         }
 

@@ -5,6 +5,8 @@
 #include <entropy++/sparse/state/MC_W.h>
 #include <entropy++/sparse/state/MC_CW.h>
 #include <entropy++/sparse/state/MC_MI.h>
+#include <entropy++/continuous/FrenzelPompe.h>
+#include <entropy++/continuous/state/FrenzelPompe.h>
 
 #include <string>
 #include <iostream>
@@ -17,12 +19,6 @@ using namespace boost::filesystem;
 using namespace entropy;
 using namespace entropy::sparse;
 using namespace entropy::sparse::state;
-
-// # define MAX(a,b)    ((a>b)?a:b)
-# define MAX3(a,b,c) MAX(a,MAX(b,c))
-
-// # define MIN(a,b)    ((a<b)?a:b)
-# define MIN3(a,b,c) MIN(a,MIN(b,c))
 
 # define POS 0
 # define VEL 1
@@ -53,8 +49,6 @@ int main(int argc, char **argv)
 
   string d = string(argv[1]);
 
-  cout << "hier 0" << endl;
-
   Csv *csv = new Csv();
 
   DContainer *dcmot  = csv->read(d + "/dcmot.csv",  4,
@@ -80,17 +74,14 @@ int main(int argc, char **argv)
   DContainer *dcmotW  = dcmot->columns(3, 0, 1, 2);
   DContainer *dcmotS  = dcmot->columns(2, 0, 1);
   DContainer *dcmotA  = dcmot->columns(1, 3);
-  delete dcmot;
 
   DContainer *muslinW = muslin->columns(3, 0, 1, 2);
   DContainer *muslinS = muslin->columns(1, 4);
   DContainer *muslinA = muslin->columns(1, 3);
-  delete muslin;
 
   DContainer *musfibW = musfib->columns(3, 0, 1, 2);
   DContainer *musfibS = musfib->columns(1, 4);
   DContainer *musfibA = musfib->columns(1, 3);
-  delete musfib;
 
   double p_min = MIN3(dcmotW->min(0), muslinW->min(0), musfibW->min(0));
   double p_max = MAX3(dcmotW->max(0), muslinW->max(0), musfibW->max(0));
@@ -127,7 +118,6 @@ int main(int argc, char **argv)
   muslinW->normaliseColumn(0, p_min,  p_max);
   muslinW->normaliseColumn(1, v_min,  v_max);
   muslinW->normaliseColumn(2, a_min,  a_max);
-  cout << "hier 1" << endl;
   muslinS->normaliseColumn(0, mi_min, mi_max);
 
   // normalising MusFib
@@ -194,33 +184,33 @@ int main(int argc, char **argv)
   musfibA->setBinSizes(abins);
 
   cout << "discretising dcmot W" << endl;
-  ULContainer *DdcmotW  = dcmotW->discretise(); delete dcmotW;
+  ULContainer *DdcmotW  = dcmotW->discretise();
   cout << "discretising dcmot S" << endl;
-  ULContainer *DdcmotS  = dcmotS->discretise(); delete dcmotS;
+  ULContainer *DdcmotS  = dcmotS->discretise();
   cout << "discretising dcmot A" << endl;
-  ULContainer *DdcmotA  = dcmotA->discretise(); delete dcmotA;
+  ULContainer *DdcmotA  = dcmotA->discretise();
   ULContainer *dcW2 = DdcmotW->drop(1);
   ULContainer *dcW1 = DdcmotW->drop(-1);
   ULContainer *dcA1 = DdcmotA->drop(-1);
   ULContainer *dcS1 = DdcmotS->drop(-1);
 
   cout << "discretising muslin W" << endl;
-  ULContainer *DmuslinW  = muslinW->discretise(); delete muslinW;
+  ULContainer *DmuslinW  = muslinW->discretise();
   cout << "discretising muslin S" << endl;
-  ULContainer *DmuslinS  = muslinS->discretise(); delete muslinS;
+  ULContainer *DmuslinS  = muslinS->discretise();
   cout << "discretising muslin A" << endl;
-  ULContainer *DmuslinA  = muslinA->discretise(); delete muslinA;
+  ULContainer *DmuslinA  = muslinA->discretise();
   ULContainer *mlW2 = DmuslinW->drop(1);
   ULContainer *mlW1 = DmuslinW->drop(-1);
   ULContainer *mlA1 = DmuslinA->drop(-1);
   ULContainer *mlS1 = DmuslinS->drop(-1);
 
   cout << "discretising musfib W" << endl;
-  ULContainer *DmusfibW  = musfibW->discretise(); delete musfibW;
+  ULContainer *DmusfibW  = musfibW->discretise();
   cout << "discretising musfib S" << endl;
-  ULContainer *DmusfibS  = musfibS->discretise(); delete musfibS;
+  ULContainer *DmusfibS  = musfibS->discretise();
   cout << "discretising musfib A" << endl;
-  ULContainer *DmusfibA  = musfibA->discretise(); delete musfibA;
+  ULContainer *DmusfibA  = musfibA->discretise();
   ULContainer *mfW2 = DmusfibW->drop(1);
   ULContainer *mfW1 = DmusfibW->drop(-1);
   ULContainer *mfA1 = DmusfibA->drop(-1);
@@ -300,5 +290,68 @@ int main(int argc, char **argv)
   csv->write("state-dependent-mf_mc_cw.csv", mfmc_wd);
   cout << "writing MusFib state-dependent MC_MI" << endl;
   csv->write("state-dependent-mf_mc_mi.csv", mfmc_mid);
+
+  cout << "Calculating MusFib with Frenzel-Pompe" << endl;
+
+  musfibA->normaliseColumn(0, 0.0, 1.0);
+  muslinA->normaliseColumn(0, 0.0, 1.0);
+
+  DContainer *dcmotData = new DContainer(dcmot->rows()-1, 7);
+  DContainer *muslinData = new DContainer(muslin->rows()-1, 7);
+  DContainer *musfibData = new DContainer(musfib->rows()-1, 7);
+  for(int i = 0; i < dcmotData->rows(); i++)
+  {
+    *dcmotData << dcmotW->get(i+1, 0) << dcmotW->get(i+1, 1) << dcmotW->get(i+1, 2); // W_t+1
+    *dcmotData << dcmotW->get(i,   0) << dcmotW->get(i,   1) << dcmotW->get(i,   2); // W_t
+    *dcmotData << dcmotA->get(i,   0);                                               // A_t
+
+    *musfibData << musfibW->get(i+1, 0) << musfibW->get(i+1, 1) << musfibW->get(i+1, 2); // W_t+1
+    *musfibData << musfibW->get(i,   0) << musfibW->get(i,   1) << musfibW->get(i,   2); // W_t
+    *musfibData << musfibA->get(i,   0);                                                 // A_t
+
+    *muslinData << muslinW->get(i+1, 0) << muslinW->get(i+1, 1) << muslinW->get(i+1, 2); // W_t+1
+    *muslinData << muslinW->get(i,   0) << muslinW->get(i,   1) << muslinW->get(i,   2); // W_t
+    *muslinData << muslinA->get(i,   0);                                                 // A_t
+  }
+
+  vector<int> w2Indices;
+  vector<int> w1Indices;
+  vector<int> a1Indices;
+
+  w2Indices.push_back(0);
+  w2Indices.push_back(1);
+  w2Indices.push_back(2);
+
+  w1Indices.push_back(3);
+  w1Indices.push_back(4);
+  w1Indices.push_back(5);
+
+  a1Indices.push_back(6);
+
+  // cout << *musfibData << endl;
+  double fpMusFib = entropy::continuous::FrenzelPompe(musfibData, w2Indices, w1Indices, a1Indices, 50);
+  cout << "  MusFib: " << fpMusFib << endl;
+
+  double fpMusLin = entropy::continuous::FrenzelPompe(muslinData, w2Indices, w1Indices, a1Indices, 50);
+  cout << "  MusLin: " << fpMusLin << endl;
+
+  double fpDcMot  = entropy::continuous::FrenzelPompe(dcmotData,  w2Indices, w1Indices, a1Indices, 50);
+  cout << "  DC-Mot: " << fpDcMot  << endl;
+
+  delete dcmot;
+  delete muslin;
+  delete musfib;
+
+  delete dcmotW;
+  delete dcmotS;
+  delete dcmotA;
+
+  delete muslinW;
+  delete muslinS;
+  delete muslinA;
+
+  delete musfibW;
+  delete musfibS;
+  delete musfibA;
 
 }

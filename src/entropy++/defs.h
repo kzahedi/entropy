@@ -6,6 +6,13 @@
 #include <iostream>
 using namespace std;
 
+#define MAX(a,b)    ((a>b)?a:b)
+#define MAX3(a,b,c) MAX(a, MAX(b,c))
+
+#define MIN(a,b)    ((a<b)?a:b)
+#define MIN3(a,b,c) MIN(a,MIN(b,c))
+
+
 # define EMPERICAL 2001
 # define UNIFORM   1001
 
